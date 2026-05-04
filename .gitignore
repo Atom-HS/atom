@@ -37,3 +37,6 @@ lighthouse-report.*
 lighthouse-after.*
 .lighthouseci
 .claude/settings.local.json
+
+# Pessoal — movido pra C:\Users\rsmra\Downloads\_misc-from-mindroot-2026-05-05
+_misc/
