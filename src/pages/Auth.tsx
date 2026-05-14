@@ -96,7 +96,7 @@ export function AuthPage({ onBack }: AuthPageProps) {
       <div className="min-h-dvh bg-bg flex flex-col items-center justify-center px-4 w-full">
         <div style={{ width: '100%', maxWidth: '360px' }}>
           <div className="text-center mb-8">
-            <div className="text-3xl font-medium text-text-heading tracking-tight">MindRoot</div>
+            <div className="text-3xl font-medium text-text-heading tracking-tight">Atom</div>
             <p className="text-sm text-text-muted mt-1">recuperar senha</p>
           </div>
 
@@ -147,7 +147,7 @@ export function AuthPage({ onBack }: AuthPageProps) {
       <div className="min-h-dvh bg-bg flex flex-col items-center justify-center px-4 w-full">
         <div style={{ width: '100%', maxWidth: '360px' }}>
           <div className="text-center mb-8">
-            <div className="text-3xl font-medium text-text-heading tracking-tight">MindRoot</div>
+            <div className="text-3xl font-medium text-text-heading tracking-tight">Atom</div>
             <p className="text-sm text-text-muted mt-1">nova senha</p>
           </div>
 
@@ -180,7 +180,7 @@ export function AuthPage({ onBack }: AuthPageProps) {
       <div style={{ width: '100%', maxWidth: '360px' }}>
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="text-3xl font-medium text-text-heading tracking-tight">MindRoot</div>
+          <div className="text-3xl font-medium text-text-heading tracking-tight">Atom</div>
           <p className="text-[13px] text-text-muted mt-1 font-light">emocao precede acao</p>
         </div>
 

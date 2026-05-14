@@ -16,7 +16,7 @@ export function TopBar({ onOpenSettings }: TopBarProps) {
         onClick={() => navigate('home')}
         className="text-base font-medium tracking-tight text-text-heading"
       >
-        MindRoot
+        Atom
       </button>
 
       <div className="flex items-center gap-2.5">

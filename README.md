@@ -1,7 +1,7 @@
 <p align="center">
-  <img src="https://mindroot.com.au/favicon.svg" width="48" height="48" alt="MindRoot"/>
+  <img src="https://mindroot.com.au/favicon.svg" width="48" height="48" alt="Atom"/>
   <br/><br/>
-  <strong>MindRoot</strong>
+  <strong>Atom</strong>
   <br/>
   <sub>Your life, organized from the inside out.</sub>
   <br/><br/>
@@ -13,13 +13,13 @@
 
 ---
 
-## What is MindRoot
+## What is Atom
 
 A personal operating system that organizes your entire digital life — not just tasks. Files, ideas, habits, reflections, documents, projects — everything enters one pipeline and emerges structured, connected, and findable.
 
 Built on the **Genesis protocol**: 7 stages of maturation from raw capture (`·`) to committed structure (`○`). Items advance when ready, regress when integrity breaks, and decompose into seeds when complete — feeding the next cycle.
 
-**MindRoot is the interface.** The engine lives in [`atom-engine-core`](https://github.com/rsmramalho/atom-engine-core).
+**Atom is the interface.** The engine lives in [`atom-engine-core`](https://github.com/rsmramalho/atom-engine-core).
 
 ## Features
 
@@ -68,7 +68,7 @@ Bundle      ~83KB gzip  Tests        41
 
 > *Build from the inside out. The engine organizes itself before organizing the world.*
 
-MindRoot doesn't want you to be more productive. It wants you to be more **present**. The systems handle the organization so your mind is free for what matters.
+Atom doesn't want you to be more productive. It wants you to be more **present**. The systems handle the organization so your mind is free for what matters.
 
 Every item follows the same geometry — from raw point to committed circle. Nothing is forced. Nothing is lost. Entropy is recycling, not destruction.
 
@@ -85,8 +85,8 @@ Every item follows the same geometry — from raw point to committed circle. Not
 ## Development
 
 ```bash
-git clone https://github.com/rsmramalho/mindroot-v2.git
-cd mindroot-v2
+git clone https://github.com/atom-hs/atom.git
+cd atom
 npm install
 npm run dev         # localhost:5173
 npm run build       # production build

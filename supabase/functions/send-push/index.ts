@@ -92,7 +92,7 @@ Deno.serve(async (req) => {
         else if (hour >= 12 && hour < 18) { greeting = 'Boa tarde'; period = 'Zenite'; }
 
         payload = {
-          title: `MindRoot — ${period}`,
+          title: `Atom — ${period}`,
           body: `${greeting} — seu ${period} comecou.`,
           tag: 'period-transition',
           url: '/',
@@ -122,7 +122,7 @@ Deno.serve(async (req) => {
             // See sendPush function below
             for (const sub of userSubs) {
               const sent = await sendPush(sub, {
-                title: 'MindRoot — Atencao',
+                title: 'Atom — Atencao',
                 body: label,
                 tag: 'overdue-reminder',
                 url: '/',

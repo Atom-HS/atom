@@ -16,7 +16,7 @@ export function LandingPage({ onLogin }: LandingPageProps) {
           </div>
         </div>
 
-        <h1 className="text-4xl font-medium text-text-heading tracking-tight mb-3">MindRoot</h1>
+        <h1 className="text-4xl font-medium text-text-heading tracking-tight mb-3">Atom</h1>
         <p className="text-base text-text-muted font-light leading-relaxed mb-2">
           sistema operacional pessoal
         </p>
