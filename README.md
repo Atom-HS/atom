@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="https://mindroot.com.au/favicon.svg" width="48" height="48" alt="MindRoot"/>
+  <img src="https://atomhs.github.io/favicon.svg" width="48" height="48" alt="MindRoot"/>
   <br/><br/>
-  <strong>MindRoot</strong>
+  <strong>Atom</strong>
   <br/>
-  <sub>Your life, organized from the inside out.</sub>
+  <sub>Personal operating system. Built on the Genesis protocol.</sub>
   <br/><br/>
-  <a href="https://mindroot.com.au">Live App</a> ·
+  [Live App](https://atom.sh) ·
   <a href="#features">Features</a> ·
   <a href="#stack">Stack</a> ·
   <a href="#philosophy">Philosophy</a>
