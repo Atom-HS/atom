@@ -144,7 +144,7 @@ export function SettingsPage() {
       {/* About */}
       <SectionLabel>sobre</SectionLabel>
       <div className="bg-card border border-border rounded-xl p-4 text-center">
-        <div className="text-sm font-medium mb-0.5">MindRoot v2</div>
+        <div className="text-sm font-medium mb-0.5">Atom</div>
         <div className="text-xs text-text-muted">Genesis v5.0.1 · PHI spiral</div>
       </div>
 

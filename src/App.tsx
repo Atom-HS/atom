@@ -180,7 +180,7 @@ function AppContent() {
     return (
       <div className="min-h-dvh flex items-center justify-center bg-bg">
         <div className="text-center">
-          <div className="text-2xl font-medium text-text-heading tracking-tight">MindRoot</div>
+          <div className="text-2xl font-medium text-text-heading tracking-tight">Atom</div>
           <div className="mt-4 flex justify-center gap-1.5">
             {[0, 1, 2].map((i) => (
               <div key={i} className="w-1.5 h-1.5 rounded-full bg-text-muted/40 animate-pulse" style={{ animationDelay: `${i * 200}ms` }} />

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://atomhs.github.io/favicon.svg" width="48" height="48" alt="MindRoot"/>
+  <img src="https://atomhs.github.io/favicon.svg" width="48" height="48" alt="Atom"/>
   <br/><br/>
   <strong>Atom</strong>
   <br/>

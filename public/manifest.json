@@ -1,6 +1,6 @@
 {
-  "name": "MindRoot",
-  "short_name": "MindRoot",
+  "name": "Atom",
+  "short_name": "Atom",
   "description": "Sistema operacional pessoal — emocao precede acao",
   "start_url": "/",
   "display": "standalone",

@@ -179,12 +179,12 @@ export const exportService = {
       const connections = await this.getConnectionsForItem(item.id);
       files.push(`<!-- FILE: ${getExportFilename(item, 'md')} -->\n\n${formatObsidian(item, connections, allItems)}`);
     }
-    downloadFile(files.join('\n\n---\n\n'), 'mindroot-vault.md', 'text/markdown');
+    downloadFile(files.join('\n\n---\n\n'), 'atom-vault.md', 'text/markdown');
   },
 
   async exportAsJSON(items: AtomItem[]): Promise<void> {
     const content = JSON.stringify(items, null, 2);
     const date = new Date().toISOString().slice(0, 10);
-    downloadFile(content, `mindroot-backup-${date}.json`, 'application/json');
+    downloadFile(content, `atom-backup-${date}.json`, 'application/json');
   },
 };
