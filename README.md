@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="https://mindroot.com.au/favicon.svg" width="48" height="48" alt="Atom"/>
+  <img src="https://atomhs.github.io/favicon.svg" width="48" height="48" alt="Atom"/>
   <br/><br/>
   <strong>Atom</strong>
   <br/>
-  <sub>Your life, organized from the inside out.</sub>
+  <sub>Personal operating system. Built on the Genesis protocol.</sub>
   <br/><br/>
-  <a href="https://mindroot.com.au">Live App</a> ·
+  [Live App](https://atom.sh) ·
   <a href="#features">Features</a> ·
   <a href="#stack">Stack</a> ·
   <a href="#philosophy">Philosophy</a>
@@ -13,13 +13,13 @@
 
 ---
 
-## What is Atom
+## What is MindRoot
 
 A personal operating system that organizes your entire digital life — not just tasks. Files, ideas, habits, reflections, documents, projects — everything enters one pipeline and emerges structured, connected, and findable.
 
 Built on the **Genesis protocol**: 7 stages of maturation from raw capture (`·`) to committed structure (`○`). Items advance when ready, regress when integrity breaks, and decompose into seeds when complete — feeding the next cycle.
 
-**Atom is the interface.** The engine lives in [`atom-engine-core`](https://github.com/rsmramalho/atom-engine-core).
+**MindRoot is the interface.** The engine lives in [`atom-engine-core`](https://github.com/rsmramalho/atom-engine-core).
 
 ## Features
 
@@ -68,7 +68,7 @@ Bundle      ~83KB gzip  Tests        41
 
 > *Build from the inside out. The engine organizes itself before organizing the world.*
 
-Atom doesn't want you to be more productive. It wants you to be more **present**. The systems handle the organization so your mind is free for what matters.
+MindRoot doesn't want you to be more productive. It wants you to be more **present**. The systems handle the organization so your mind is free for what matters.
 
 Every item follows the same geometry — from raw point to committed circle. Nothing is forced. Nothing is lost. Entropy is recycling, not destruction.
 
@@ -85,8 +85,8 @@ Every item follows the same geometry — from raw point to committed circle. Not
 ## Development
 
 ```bash
-git clone https://github.com/atom-hs/atom.git
-cd atom
+git clone https://github.com/rsmramalho/mindroot-v2.git
+cd mindroot-v2
 npm install
 npm run dev         # localhost:5173
 npm run build       # production build
