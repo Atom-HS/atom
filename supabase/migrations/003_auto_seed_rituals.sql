@@ -37,7 +37,7 @@ BEGIN
   -- Starter task (so Dashboard isn't empty)
   INSERT INTO public.items (user_id, title, type, module, priority, needs_checkin)
   VALUES
-    (NEW.id, 'Explorar o MindRoot', 'task', 'mind', 'importante', false);
+    (NEW.id, 'Explorar o Atom', 'task', 'mind', 'importante', false);
 
   RETURN NEW;
 END;

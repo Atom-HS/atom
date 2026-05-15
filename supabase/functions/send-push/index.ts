@@ -49,7 +49,7 @@ Deno.serve(async (req) => {
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const vapidPublicKey = Deno.env.get('VAPID_PUBLIC_KEY');
     const vapidPrivateKey = Deno.env.get('VAPID_PRIVATE_KEY');
-    const vapidSubject = Deno.env.get('VAPID_SUBJECT') || 'mailto:admin@mindroot.app';
+    const vapidSubject = Deno.env.get('VAPID_SUBJECT') || 'mailto:r@ramalho.au';
 
     if (!vapidPublicKey || !vapidPrivateKey) {
       return new Response(

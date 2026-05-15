@@ -4,7 +4,7 @@
 
 const ANTHROPIC_API_KEY = Deno.env.get('ANTHROPIC_API_KEY');
 
-const SYSTEM_PROMPT_TEMPLATE = `You are MindRoot's input parser. Given a Portuguese text input, extract structured data.
+const SYSTEM_PROMPT_TEMPLATE = `You are Atom's input parser. Given a Portuguese text input, extract structured data.
 
 Return ONLY valid JSON with these fields:
 {
