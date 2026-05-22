@@ -7,30 +7,26 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useItems } from '@/hooks/useItems';
 import { usePipeline } from '@/hooks/usePipeline';
-import { useTriage } from '@/hooks/useTriage';
 import { useNav } from '@/hooks/useNav';
 import { useAppStore } from '@/store/app-store';
 import { getCurrentPeriod } from '@/types/ui';
 import { getCreatedToday, getModifiedToday } from '@/engine/wrap';
-import { getConfidenceBand } from '@/service/triage-service';
 import { motion } from 'framer-motion';
 import { useRaiz } from '@/hooks/useRaiz';
 import { useSoulStore } from '@/store/soul-store';
 import { AuroraCheckin } from '@/components/home/AuroraCheckin';
 import { SoulCard } from '@/components/home/SoulCard';
 import { WrapBanner } from '@/components/home/WrapBanner';
-import { AtomInput } from '@/components/home/AtomInput';
+import { CaptureInput } from '@/components/home/CaptureInput';
 import { ItemCard } from '@/components/shared/ItemCard';
 import { InboxPreview } from '@/components/home/InboxPreview';
 import { HealthBar } from '@/components/audit/HealthBar';
 import { SoulCardSkeleton, CardSkeleton } from '@/components/shared/Skeleton';
 import { EmptyState } from '@/components/shared/EmptyState';
-import type { AtomType, AtomModule } from '@/types/item';
 
 export function HomePage() {
   const { items, isLoading: loading } = useItems();
-  const { capture, classify } = usePipeline();
-  const { classify: aiClassify } = useTriage();
+  const { capture, captureWithModule, quickClassify } = usePipeline();
   const user = useAppStore((s) => s.user);
   const { navigate, selectItem } = useNav();
   const currentEmotion = useAppStore((s) => s.currentEmotion);
@@ -135,19 +131,16 @@ export function HomePage() {
       {/* Capture */}
       <div className="mt-4">
         <SectionLabel>captura</SectionLabel>
-        <AtomInput
+        <CaptureInput
           placeholder={isCrepusculo ? 'ultima captura antes do wrap...' : 'o que esta na cabeca?'}
-          onSubmit={async (text) => {
-            const item = await capture(text);
-            if (item) {
-              // Auto-triage in background
-              try {
-                const result = await aiClassify({ input: text });
-                const band = getConfidenceBand(result);
-                if (band === 'auto') {
-                  await classify(item.id, result.type as AtomType, result.module as AtomModule);
-                }
-              } catch { /* triage failure is non-blocking */ }
+          onSubmit={async ({ title, module, type }) => {
+            if (module && type) {
+              const item = await capture(title);
+              if (item) await quickClassify(item.id, type, module);
+            } else if (module) {
+              await captureWithModule(title, module, []);
+            } else {
+              await capture(title);
             }
           }}
         />

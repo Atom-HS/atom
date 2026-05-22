@@ -110,10 +110,17 @@ Deno.serve(async (req: Request) => {
     const data = await response.json();
     const text = data.content?.[0]?.text || '{}';
 
+    // Haiku às vezes ignora "Return ONLY JSON" e envolve em ```json fence
+    // ou prefixa com "Aqui está:". Extrair JSON antes de parsear.
+    const fenceMatch = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+    const braceMatch = text.match(/\{[\s\S]*\}/);
+    const jsonStr = fenceMatch ? fenceMatch[1].trim() : (braceMatch ? braceMatch[0] : text);
+
     let parsed;
     try {
-      parsed = JSON.parse(text);
+      parsed = JSON.parse(jsonStr);
     } catch {
+      console.error('Triage parse failed. Raw text:', text);
       parsed = {
         title: input, type: 'note', module: 'bridge',
         confidence: 20, reasoning: 'Failed to parse AI response',
