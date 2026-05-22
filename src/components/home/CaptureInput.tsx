@@ -1,83 +1,143 @@
-// home/CaptureInput.tsx — Captura híbrida: input livre + tokens + chips
-// Tokens #module / @type / @date são parseados em tempo real e refletidos nos chips.
-// Clicar chip toggles o token no texto. onSubmit recebe ParsedCapture estruturado.
+// home/CaptureInput.tsx — Captura híbrida: input livre + popover contextual + pílulas
+// Digita `#` ou `@` → popover compacto logo abaixo do cursor com opções filtráveis.
+// Tokens reconhecidos viram pílulas coloridas em UMA linha embaixo do input.
+// Setas navegam, Enter aceita, Esc fecha.
 
-import { useState } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 import { parseCapture, MODULES, type ParsedCapture } from '@/engine/token-parser';
-import type { AtomType } from '@/types/item';
+import type { AtomModule, AtomType } from '@/types/item';
 
-const COMMON_TYPES: ReadonlyArray<AtomType> = ['task', 'note', 'reflection', 'project', 'habit'];
+const COMMON_TYPES: ReadonlyArray<AtomType> = ['task', 'note', 'reflection', 'project', 'habit', 'recipe', 'workout', 'spec', 'doc'];
+const DATE_TOKENS: ReadonlyArray<string> = ['hoje', 'amanha', 'semana', 'seg', 'ter', 'qua', 'qui', 'sex'];
 
-const DATE_CHIPS: ReadonlyArray<{ label: string; token: string }> = [
-  { label: 'hoje', token: 'hoje' },
-  { label: 'amanhã', token: 'amanha' },
-  { label: 'semana', token: 'semana' },
-];
+const MODULE_COLORS: Record<AtomModule, string> = {
+  work: 'bg-blue-500/20 text-blue-300 border-blue-500/40',
+  body: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+  mind: 'bg-violet-500/20 text-violet-300 border-violet-500/40',
+  family: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+  purpose: 'bg-rose-500/20 text-rose-300 border-rose-500/40',
+  bridge: 'bg-zinc-500/20 text-zinc-300 border-zinc-500/40',
+  finance: 'bg-teal-500/20 text-teal-300 border-teal-500/40',
+  social: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40',
+};
+
+const TYPE_COLOR = 'bg-text/10 text-text border-text/20';
+const DATE_COLOR = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
 
 interface CaptureInputProps {
   placeholder?: string;
   onSubmit: (parsed: ParsedCapture) => void | Promise<void>;
 }
 
-function escapeRegExp(s: string): string {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+interface ActiveTrigger {
+  char: '#' | '@';
+  prefix: string;
+  start: number;
 }
 
-interface ChipProps {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}
-
-function Chip({ active, onClick, children }: ChipProps) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`text-[11px] px-2.5 py-1 rounded-lg transition-colors ${
-        active
-          ? 'bg-accent text-bg'
-          : 'bg-card border border-border text-text-muted hover:text-text'
-      }`}
-    >
-      {children}
-    </button>
-  );
+function detectTrigger(text: string, caretPos: number): ActiveTrigger | null {
+  for (let i = caretPos - 1; i >= 0; i--) {
+    const c = text[i];
+    if (c === ' ' || c === '\t') return null;
+    if (c === '#' || c === '@') {
+      return { char: c, prefix: text.slice(i + 1, caretPos), start: i };
+    }
+  }
+  return null;
 }
 
 export function CaptureInput({ placeholder = 'o que esta na cabeca?', onSubmit }: CaptureInputProps) {
   const [text, setText] = useState('');
+  const [caretPos, setCaretPos] = useState(0);
+  const [trigger, setTrigger] = useState<ActiveTrigger | null>(null);
+  const [highlightIdx, setHighlightIdx] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const parsed = parseCapture(text);
 
-  const toggleToken = (token: string) => {
-    const re = new RegExp(`\\s*${escapeRegExp(token)}(?=\\s|$|[.,;!?])`, 'gi');
-    if (re.test(text)) {
-      setText(text.replace(re, '').replace(/\s+/g, ' ').trim());
-    } else {
-      setText(text.trim() ? `${text.trim()} ${token}` : token);
+  const options = useMemo<string[]>(() => {
+    if (!trigger) return [];
+    const prefix = trigger.prefix.toLowerCase();
+    if (trigger.char === '#') {
+      return MODULES.filter((m) => m.startsWith(prefix));
     }
+    // @ — types + dates
+    const both = [...COMMON_TYPES, ...DATE_TOKENS];
+    return both.filter((o) => o.startsWith(prefix));
+  }, [trigger]);
+
+  useEffect(() => { setHighlightIdx(0); }, [trigger?.char, trigger?.prefix]);
+
+  const updateCaret = () => {
+    const pos = inputRef.current?.selectionStart ?? 0;
+    setCaretPos(pos);
+    setTrigger(detectTrigger(text, pos));
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setText(e.target.value);
+    const pos = e.target.selectionStart ?? 0;
+    setCaretPos(pos);
+    setTrigger(detectTrigger(e.target.value, pos));
+  };
+
+  const acceptOption = (opt: string) => {
+    if (!trigger) return;
+    const before = text.slice(0, trigger.start);
+    const after = text.slice(caretPos);
+    const inserted = `${trigger.char}${opt}`;
+    const newText = `${before}${inserted}${after}`;
+    setText(newText);
+    setTrigger(null);
+    const newCaret = before.length + inserted.length;
+    setTimeout(() => {
+      inputRef.current?.focus();
+      inputRef.current?.setSelectionRange(newCaret, newCaret);
+      setCaretPos(newCaret);
+    }, 0);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (trigger && options.length > 0) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); setHighlightIdx((i) => (i + 1) % options.length); return; }
+      if (e.key === 'ArrowUp') { e.preventDefault(); setHighlightIdx((i) => (i - 1 + options.length) % options.length); return; }
+      if (e.key === 'Enter' || e.key === 'Tab') { e.preventDefault(); acceptOption(options[highlightIdx]); return; }
+      if (e.key === 'Escape') { e.preventDefault(); setTrigger(null); return; }
+    }
+    if (e.key === 'Enter') { e.preventDefault(); handleSubmit(); }
   };
 
   const handleSubmit = async () => {
     if (!parsed.title) return;
     await onSubmit(parsed);
     setText('');
+    setTrigger(null);
   };
 
-  const dateActive = (tokenWord: string) => new RegExp(`@${tokenWord}(?=\\s|$|[.,;!?])`, 'i').test(text);
+  const dueLabel = useMemo(() => {
+    if (!parsed.dueDate) return null;
+    const m = text.match(/@(hoje|amanha|amanhã|semana|seg|ter|qua|qui|sex|sab|sáb|dom)\b/i);
+    return m ? m[1].toLowerCase() : parsed.dueDate;
+  }, [parsed.dueDate, text]);
+
+  const hasPills = parsed.module || parsed.type || parsed.dueDate;
 
   return (
-    <div className="space-y-2">
+    <div className="relative">
       <div className="bg-card border border-border rounded-xl px-4 py-3 flex items-center gap-2.5">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0 opacity-35">
           <circle cx="7" cy="7" r="2.5" fill="currentColor" />
         </svg>
 
         <input
+          ref={inputRef}
           type="text"
           value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          onKeyUp={updateCaret}
+          onClick={updateCaret}
+          onBlur={() => setTimeout(() => setTrigger(null), 150)}
           placeholder={placeholder}
           className="flex-1 text-sm bg-transparent outline-none placeholder:text-text-muted"
         />
@@ -95,29 +155,43 @@ export function CaptureInput({ placeholder = 'o que esta na cabeca?', onSubmit }
         </button>
       </div>
 
-      <div className="flex flex-wrap gap-1.5">
-        {MODULES.map((m) => (
-          <Chip key={m} active={parsed.module === m} onClick={() => toggleToken(`#${m}`)}>
-            {m}
-          </Chip>
-        ))}
-      </div>
+      {trigger && options.length > 0 && (
+        <div className="absolute left-8 top-full mt-1 z-10 bg-card border border-border rounded-lg shadow-lg overflow-hidden min-w-35">
+          {options.map((opt, i) => (
+            <button
+              key={opt}
+              type="button"
+              onMouseDown={(e) => { e.preventDefault(); acceptOption(opt); }}
+              onMouseEnter={() => setHighlightIdx(i)}
+              className={`block w-full text-left text-xs px-3 py-1.5 ${
+                i === highlightIdx ? 'bg-text/10 text-text' : 'text-text-muted'
+              }`}
+            >
+              {trigger.char}{opt}
+            </button>
+          ))}
+        </div>
+      )}
 
-      <div className="flex flex-wrap gap-1.5">
-        {COMMON_TYPES.map((t) => (
-          <Chip key={t} active={parsed.type === t} onClick={() => toggleToken(`@${t}`)}>
-            {t}
-          </Chip>
-        ))}
-      </div>
-
-      <div className="flex flex-wrap gap-1.5">
-        {DATE_CHIPS.map((d) => (
-          <Chip key={d.token} active={dateActive(d.token)} onClick={() => toggleToken(`@${d.token}`)}>
-            {d.label}
-          </Chip>
-        ))}
-      </div>
+      {hasPills && (
+        <div className="flex flex-wrap gap-1.5 mt-1.5 px-1">
+          {parsed.module && (
+            <span className={`text-[10px] px-2 py-0.5 rounded-md border ${MODULE_COLORS[parsed.module]}`}>
+              {parsed.module}
+            </span>
+          )}
+          {parsed.type && (
+            <span className={`text-[10px] px-2 py-0.5 rounded-md border ${TYPE_COLOR}`}>
+              {parsed.type}
+            </span>
+          )}
+          {dueLabel && (
+            <span className={`text-[10px] px-2 py-0.5 rounded-md border ${DATE_COLOR}`}>
+              {dueLabel}
+            </span>
+          )}
+        </div>
+      )}
     </div>
   );
 }
