@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atom — a cara (mockup das 3 faces · WIREFRAME_V2)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e1014; --surface:#15181e; --surface2:#1b1f27; --line:#262b35;
+    --ink:#e8e4da; --ink-dim:#9a958a; --ink-faint:#5d594f;
+    --verde:#7fb78a; --ambar:#d9b06b; --roxo:#9b8fc0; --azul:#7da3b8;
+    --shadow:0 10px 30px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#07080a;color:var(--ink);font-family:Inter,sans-serif;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:28px 12px}
+  .phone{width:390px;max-width:100%;height:800px;background:var(--bg);border:1px solid var(--line);border-radius:34px;overflow:hidden;position:relative;box-shadow:var(--shadow);display:flex;flex-direction:column}
+  /* topo */
+  .top{display:flex;justify-content:space-between;align-items:center;padding:18px 22px 6px}
+  .brand{font-family:'Cormorant Garamond',serif;font-size:19px;letter-spacing:.04em;color:var(--ink-dim)}
+  .topo-icons{display:flex;gap:14px;color:var(--ink-faint);font-size:15px}
+  .topo-icons span{cursor:pointer;transition:color .2s}
+  .topo-icons span:hover{color:var(--ink)}
+  /* faces */
+  .face{flex:1;overflow-y:auto;padding:8px 22px 90px;display:none;scrollbar-width:none}
+  .face::-webkit-scrollbar{display:none}
+  .face.active{display:block;animation:fadein .35s ease}
+  @keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  /* nav */
+  .nav{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:14px 30px 22px;background:linear-gradient(to top,var(--bg) 65%,transparent);font-family:'JetBrains Mono',monospace}
+  .nav button{background:none;border:none;color:var(--ink-faint);font-family:inherit;font-size:13.5px;cursor:pointer;padding:6px 14px;border-radius:18px;transition:all .25s;letter-spacing:.02em}
+  .nav button.on{color:var(--ink);background:var(--surface2)}
+  /* blocos comuns */
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:12px}
+  .card h4{font-size:10.5px;font-weight:500;letter-spacing:.14em;text-transform:lowercase;color:var(--ink-faint);margin-bottom:10px;font-family:'JetBrains Mono',monospace}
+  /* ===== HOJE ===== */
+  .arc{margin:10px 0 4px;text-align:center}
+  .arc svg{width:100%;height:74px;overflow:visible}
+  .arc-labels{display:flex;justify-content:space-between;padding:0 14px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-faint)}
+  .arc-labels .now{color:var(--ambar)}
+  .chegada{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:21px;text-align:center;color:var(--ink);margin:10px 0 18px}
+  .chegada small{display:block;font-family:'JetBrains Mono',monospace;font-style:normal;font-size:10px;color:var(--ink-faint);letter-spacing:.12em;margin-top:5px}
+  .proto-head{display:flex;justify-content:space-between;align-items:baseline}
+  .proto-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--verde)}
+  .protos{display:flex;gap:10px;margin-top:4px}
+  .proto{flex:1;border:1px solid var(--line);border-radius:12px;padding:10px 6px;text-align:center;cursor:pointer;transition:all .25s;font-size:12.5px;color:var(--ink-dim)}
+  .proto .g{display:block;font-size:16px;margin-bottom:4px;color:var(--ink-faint);transition:color .25s}
+  .proto.done{border-color:rgba(127,183,138,.4);color:var(--ink)}
+  .proto.done .g{color:var(--verde)}
+  .ainda-da{font-size:11px;color:var(--ink-faint);margin-top:9px;font-style:italic}
+  .fixo{display:flex;gap:12px;padding:7px 0;font-size:13.5px;color:var(--ink-dim);border-bottom:1px dashed var(--line)}
+  .fixo:last-child{border:none}
+  .fixo b{font-family:'JetBrains Mono',monospace;font-weight:400;color:var(--ink-faint);font-size:12px;padding-top:1px}
+  .cabe{background:linear-gradient(135deg,var(--surface) 0%,#191e18 100%);border:1px solid rgba(127,183,138,.25)}
+  .cabe p{font-family:'Cormorant Garamond',serif;font-size:18.5px;line-height:1.45;color:var(--ink)}
+  .cabe small{display:block;margin-top:8px;font-size:10.5px;color:var(--ink-faint);font-family:'JetBrains Mono',monospace;letter-spacing:.06em}
+  .fechar{display:block;margin:22px auto 0;background:none;border:1px solid var(--line);color:var(--ink-dim);font-family:'JetBrains Mono',monospace;font-size:13px;padding:12px 26px;border-radius:24px;cursor:pointer;transition:all .25s}
+  .fechar:hover{border-color:var(--roxo);color:var(--ink)}
+  /* ===== ÁRVORE ===== */
+  .tree-wrap{text-align:center;margin:4px 0 6px}
+  .tree-wrap svg{width:100%;height:300px}
+  .ramo-line{cursor:pointer}
+  .sintese{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;text-align:center;color:var(--ink);line-height:1.4;margin:4px 18px 16px}
+  .janelas{display:flex;justify-content:center;gap:8px;margin-bottom:16px;font-family:'JetBrains Mono',monospace}
+  .janela{font-size:11px;color:var(--ink-faint);border:1px solid var(--line);border-radius:14px;padding:5px 12px;cursor:pointer;transition:all .2s}
+  .janela.on{color:var(--ambar);border-color:rgba(217,176,107,.4)}
+  .folha{display:flex;justify-content:space-between;padding:8px 2px;font-size:13.5px;color:var(--ink-dim);border-bottom:1px dashed var(--line)}
+  .folha:last-child{border:none}
+  .folha .mod{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-faint)}
+  .folha .st{color:var(--verde);margin-right:8px}
+  .drill{position:absolute;left:0;right:0;bottom:0;background:var(--surface2);border-top:1px solid var(--line);border-radius:26px 26px 0 0;padding:22px 26px 90px;transform:translateY(105%);transition:transform .35s cubic-bezier(.2,.8,.2,1);z-index:5;max-height:62%;overflow-y:auto}
+  .drill.open{transform:none}
+  .drill h3{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;margin-bottom:2px}
+  .drill .sub{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-faint);letter-spacing:.1em;margin-bottom:14px}
+  .drill h5{font-size:10.5px;letter-spacing:.14em;color:var(--ink-faint);font-family:'JetBrains Mono',monospace;margin:14px 0 6px;font-weight:400}
+  .drill .item{padding:6px 0;font-size:13.5px;color:var(--ink-dim)}
+  .drill .close{position:absolute;top:14px;right:20px;background:none;border:none;color:var(--ink-faint);font-size:18px;cursor:pointer}
+  /* ===== @ ===== */
+  .e-head{font-family:'Cormorant Garamond',serif;font-size:22px;margin:14px 2px 16px;color:var(--ink)}
+  .e-head em{color:var(--ink-dim)}
+  .boca{display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--line);border-radius:18px;padding:15px 18px;margin-bottom:20px}
+  .boca input{flex:1;background:none;border:none;outline:none;color:var(--ink);font-family:Inter,sans-serif;font-size:14.5px}
+  .boca input::placeholder{color:var(--ink-faint)}
+  .boca .mic{color:var(--ink-faint);font-size:16px;cursor:pointer}
+  .bilhete{border-left:2px solid rgba(217,176,107,.5);padding:8px 0 8px 14px;margin-bottom:12px;font-family:'Cormorant Garamond',serif;font-size:17.5px;font-style:italic;color:var(--ink);line-height:1.4}
+  .bilhete small{display:block;font-family:'JetBrains Mono',monospace;font-style:normal;font-size:10px;color:var(--ink-faint);letter-spacing:.1em;margin-top:5px}
+  .capturado{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--verde);padding:6px 0 2px;opacity:0;transition:opacity .4s}
+  .capturado.show{opacity:1}
+  .v-note{margin-top:20px;font-size:11px;color:var(--ink-faint);font-family:'JetBrains Mono',monospace;line-height:1.7;border-top:1px dashed var(--line);padding-top:14px}
+  /* overlays norte / fechar-dia */
+  .overlay{position:absolute;inset:0;background:rgba(10,11,14,.96);display:none;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px;z-index:9}
+  .overlay.open{display:flex;animation:fadein .4s ease}
+  .overlay .x{position:absolute;top:22px;right:26px;background:none;border:none;color:var(--ink-faint);font-size:20px;cursor:pointer}
+  .overlay h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:26px;margin-bottom:10px}
+  .overlay p{color:var(--ink-dim);font-size:14px;line-height:1.7;max-width:280px}
+  .overlay .estrela{font-size:30px;color:var(--ambar);margin-bottom:18px}
+  .emocoes{display:flex;gap:10px;margin:20px 0}
+  .emocoes button{background:var(--surface);border:1px solid var(--line);border-radius:14px;color:var(--ink-dim);padding:10px 14px;cursor:pointer;font-size:13px;transition:all .2s}
+  .emocoes button:hover{color:var(--ink);border-color:var(--roxo)}
+  .semente{background:var(--surface);border:1px solid var(--line);border-radius:14px;color:var(--ink);padding:12px 16px;width:100%;max-width:280px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;outline:none}
+  .tag{position:absolute;top:0;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--ink-faint);padding:6px 12px}
+  /* rituais de verdade + soul log */
+  .tap{cursor:pointer;transition:color .2s}
+  .tap:hover{color:var(--ink)}
+  .soul-entry{font-size:12.5px;color:var(--ink-dim);padding:5px 0;font-family:'JetBrains Mono',monospace}
+  .soul-entry b{font-weight:400;color:var(--ink-faint);margin-right:8px;font-size:11px}
+  .breath{width:110px;height:110px;border-radius:50%;border:1.5px solid rgba(217,176,107,.55);margin:8px 0 14px;animation:breathe 8s ease-in-out infinite;box-shadow:0 0 40px rgba(217,176,107,.12)}
+  @keyframes breathe{0%,100%{transform:scale(1);opacity:.55}50%{transform:scale(1.55);opacity:1}}
+  .breath-word{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--ink-dim);min-height:26px}
+  .pular{margin-top:18px;background:none;border:none;color:var(--ink-faint);font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;letter-spacing:.1em}
+  /* listas */
+  .li-row{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:13.5px;color:var(--ink-dim);cursor:pointer;border-bottom:1px dashed var(--line)}
+  .li-row .g{color:var(--ink-faint);font-size:14px;transition:color .2s}
+  .li-row.done{color:var(--ink-faint);text-decoration:line-through}
+  .li-row.done .g{color:var(--verde)}
+  .li-add{display:flex;gap:8px;margin-top:8px}
+  .li-add input{flex:1;background:none;border:none;border-bottom:1px dashed var(--line);outline:none;color:var(--ink);font-size:13px;padding:4px 2px;font-family:Inter,sans-serif}
+  .li-add input::placeholder{color:var(--ink-faint)}
+  .li-name{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--ink);margin-bottom:4px}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="tag">MOCKUP · WIREFRAME V2 · 11 JUN — pra marcar ✓ ✗ ?</div>
+  <div class="top">
+    <div class="brand">atom</div>
+    <div class="topo-icons">
+      <span title="norte — a estrela, quieta" onclick="openOv('norte')">✦</span>
+      <span title="ajustes" style="font-size:13px">⚙</span>
+    </div>
+  </div>
+
+  <!-- ============ FACE 1 · HOJE ============ -->
+  <div class="face active" id="hoje">
+    <div class="arc">
+      <svg viewBox="0 0 340 70">
+        <path d="M 20 62 Q 170 -28 320 62" fill="none" stroke="#262b35" stroke-width="1.5"/>
+        <path d="M 20 62 Q 95 17 170 17" fill="none" stroke="#d9b06b" stroke-width="1.5" opacity=".85"/>
+        <circle cx="20" cy="62" r="3" fill="#7fb78a"/>
+        <circle cx="170" cy="17" r="4.5" fill="#d9b06b"/>
+        <circle cx="320" cy="62" r="3" fill="#9b8fc0" opacity=".6"/>
+      </svg>
+      <div class="arc-labels">
+        <span class="tap" onclick="openRitual('aurora')">aurora</span>
+        <span class="now tap" onclick="openRitual('zenite')">zênite</span>
+        <span class="tap" onclick="openOv('fdia')">crepúsculo</span>
+      </div>
+    </div>
+
+    <div class="chegada">“cheguei firme”<small>chegada do dia · 06:48</small></div>
+
+    <div class="card">
+      <div class="proto-head"><h4>manhã · E.</h4><span class="proto-count" id="pcount">2/3</span></div>
+      <div class="protos">
+        <div class="proto done" onclick="toggleProto(this)"><span class="g">◉</span>água</div>
+        <div class="proto done" onclick="toggleProto(this)"><span class="g">◉</span>vitamina</div>
+        <div class="proto" onclick="toggleProto(this)"><span class="g">⊙</span>remédio</div>
+      </div>
+      <div class="ainda-da" id="aindada">a janela do remédio ainda dá</div>
+    </div>
+
+    <div class="card">
+      <h4>fixos de hoje</h4>
+      <div class="fixo"><b>09:00</b> levar Sofia</div>
+      <div class="fixo"><b>14:00</b> call Atlas</div>
+    </div>
+
+    <div class="card cabe">
+      <h4>o que cabe agora</h4>
+      <p style="font-size:16.5px;padding:4px 0;cursor:pointer" onclick="addSoul('escolhi · responder Willi')">“responder Willi — leve”</p>
+      <p style="font-size:16.5px;padding:4px 0;cursor:pointer;opacity:.75" onclick="addSoul('escolhi · esboço árvore')">“10 min no esboço da árvore”</p>
+      <p style="font-size:16.5px;padding:4px 0;cursor:pointer;opacity:.55" onclick="addSoul('escolhi · alongar')">“alongar — o corpo pediu”</p>
+      <small>capacidade × momento · 2-3 opções, tu escolhes (marcação 11 Jun)</small>
+    </div>
+
+    <div class="card">
+      <h4>soul log · hoje</h4>
+      <div id="soullist">
+        <div class="soul-entry"><b>06:48</b> aurora · cheguei firme</div>
+      </div>
+    </div>
+
+    <button class="fechar" onclick="openOv('fdia')">○ &nbsp;fechar o dia</button>
+  </div>
+
+  <!-- ============ FACE 2 · ÁRVORE ============ -->
+  <div class="face" id="arvore">
+    <div class="tree-wrap"><svg id="treesvg" viewBox="0 0 340 300"></svg></div>
+    <div class="sintese">“a árvore pende: trabalho cheio · corpo pedindo”</div>
+    <div class="janelas">
+      <span class="janela on">lunar 21</span><span class="janela">estação 55</span><span class="janela">vida</span>
+    </div>
+    <div class="card">
+      <h4>folhas recentes</h4>
+      <div class="folha"><span><span class="st">○</span>wrap W23</span><span class="mod">ponte</span></div>
+      <div class="folha"><span><span class="st">⬠</span>dormir 20:30</span><span class="mod">corpo</span></div>
+      <div class="folha"><span><span class="st">△</span>spec entrada Lumen</span><span class="mod">trabalho</span></div>
+    </div>
+    <div style="text-align:center;font-size:11px;color:var(--ink-faint);font-family:'JetBrains Mono',monospace">toca um ramo → o ramo abre</div>
+
+    <div class="drill" id="drill">
+      <button class="close" onclick="drill(false)">×</button>
+      <h3 id="d-nome">corpo</h3>
+      <div class="sub" id="d-sub">real 13 · ideal 21 · pendendo pra dentro</div>
+      <h5>items do ramo</h5>
+      <div class="item">· treino fáscia — broto (—)</div>
+      <div class="item">· dormir 20:30 — ⬠</div>
+      <h5>pessoas</h5>
+      <div class="item">· Dr. Camila · fisio</div>
+      <h5>a raiz dele</h5>
+      <div class="item">· saúde — exames, remédio, academia</div>
+    </div>
+  </div>
+
+  <!-- ============ FACE 3 · @ ============ -->
+  <div class="face" id="arroba">
+    <div class="e-head">E. · <em>“o que chegou?”</em></div>
+    <div class="boca">
+      <input id="bocain" placeholder="fala, cola, despeja…" onkeydown="if(event.key==='Enter')captura()">
+      <span class="mic">🎤</span>
+    </div>
+    <div class="capturado" id="cap">· capturado — vira ponto no tronco</div>
+
+    <div class="card" style="background:none;border:none;padding:4px 2px">
+      <h4>bilhetes do E.</h4>
+      <div class="bilhete">“a janela do remédio ainda dá”<small>sentinela · sem-shame</small></div>
+      <div class="bilhete">“três folhas no corpo essa semana — a árvore sentiu”<small>observador</small></div>
+    </div>
+
+    <div class="card">
+      <h4>listas · o simples coberto</h4>
+      <div class="li-name">mercado</div>
+      <div class="li-row" onclick="liToggle(this)"><span class="g">⊙</span>leite</div>
+      <div class="li-row" onclick="liToggle(this)"><span class="g">⊙</span>pão</div>
+      <div class="li-row done" onclick="liToggle(this)"><span class="g">◉</span>café</div>
+      <div class="li-add"><input placeholder="+ item (Enter)" onkeydown="if(event.key==='Enter')liAdd(this)"></div>
+    </div>
+
+    <div class="v-note">
+      v1 · captura + bilhetes + listas locais<br>
+      “compra leite” na boca → cai na lista certa, sem cerimônia<br>
+      v2 · o @ real — escreve no tronco via skill/agente (o wrap prova o canal)
+    </div>
+  </div>
+
+  <!-- overlays -->
+  <div class="overlay" id="norte">
+    <button class="x" onclick="closeOv()">×</button>
+    <div class="estrela">✦</div>
+    <h2>norte</h2>
+    <p>a estrela — quieta, pull.<br>não muda. não cobra.<br>está aqui quando tu olhas.</p>
+  </div>
+  <div class="overlay" id="fdia">
+    <button class="x" onclick="closeOv()">×</button>
+    <h2>○ fechar o dia</h2>
+    <p>como tu chegas ao fim?</p>
+    <div class="emocoes">
+      <button onclick="soulPick('crepúsculo',this)">inteiro</button><button onclick="soulPick('crepúsculo',this)">cansado</button><button onclick="soulPick('crepúsculo',this)">grato</button>
+    </div>
+    <input class="semente" placeholder="uma semente pra amanhã…">
+  </div>
+  <div class="overlay" id="ritual">
+    <button class="x" onclick="closeOv()">×</button>
+    <h2 id="r-title">aurora</h2>
+    <p id="r-sub">três respirações antes de qualquer coisa</p>
+    <div class="breath" id="r-breath"></div>
+    <div class="breath-word" id="r-word">inspira…</div>
+    <div class="emocoes" id="r-emos" style="display:none">
+      <button onclick="soulPick(rPhase,this)">firme</button><button onclick="soulPick(rPhase,this)">leve</button><button onclick="soulPick(rPhase,this)">pesado</button>
+    </div>
+    <button class="pular" id="r-skip" onclick="ritualEmos()">pular pra chegada</button>
+  </div>
+
+  <div class="nav">
+    <button class="on" onclick="go('hoje',this)">·&thinsp;hoje</button>
+    <button onclick="go('arvore',this)">⬡&thinsp;árvore</button>
+    <button onclick="go('arroba',this)">✳&thinsp;@</button>
+  </div>
+</div>
+
+<script>
+function go(id,btn){
+  document.querySelectorAll('.face').forEach(f=>f.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  drill(false);
+}
+function toggleProto(el){
+  el.classList.toggle('done');
+  el.querySelector('.g').textContent = el.classList.contains('done')?'◉':'⊙';
+  const n=document.querySelectorAll('.proto.done').length;
+  document.getElementById('pcount').textContent=n+'/3';
+  document.getElementById('aindada').textContent = n===3 ? 'manhã inteira — o E. agradece' : 'a janela do remédio ainda dá';
+  if(n===3) addSoul('protocolo · manhã inteira');
+}
+/* soul log — todo ritual escreve aqui (no real: body.soul do tronco) */
+function addSoul(txt){
+  const t=new Date(), hh=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
+  const d=document.createElement('div'); d.className='soul-entry';
+  d.innerHTML='<b>'+hh+'</b>'+txt;
+  document.getElementById('soullist').appendChild(d);
+}
+function soulPick(phase,btn){ addSoul(phase+' · '+btn.textContent); closeOv(); }
+/* ritual de verdade: respiração breve → emoção → soul log */
+let rPhase='aurora', rTimer=null;
+function openRitual(phase){
+  rPhase=phase;
+  const cfg = phase==='aurora'
+    ? {t:'aurora — chegada', s:'três respirações antes de qualquer coisa', emos:['firme','leve','pesado']}
+    : {t:'zênite — um toque', s:'pausa. como está sendo o dia?', emos:['fluindo','corrido','presente']};
+  document.getElementById('r-title').textContent=cfg.t;
+  document.getElementById('r-sub').textContent=cfg.s;
+  const emos=document.getElementById('r-emos');
+  emos.innerHTML=cfg.emos.map(e=>'<button onclick="soulPick(rPhase,this)">'+e+'</button>').join('');
+  emos.style.display='none';
+  document.getElementById('r-breath').style.display='block';
+  document.getElementById('r-skip').style.display='inline';
+  const w=document.getElementById('r-word'); w.style.display='block'; w.textContent='inspira…';
+  let i=0; clearInterval(rTimer);
+  rTimer=setInterval(()=>{ i++; w.textContent = i%2 ? 'expira…' : 'inspira…'; if(i>=6) ritualEmos(); },4000);
+  openOv('ritual');
+}
+function ritualEmos(){
+  clearInterval(rTimer);
+  document.getElementById('r-breath').style.display='none';
+  document.getElementById('r-word').style.display='none';
+  document.getElementById('r-skip').style.display='none';
+  document.getElementById('r-emos').style.display='flex';
+  document.getElementById('r-sub').textContent='como tu chegas?';
+}
+/* listas — o simples coberto */
+function liToggle(el){
+  el.classList.toggle('done');
+  el.querySelector('.g').textContent = el.classList.contains('done')?'◉':'⊙';
+}
+function liAdd(inp){
+  if(!inp.value.trim())return;
+  const r=document.createElement('div'); r.className='li-row'; r.onclick=()=>liToggle(r);
+  r.innerHTML='<span class="g">⊙</span>'+inp.value.trim();
+  inp.closest('.card').insertBefore(r,inp.closest('.li-add'));
+  inp.value='';
+}
+function openOv(id){document.getElementById(id).classList.add('open')}
+function closeOv(){clearInterval(rTimer);document.querySelectorAll('.overlay').forEach(o=>o.classList.remove('open'))}
+function captura(){
+  const i=document.getElementById('bocain'); if(!i.value.trim())return;
+  i.value=''; const c=document.getElementById('cap'); c.classList.add('show');
+  setTimeout(()=>c.classList.remove('show'),2200);
+}
+function drill(open,r){
+  const d=document.getElementById('drill');
+  if(open&&r){
+    document.getElementById('d-nome').textContent=r.nome;
+    document.getElementById('d-sub').textContent='real '+r.real+' · ideal '+r.ideal+(r.real<r.ideal?' · pendendo pra dentro':' · saturando');
+    d.classList.add('open');
+  } else d.classList.remove('open');
+}
+/* árvore radial φ — 8 ramos (módulos do tronco), real × ideal, fib 34·21·13·8·5·3·2·1 */
+const ramos=[
+  {nome:'trabalho', ideal:34, real:34, cor:'#7da3b8'},
+  {nome:'corpo',    ideal:21, real:13, cor:'#7fb78a'},
+  {nome:'mente',    ideal:13, real:11, cor:'#9b8fc0'},
+  {nome:'família',  ideal:8,  real:8,  cor:'#d9b06b'},
+  {nome:'propósito',ideal:5,  real:3,  cor:'#c0a4a4'},
+  {nome:'ponte',    ideal:3,  real:3,  cor:'#a8b3a0'},
+  {nome:'finanças', ideal:2,  real:2,  cor:'#b8a87d'},
+  {nome:'social',   ideal:1,  real:1,  cor:'#8f9bb0'}
+];
+const svg=document.getElementById('treesvg'), cx=170, cy=290, NS='http://www.w3.org/2000/svg';
+const tr=document.createElementNS(NS,'line');
+tr.setAttribute('x1',cx);tr.setAttribute('y1',cy);tr.setAttribute('x2',cx);tr.setAttribute('y2',cy-58);
+tr.setAttribute('stroke','#5d594f');tr.setAttribute('stroke-width','3');svg.appendChild(tr);
+/* marcação 11 Jun: aurora = tela-ritual de manhã — primeira abertura do dia abre o ritual */
+setTimeout(()=>openRitual('aurora'),700);
+ramos.forEach((r,i)=>{
+  const ang=Math.PI*(0.08+0.84*(i/(ramos.length-1)));   // leque
+  const Lmax=140, Li=30+(r.ideal/34)*(Lmax-30), Lr=30+(r.real/34)*(Lmax-30);
+  const bx=cx, by=cy-58;
+  const ex=i=>bx+Math.cos(Math.PI-ang)*i, ey=i=>by-Math.sin(ang)*i;
+  const ideal=document.createElementNS(NS,'line');     // ideal: tracejado
+  ideal.setAttribute('x1',bx);ideal.setAttribute('y1',by);
+  ideal.setAttribute('x2',ex(Li));ideal.setAttribute('y2',ey(Li));
+  ideal.setAttribute('stroke','#2c323d');ideal.setAttribute('stroke-width','1.5');
+  ideal.setAttribute('stroke-dasharray','3 4');svg.appendChild(ideal);
+  const real=document.createElementNS(NS,'line');      // real: cheio
+  real.setAttribute('x1',bx);real.setAttribute('y1',by);
+  real.setAttribute('x2',ex(Lr));real.setAttribute('y2',ey(Lr));
+  real.setAttribute('stroke',r.cor);real.setAttribute('stroke-width','2.5');
+  real.setAttribute('stroke-linecap','round');real.setAttribute('class','ramo-line');
+  real.addEventListener('click',()=>drill(true,r));svg.appendChild(real);
+  const folha=document.createElementNS(NS,'circle');   // folha na ponta
+  folha.setAttribute('cx',ex(Lr));folha.setAttribute('cy',ey(Lr));folha.setAttribute('r','3.4');
+  folha.setAttribute('fill',r.cor);folha.setAttribute('class','ramo-line');
+  folha.addEventListener('click',()=>drill(true,r));svg.appendChild(folha);
+  const lb=document.createElementNS(NS,'text');        // label
+  lb.setAttribute('x',ex(Li+16));lb.setAttribute('y',ey(Li+16));
+  lb.setAttribute('fill','#5d594f');lb.setAttribute('font-size','10');
+  lb.setAttribute('font-family','JetBrains Mono,monospace');lb.setAttribute('text-anchor','middle');
+  lb.textContent=r.nome;svg.appendChild(lb);
+});
+</script>
+</body>
+</html>
