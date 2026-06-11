@@ -33,6 +33,7 @@ const SettingsPage = lazy(() => import('@/pages/Settings').then((m) => ({ defaul
 const RaizPage = lazy(() => import('@/pages/Raiz').then((m) => ({ default: m.RaizPage })));
 const SearchPage = lazy(() => import('@/pages/Search').then((m) => ({ default: m.SearchPage })));
 const ItemDetailPage = lazy(() => import('@/pages/ItemDetail').then((m) => ({ default: m.ItemDetailPage })));
+const HojePage = lazy(() => import('@/pages/Hoje').then((m) => ({ default: m.HojePage })));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -114,6 +115,7 @@ function AnimatedRoutes() {
             <Route path="/library" element={<LibraryPage />} />
             <Route path="/graph" element={<GraphPage />} />
             <Route path="/search" element={<SearchPage />} />
+            <Route path="/hoje" element={<HojePage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/item/:id" element={<ItemDetailPage />} />
             <Route path="/auth/callback" element={<HomePage />} />

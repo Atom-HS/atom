@@ -1,7 +1,11 @@
 // components/home/AuroraCheckin.tsx — First-access-of-day check-in
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { isToday, parseISO } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useItems } from '@/hooks/useItems';
 import { useSoulStore } from '@/store/soul-store';
+import { useAppStore } from '@/store/app-store';
+import { soulService } from '@/service/soul-service';
 import { getCurrentPeriod } from '@/types/ui';
 
 const ENERGY_OPTIONS: { key: 'high' | 'medium' | 'low'; label: string }[] = [
@@ -12,19 +16,44 @@ const ENERGY_OPTIONS: { key: 'high' | 'medium' | 'low'; label: string }[] = [
 
 export function AuroraCheckin() {
   const { auroraCheckedToday, setAurora, skipAurora } = useSoulStore();
+  const user = useAppStore((s) => s.user);
   const period = getCurrentPeriod();
+  const { items } = useItems();
 
   const [emotion, setEmotion] = useState('');
   const [energy, setEnergy] = useState<'high' | 'medium' | 'low'>('medium');
   const [intention, setIntention] = useState('');
 
+  // O tronco é a fonte de verdade: se a chegada de hoje já está em items,
+  // não re-pergunta (o Zustand evapora no reload; o banco não)
+  const jaChegouNoTronco = useMemo(
+    () =>
+      (items ?? []).some(
+        (i) =>
+          i.type === 'checkpoint' &&
+          i.tags?.includes('aurora') &&
+          isToday(parseISO(i.created_at)),
+      ),
+    [items],
+  );
+
   // Only show before crepusculo and if not checked today
-  if (auroraCheckedToday || period.key === 'crepusculo') return null;
+  if (auroraCheckedToday || jaChegouNoTronco || period.key === 'crepusculo') return null;
 
   const canSubmit = emotion.trim().length > 0;
 
   const handleSubmit = () => {
-    setAurora(emotion.trim(), energy, intention.trim());
+    const e = emotion.trim();
+    const i = intention.trim();
+    // Local primeiro — a UI nunca espera a rede pra deixar o dia começar
+    setAurora(e, energy, i);
+    if (user) {
+      soulService
+        .persistAuroraCheckin({ userId: user.id, emotion: e, energy, intention: i })
+        .catch(() => {
+          // offline/erro: o dia segue; fila de persistência vem na E6 (PWA offline)
+        });
+    }
   };
 
   return (
