@@ -1,5 +1,13 @@
 # MindMate — Tag V1 UX (Histórico)
 
+> ⚠️ **Correção histórica (2026-06-12):** este doc afirma que a plataforma Lovable foi
+> "planejada, não iniciada". **Falso** — o MindMate foi SIM construído no Lovable como
+> "Atom Engine 4.0" (`rsmramalho/atom-core`, 743 commits, beta.2 completo em 20/Mar/2026,
+> com colaboração multi-user, PWA offline e 150+ testes). A arqueologia completa está em
+> [`docs/release-v1/analise_mindmate-atom_v1.md`](../release-v1/analise_mindmate-atom_v1.md).
+> O texto abaixo segue congelado como estava — ele descreve fielmente apenas a fase
+> *Tag V1* (Out 2025), não a linhagem inteira.
+
 **Versão:** 1.0
 **Data:** 2026-05-13
 **Status:** Historical (referência)
