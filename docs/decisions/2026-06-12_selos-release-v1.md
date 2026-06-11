@@ -48,8 +48,8 @@ CI nasce com **typecheck + test + build como portão duro; lint como relatório*
 
 ## S-07 · Pendências que escalam pro Rick (não são minhas)
 
-1. Vercel: confirmar/rewirar o projeto de deploy pro repo `Atom-HS/atom` (painel). O projeto `mindroot-v2` mora na conta Vercel antiga — invisível da conta nova.
-1b. GitHub: **adicionar `ramalhoau` como collaborator/owner na org `Atom-HS`** — sem isso, PRs via API são impossíveis (esta rodada usou merge local --no-ff + push via chave SSH `rsmramalho`, documentado nos merges).
+1. ~~Vercel~~ **RESOLVIDO PARCIAL (12 Jun):** app no ar na conta nova — **https://atom-deploy-ten.vercel.app** (projeto `atom-deploy`, deploy estático do dist, proteção SSO desligada via API). Pendente só o CD automático: conectar GitHub à conta Vercel `ramalhoau` no painel (login connection) e aí religar o projeto ao `Atom-HS/atom`. O `mindroot-v2.vercel.app` antigo segue fóssil — arquivar quando o CD novo existir.
+1b. ~~GitHub~~ **RESOLVIDO (12 Jun):** `ramalhoau` agora é collaborator **admin** no `Atom-HS/atom` (convite criado pela conta `rsmramalho` via gh, aceito via API). PRs por MCP/gh destravadas. Org membership ainda requer admin da org (403 — descobrir quem é o owner da org `Atom-HS`, possivelmente conta terceira).
 2. Auto-confirm de email ligado no Supabase — decidir antes do release público.
 3. Renomear o projeto Supabase "rsmramalho's Project" → "Atom" (cosmético).
 4. Arquivar com selo os 6 backends-fósseis MindMate da conta antiga (Jun–Set 2025).
