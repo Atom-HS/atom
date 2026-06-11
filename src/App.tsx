@@ -104,7 +104,8 @@ function AnimatedRoutes() {
       >
         <Suspense fallback={<PageSkeleton />}>
           <Routes location={location}>
-            <Route path="/" element={<HomePage />} />
+            {/* O dia é a entrada (E2 → E3): a raiz abre o HOJE; a Home antiga vive em /home */}
+            <Route path="/" element={<HojePage />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/pipeline" element={<PipelinePage />} />
             <Route path="/wrap" element={<WrapPage />} />
