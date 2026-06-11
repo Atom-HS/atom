@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "test": "vitest run",
+    "typecheck": "tsc -b",
     "lint": "eslint .",
     "preview": "vite preview",
     "lighthouse": "lhci autorun --collect.url=https://mindroot-v2.vercel.app --collect.numberOfRuns=3",
