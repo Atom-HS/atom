@@ -53,8 +53,7 @@ export function HojePage() {
   }, [items]);
 
   return (
-    // sem max-w-*: a escala de container não existe no @theme (bug conhecido,
-    // cf. 5f85cb7) — o AppShell já limita a 430px
+    // padrão da casa: página usa só padding — o AppShell já limita a 430px
     <div className="px-5 pb-24">
       <AuroraCheckin />
 
