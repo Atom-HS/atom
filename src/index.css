@@ -78,13 +78,10 @@
   /* Font */
   --font-sans: 'DM Sans', sans-serif;
 
-  /* Spacing scale */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 3rem;
+  /* NUNCA definir --spacing-{sm,md,lg,...} aqui: no Tailwind v4 esses nomes
+     sequestram max-w-sm/md/lg etc. (max-width vira 0.5rem → texto quebra
+     palavra-a-palavra). Os tokens antigos não eram usados em nenhum lugar
+     do src — removidos em 2026-06-12. Causa-raiz dos workarounds 5f85cb7. */
 }
 
 /* ─── Dark mode ───────────────────────────────────────── */
