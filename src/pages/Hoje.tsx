@@ -53,7 +53,9 @@ export function HojePage() {
   }, [items]);
 
   return (
-    <div className="max-w-md mx-auto px-4 pb-24">
+    // sem max-w-*: a escala de container não existe no @theme (bug conhecido,
+    // cf. 5f85cb7) — o AppShell já limita a 430px
+    <div className="px-5 pb-24">
       <AuroraCheckin />
 
       {/* arco do dia */}
