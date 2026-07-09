@@ -1,0 +1,26 @@
+name: Supabase keep-alive
+
+# Free tier do Supabase pausa projetos após ~7 dias sem tráfego de API.
+# Incidente de 12 Jun 2026: backend hibernou e o app "caiu" pro Rick.
+# Este ping diário conta como atividade e impede a pausa.
+# Morre quando a org migrar pra Pro (selo S-07).
+
+on:
+  schedule:
+    - cron: '17 19 * * *'   # diário, 19:17 UTC (~05:17 Brisbane — antes da aurora)
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping REST endpoint
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" \
+            "${{ secrets.SUPABASE_URL }}/rest/v1/?apikey=${{ secrets.SUPABASE_ANON_KEY }}")
+          echo "supabase respondeu: HTTP $code"
+          # 200/401/404 = vivo; 000/5xx = problema real
+          case "$code" in
+            2*|401|404) exit 0 ;;
+            *) echo "::error::backend não respondeu (HTTP $code) — possivelmente pausado"; exit 1 ;;
+          esac
