@@ -15,7 +15,8 @@ Fonte: `docs/release-v1/auditoria_reformar-x-zero.md`.
 - M5 `c:/repos/mindroot-original` → movido pra `c:/repos/_archive/` ✅
 - M6 `c:/repos/atom-engine-core` → movido pra `_archive/` (remoto `archive-atom-core` confirmado arquivado antes) ✅
 - M7 → migração `011_drop_v1_ghost_tables.sql` criada; aplica no próximo ciclo de DDL ⏳
-- M1 (7 backends Lovable) → pipeline export→delete em execução; exports em `c:/repos/_archive/supabase-fosseis-export/` ⏳
+- M1 (7 backends Lovable) → **CONCLUÍDO ✅**: 7/7 deletados. 5 exportados antes (77 tabelas, 520KB em `c:/repos/_archive/supabase-fosseis-export/`); 2 não aceitaram restore (MMv1-tag-card, Mindmate-v1.3) e morreram sem export conforme o Sim. **Achado arqueológico no export: o "Mindmate v1.4" tinha 48 TABELAS** — um life-OS completo (work/body/meals/meditation/financial_vision/family_rituals/life_mission/core_values/wisdom_entries/symptom_tracking…) — de longe o fóssil mais rico da linhagem; o export preserva esse vocabulário de domínios pra consulta futura.
+- **Incidente recorrente:** o backend canon (`avvw…`) hibernou pela 2ª vez no mesmo dia (e o Constellation apareceu ACTIVE — restore via painel?). Restaurado de novo via Management API. **Free tier é incompatível com o app em uso real — a decisão Pro (S-07) sobe de prioridade.**
 - M2 (stub "ATOM Project") → **BLOQUEADO por privilégio** (org da conta nova; nem API nem CLI têm owner) → 1 clique do Rick no painel Supabase da conta nova 🔴
 - M3 (Vercel velho `mindroot-v2` + domínio `www.mindroot.com.au`) → conta Vercel antiga, fora do alcance → painel do Rick 🔴
 
