@@ -1,5 +1,24 @@
 # Selos do release v1 — decisões consolidadas
 
+## S-08 · A DECISÃO DO CORTE (Rick: "Sim", 12 Jun — pós-auditoria reformar×zero)
+
+1. **Zero na casca, tronco como biblioteca** — casca (14 páginas, 8.365 LOC) morre INTEIRA no E4 via branch `v1-faces`: as 3 faces nascem do zero sobre o tronco; quando o Rick vive 1 dia completo nelas, o merge deleta a casca velha. Substituição, nunca convivência longa.
+2. **Tronco intocável** (types/service/engine/config/features-raiz-lógica/supabase — 4.873 LOC React-zero) — é a Genesis encarnada.
+3. **Mesmo repo** (`Atom-HS/atom`) — história, CI, selos e cherry-picks moram aqui.
+4. **Regra de condução: NADA nasce na casca velha.** Toda feature nova nasce na casca nova. (Lição do enxerto /hoje de 11-12 Jun.)
+5. **Mortes M1–M7 autorizadas** (lista na auditoria) — execução registrada abaixo de cada item conforme concluída.
+
+Fonte: `docs/release-v1/auditoria_reformar-x-zero.md`.
+
+**Execução das mortes (12 Jun, mesma sessão do Sim):**
+- M4 `rsmramalho/mindroot` → já estava arquivado (verificado) ✅
+- M5 `c:/repos/mindroot-original` → movido pra `c:/repos/_archive/` ✅
+- M6 `c:/repos/atom-engine-core` → movido pra `_archive/` (remoto `archive-atom-core` confirmado arquivado antes) ✅
+- M7 → migração `011_drop_v1_ghost_tables.sql` criada; aplica no próximo ciclo de DDL ⏳
+- M1 (7 backends Lovable) → pipeline export→delete em execução; exports em `c:/repos/_archive/supabase-fosseis-export/` ⏳
+- M2 (stub "ATOM Project") → **BLOQUEADO por privilégio** (org da conta nova; nem API nem CLI têm owner) → 1 clique do Rick no painel Supabase da conta nova 🔴
+- M3 (Vercel velho `mindroot-v2` + domínio `www.mindroot.com.au`) → conta Vercel antiga, fora do alcance → painel do Rick 🔴
+
 **Data:** 2026-06-12 · **Autoridade:** Rick (sessões 11–12 Jun 2026, "pode rodar sem autorização") · **Registrado por:** Claude Code
 **Contexto:** análise de linhagem MindMate→MindRoot→Atom (`docs/release-v1/analise_mindmate-atom_v1.md`). A lição nº 1 da linhagem: **o que evapora sem decisão escrita volta pra assombrar** — três features completas do atom-core (offline, push, colaboração) sumiram no rebuild sem nenhum selo. Este arquivo existe pra isso nunca se repetir.
 
