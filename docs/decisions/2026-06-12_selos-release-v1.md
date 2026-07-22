@@ -10,6 +10,16 @@
 
 Fonte: `docs/release-v1/auditoria_reformar-x-zero.md`.
 
+## S-09 · CORREÇÃO DE RUMO PELO RICK (mesma noite, com o app aberto na mão)
+
+> *"Quero essa versão — é meio onde a gente parou quando era claro o que estávamos fazendo. Casa com a DB que já temos. Estou pronto pra começar a terminar os projetos."*
+
+1. **A base de trabalho é a VERSÃO ATUAL** (MindRoot v2, 14 rotas, em `www.mindroot.com.au` / `mindroot-v2.vercel.app`) — com os dados reais que o Rick já tem nela (rituais, items, inbox).
+2. **O corte das 3 faces (S-08/E4) fica ADIADO como norte, não como demolição** — os mockups e o wireframe V2 continuam sendo a direção de longo prazo; a data da morte da casca sai do calendário e passa a depender do uso real pedir.
+3. A regra "nada nasce na casca velha" **relaxa para**: melhorias nascem onde o USO pedir, incrementais, uma de cada vez — sem re-arquitetura por impulso. (O espírito anti-caos fica; o dogma sai.)
+4. Nome (mindroot × Atom): **explicitamente adiado** pelo Rick — decidir olhando o app pronto.
+5. Modo de trabalho: **usar → doer → consertar** (o "dia vivido" como bússola, agora com o app que já existe).
+
 **Execução das mortes (12 Jun, mesma sessão do Sim):**
 - M4 `rsmramalho/mindroot` → já estava arquivado (verificado) ✅
 - M5 `c:/repos/mindroot-original` → movido pra `c:/repos/_archive/` ✅
