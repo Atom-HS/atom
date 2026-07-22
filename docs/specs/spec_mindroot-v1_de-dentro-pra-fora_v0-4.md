@@ -1,3 +1,5 @@
+> 📌 **Cópia de trabalho.** A canônica vive no hub: `atom-engine/specs/system_spec_mindroot-v1_de-dentro-pra-fora_v0-4.md` (d-058). Divergência → hub vence.
+
 ╔══════════════════════════════════════╗
 ║          A T O M   E N V E L O P E  ║
 ╠══════════════════════════════════════╣
