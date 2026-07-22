@@ -1,3 +1,7 @@
+> ⚠️ **SUPERSEDED (23 Jul 2026):** este plano foi substituído pela spec aprovada
+> [`docs/specs/spec_mindroot-v1_de-dentro-pra-fora_v0-4.md`](../specs/spec_mindroot-v1_de-dentro-pra-fora_v0-4.md).
+> Fica como contexto histórico; E0–E2 executados, E3–E7 reabsorvidos nas 9 fases da spec.
+
 # Plano de implementação — Atom v1 (método Karpathy)
 
 **Data:** 2026-06-11 · **Status:** v1 — plano executável

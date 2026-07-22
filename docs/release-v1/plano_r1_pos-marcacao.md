@@ -1,3 +1,6 @@
+> ⚠️ **SUPERSEDED (23 Jul 2026):** substituído pela spec aprovada `docs/specs/spec_mindroot-v1_de-dentro-pra-fora_v0-4.md`.
+> A marcação do wireframe registrada aqui segue válida (absorvida via selo S-04 e ajuste A3 da spec).
+
 # Plano R1 — pós-marcação do WIREFRAME_V2
 
 **Data:** 2026-06-11 · sessão de marcação conduzida (protocolo do próprio wireframe)
