@@ -2,6 +2,7 @@
 // Formats: ATOM ENVELOPE (.txt), Obsidian (.md), JSON backup
 
 import { supabase } from './supabase';
+import { localDayKey } from '@/engine/dates';
 import type { AtomItem, ItemConnection } from '@/types/item';
 import { STAGE_GEOMETRIES, STAGE_NAMES } from '@/components/atoms/tokens';
 
@@ -184,7 +185,7 @@ export const exportService = {
 
   async exportAsJSON(items: AtomItem[]): Promise<void> {
     const content = JSON.stringify(items, null, 2);
-    const date = new Date().toISOString().slice(0, 10);
+    const date = localDayKey();
     downloadFile(content, `atom-backup-${date}.json`, 'application/json');
   },
 };

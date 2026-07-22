@@ -9,6 +9,10 @@ export function useAuth() {
   const { user, setUser } = useAppStore();
   const [loading, setLoading] = useState(true);
   const tokenStored = useRef(false);
+  // F2 close: onAuthStateChange dispara TOKEN_REFRESHED periodicamente —
+  // sem estes guards, cada refresh re-setava user (re-render global) e re-aplicava tema
+  const lastUserId = useRef<string | null>(null);
+  const themeApplied = useRef(false);
 
   useEffect(() => {
     // On the OAuth callback URL, Supabase needs to read ?code from the URL
@@ -32,11 +36,18 @@ export function useAuth() {
         return;
       }
 
-      setUser(session?.user ?? null);
+      // Só propaga quando a IDENTIDADE muda (login/logout/troca) —
+      // TOKEN_REFRESHED com o mesmo user não re-renderiza o app inteiro
+      const newId = session?.user?.id ?? null;
+      if (newId !== lastUserId.current) {
+        lastUserId.current = newId;
+        setUser(session?.user ?? null);
+      }
       setLoading(false);
 
-      // Restore theme from user_metadata
-      if (session?.user?.user_metadata?.theme) {
+      // Restore theme from user_metadata (uma vez por sessão)
+      if (session?.user?.user_metadata?.theme && !themeApplied.current) {
+        themeApplied.current = true;
         const saved = session.user.user_metadata.theme as ThemeMode;
         useAppStore.getState().setTheme(saved);
       }
@@ -79,6 +90,8 @@ export function useAuth() {
   const signOut = async () => {
     await authService.signOut();
     tokenStored.current = false;
+    themeApplied.current = false;
+    lastUserId.current = null;
     setUser(null);
   };
 

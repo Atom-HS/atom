@@ -1,3 +1,5 @@
+import { localDayKey } from './dates';
+
 // engine/token-parser.ts — Parser de tokens de captura manual
 // Input livre + tokens #module / @type / @date → ParsedCapture estruturado.
 
@@ -19,7 +21,7 @@ type DateKeyword = typeof DATE_KEYWORDS[number];
 function offsetDays(d: Date, days: number): string {
   const dd = new Date(d);
   dd.setDate(dd.getDate() + days);
-  return dd.toISOString().slice(0, 10);
+  return localDayKey(dd); // fuso local — @hoje às 04h da manhã é HOJE, não ontem-UTC
 }
 
 function nextWeekday(d: Date, target: number): string {

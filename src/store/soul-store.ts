@@ -2,9 +2,11 @@
 // auroraCheckedDate tracks the ISO date (YYYY-MM-DD) of last check-in.
 // Consumers compare against today to auto-reset at midnight.
 import { create } from 'zustand';
+import { localDayKey } from '@/engine/dates';
 
+// fuso LOCAL: com o UTC antigo, a aurora "resetava" às 10h da manhã de Brisbane
 function todayKey(): string {
-  return new Date().toISOString().slice(0, 10);
+  return localDayKey();
 }
 
 interface SoulState {

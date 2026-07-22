@@ -49,7 +49,8 @@ export const RITUAL_PERIODS: RitualPeriodConfig[] = [
     key: 'aurora',
     label: 'Aurora',
     greeting: 'Bom dia',
-    hours: { start: 5, end: 12 },
+    // começa às 4h: quem acorda antes do sol merece aurora, não crepúsculo
+    hours: { start: 4, end: 12 },
     color: 'var(--color-aurora)',
   },
   {
@@ -63,14 +64,14 @@ export const RITUAL_PERIODS: RitualPeriodConfig[] = [
     key: 'crepusculo',
     label: 'Crepusculo',
     greeting: 'Boa noite',
-    hours: { start: 18, end: 5 },
+    hours: { start: 18, end: 4 },
     color: 'var(--color-crepusculo)',
   },
 ];
 
 export function getCurrentPeriod(): RitualPeriodConfig {
   const hour = new Date().getHours();
-  if (hour >= 5 && hour < 12) return RITUAL_PERIODS[0];
+  if (hour >= 4 && hour < 12) return RITUAL_PERIODS[0];
   if (hour >= 12 && hour < 18) return RITUAL_PERIODS[1];
   return RITUAL_PERIODS[2];
 }

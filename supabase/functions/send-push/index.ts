@@ -112,7 +112,7 @@ Deno.serve(async (req) => {
             .eq('user_id', uid)
             .eq('completed', false)
             .eq('archived', false)
-            .lt('due_date', new Date().toISOString().slice(0, 10));
+            .lt('due_date', new Date().toLocaleDateString('en-CA', { timeZone: 'Australia/Brisbane' })); // dia de Brisbane (F2 close)
 
           if (count && count > 0) {
             const label = count === 1 ? '1 item atrasado' : `${count} itens atrasados`;

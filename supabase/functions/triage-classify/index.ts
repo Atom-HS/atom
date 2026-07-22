@@ -75,7 +75,7 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const today = new Date().toISOString().slice(0, 10);
+    const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Australia/Brisbane' }); // dia do usuário, não dia UTC (F2 close)
     const systemPrompt = SYSTEM_PROMPT.replace('{{TODAY}}', today);
 
     let userMessage = input;

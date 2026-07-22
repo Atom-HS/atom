@@ -64,7 +64,7 @@ Deno.serve(async (req: Request) => {
 
     console.log('Parsing input:', input);
 
-    const today = new Date().toISOString().slice(0, 10);
+    const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Australia/Brisbane' }); // dia do usuário, não dia UTC (F2 close)
     const systemPrompt = SYSTEM_PROMPT_TEMPLATE.replace('{{TODAY}}', today);
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
