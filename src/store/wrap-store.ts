@@ -4,6 +4,7 @@
 import { create } from 'zustand';
 import { wrapService, type WrapSession } from '@/service/wrap-service';
 import { useSoulStore } from './soul-store';
+import { soulService } from '@/service/soul-service';
 import type { AtomItem, Emotion, EnergyLevel } from '@/types/item';
 
 interface WrapState {
@@ -31,12 +32,24 @@ export const useWrapStore = create<WrapState>((set, get) => ({
     try {
       const data = await wrapService.collectWrapData();
 
-      // Read aurora check-in from soul-store
+      // Read aurora check-in from soul-store — e cai pro TRONCO quando o
+      // Zustand evaporou (check-in às 5h + wrap às 20h = shift perdido antes)
       const soulState = useSoulStore.getState();
       const hasAurora = soulState.auroraCheckedToday && soulState.emotion && soulState.energy;
-      const aurora = hasAurora
+      let aurora = hasAurora
         ? { emotion: soulState.emotion as Emotion, energy: soulState.energy as EnergyLevel }
         : null;
+      let intention: string | null = soulState.intention ?? null;
+      if (!aurora) {
+        const arrival = await soulService.getTodayArrival().catch(() => null);
+        if (arrival) {
+          aurora = {
+            emotion: arrival.emotion as Emotion,
+            energy: (arrival.energy ?? 'medium') as EnergyLevel,
+          };
+          intention = arrival.intention ?? intention;
+        }
+      }
 
       set({
         session: {
@@ -47,7 +60,7 @@ export const useWrapStore = create<WrapState>((set, get) => ({
           seeds: [],
           soul: {
             aurora,
-            intention: soulState.intention ?? null,
+            intention,
             tasks: [],
             crepusculo: null,
             shift: null,

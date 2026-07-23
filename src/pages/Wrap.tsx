@@ -10,6 +10,7 @@ import { useFullAudit } from '@/hooks/useAudit';
 import { useNav } from '@/hooks/useNav';
 import { getCreatedToday, getModifiedToday, computeAudit } from '@/engine/wrap';
 import { detectShift } from '@/engine/soul';
+import { soulService } from '@/service/soul-service';
 import { StageBadge } from '@/components/atoms/StageBadge';
 import { EMOTIONS } from '@/types/item';
 import type { Emotion, EnergyLevel, AtomItem, AtomRelation } from '@/types/item';
@@ -39,12 +40,37 @@ export function WrapPage() {
   // Local state for soul step
   const [selectedEmotions, setSelectedEmotions] = useState<string[]>([]);
   const [energy, setEnergy] = useState<EnergyLevel>('medium');
+  // Fase 3: journaling de fechamento (página, primeira classe — spec §2.2)
+  const [journal, setJournal] = useState('');
+  const [journalSaved, setJournalSaved] = useState(false);
   const [decisions, setDecisions] = useState<string[]>([]);
   const [newDecision, setNewDecision] = useState('');
   const [nextSteps, setNextSteps] = useState<string[]>(['']);
 
   const created = useMemo(() => getCreatedToday(items), [items]);
   const modified = useMemo(() => getModifiedToday(items), [items]);
+  // Fase 3: o soul log do dia ganha casa no crepúsculo (checkpoints de hoje)
+  const todaySoul = useMemo(() => {
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
+    return (items ?? [])
+      .filter((i) => i.type === 'checkpoint' && new Date(i.created_at) >= start)
+      .sort((a, b) => a.created_at.localeCompare(b.created_at));
+  }, [items]);
+
+  const saveJournal = async () => {
+    const text = journal.trim();
+    if (!text || journalSaved) return;
+    try {
+      const { data } = await import('@/service/supabase').then((m) => m.supabase.auth.getUser());
+      const uid = data.user?.id;
+      if (!uid) return;
+      await soulService.persistJournal({ userId: uid, text, slot: 'crepusculo' });
+      setJournalSaved(true);
+    } catch {
+      /* rede não segura o ritual */
+    }
+  };
   const audit = useMemo(() => computeAudit(items), [items]);
   const { data: fullAudit, isLoading: auditLoading } = useFullAudit();
 
@@ -160,7 +186,7 @@ export function WrapPage() {
       <div className="flex-1 overflow-y-auto px-5 pb-4">
         <AnimatePresence mode="wait">
           <motion.div key={step} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-            {step === 0 && <SoulStep emotions={selectedEmotions} setEmotions={setSelectedEmotions} energy={energy} setEnergy={setEnergy} aurora={session?.soul.aurora ?? null} intention={session?.soul.intention ?? null} />}
+            {step === 0 && <SoulStep emotions={selectedEmotions} setEmotions={setSelectedEmotions} energy={energy} setEnergy={setEnergy} aurora={session?.soul.aurora ?? null} intention={session?.soul.intention ?? null} todaySoul={todaySoul} journal={journal} setJournal={setJournal} journalSaved={journalSaved} onSaveJournal={saveJournal} />}
             {step === 1 && <ItemsStep created={created} modified={modified} />}
             {step === 2 && <DecidedStep decisions={decisions} setDecisions={setDecisions} newDecision={newDecision} setNewDecision={setNewDecision} />}
             {step === 3 && <ConnectionsStep items={items} createdToday={created} modifiedToday={modified} />}
@@ -208,15 +234,26 @@ export function WrapPage() {
 
 // ─── Step Components ──────────────────────────────────
 
-function SoulStep({ emotions, setEmotions, energy, setEnergy, aurora, intention }: {
+function SoulStep({ emotions, setEmotions, energy, setEnergy, aurora, intention, todaySoul, journal, setJournal, journalSaved, onSaveJournal }: {
   emotions: string[]; setEmotions: (e: string[]) => void;
   energy: EnergyLevel; setEnergy: (e: EnergyLevel) => void;
   aurora: { emotion: Emotion; energy: EnergyLevel } | null;
   intention: string | null;
+  todaySoul: AtomItem[];
+  journal: string; setJournal: (t: string) => void;
+  journalSaved: boolean; onSaveJournal: () => void;
 }) {
   const toggleEmotion = (e: string) => {
     setEmotions(emotions.includes(e) ? emotions.filter((x) => x !== e) : [...emotions, e]);
   };
+
+  // Fase 3: o shift do dia, visível (chegaste X → sais Y)
+  const exit = (emotions[0] ?? null) as Emotion | null;
+  const shift = aurora && exit ? detectShift(aurora.emotion, exit) : null;
+  const shiftWord =
+    shift === 'positive' ? 'o dia subiu' :
+    shift === 'negative' ? 'o dia pesou' :
+    shift === 'stable' ? 'chegaste e sais inteiro' : null;
 
   return (
     <div className="bg-card border border-border rounded-[14px] p-4">
@@ -259,6 +296,59 @@ function SoulStep({ emotions, setEmotions, energy, setEnergy, aurora, intention 
             {e}
           </button>
         ))}
+      </div>
+
+      {/* Fase 3 · o shift, visível — nomeia, não julga */}
+      {shift && aurora && exit && (
+        <div className="mt-3 pt-3 border-t border-surface text-center">
+          <p className="text-sm text-text">
+            <span className="text-accent">{aurora.emotion}</span>
+            <span className="text-text-muted mx-2">→</span>
+            <span className="text-accent">{exit}</span>
+          </p>
+          {shiftWord && <p className="text-xs text-text-muted italic mt-0.5">{shiftWord}</p>}
+        </div>
+      )}
+
+      {/* Fase 3 · o soul log do dia — casa própria no crepúsculo */}
+      {todaySoul.length > 0 && (
+        <div className="mt-3 pt-3 border-t border-surface">
+          <div className="text-[11px] font-medium tracking-wider uppercase text-text-muted mb-1.5">o dia escreveu</div>
+          {todaySoul.map((i) => (
+            <div key={i.id} className="flex gap-2 py-0.5 text-xs text-text-muted">
+              <span className="text-accent-light">
+                {new Date(i.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+              </span>
+              <span>{i.title}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Fase 3 · journaling de fechamento — página, primeira classe */}
+      <div className="mt-3 pt-3 border-t border-surface">
+        <div className="text-[11px] font-medium tracking-wider uppercase text-text-muted mb-1.5">fechar escrevendo · opcional</div>
+        {journalSaved ? (
+          <p className="text-xs text-text-muted italic py-1">guardado. o dia está escrito.</p>
+        ) : (
+          <>
+            <textarea
+              value={journal}
+              onChange={(e) => setJournal(e.target.value)}
+              placeholder="o que este dia te deixou..."
+              rows={4}
+              className="w-full bg-surface border border-border rounded-xl px-3 py-2.5 text-sm text-text outline-none focus:border-accent-light resize-none placeholder:text-text-muted"
+            />
+            {journal.trim() && (
+              <button
+                onClick={onSaveJournal}
+                className="mt-2 px-4 py-2 rounded-xl bg-accent text-white text-xs font-medium"
+              >
+                guardar
+              </button>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

@@ -3,16 +3,21 @@
 // tocava o banco. Agora a chegada nasce como checkpoint born-committed em items,
 // mesmo padrão do wrap (state committed · stage 7 · status completed).
 import { itemService } from './item-service';
+import { supabase } from './supabase';
 import type { AtomItem, EnergyLevel } from '@/types/item';
 
 export const soulService = {
-  /** Journaling de aurora (spec v0.4 §2.2 — primeira classe, não campo).
-   *  Escrita livre da abertura do dia → item reflection born-committed. */
-  async persistAuroraJournal(params: { userId: string; text: string }): Promise<AtomItem> {
-    const { userId, text } = params;
+  /** Journaling das pontas do dia (spec v0.4 §2.2 — primeira classe, não campo).
+   *  Escrita livre → item reflection born-committed com o slot do ritual. */
+  async persistJournal(params: {
+    userId: string;
+    text: string;
+    slot: 'aurora' | 'crepusculo';
+  }): Promise<AtomItem> {
+    const { userId, text, slot } = params;
     const firstLine = text.trim().split('\n')[0].slice(0, 60);
     return itemService.create({
-      title: firstLine || 'aurora — journaling',
+      title: firstLine || `${slot} — journaling`,
       user_id: userId,
       type: 'reflection',
       module: 'mind',
@@ -20,7 +25,7 @@ export const soulService = {
       genesis_stage: 7,
       status: 'completed',
       source: 'mindroot',
-      tags: ['journal', 'aurora'],
+      tags: ['journal', slot],
       notes: text,
       body: {
         soul: {
@@ -28,10 +33,40 @@ export const soulService = {
           emotion_before: null,
           emotion_after: null,
           needs_checkin: false,
-          ritual_slot: 'aurora',
+          ritual_slot: slot,
         },
       },
     });
+  },
+
+  /** A chegada de hoje, lida do TRONCO (o Zustand evapora no reload —
+   *  sem isto, check-in às 5h + wrap às 20h = shift perdido). */
+  async getTodayArrival(): Promise<{
+    emotion: string;
+    energy: string | null;
+    intention: string | null;
+  } | null> {
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
+    const { data } = await supabase
+      .from('items')
+      .select('notes,body,created_at')
+      .eq('type', 'checkpoint')
+      .contains('tags', ['aurora'])
+      .gte('created_at', start.toISOString())
+      .order('created_at', { ascending: true })
+      .limit(1)
+      .maybeSingle();
+    if (!data) return null;
+    const soul = (data.body as Record<string, unknown> | null)?.soul as
+      | { emotion_before?: string | null; energy_level?: string | null }
+      | undefined;
+    if (!soul?.emotion_before) return null;
+    return {
+      emotion: soul.emotion_before,
+      energy: soul.energy_level ?? null,
+      intention: data.notes ?? null,
+    };
   },
 
   async persistAuroraCheckin(params: {

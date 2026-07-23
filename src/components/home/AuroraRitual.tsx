@@ -121,7 +121,7 @@ export function AuroraRitual() {
   const submitJournal = (save: boolean) => {
     const text = journal.trim();
     if (save && text && user) {
-      soulService.persistAuroraJournal({ userId: user.id, text }).catch(() => {});
+      soulService.persistJournal({ userId: user.id, text, slot: 'aurora' }).catch(() => {});
     }
     setStep('arrival');
   };
