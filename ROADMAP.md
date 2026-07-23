@@ -1,3 +1,7 @@
+> ⚠️ **SUPERSEDED (23 Jul 2026):** este roadmap foi substituído pela spec da Onda 2
+> — `docs/specs/spec_mindroot-v1_de-dentro-pra-fora_v0-4.md` (canônica no hub, ADR d-058).
+> Progresso vivo: `docs/onda-2-log.md`. Este arquivo fica como história da Espiral 1.
+
 # Atom — Roadmap
 
 **Versão:** 6.9

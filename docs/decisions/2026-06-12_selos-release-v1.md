@@ -76,6 +76,11 @@ PWA offline (fila IndexedDB + sync) · push VAPID só pra protocolos do E. · pr
 
 CI nasce com **typecheck + test + build como portão duro; lint como relatório** (59 erros herdados). Selo: zerar a dívida até o fim do E4 e promover lint a portão.
 
+> **Atualização 23 Jul:** S-07 itens resolvidos — Pro do Supabase LIGADO ✅ (org coberta: Atom +
+> Constellation) · CD automático VIVO ✅ (reconexão Git via Claude-in-Chrome). Restam: auto-confirm
+> de email (antes de release público) · renomear projeto Supabase · stub "ATOM Project" (M2, painel)
+> · fósseis da conta antiga. Progresso da Onda 2: `docs/onda-2-log.md`.
+
 ## S-07 · Pendências que escalam pro Rick (não são minhas)
 
 1. ~~Vercel~~ **RESOLVIDO PARCIAL (12 Jun):** app no ar na conta nova — **https://atom-deploy-ten.vercel.app** (projeto `atom-deploy`, deploy estático do dist, proteção SSO desligada via API). Pendente só o CD automático: conectar GitHub à conta Vercel `ramalhoau` no painel (login connection) e aí religar o projeto ao `Atom-HS/atom`. O `mindroot-v2.vercel.app` antigo segue fóssil — arquivar quando o CD novo existir.
