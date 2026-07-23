@@ -10,8 +10,17 @@ import { useNav } from '@/hooks/useNav';
 import type { AtomItem, SoulExtension } from '@/types/item';
 import { MODULE_COLORS, STAGE_GEOMETRIES } from '@/components/atoms/tokens';
 import { getTypeColor } from '@/components/atoms/tokens';
+import { RITUAL_PERIODS } from '@/types/ui';
 
 const DAY_NAMES = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
+
+// Fonte única dos horários: RITUAL_PERIODS (types/ui). Labels hardcoded aqui
+// divergiram quando a aurora mudou pra 4h (achado do QA sweep, F2 close).
+function ritualHours(period: string): string {
+  const cfg = RITUAL_PERIODS.find((p) => p.key === period);
+  if (!cfg) return '';
+  return `${String(cfg.hours.start).padStart(2, '0')}h–${String(cfg.hours.end).padStart(2, '0')}h`;
+}
 
 export function CalendarPage() {
   const { items } = useItems();
@@ -154,9 +163,9 @@ export function CalendarPage() {
         {dayItems.length === 0 && habits.length === 0 && (
           <>
             <div className="space-y-1.5 mb-4">
-              <GhostRitualBlock period="aurora" hours="05h-12h" color="var(--color-warning)" />
-              <GhostRitualBlock period="zenite" hours="12h-18h" color="var(--color-ai-blue)" />
-              <GhostRitualBlock period="crepusculo" hours="18h-05h" color="var(--color-accent-light)" />
+              <GhostRitualBlock period="aurora" hours={ritualHours('aurora')} color="var(--color-warning)" />
+              <GhostRitualBlock period="zenite" hours={ritualHours('zenite')} color="var(--color-ai-blue)" />
+              <GhostRitualBlock period="crepusculo" hours={ritualHours('crepusculo')} color="var(--color-accent-light)" />
             </div>
             <div className="text-center py-4">
               <div className="text-2xl text-text-muted/30 mb-2">·</div>
@@ -173,7 +182,7 @@ function RitualBlock({ period, color, bgClass, items, habits, showWrap, wrapItem
   period: string; color: string; bgClass: string; items: AtomItem[]; habits: AtomItem[]; showWrap?: boolean; wrapItem?: AtomItem | null;
 }) {
   const { selectItem } = useNav();
-  const hours = period === 'aurora' ? '05h–12h' : period === 'zenite' ? '12h–18h' : '18h–05h';
+  const hours = ritualHours(period);
 
   if (items.length === 0 && habits.length === 0 && !showWrap) return null;
 
