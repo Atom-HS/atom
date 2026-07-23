@@ -6,6 +6,39 @@
 
 ---
 
+## 2026-07-24 (2ª entrada) — Fase 6: routine builder, a cadeia
+
+**Arco:** "bora, acho q tem um por sinal" → o RoutineBuilder da Raiz mapeado
+(gerador de hábitos soltos, não cadeia) → Fase 6 construída: rotina como
+cadeia de hábitos de primeira classe (D2).
+
+### Decisões (Rick, nesta sessão)
+- **Type routine próprio** (migration 013) — D2: achatar rotina em task
+  recorrente evapora a alma. Nasce structured (3): a cadeia É a estrutura.
+- **Vive no zênite da agenda** ("zênite ganha estrutura") — o builder da
+  Raiz continua existindo pro onboarding; a cadeia mora no dia.
+
+### Os 5 commits
+- **Chão** `0abfa86` — enum + registry (body: chain[]+slot, recurrence+soul).
+- **Motor** `8836ea0` — engine/routine puro (7 testes): chainProgress sobre
+  items com virtual reset — "feito" = feito NESTE período de graça.
+- **Serviço** `10f08e8` — createRoutine (elos habits classified + belongs_to
+  + chain ordenada), completeLink/reopen/seal; useRoutine: cadeia fechou →
+  rotina sela sozinha.
+- **Fix** `aa55aac` — bug pré-existente: completeMutation não gravava
+  last_completed → recorrente completado NUNCA reabria. Achado da F6 → D4.
+- **Rosto** `139e818` — RoutineChain nos blocos de ritual (só no HOJE) +
+  RoutineComposer (templates prontos por slot, elos editáveis) + ⛓+ nos
+  headers e ghosts.
+
+### Estado e gate
+- 129 testes verdes, build ok. Prod: pendente migration 013 + push (CD).
+- Aceitação: Rick monta a primeira cadeia real (o template "pausa do
+  meio-dia" tá a 2 toques) e vive ela alguns dias.
+- Próxima da spec: **Fase 7 — Protocol builder** ("quando X, faço Y").
+
+---
+
 ## 2026-07-24 — Fase 5: pessoas no calendário (sessão "vamos continuar")
 
 **Arco da sessão:** "vamos continuar fazendo o mindroot?" → Fase 5 desenhada,
