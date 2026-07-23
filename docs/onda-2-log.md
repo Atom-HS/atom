@@ -6,6 +6,43 @@
 
 ---
 
+## 2026-07-24 — Fase 5: pessoas no calendário (sessão "vamos continuar")
+
+**Arco da sessão:** "vamos continuar fazendo o mindroot?" → Fase 5 desenhada,
+2 decisões do Rick seladas, 4 commits — o calendário agora sabe QUEM.
+
+### Decisões (Rick, nesta sessão)
+- **Sugestão curada**: attendee desconhecido NUNCA vira pessoa sozinho — o app
+  apresenta cards prontos, o Rick decide em 1 toque (honra D1 + padrão Lumen-sugere).
+- **Born-committed**: person nasce ○ (stage 7) — uma pessoa É, não matura pelo
+  FSM e não sofre entropia (views de audit só olham inbox/connected: invisível
+  por construção).
+
+### Os 4 commits
+- **Chão** `6660bc1` — migration 012 (`atom_type` + 'person'), registry
+  (floor 7, family, body: emails/aliases/relationship), TS union + PersonBody.
+- **Olhos** `3ec3bcc` — calendar-sync traz attendees (sem self/salas, email
+  lowercase); ingest grava body.attendees + tags #who (padrão do Gmail);
+  eventos existentes têm attendees atualizados quando mudam.
+- **Mapa** `a734a8f` — engine/people.ts puro (8 testes): match por email e por
+  nome/alias em título (palavra inteira, sem acento — o caminho da família,
+  que não é attendee). person-service: createPerson, syncEventConnections
+  (event —references→ person, idempotente, roda após cada sync), getSuggestions.
+- **Rosto** `b81e490` — PersonChips nos eventos (conhecido = cor do módulo,
+  clicável; desconhecido = cinza) + PersonSuggestions (banner discreto →
+  cards com família·trabalho·amigo; "×" silencia por aparelho via localStorage).
+
+### Estado e gate
+- Código completo, 122 testes verdes, build ok. **Pendências de prod (freio 🔴,
+  aguardando o sim):** `git push` (CD deploya) · `supabase db push` (migration
+  012) · `supabase functions deploy calendar-sync`.
+- Aceitação da fase: Rick abre a agenda, vê gente nos eventos, cria as pessoas
+  da família a partir das sugestões (ou via alias no título).
+- Próxima da spec: **Fase 6 — Routine builder** (cadeias de hábitos sobre
+  Recurrence; o zênite ganha estrutura).
+
+---
+
 ## 2026-07-23 — o dia das quatro fases (sessão "segue o flow")
 
 **Arco da sessão:** começou com a spec em draft e "vamos trabalhar em cima do mindroot";
