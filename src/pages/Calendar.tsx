@@ -11,6 +11,8 @@ import type { AtomItem, SoulExtension } from '@/types/item';
 import { MODULE_COLORS, STAGE_GEOMETRIES } from '@/components/atoms/tokens';
 import { getTypeColor } from '@/components/atoms/tokens';
 import { RITUAL_PERIODS } from '@/types/ui';
+import { PersonChips } from '@/components/calendar/PersonChips';
+import { PersonSuggestions } from '@/components/calendar/PersonSuggestions';
 
 const DAY_NAMES = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
 
@@ -60,6 +62,12 @@ export function CalendarPage() {
     [items],
   );
 
+  // Pessoas do mundo (Fase 5) — pra chips e matching nos eventos
+  const persons = useMemo(
+    () => items.filter((i) => i.type === 'person' && i.state !== 'archived'),
+    [items],
+  );
+
   const selectedKey = format(selectedDate, 'yyyy-MM-dd');
   const dayItems = itemsByDate[selectedKey] ?? [];
 
@@ -95,6 +103,9 @@ export function CalendarPage() {
         <h1 className="text-[24px] font-medium tracking-tight">agenda</h1>
         <span className="text-[13px] text-text-muted">{format(selectedDate, 'MMMM yyyy', { locale: ptBR })}</span>
       </div>
+
+      {/* Pessoas novas no calendário — sugestão curada (Fase 5) */}
+      <PersonSuggestions />
 
       {/* Week nav */}
       <div className="flex items-center justify-between py-3">
@@ -152,13 +163,13 @@ export function CalendarPage() {
         </div>
 
         {/* Aurora block */}
-        <RitualBlock period="aurora" color="var(--color-warning)" bgClass="bg-warning/5 border-warning/15" items={aurora} habits={habits.slice(0, 2)} />
+        <RitualBlock period="aurora" color="var(--color-warning)" bgClass="bg-warning/5 border-warning/15" items={aurora} habits={habits.slice(0, 2)} persons={persons} />
 
         {/* Zenite block */}
-        <RitualBlock period="zenite" color="var(--color-ai-blue)" bgClass="bg-ai-blue/4 border-ai-blue/10" items={zenite} habits={[]} />
+        <RitualBlock period="zenite" color="var(--color-ai-blue)" bgClass="bg-ai-blue/4 border-ai-blue/10" items={zenite} habits={[]} persons={persons} />
 
         {/* Crepúsculo block */}
-        <RitualBlock period="crepusculo" color="var(--color-accent-light)" bgClass="bg-accent-light/5 border-accent-light/15" items={crepItems} habits={[]} showWrap={today && !!todayWrap} wrapItem={todayWrap} />
+        <RitualBlock period="crepusculo" color="var(--color-accent-light)" bgClass="bg-accent-light/5 border-accent-light/15" items={crepItems} habits={[]} persons={persons} showWrap={today && !!todayWrap} wrapItem={todayWrap} />
 
         {dayItems.length === 0 && habits.length === 0 && (
           <>
@@ -178,8 +189,8 @@ export function CalendarPage() {
   );
 }
 
-function RitualBlock({ period, color, bgClass, items, habits, showWrap, wrapItem }: {
-  period: string; color: string; bgClass: string; items: AtomItem[]; habits: AtomItem[]; showWrap?: boolean; wrapItem?: AtomItem | null;
+function RitualBlock({ period, color, bgClass, items, habits, persons, showWrap, wrapItem }: {
+  period: string; color: string; bgClass: string; items: AtomItem[]; habits: AtomItem[]; persons: AtomItem[]; showWrap?: boolean; wrapItem?: AtomItem | null;
 }) {
   const { selectItem } = useNav();
   const hours = ritualHours(period);
@@ -196,8 +207,8 @@ function RitualBlock({ period, color, bgClass, items, habits, showWrap, wrapItem
         <span className="text-[10px] text-text-muted ml-auto">{hours}</span>
       </div>
 
-      {items.map((item) => <CalendarItem key={item.id} item={item} />)}
-      {habits.map((item) => <CalendarItem key={item.id} item={item} />)}
+      {items.map((item) => <CalendarItem key={item.id} item={item} persons={persons} />)}
+      {habits.map((item) => <CalendarItem key={item.id} item={item} persons={persons} />)}
       {showWrap && (
         <div
           onClick={() => wrapItem && selectItem(wrapItem.id)}
@@ -210,7 +221,7 @@ function RitualBlock({ period, color, bgClass, items, habits, showWrap, wrapItem
   );
 }
 
-function CalendarItem({ item }: { item: AtomItem }) {
+function CalendarItem({ item, persons }: { item: AtomItem; persons: AtomItem[] }) {
   const { selectItem } = useNav();
   const moduleColor = item.module ? MODULE_COLORS[item.module] : 'var(--color-mod-bridge)';
   const geo = STAGE_GEOMETRIES[item.genesis_stage] ?? '·';
@@ -220,6 +231,7 @@ function CalendarItem({ item }: { item: AtomItem }) {
     <div onClick={() => selectItem(item.id)} className="flex items-center gap-2 p-1.5 px-2.5 mb-[3px] rounded-lg bg-card border border-border text-[13px] cursor-pointer hover:border-accent-light/30 transition-colors">
       <div className="w-[3px] h-[22px] rounded-sm shrink-0" style={{ background: moduleColor }} />
       <span className="flex-1 truncate">{item.title}</span>
+      <PersonChips item={item} persons={persons} />
       <span className="text-[10px] text-text-muted">{geo}</span>
       {item.type && (
         <span className="text-[9px] font-medium px-1.5 py-px rounded" style={{ background: `${typeColor}18`, color: typeColor }}>
