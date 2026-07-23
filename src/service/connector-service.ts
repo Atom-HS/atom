@@ -12,6 +12,12 @@ export interface ConnectorStatus {
   metadata: Record<string, unknown>;
 }
 
+export interface EventAttendee {
+  email: string;
+  name: string | null;
+  response: string | null;
+}
+
 export interface CalendarEvent {
   google_id: string;
   title: string;
@@ -19,6 +25,7 @@ export interface CalendarEvent {
   end: string;
   calendar: string;
   recurring: boolean;
+  attendees?: EventAttendee[];
 }
 
 export interface GmailMessage {
@@ -112,20 +119,38 @@ export const connectorService = {
 
   async ingestCalendarEvents(events: CalendarEvent[], userId: string): Promise<number> {
     const { data: existingItems } = await supabase
-      .from('items').select('body').eq('user_id', userId).not('body', 'is', null);
-    const existingGoogleIds = new Set(
-      (existingItems ?? []).map((i) => (i.body as Record<string, unknown>)?.google_id).filter(Boolean),
+      .from('items').select('id, body').eq('user_id', userId).not('body', 'is', null);
+    const existingByGoogleId = new Map(
+      (existingItems ?? [])
+        .filter((i) => (i.body as Record<string, unknown>)?.google_id)
+        .map((i) => [(i.body as Record<string, unknown>).google_id as string, i]),
     );
 
     let created = 0;
     for (const event of events) {
-      if (existingGoogleIds.has(event.google_id)) continue;
+      const attendees = event.attendees ?? [];
+      const existing = existingByGoogleId.get(event.google_id);
+
+      if (existing) {
+        // Attendees change (people respond, get added) — keep the tronco fresh
+        const body = existing.body as Record<string, unknown>;
+        if (attendees.length > 0 && JSON.stringify(body.attendees ?? []) !== JSON.stringify(attendees)) {
+          await itemService.update(existing.id, { body: { ...body, attendees } });
+        }
+        continue;
+      }
+
       const type = event.recurring ? 'ritual' : 'task';
+      const tags = ['#domain:time', '#source:google-calendar', '#connector'];
+      for (const a of attendees) {
+        const whoTag = extractWhoTag(a.name ? `${a.name} <${a.email}>` : `<${a.email}>`);
+        if (whoTag && !tags.includes(whoTag)) tags.push(whoTag);
+      }
       await itemService.create({
         title: event.title, user_id: userId, type, module: 'bridge',
-        tags: ['#domain:time', '#source:google-calendar', '#connector'],
+        tags,
         status: 'inbox', state: 'inbox', genesis_stage: 1, source: 'atom-engine',
-        body: { google_id: event.google_id, start: event.start, end: event.end, calendar: event.calendar, recurring: event.recurring },
+        body: { google_id: event.google_id, start: event.start, end: event.end, calendar: event.calendar, recurring: event.recurring, attendees },
       });
       created++;
     }

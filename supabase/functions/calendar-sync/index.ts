@@ -1,8 +1,13 @@
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
+interface EventAttendee {
+  email: string; name: string | null; response: string | null;
+}
+
 interface CalendarEvent {
   google_id: string; title: string; start: string; end: string;
   calendar: string; recurring: boolean; all_day: boolean;
+  attendees: EventAttendee[];
 }
 
 const CORS = {
@@ -65,6 +70,14 @@ async function fetchEvents(at: string): Promise<{ events: CalendarEvent[]; tz: s
       google_id: String(e.id ?? ""), title: String(e.summary ?? ""),
       start: e.start?.dateTime ?? e.start?.date ?? "", end: e.end?.dateTime ?? e.end?.date ?? "",
       calendar: e.organizer?.email ?? "primary", recurring: !!e.recurringEventId, all_day: !e.start?.dateTime,
+      // People in the event, minus the user (self) and rooms/resources
+      attendees: (e.attendees ?? [])
+        .filter((a: any) => a.email && !a.self && !a.resource)
+        .map((a: any) => ({
+          email: String(a.email).toLowerCase(),
+          name: a.displayName ? String(a.displayName) : null,
+          response: a.responseStatus ? String(a.responseStatus) : null,
+        })),
     })).filter((e: CalendarEvent) => e.google_id && e.title && e.start);
 
   log("events-ok", { count: events.length });
