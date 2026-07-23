@@ -20,7 +20,8 @@ export type AtomType =
   | 'note' | 'reflection' | 'recommendation' | 'podcast' | 'article'
   | 'resource' | 'list' | 'task' | 'habit' | 'recipe' | 'workout'
   | 'spec' | 'checkpoint' | 'project' | 'session-log' | 'wrap'
-  | 'ritual' | 'review' | 'log' | 'doc' | 'research' | 'template' | 'lib';
+  | 'ritual' | 'review' | 'log' | 'doc' | 'research' | 'template' | 'lib'
+  | 'person';
 
 export type AtomModule =
   | 'work' | 'body' | 'mind' | 'family'
@@ -108,6 +109,13 @@ export interface OperationsExtension {
   project_status: 'draft' | 'active' | 'paused' | 'completed' | 'archived' | null;
   progress_mode: 'auto' | 'milestone' | 'manual' | null;
   progress: number | null;       // 0-100
+}
+
+// Body of type 'person' (spec v0.4 D1: entity, not account)
+export interface PersonBody {
+  emails: string[];
+  aliases: string[];
+  relationship: string | null;
 }
 
 export interface RecurrenceExtension {

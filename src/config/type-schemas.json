@@ -325,6 +325,30 @@
       "naming": "mod-[module]_lib_[description]",
       "drive_dest": "mod-[module]/library/",
       "usage_notes": "Library item — curated reference material. Books, courses, tools, frameworks. Content in notes."
+    },
+
+    "person": {
+      "floor_stage": 7,
+      "default_module": "family",
+      "has_body_schema": true,
+      "body_schema": {
+        "emails": {
+          "type": "string[]",
+          "description": "Emails that identify this person (Google Calendar attendee matching)"
+        },
+        "aliases": {
+          "type": "string[]",
+          "description": "Alternative names/nicknames for matching in text"
+        },
+        "relationship": {
+          "type": "string",
+          "description": "Who they are to the user (esposa, filho, cliente, amigo...)"
+        }
+      },
+      "extensions": [],
+      "naming": "person_[slug]",
+      "drive_dest": "mod-family/",
+      "usage_notes": "Entity of the user's world (spec v0.4 D1) — never an account, never multi-tenancy. Born-committed (stage 7): a person IS — doesn't mature through the FSM and doesn't decay. Module follows the relationship (family default; work for clients, social for friends). Calendar attendees map to persons via emails[]; aliases[] catch name mentions in text."
     }
   }
 }
