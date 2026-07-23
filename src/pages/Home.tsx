@@ -17,6 +17,7 @@ import { useSoulStore } from '@/store/soul-store';
 import { AuroraRitual } from '@/components/home/AuroraRitual';
 import { SoulCard } from '@/components/home/SoulCard';
 import { WrapBanner } from '@/components/home/WrapBanner';
+import { ReviewBanner } from '@/components/home/ReviewBanner';
 import { CaptureInput } from '@/components/home/CaptureInput';
 import { ItemCard } from '@/components/shared/ItemCard';
 import { InboxPreview } from '@/components/home/InboxPreview';
@@ -110,6 +111,9 @@ export function HomePage() {
           modifiedCount={modifiedToday.length}
         />
       )}
+
+      {/* Escada de meaning (Fase 4) — convida quando um degrau acordou */}
+      <ReviewBanner />
 
       {/* Raiz health */}
       <button
