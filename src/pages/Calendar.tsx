@@ -7,12 +7,15 @@ import { format, startOfWeek, addDays, isSameDay, isToday as isDateToday, parseI
 import { ptBR } from 'date-fns/locale';
 import { useItems } from '@/hooks/useItems';
 import { useNav } from '@/hooks/useNav';
-import type { AtomItem, SoulExtension } from '@/types/item';
+import type { AtomItem, RitualSlot, SoulExtension } from '@/types/item';
 import { MODULE_COLORS, STAGE_GEOMETRIES } from '@/components/atoms/tokens';
 import { getTypeColor } from '@/components/atoms/tokens';
 import { RITUAL_PERIODS } from '@/types/ui';
 import { PersonChips } from '@/components/calendar/PersonChips';
 import { PersonSuggestions } from '@/components/calendar/PersonSuggestions';
+import { RoutineChain } from '@/components/calendar/RoutineChain';
+import { RoutineComposer } from '@/components/calendar/RoutineComposer';
+import { routinesForSlot } from '@/engine/routine';
 
 const DAY_NAMES = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
 
@@ -27,6 +30,7 @@ function ritualHours(period: string): string {
 export function CalendarPage() {
   const { items } = useItems();
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [composerSlot, setComposerSlot] = useState<RitualSlot | null>(null);
 
   const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 });
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
@@ -96,6 +100,16 @@ export function CalendarPage() {
     [items],
   );
 
+  // Cadeias por slot (Fase 6) — o progresso é do período corrente, então só hoje
+  const chains = useMemo(() => {
+    if (!today) return { aurora: [], zenite: [], crepusculo: [] } as Record<RitualSlot, AtomItem[]>;
+    return {
+      aurora: routinesForSlot(items, 'aurora'),
+      zenite: routinesForSlot(items, 'zenite'),
+      crepusculo: routinesForSlot(items, 'crepusculo'),
+    };
+  }, [items, today]);
+
   return (
     <div className="px-5 pb-4">
       {/* Header */}
@@ -163,20 +177,20 @@ export function CalendarPage() {
         </div>
 
         {/* Aurora block */}
-        <RitualBlock period="aurora" color="var(--color-warning)" bgClass="bg-warning/5 border-warning/15" items={aurora} habits={habits.slice(0, 2)} persons={persons} />
+        <RitualBlock period="aurora" color="var(--color-warning)" bgClass="bg-warning/5 border-warning/15" items={aurora} habits={habits.slice(0, 2)} persons={persons} routines={chains.aurora} allItems={items} onAddRoutine={() => setComposerSlot('aurora')} />
 
         {/* Zenite block */}
-        <RitualBlock period="zenite" color="var(--color-ai-blue)" bgClass="bg-ai-blue/4 border-ai-blue/10" items={zenite} habits={[]} persons={persons} />
+        <RitualBlock period="zenite" color="var(--color-ai-blue)" bgClass="bg-ai-blue/4 border-ai-blue/10" items={zenite} habits={[]} persons={persons} routines={chains.zenite} allItems={items} onAddRoutine={() => setComposerSlot('zenite')} />
 
         {/* Crepúsculo block */}
-        <RitualBlock period="crepusculo" color="var(--color-accent-light)" bgClass="bg-accent-light/5 border-accent-light/15" items={crepItems} habits={[]} persons={persons} showWrap={today && !!todayWrap} wrapItem={todayWrap} />
+        <RitualBlock period="crepusculo" color="var(--color-accent-light)" bgClass="bg-accent-light/5 border-accent-light/15" items={crepItems} habits={[]} persons={persons} routines={chains.crepusculo} allItems={items} onAddRoutine={() => setComposerSlot('crepusculo')} showWrap={today && !!todayWrap} wrapItem={todayWrap} />
 
-        {dayItems.length === 0 && habits.length === 0 && (
+        {dayItems.length === 0 && habits.length === 0 && chains.aurora.length === 0 && chains.zenite.length === 0 && chains.crepusculo.length === 0 && (
           <>
             <div className="space-y-1.5 mb-4">
-              <GhostRitualBlock period="aurora" hours={ritualHours('aurora')} color="var(--color-warning)" />
-              <GhostRitualBlock period="zenite" hours={ritualHours('zenite')} color="var(--color-ai-blue)" />
-              <GhostRitualBlock period="crepusculo" hours={ritualHours('crepusculo')} color="var(--color-accent-light)" />
+              <GhostRitualBlock period="aurora" hours={ritualHours('aurora')} color="var(--color-warning)" onAdd={() => setComposerSlot('aurora')} />
+              <GhostRitualBlock period="zenite" hours={ritualHours('zenite')} color="var(--color-ai-blue)" onAdd={() => setComposerSlot('zenite')} />
+              <GhostRitualBlock period="crepusculo" hours={ritualHours('crepusculo')} color="var(--color-accent-light)" onAdd={() => setComposerSlot('crepusculo')} />
             </div>
             <div className="text-center py-4">
               <div className="text-2xl text-text-muted/30 mb-2">·</div>
@@ -185,17 +199,21 @@ export function CalendarPage() {
           </>
         )}
       </div>
+
+      {composerSlot && (
+        <RoutineComposer initialSlot={composerSlot} onClose={() => setComposerSlot(null)} />
+      )}
     </div>
   );
 }
 
-function RitualBlock({ period, color, bgClass, items, habits, persons, showWrap, wrapItem }: {
-  period: string; color: string; bgClass: string; items: AtomItem[]; habits: AtomItem[]; persons: AtomItem[]; showWrap?: boolean; wrapItem?: AtomItem | null;
+function RitualBlock({ period, color, bgClass, items, habits, persons, routines, allItems, onAddRoutine, showWrap, wrapItem }: {
+  period: string; color: string; bgClass: string; items: AtomItem[]; habits: AtomItem[]; persons: AtomItem[]; routines: AtomItem[]; allItems: AtomItem[]; onAddRoutine: () => void; showWrap?: boolean; wrapItem?: AtomItem | null;
 }) {
   const { selectItem } = useNav();
   const hours = ritualHours(period);
 
-  if (items.length === 0 && habits.length === 0 && !showWrap) return null;
+  if (items.length === 0 && habits.length === 0 && routines.length === 0 && !showWrap) return null;
 
   return (
     <div className={`rounded-[14px] p-3 px-3.5 mb-2 border ${bgClass}`}>
@@ -205,8 +223,16 @@ function RitualBlock({ period, color, bgClass, items, habits, persons, showWrap,
         </div>
         <span className="text-xs font-medium" style={{ color }}>{period}</span>
         <span className="text-[10px] text-text-muted ml-auto">{hours}</span>
+        <button
+          onClick={onAddRoutine}
+          title="montar rotina"
+          className="text-[11px] text-text-muted hover:text-text px-1 rounded transition-colors"
+        >
+          ⛓+
+        </button>
       </div>
 
+      {routines.map((routine) => <RoutineChain key={routine.id} routine={routine} items={allItems} />)}
       {items.map((item) => <CalendarItem key={item.id} item={item} persons={persons} />)}
       {habits.map((item) => <CalendarItem key={item.id} item={item} persons={persons} />)}
       {showWrap && (
@@ -242,16 +268,16 @@ function CalendarItem({ item, persons }: { item: AtomItem; persons: AtomItem[] }
   );
 }
 
-function GhostRitualBlock({ period, hours, color }: { period: string; hours: string; color: string }) {
+function GhostRitualBlock({ period, hours, color, onAdd }: { period: string; hours: string; color: string; onAdd: () => void }) {
   return (
-    <div className="rounded-xl p-2.5 px-3.5 border border-border/30 opacity-40">
+    <button onClick={onAdd} className="w-full text-left rounded-xl p-2.5 px-3.5 border border-border/30 opacity-40 hover:opacity-70 transition-opacity">
       <div className="flex items-center gap-2">
         <div className="w-5 h-5 rounded-full flex items-center justify-center text-[10px]" style={{ color }}>
           {period === 'aurora' ? '☀' : period === 'zenite' ? '◆' : '☽'}
         </div>
         <span className="text-xs" style={{ color }}>{period}</span>
-        <span className="text-[10px] text-text-muted ml-auto">{hours}</span>
+        <span className="text-[10px] text-text-muted ml-auto">{hours} · ⛓+</span>
       </div>
-    </div>
+    </button>
   );
 }

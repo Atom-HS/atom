@@ -77,6 +77,8 @@ export const TYPE_COLORS: Partial<Record<AtomType, string>> = {
   research: 'var(--color-stage-3)',
   template: 'var(--color-mod-bridge)',
   lib: 'var(--color-mod-mind)',
+  person: 'var(--color-mod-family)',
+  routine: 'var(--color-stage-5)',
 };
 
 export function getTypeColor(type: AtomType): string {

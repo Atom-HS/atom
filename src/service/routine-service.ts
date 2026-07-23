@@ -4,7 +4,7 @@
 // Pattern: hooks → service → supabase
 
 import { itemService, connectionService } from './item-service';
-import type { AtomItem, AtomModule, RitualSlot } from '@/types/item';
+import type { AtomItem, AtomModule, RecurrenceExtension, RitualSlot } from '@/types/item';
 import type { RecurrenceType } from '@/engine/recurrence';
 import { slugify } from '@/engine/people';
 
@@ -87,29 +87,34 @@ export const routineService = {
   // (O completeMutation genérico não grava recurrence — aqui é lei.)
   async completeLink(item: AtomItem): Promise<AtomItem> {
     const now = new Date().toISOString();
-    const body = (item.body ?? {}) as Record<string, unknown>;
-    const rec = (body.recurrence ?? {}) as Record<string, unknown>;
-    const log = Array.isArray(rec.completion_log) ? (rec.completion_log as string[]) : [];
+    const rec = (item.body?.recurrence ?? {}) as Partial<RecurrenceExtension>;
     return itemService.update(item.id, {
       status: 'completed',
       body: {
-        ...body,
+        ...item.body,
         recurrence: {
-          ...rec,
+          rule: rec.rule ?? null,
           last_completed: now,
-          streak_count: ((rec.streak_count as number) ?? 0) + 1,
-          completion_log: [...log, now],
+          streak_count: (rec.streak_count ?? 0) + 1,
+          completion_log: [...(rec.completion_log ?? []), now],
         },
       },
     });
   },
 
   async reopenLink(item: AtomItem): Promise<AtomItem> {
-    const body = (item.body ?? {}) as Record<string, unknown>;
-    const rec = (body.recurrence ?? {}) as Record<string, unknown>;
+    const rec = (item.body?.recurrence ?? {}) as Partial<RecurrenceExtension>;
     return itemService.update(item.id, {
       status: 'active',
-      body: { ...body, recurrence: { ...rec, last_completed: null } },
+      body: {
+        ...item.body,
+        recurrence: {
+          rule: rec.rule ?? null,
+          last_completed: null,
+          streak_count: rec.streak_count ?? 0,
+          completion_log: rec.completion_log ?? [],
+        },
+      },
     });
   },
 
