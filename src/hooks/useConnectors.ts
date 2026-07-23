@@ -3,6 +3,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { connectorService, type ConnectorStatus } from '@/service/connector-service';
+import { personService } from '@/service/person-service';
 import { useAppStore } from '@/store/app-store';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from '@/store/toast-store';
@@ -40,6 +41,7 @@ export function useConnectors() {
     try {
       const events = await connectorService.syncCalendar();
       const created = await connectorService.ingestCalendarEvents(events, user.id);
+      await personService.syncEventConnections(user.id);
       queryClient.invalidateQueries({ queryKey: ['items'] });
       await refresh();
       setSyncState('done');
