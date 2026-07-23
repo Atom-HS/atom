@@ -61,7 +61,27 @@ export function useItemMutations() {
   });
 
   const completeMutation = useMutation({
-    mutationFn: async (id: string) => itemService.update(id, { status: 'completed' }),
+    mutationFn: async (id: string) => {
+      // Item recorrente precisa de last_completed — sem ele o virtual reset
+      // nunca reabre o hábito no período seguinte (achado da Fase 6)
+      const current = await itemService.getById(id);
+      const rec = current.body?.recurrence;
+      if (rec?.rule) {
+        const now = new Date().toISOString();
+        return itemService.update(id, {
+          status: 'completed',
+          body: {
+            ...current.body,
+            recurrence: {
+              ...rec,
+              last_completed: now,
+              completion_log: [...(rec.completion_log ?? []), now],
+            },
+          },
+        });
+      }
+      return itemService.update(id, { status: 'completed' });
+    },
     onMutate: async (id) => {
       await queryClient.cancelQueries({ queryKey: ['items'] });
       const previous = queryClient.getQueryData<AtomItem[]>(['items']);
