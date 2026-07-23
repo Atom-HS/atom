@@ -6,6 +6,34 @@ import { itemService } from './item-service';
 import type { AtomItem, EnergyLevel } from '@/types/item';
 
 export const soulService = {
+  /** Journaling de aurora (spec v0.4 §2.2 — primeira classe, não campo).
+   *  Escrita livre da abertura do dia → item reflection born-committed. */
+  async persistAuroraJournal(params: { userId: string; text: string }): Promise<AtomItem> {
+    const { userId, text } = params;
+    const firstLine = text.trim().split('\n')[0].slice(0, 60);
+    return itemService.create({
+      title: firstLine || 'aurora — journaling',
+      user_id: userId,
+      type: 'reflection',
+      module: 'mind',
+      state: 'committed',
+      genesis_stage: 7,
+      status: 'completed',
+      source: 'mindroot',
+      tags: ['journal', 'aurora'],
+      notes: text,
+      body: {
+        soul: {
+          energy_level: null,
+          emotion_before: null,
+          emotion_after: null,
+          needs_checkin: false,
+          ritual_slot: 'aurora',
+        },
+      },
+    });
+  },
+
   async persistAuroraCheckin(params: {
     userId: string;
     emotion: string;

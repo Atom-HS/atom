@@ -248,6 +248,22 @@ html.light {
   }
 }
 
+/* ─── Aurora ritual — respiração (spec v0.4 Fase 2) ──── */
+
+.aurora-breath {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 2px solid var(--color-aurora);
+  box-shadow: 0 0 50px color-mix(in srgb, var(--color-aurora) 35%, transparent);
+  animation: aurora-breathe 8s ease-in-out infinite;
+}
+
+@keyframes aurora-breathe {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.55); opacity: 1; }
+}
+
 /* ─── Wireframe alignment: 0.5px borders ─────────────── */
 
 @layer utilities {

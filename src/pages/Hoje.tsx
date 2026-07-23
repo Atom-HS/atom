@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useItems } from '@/hooks/useItems';
 import { useSoulStore } from '@/store/soul-store';
 import { getCurrentPeriod } from '@/types/ui';
-import { AuroraCheckin } from '@/components/home/AuroraCheckin';
+import { AuroraRitual } from '@/components/home/AuroraRitual';
 import type { AtomItem } from '@/types/item';
 
 function isTodayISO(iso: string | null | undefined): boolean {
@@ -55,7 +55,7 @@ export function HojePage() {
   return (
     // padrão da casa: página usa só padding — o AppShell já limita a 430px
     <div className="px-5 pb-24">
-      <AuroraCheckin />
+      <AuroraRitual />
 
       {/* arco do dia */}
       <div className="pt-4 text-center">

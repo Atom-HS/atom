@@ -14,7 +14,7 @@ import { getCreatedToday, getModifiedToday } from '@/engine/wrap';
 import { motion } from 'framer-motion';
 import { useRaiz } from '@/hooks/useRaiz';
 import { useSoulStore } from '@/store/soul-store';
-import { AuroraCheckin } from '@/components/home/AuroraCheckin';
+import { AuroraRitual } from '@/components/home/AuroraRitual';
 import { SoulCard } from '@/components/home/SoulCard';
 import { WrapBanner } from '@/components/home/WrapBanner';
 import { CaptureInput } from '@/components/home/CaptureInput';
@@ -73,7 +73,7 @@ export function HomePage() {
   return (
     <div className="px-5 pb-4">
       {/* Aurora check-in overlay */}
-      <AuroraCheckin />
+      <AuroraRitual />
 
       {/* Greeting */}
       <div className="pt-4 pb-2">

@@ -127,7 +127,7 @@ export const wrapService = {
       .eq('state', 'committed')
       .order('created_at', { ascending: false })
       .limit(1)
-      .single();
+      .maybeSingle(); // sem wrap ainda não é erro (era 406 no console)
     return (data as AtomItem) ?? null;
   },
 };
