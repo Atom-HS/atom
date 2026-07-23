@@ -349,6 +349,29 @@
       "naming": "person_[slug]",
       "drive_dest": "mod-family/",
       "usage_notes": "Entity of the user's world (spec v0.4 D1) — never an account, never multi-tenancy. Born-committed (stage 7): a person IS — doesn't mature through the FSM and doesn't decay. Module follows the relationship (family default; work for clients, social for friends). Calendar attendees map to persons via emails[]; aliases[] catch name mentions in text."
+    },
+
+    "routine": {
+      "floor_stage": 3,
+      "default_module": "varies",
+      "has_body_schema": true,
+      "body_schema": {
+        "chain": {
+          "type": "string[]",
+          "description": "Ordered item ids — the habit links of the chain"
+        },
+        "slot": {
+          "type": "string",
+          "description": "Ritual slot where the chain lives (aurora | zenite | crepusculo) or null"
+        }
+      },
+      "extensions": [
+        "recurrence",
+        "soul"
+      ],
+      "naming": "mod-[module]_routine_[name]",
+      "drive_dest": "mod-[module]/",
+      "usage_notes": "Chain of habits (spec v0.4 D2: ritual ≠ rotina ≠ protocolo). Born structured (stage 3) by the routine builder — the chain IS the structure. Links are habit items connected via belongs_to; chain[] holds the order. Completion = every link done in the current period (Recurrence per link); the routine then seals its own period via recurrence.last_completed."
     }
   }
 }

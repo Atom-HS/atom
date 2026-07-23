@@ -21,7 +21,7 @@ export type AtomType =
   | 'resource' | 'list' | 'task' | 'habit' | 'recipe' | 'workout'
   | 'spec' | 'checkpoint' | 'project' | 'session-log' | 'wrap'
   | 'ritual' | 'review' | 'log' | 'doc' | 'research' | 'template' | 'lib'
-  | 'person';
+  | 'person' | 'routine';
 
 export type AtomModule =
   | 'work' | 'body' | 'mind' | 'family'
@@ -116,6 +116,12 @@ export interface PersonBody {
   emails: string[];
   aliases: string[];
   relationship: string | null;
+}
+
+// Body of type 'routine' (spec v0.4 D2: chain of habits, not a recurring task)
+export interface RoutineBody {
+  chain: string[];               // ordered habit item ids — the links
+  slot: RitualSlot | null;       // where the chain lives in the day
 }
 
 export interface RecurrenceExtension {
