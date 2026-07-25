@@ -1,55 +1,43 @@
-// pages/Projects.tsx — Projects list + detail
-// Wireframe: mindroot-wireframe-projects.html
-// List: grouped by module, card with progress, next action, stage, connections
-// Detail: back button, items list, connections, links
+// pages/Projects.tsx — o projeto como contêiner relacional (Fase 8 · D4)
+// Reescrito sobre engine/project: belongs_to é a única verdade de
+// pertencimento; sem barra de %, sem métrica — linguagem de presença
+// ("2 de 5 abertos · quieto há 13 dias"). O próximo convida, não cobra.
 
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useItems } from '@/hooks/useItems';
+import { useConnections } from '@/hooks/useConnections';
 import { usePipeline } from '@/hooks/usePipeline';
 import { useNav } from '@/hooks/useNav';
 import { useAppStore } from '@/store/app-store';
 import type { AtomItem, AtomModule } from '@/types/item';
 import { MODULES } from '@/types/item';
-import { MODULE_COLORS, STAGE_COLORS, STAGE_GEOMETRIES } from '@/components/atoms/tokens';
-import { getTypeColor } from '@/components/atoms/tokens';
+import { MODULE_COLORS, STAGE_COLORS, STAGE_GEOMETRIES, getTypeColor } from '@/components/atoms/tokens';
+import { listProjects, projectPresence, presenceLine, type ProjectPresence } from '@/engine/project';
 
 export function ProjectsPage() {
   const { items } = useItems();
-  const { capture } = usePipeline();
-  const { classify } = usePipeline();
+  const { connections } = useConnections();
+  const { capture, classify } = usePipeline();
   const { selectItem } = useNav();
   const user = useAppStore((s) => s.user);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const [newModule, setNewModule] = useState<AtomModule>('work');
-  const [filter, setFilter] = useState<'all' | 'active' | 'paused' | 'completed'>('all');
+  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
 
-  const projects = useMemo(
-    () => items.filter((i) => i.type === 'project' && i.status !== 'archived'),
-    [items],
-  );
+  const projects = useMemo(() => listProjects(items), [items]);
 
-  const projectChildren = useMemo(() => {
-    const map: Record<string, AtomItem[]> = {};
-    projects.forEach((p) => { map[p.id] = []; });
-    items.forEach((i) => {
-      if (i.project_id && map[i.project_id]) map[i.project_id].push(i);
+  const presences = useMemo(() => {
+    const map: Record<string, ProjectPresence> = {};
+    projects.forEach((p) => {
+      map[p.id] = projectPresence(p, items, connections);
     });
     return map;
-  }, [items, projects]);
-
-  const connectionCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
-    items.forEach((i) => {
-      if (i.project_id) counts[i.project_id] = (counts[i.project_id] ?? 0) + 1;
-    });
-    return counts;
-  }, [items]);
+  }, [projects, items, connections]);
 
   const selected = selectedId ? projects.find((p) => p.id === selectedId) : null;
-  const totalItems = projects.reduce((sum, p) => sum + (projectChildren[p.id]?.length ?? 0), 0);
   const activeCount = projects.filter((p) => p.status === 'active').length;
 
   const filteredProjects = useMemo(() => {
@@ -79,7 +67,7 @@ export function ProjectsPage() {
   };
 
   if (selected) {
-    return <ProjectDetail project={selected} children={projectChildren[selected.id] ?? []} onBack={() => setSelectedId(null)} />;
+    return <ProjectDetail presence={presences[selected.id]} onBack={() => setSelectedId(null)} />;
   }
 
   return (
@@ -87,7 +75,7 @@ export function ProjectsPage() {
       <div className="pt-4 pb-3 flex items-center justify-between">
         <div>
           <h1 className="text-[24px] font-medium tracking-tight">projects</h1>
-          <p className="text-[13px] text-text-muted mt-0.5">{projects.length} projetos · {activeCount} ativos · {totalItems} items</p>
+          <p className="text-[13px] text-text-muted mt-0.5">{projects.length} projetos · {activeCount} vivos</p>
         </div>
         <button
           onClick={() => setCreating(true)}
@@ -131,9 +119,9 @@ export function ProjectsPage() {
         </motion.div>
       )}
 
-      {/* Filter chips */}
+      {/* Filter chips — paused morreu: nenhuma UI produz esse status */}
       <div className="flex gap-1.5 mb-4 overflow-x-auto">
-        {([['all', 'todos'], ['active', 'ativos'], ['paused', 'pausados'], ['completed', 'completos']] as const).map(([key, label]) => (
+        {([['all', 'todos'], ['active', 'vivos'], ['completed', 'selados']] as const).map(([key, label]) => (
           <button
             key={key}
             onClick={() => setFilter(key)}
@@ -154,7 +142,7 @@ export function ProjectsPage() {
         </div>
       ) : filteredProjects.length === 0 ? (
         <div className="text-center py-8">
-          <p className="text-sm text-text-muted">nenhum projeto {filter}</p>
+          <p className="text-sm text-text-muted">nenhum projeto aqui</p>
         </div>
       ) : (
         Object.entries(filteredByModule).map(([mod, projs]) => (
@@ -163,13 +151,7 @@ export function ProjectsPage() {
               mod-{mod} · {projs.length}
             </div>
             {projs.map((p) => (
-              <ProjectCard
-                key={p.id}
-                project={p}
-                childCount={projectChildren[p.id]?.length ?? 0}
-                connectionCount={connectionCounts[p.id] ?? 0}
-                onClick={() => setSelectedId(p.id)}
-              />
+              <ProjectCard key={p.id} presence={presences[p.id]} onClick={() => setSelectedId(p.id)} />
             ))}
           </div>
         ))
@@ -178,12 +160,10 @@ export function ProjectsPage() {
   );
 }
 
-function ProjectCard({ project, childCount, connectionCount, onClick }: { project: AtomItem; childCount: number; connectionCount: number; onClick: () => void }) {
+function ProjectCard({ presence, onClick }: { presence: ProjectPresence; onClick: () => void }) {
+  const { project, next } = presence;
   const moduleColor = project.module ? MODULE_COLORS[project.module] : 'var(--color-mod-bridge)';
-  const progress = project.body?.operations?.progress ?? 0;
-  const stage = project.genesis_stage;
-  const geometry = STAGE_GEOMETRIES[stage] ?? '·';
-  const statusLabel = project.status === 'active' ? 'active' : project.status;
+  const geometry = STAGE_GEOMETRIES[project.genesis_stage] ?? '·';
   const statusBg = project.status === 'active' ? 'bg-success-bg text-success-text' : 'bg-surface text-text-muted';
 
   return (
@@ -194,24 +174,26 @@ function ProjectCard({ project, childCount, connectionCount, onClick }: { projec
     >
       <div className="flex justify-between items-start mb-1">
         <span className="text-[15px] font-medium">{project.title}</span>
-        <span className={`text-[10px] px-2 py-px rounded-lg font-medium ${statusBg}`}>{statusLabel}</span>
+        <span className={`text-[10px] px-2 py-px rounded-lg font-medium ${statusBg}`}>
+          {project.status === 'active' ? 'vivo' : project.status === 'completed' ? 'selado ○' : project.status}
+        </span>
       </div>
-      <div className="text-[11px] text-text-muted mb-2">
-        {childCount} items · {geometry} stage {stage}{connectionCount > 0 ? ` · ${connectionCount} connections` : ''}
+      <div className="text-[11px] text-text-muted">
+        {geometry} {presenceLine(presence)}
       </div>
-      <div className="h-1 rounded-sm bg-surface overflow-hidden">
-        <div className="h-full rounded-sm" style={{ width: `${progress}%`, background: `linear-gradient(90deg, ${moduleColor}, ${moduleColor}88)` }} />
-      </div>
+      {next && (
+        <div className="text-[11px] text-text-muted mt-1 truncate">
+          <span className="text-accent">→</span> {next.title}
+        </div>
+      )}
     </button>
   );
 }
 
-function ProjectDetail({ project, children, onBack }: { project: AtomItem; children: AtomItem[]; onBack: () => void }) {
+function ProjectDetail({ presence, onBack }: { presence: ProjectPresence; onBack: () => void }) {
   const { selectItem } = useNav();
-  const moduleColor = project.module ? MODULE_COLORS[project.module] : 'var(--color-mod-bridge)';
-  const progress = project.body?.operations?.progress ?? 0;
-  const stage = project.genesis_stage;
-  const geometry = STAGE_GEOMETRIES[stage] ?? '·';
+  const { project, children, next } = presence;
+  const geometry = STAGE_GEOMETRIES[project.genesis_stage] ?? '·';
   const statusBg = project.status === 'active' ? 'bg-success-bg text-success-text' : 'bg-surface text-text-muted';
 
   return (
@@ -221,36 +203,43 @@ function ProjectDetail({ project, children, onBack }: { project: AtomItem; child
         <h1 className="text-[24px] font-medium tracking-tight mb-1.5">{project.title}</h1>
         <button onClick={() => selectItem(project.id)} className="text-xs text-accent">editar</button>
       </div>
-      <div className="text-[13px] text-text-muted mb-4 flex items-center gap-2">
-        <span className={`text-[10px] px-2 py-px rounded-lg font-medium ${statusBg}`}>{project.status}</span>
-        mod-{project.module} · {geometry} stage {stage}
+      <div className="text-[13px] text-text-muted mb-2 flex items-center gap-2">
+        <span className={`text-[10px] px-2 py-px rounded-lg font-medium ${statusBg}`}>{project.status === 'active' ? 'vivo' : project.status}</span>
+        mod-{project.module} · {geometry} stage {project.genesis_stage}
       </div>
 
-      {/* Progress */}
-      <div className="flex items-center gap-2.5 mb-1.5">
-        <div className="flex-1 h-1.5 rounded-sm bg-surface overflow-hidden">
-          <div className="h-full rounded-sm" style={{ width: `${progress}%`, background: `linear-gradient(90deg, ${moduleColor}, ${moduleColor}88)` }} />
-        </div>
-        <span className="text-base font-medium" style={{ color: moduleColor }}>{progress}%</span>
-      </div>
+      {/* Presença — estado, não métrica */}
+      <p className="text-[13px] text-text mb-1.5">{presenceLine(presence)}</p>
 
       {project.notes && (
         <p className="text-xs text-text-muted mb-4">{project.notes}</p>
       )}
 
-      {/* Items */}
+      {/* Items — filhos por belongs_to (a única verdade) */}
       <div className="text-[11px] text-text-muted tracking-wider uppercase mb-2 mt-4">items · {children.length}</div>
       {children.length === 0 ? (
-        <p className="text-xs text-text-muted py-4 text-center">nenhum item conectado</p>
+        <p className="text-xs text-text-muted py-4 text-center">
+          um projeto sem items é vazio — conecte algo a ele (belongs_to)
+        </p>
       ) : (
         children.map((item) => {
           const geo = STAGE_GEOMETRIES[item.genesis_stage] ?? '·';
           const stageColor = STAGE_COLORS[item.genesis_stage] ?? 'var(--color-stage-1)';
           const typeColor = item.type ? getTypeColor(item.type) : 'var(--color-mod-bridge)';
+          const isNext = next?.id === item.id;
           return (
-            <div key={item.id} onClick={() => selectItem(item.id)} className="bg-card border border-border rounded-lg p-2.5 px-3 mb-1.5 flex items-center gap-2.5 text-[13px] cursor-pointer hover:border-accent-light/30 transition-colors">
+            <div
+              key={item.id}
+              onClick={() => selectItem(item.id)}
+              className={`bg-card border rounded-lg p-2.5 px-3 mb-1.5 flex items-center gap-2.5 text-[13px] cursor-pointer transition-colors ${
+                isNext ? 'border-accent/40' : 'border-border hover:border-accent-light/30'
+              }`}
+            >
               <span style={{ color: stageColor }}>{geo}</span>
-              <span className="flex-1 truncate">{item.title}</span>
+              <span className={`flex-1 truncate ${item.status === 'completed' ? 'text-text-muted line-through decoration-border' : ''}`}>
+                {item.title}
+              </span>
+              {isNext && <span className="text-[10px] text-accent shrink-0">→ próximo</span>}
               {item.type && (
                 <span className="text-[9px] font-medium px-1.5 py-px rounded-md" style={{ background: `${typeColor}18`, color: typeColor }}>
                   {item.type}
