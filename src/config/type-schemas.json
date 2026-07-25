@@ -94,12 +94,17 @@
     "list": {
       "floor_stage": 2,
       "default_module": "varies",
-      "has_body_schema": false,
-      "body_schema": null,
+      "has_body_schema": true,
+      "body_schema": {
+        "entries": {
+          "type": "{text, done}[]",
+          "description": "Ordered checkable entries — the list itself (Keep-style)"
+        }
+      },
       "extensions": [],
       "naming": "mod-[module]_list_[description]",
       "drive_dest": "mod-[module]/",
-      "usage_notes": "Curated lists. Content lives in notes as markdown list. Module varies by content."
+      "usage_notes": "Keep-style list (Fase 8 · linhagem #20): a place to cover the simple — groceries, packing, gifts. Entries live in body.entries as ordered {text, done} pairs, checked in place; notes stays free text. Floor 2 honored: zero relational commitment, unlike project (floor 5)."
     },
 
     "task": {

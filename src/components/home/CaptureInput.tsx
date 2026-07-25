@@ -7,7 +7,7 @@ import { useState, useRef, useMemo, useEffect } from 'react';
 import { parseCapture, MODULES, type ParsedCapture } from '@/engine/token-parser';
 import type { AtomModule, AtomType } from '@/types/item';
 
-const COMMON_TYPES: ReadonlyArray<AtomType> = ['task', 'note', 'reflection', 'project', 'habit', 'recipe', 'workout', 'spec', 'doc'];
+const COMMON_TYPES: ReadonlyArray<AtomType> = ['task', 'note', 'list', 'reflection', 'project', 'habit', 'recipe', 'workout', 'spec', 'doc'];
 const DATE_TOKENS: ReadonlyArray<string> = ['hoje', 'amanha', 'semana', 'seg', 'ter', 'qua', 'qui', 'sex'];
 
 const MODULE_COLORS: Record<AtomModule, string> = {

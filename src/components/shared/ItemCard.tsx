@@ -6,6 +6,7 @@ import { MODULE_COLORS, STAGE_COLORS, STAGE_GEOMETRIES } from '@/components/atom
 import { getTypeColor } from '@/components/atoms/tokens';
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { listSummary } from '@/engine/list';
 
 interface ItemCardProps {
   item: AtomItem;
@@ -52,6 +53,9 @@ export function ItemCard({ item, onClick }: ItemCardProps) {
             </span>
           )}
           <span className="text-[11px] text-text-muted">stage {item.genesis_stage}</span>
+          {item.type === 'list' && listSummary(item) && (
+            <span className="text-[11px] text-text-muted">· {listSummary(item)}</span>
+          )}
           {dueDate && (
             <span className="text-[10px] text-text-muted ml-auto shrink-0">
               {formatDue(dueDate)}

@@ -19,6 +19,7 @@ import { toast } from '@/store/toast-store';
 import { ALL_TYPES } from '@/config/types';
 import { STAGE_COLORS, STAGE_GEOMETRIES, MODULE_COLORS } from '@/components/atoms/tokens';
 import { ConnectionsSection } from '@/components/shared/ConnectionsSection';
+import { ListChecklist } from '@/components/shared/ListChecklist';
 import { getTypeColor } from '@/components/atoms/tokens';
 import { getConfidenceBand } from '@/service/triage-service';
 import { useConnections } from '@/hooks/useConnections';
@@ -261,6 +262,11 @@ export function ItemDetailPage() {
       )}
 
       <Divider />
+
+      {/* Lista Keep-style (Fase 8) — entradas checáveis no body */}
+      {item.type === 'list' && (
+        <ListChecklist item={item} onSave={(body) => update({ body: { ...item.body, ...body } })} />
+      )}
 
       {/* Notes */}
       <EditableNotes item={item} onSave={(notes) => update({ notes })} />

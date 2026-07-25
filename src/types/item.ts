@@ -124,6 +124,16 @@ export interface RoutineBody {
   slot: RitualSlot | null;       // where the chain lives in the day
 }
 
+// Body of type 'list' (Fase 8 · veredito #20: Keep-style — "um lugar pra cobrir o simples")
+export interface ListEntry {
+  text: string;
+  done: boolean;
+}
+
+export interface ListBody {
+  entries: ListEntry[];          // ordered, checkable — the list itself
+}
+
 // Body of type 'protocol' (spec v0.4 D2: conditional procedure — "quando X, faço Y")
 export interface ProtocolWhen {
   emotion: string | null;        // wakes when the day's check-in matches (fold-compared)
