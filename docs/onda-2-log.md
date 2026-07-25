@@ -6,6 +6,43 @@
 
 ---
 
+## 2026-07-25 — Fase 7: protocol builder, quando X faço Y
+
+**Arco:** "bora continuar o mindroot" → prod confirmada em dia (13 migrations,
+CD deployado) → Fase 7 desenhada com 3 decisões do Rick → 4 commits.
+
+### Decisões (Rick, nesta sessão)
+- **Gatilho = alma + período**: condição lê emoção/energia do check-in do dia
+  (tronco: aurora + Telegram "sinto:") + período como refinamento. Situação
+  que só o humano percebe nunca dispara sozinha — todo protocolo tem
+  invocação manual ("tô nessa").
+- **Passos leves no body** (steps[] como strings): procedimento é receita,
+  não cadeia de hábitos — sem micro-items sem alma no tronco.
+- **Rastro em atom_events**: cada execução = protocol_run (trigger + alma do
+  momento + passos). A tabela canônica ociosa acorda; o item nunca muta ao
+  rodar. É o dado do espelho no tempo (Fase 9).
+
+### Os 4 commits
+- **Chão** `973652f` — migration 014 + registry (floor 3, structured, sem
+  extensions: sem recorrência POR LEI) + ProtocolBody/ProtocolWhen.
+- **Motor** `e2956f6` — engine/protocol puro (11 testes): matchesWhen em AND
+  (período sozinho nunca acorda — seria rotina disfarçada, D2), readTodaySoul
+  do TRONCO, evaluateProtocols com snooze. fold() do people vira export.
+- **Serviço** `e99890f` — createProtocol + logRun (atom_events); useProtocol.
+- **Rosto** `74d4a37` — ProtocolBanner (a situação chamou → convida; ×
+  silencia por hoje) + ProtocolRunner (desdobra, executado ○) + ProtocolShelf
+  (cartas sempre puxáveis) + ProtocolComposer (templates por situação:
+  ansiedade bateu · energia no chão · travado).
+
+### Estado e gate
+- 140 testes verdes, build ok. Prod: pendente migration 014 + push (CD).
+- Aceitação: Rick monta um protocolo real (template "ansiedade bateu" a 2
+  toques), vê o banner acordar num dia desafiador e puxa um pela mão.
+- Próxima da spec: **Fase 8 — Listas + projetos rework** (audit F3/F4
+  contra D4: "cresceu ou foi colado?", completa o que cresceu).
+
+---
+
 ## 2026-07-24 (2ª entrada) — Fase 6: routine builder, a cadeia
 
 **Arco:** "bora, acho q tem um por sinal" → o RoutineBuilder da Raiz mapeado
