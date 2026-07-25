@@ -17,7 +17,7 @@ export interface PersonSuggestion {
 }
 
 // Normaliza pra comparação: lowercase + sem acentos
-function fold(s: string): string {
+export function fold(s: string): string {
   return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 }
 
