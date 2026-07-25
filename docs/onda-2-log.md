@@ -6,6 +6,49 @@
 
 ---
 
+## 2026-07-25 (2ª entrada) — Fase 8: listas + projetos, o audit D4
+
+**Arco:** "boa seguimos" → dossiê "cresceu ou foi colado" (list = type morto;
+project = casca de wireframe) → 4 decisões do Rick → 4 commits + porão limpo.
+
+### O que o audit achou (D4)
+- **project era casca**: barra de % lia campo que NINGUÉM escreve; project_id
+  sempre null (ProjectDetail eternamente vazio); duas hierarquias sem ponte
+  (belongs_to funciona, a página lia a outra); useProject órfão 4 meses.
+- **list era ⚪ puro**: enum + promessa de markdown, zero código.
+- **Porão**: a 011 nunca rodou (repair de 24 Jul marcou sem executar) — 7
+  fantasmas vivas, 3 COM DADOS (atom_items 51 · share_links 21 ·
+  email_captures 17 LEADS reais da landing "revelation"). O M7 teria
+  deletado gente. E push_subscriptions/public_shares (005/006) NUNCA
+  existiram em prod — push está sem tabela (aberto pro futuro).
+
+### Decisões (Rick, nesta sessão)
+- **belongs_to única verdade** de pertencimento; project_id vira coluna dormente.
+- **Linguagem de presença no lugar de %**: "2 de 5 abertos · quieto há 13
+  dias" (quietude no 1º degrau φ = 8d); o próximo convida, não cobra.
+- **Lista = entries no body** {text, done}: Keep-style, floor 2 honrado.
+- **Export + drop das 7 fantasmas** (export ANTES, com os leads visíveis:
+  c:/repos/_archive/atom-fosseis-export-2026-07-25/).
+
+### Os 4 commits
+- **Porão** `714cea2` — migration 015 dropa as 7; schema público = só v2.
+- **Motor** `70d79a2` — engine/project puro (9 testes): children via
+  belongs_to, presence, presenceLine.
+- **Rosto** `b689081` — Projects.tsx reescrita (sem %, chips vivos/selados,
+  "→ próximo", filhos por belongs_to); useProject deletado.
+- **Lista** `16d217f` — ListBody + engine/list (6 testes) + ListChecklist
+  no ItemDetail + '!list' na captura + "2 de 3" no ItemCard.
+
+### Estado e gate
+- 155 testes verdes, build ok. Migration 015 APLICADA em prod. Push pendente.
+- Aceitação: Rick cria "compra da semana" com !list e vive ela no mercado;
+  conecta um item a um projeto e VÊ ele aparecer no projeto.
+- Decisão pendente de baixo custo: destino dos 17 leads exportados.
+- Próxima da spec: **Fase 9 — Espelho emocional no tempo** (padrões sobre
+  soul data + journaling; lookback espiral φ; lê os protocol_run da F7).
+
+---
+
 ## 2026-07-25 — Fase 7: protocol builder, quando X faço Y
 
 **Arco:** "bora continuar o mindroot" → prod confirmada em dia (13 migrations,
