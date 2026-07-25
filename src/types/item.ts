@@ -21,7 +21,7 @@ export type AtomType =
   | 'resource' | 'list' | 'task' | 'habit' | 'recipe' | 'workout'
   | 'spec' | 'checkpoint' | 'project' | 'session-log' | 'wrap'
   | 'ritual' | 'review' | 'log' | 'doc' | 'research' | 'template' | 'lib'
-  | 'person' | 'routine';
+  | 'person' | 'routine' | 'protocol';
 
 export type AtomModule =
   | 'work' | 'body' | 'mind' | 'family'
@@ -122,6 +122,19 @@ export interface PersonBody {
 export interface RoutineBody {
   chain: string[];               // ordered habit item ids — the links
   slot: RitualSlot | null;       // where the chain lives in the day
+}
+
+// Body of type 'protocol' (spec v0.4 D2: conditional procedure — "quando X, faço Y")
+export interface ProtocolWhen {
+  emotion: string | null;        // wakes when the day's check-in matches (fold-compared)
+  challenging: boolean;          // wakes on any challenging emotion
+  energy: EnergyLevel | null;    // wakes on this energy level
+  period: RitualSlot | null;     // optional refinement: only during this period
+}
+
+export interface ProtocolBody {
+  steps: string[];               // ordered steps — the procedure itself
+  when: ProtocolWhen | null;     // null = manual-only (X only the human perceives)
 }
 
 export interface RecurrenceExtension {
