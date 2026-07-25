@@ -18,6 +18,8 @@ import { AuroraRitual } from '@/components/home/AuroraRitual';
 import { SoulCard } from '@/components/home/SoulCard';
 import { WrapBanner } from '@/components/home/WrapBanner';
 import { ReviewBanner } from '@/components/home/ReviewBanner';
+import { ProtocolBanner } from '@/components/home/ProtocolBanner';
+import { ProtocolShelf } from '@/components/home/ProtocolShelf';
 import { CaptureInput } from '@/components/home/CaptureInput';
 import { ItemCard } from '@/components/shared/ItemCard';
 import { InboxPreview } from '@/components/home/InboxPreview';
@@ -40,7 +42,7 @@ export function HomePage() {
 
   // Derived data
   const activeItems = useMemo(
-    () => items.filter((i) => i.status !== 'completed' && i.status !== 'archived' && i.state !== 'inbox'),
+    () => items.filter((i) => i.status !== 'completed' && i.status !== 'archived' && i.state !== 'inbox' && i.type !== 'protocol'),
     [items],
   );
 
@@ -115,6 +117,9 @@ export function HomePage() {
       {/* Escada de meaning (Fase 4) — convida quando um degrau acordou */}
       <ReviewBanner />
 
+      {/* Protocolo (Fase 7) — convida quando a situação chamou */}
+      <ProtocolBanner />
+
       {/* Raiz health */}
       <button
         onClick={() => navigate('raiz')}
@@ -149,6 +154,9 @@ export function HomePage() {
           }}
         />
       </div>
+
+      {/* Protocolos (Fase 7) — as cartas na manga, sempre puxáveis */}
+      <ProtocolShelf />
 
       {/* Active items */}
       {activeItems.length > 0 ? (
