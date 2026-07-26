@@ -162,6 +162,20 @@ export const connectionService = {
 // ─── Events ──────────────────────────────────────────────
 
 export const eventService = {
+  /** o rastro de um tipo de evento na janela — o que o espelho (F9) lê */
+  async listByType(userId: string, eventType: string, sinceISO: string): Promise<AtomEvent[]> {
+    const { data, error } = await supabase
+      .from('atom_events')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('event_type', eventType)
+      .gte('created_at', sinceISO)
+      .order('created_at', { ascending: false })
+      .limit(500);
+    if (error) throw error;
+    return (data ?? []) as AtomEvent[];
+  },
+
   async create(
     userId: string,
     sourceId: string,

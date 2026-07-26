@@ -35,6 +35,7 @@ const SearchPage = lazy(() => import('@/pages/Search').then((m) => ({ default: m
 const ItemDetailPage = lazy(() => import('@/pages/ItemDetail').then((m) => ({ default: m.ItemDetailPage })));
 const HojePage = lazy(() => import('@/pages/Hoje').then((m) => ({ default: m.HojePage })));
 const AtPage = lazy(() => import('@/pages/At').then((m) => ({ default: m.AtPage })));
+const ArvorePage = lazy(() => import('@/pages/Arvore').then((m) => ({ default: m.ArvorePage })));
 const ReviewPage = lazy(() => import('@/pages/Review').then((m) => ({ default: m.ReviewPage })));
 
 const queryClient = new QueryClient({
@@ -119,6 +120,7 @@ function AnimatedRoutes() {
             <Route path="/search" element={<SearchPage />} />
             <Route path="/hoje" element={<HojePage />} />
             <Route path="/at" element={<AtPage />} />
+            <Route path="/arvore" element={<ArvorePage />} />
             <Route path="/review" element={<ReviewPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/item/:id" element={<ItemDetailPage />} />
