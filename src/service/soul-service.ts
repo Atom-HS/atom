@@ -69,6 +69,38 @@ export const soulService = {
     };
   },
 
+  /** "sinto: X" pela boca do @ — mesmo shape do check-in que o Telegram cria
+   *  (tronco.createSoulCheckin): tag 'checkin' é o que readTodaySoul e a
+   *  sentinela leem. Uma boca, dois aparelhos, um só tronco. */
+  async persistSoulCheckin(params: {
+    userId: string;
+    emotion: string;
+    note?: string | null;
+  }): Promise<AtomItem> {
+    const { userId, emotion, note } = params;
+    return itemService.create({
+      title: `sinto — ${emotion.slice(0, 60)}`,
+      user_id: userId,
+      type: 'checkpoint',
+      module: 'mind',
+      state: 'committed',
+      genesis_stage: 7,
+      status: 'completed',
+      source: 'mindroot',
+      tags: ['checkin', 'at'],
+      notes: note ?? null,
+      body: {
+        soul: {
+          energy_level: null,
+          emotion_before: emotion,
+          emotion_after: null,
+          needs_checkin: false,
+          ritual_slot: null,
+        },
+      },
+    });
+  },
+
   async persistAuroraCheckin(params: {
     userId: string;
     emotion: string;
