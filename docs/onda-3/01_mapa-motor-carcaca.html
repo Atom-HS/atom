@@ -1,0 +1,511 @@
+﻿<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head><title>MindRoot — motor × carcaça</title>
+<style>
+  :root {
+    --bg: #f5f1e6;
+    --card: #fdfaf2;
+    --card2: #efe9da;
+    --border: #ddd5c2;
+    --text: #2b2620;
+    --muted: #7d7566;
+    --accent: #a3812f;
+    --accent-soft: rgba(163, 129, 47, .12);
+    --vivo: #5d7a4a;
+    --vivo-bg: rgba(93, 122, 74, .12);
+    --meio: #a3812f;
+    --meio-bg: rgba(163, 129, 47, .12);
+    --colado: #a3644a;
+    --colado-bg: rgba(163, 100, 74, .12);
+    --morto: #8a8578;
+    --morto-bg: rgba(138, 133, 120, .14);
+    --falta: #7a6f9e;
+    --falta-bg: rgba(122, 111, 158, .12);
+    --mono: ui-monospace, "Cascadia Code", Consolas, Menlo, monospace;
+    --sans: "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14110c;
+      --card: #1c1812;
+      --card2: #231e16;
+      --border: #322b1f;
+      --text: #e9e1cd;
+      --muted: #948b78;
+      --accent: #d4b872;
+      --accent-soft: rgba(212, 184, 114, .12);
+      --vivo: #9db37e;
+      --vivo-bg: rgba(138, 158, 122, .14);
+      --meio: #d4b872;
+      --meio-bg: rgba(212, 184, 114, .13);
+      --colado: #c08f72;
+      --colado-bg: rgba(184, 137, 106, .14);
+      --morto: #7d776a;
+      --morto-bg: rgba(107, 107, 107, .16);
+      --falta: #a79ac4;
+      --falta-bg: rgba(158, 122, 184, .14);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f5f1e6; --card: #fdfaf2; --card2: #efe9da; --border: #ddd5c2;
+    --text: #2b2620; --muted: #7d7566; --accent: #a3812f; --accent-soft: rgba(163,129,47,.12);
+    --vivo: #5d7a4a; --vivo-bg: rgba(93,122,74,.12); --meio: #a3812f; --meio-bg: rgba(163,129,47,.12);
+    --colado: #a3644a; --colado-bg: rgba(163,100,74,.12); --morto: #8a8578; --morto-bg: rgba(138,133,120,.14);
+    --falta: #7a6f9e; --falta-bg: rgba(122,111,158,.12);
+  }
+  :root[data-theme="dark"] {
+    --bg: #14110c; --card: #1c1812; --card2: #231e16; --border: #322b1f;
+    --text: #e9e1cd; --muted: #948b78; --accent: #d4b872; --accent-soft: rgba(212,184,114,.12);
+    --vivo: #9db37e; --vivo-bg: rgba(138,158,122,.14); --meio: #d4b872; --meio-bg: rgba(212,184,114,.13);
+    --colado: #c08f72; --colado-bg: rgba(184,137,106,.14); --morto: #7d776a; --morto-bg: rgba(107,107,107,.16);
+    --falta: #a79ac4; --falta-bg: rgba(158,122,184,.14);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: var(--sans); line-height: 1.55;
+    margin: 0; padding: 0 20px 96px;
+  }
+  main { max-width: 780px; margin: 0 auto; }
+
+  .eyebrow {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 6px;
+  }
+  header { padding: 56px 0 8px; }
+  h1 {
+    font-size: clamp(28px, 5vw, 40px); font-weight: 350; letter-spacing: -.01em;
+    margin: 0 0 10px; text-wrap: balance;
+  }
+  h1 em { font-style: normal; color: var(--accent); }
+  .lede { font-size: 16px; color: var(--muted); max-width: 60ch; margin: 0; }
+  .lede strong { color: var(--text); font-weight: 600; }
+
+  .arc {
+    display: flex; align-items: center; gap: 10px; margin: 26px 0 4px;
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+  }
+  .arc .line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); }
+  .arc .sun { color: var(--accent); }
+
+  h2 {
+    font-size: 21px; font-weight: 500; margin: 64px 0 6px;
+    display: flex; align-items: baseline; gap: 10px; text-wrap: balance;
+  }
+  h2 .glyph { font-family: var(--mono); color: var(--accent); font-size: 17px; }
+  .sub { color: var(--muted); font-size: 14px; margin: 0 0 20px; max-width: 62ch; }
+
+  /* ── diagnóstico: pilha × motor ─────────────────── */
+  .diag { display: grid; grid-template-columns: minmax(200px, 5fr) 8fr; gap: 18px; align-items: start; }
+  @media (max-width: 620px) { .diag { grid-template-columns: 1fr; } }
+  .phone {
+    background: var(--card); border: 1px solid var(--border); border-radius: 18px;
+    padding: 14px 12px 10px; display: flex; flex-direction: column; gap: 5px;
+  }
+  .phone .cap { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); text-align: center; margin-bottom: 6px; }
+  .slab {
+    border: 1px solid var(--border); background: var(--card2); border-radius: 7px;
+    padding: 5px 9px; font-family: var(--mono); font-size: 10.5px; color: var(--muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .slab.hot { border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); color: var(--accent); }
+  .motorlist { display: flex; flex-direction: column; gap: 7px; }
+  .motor-row {
+    display: flex; gap: 10px; align-items: baseline; background: var(--card);
+    border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; font-size: 13.5px;
+  }
+  .motor-row .g { font-family: var(--mono); color: var(--accent); width: 1.4em; flex-shrink: 0; }
+  .motor-row .n { color: var(--muted); font-size: 12px; margin-left: auto; text-align: right; flex-shrink: 0; }
+
+  /* ── fluxos ──────────────────────────────────────── */
+  .flow { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px 16px; overflow-x: auto; margin-bottom: 14px; }
+  .flow figcaption { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); padding: 0 0 12px; }
+  .chain { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 8px; margin: 0 0 10px; }
+  .chain:last-child { margin-bottom: 0; }
+  .node {
+    background: var(--card2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 4px 10px; font-size: 12.5px; white-space: nowrap;
+  }
+  .node small { display: block; color: var(--muted); font-size: 10.5px; line-height: 1.3; }
+  .node.core { border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); color: var(--accent); }
+  .node.ghost { border-style: dashed; color: var(--muted); }
+  .arr { font-family: var(--mono); color: var(--muted); font-size: 12px; }
+  .arr.soft { opacity: .55; }
+  .branch { font-family: var(--mono); color: var(--muted); font-size: 12px; width: 2em; text-align: right; }
+
+  /* ── inventário ──────────────────────────────────── */
+  .pillar { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); margin: 30px 0 8px; }
+  .inv { display: flex; flex-direction: column; gap: 6px; }
+  .row {
+    display: grid; grid-template-columns: 1fr auto; gap: 4px 12px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px;
+  }
+  .row .name { font-size: 14.5px; font-weight: 600; }
+  .row .name small { font-weight: 400; color: var(--muted); }
+  .row .dest { grid-column: 1; font-size: 13px; color: var(--muted); }
+  .row .dest b { color: var(--text); font-weight: 600; }
+  .row .side { grid-column: 2; grid-row: 1 / span 2; display: flex; flex-direction: column; align-items: flex-end; gap: 7px; justify-content: center; }
+  .chip {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .04em;
+    padding: 2px 9px; border-radius: 999px; white-space: nowrap;
+  }
+  .chip.vivo   { color: var(--vivo);   background: var(--vivo-bg); }
+  .chip.meio   { color: var(--meio);   background: var(--meio-bg); }
+  .chip.colado { color: var(--colado); background: var(--colado-bg); }
+  .chip.morto  { color: var(--morto);  background: var(--morto-bg); }
+  .chip.falta  { color: var(--falta);  background: var(--falta-bg); }
+  .marks { display: flex; gap: 5px; }
+  .mk {
+    font-family: var(--mono); font-size: 13px; line-height: 1;
+    width: 30px; height: 26px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--card2); color: var(--muted); cursor: pointer;
+  }
+  .mk:hover { border-color: var(--accent); }
+  .mk:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .mk.on { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 700; }
+
+  /* ── 3 faces ─────────────────────────────────────── */
+  .faces { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+  .face { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .face h3 { margin: 0; font-size: 17px; font-weight: 650; display: flex; gap: 8px; align-items: baseline; }
+  .face h3 .g { font-family: var(--mono); color: var(--accent); }
+  .face .tag { font-size: 12.5px; color: var(--muted); font-style: italic; }
+  .face ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
+  .face li { font-size: 13px; padding: 5px 9px; background: var(--card2); border-radius: 7px; }
+  .face li small { color: var(--muted); }
+  .navbar {
+    margin-top: 4px; display: flex; justify-content: center; gap: 18px;
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+    border-top: 1px dashed var(--border); padding-top: 10px;
+  }
+  .navbar b { color: var(--accent); font-weight: 400; }
+
+  /* ── mortes + perguntas ──────────────────────────── */
+  .kill { display: flex; flex-direction: column; gap: 6px; }
+  .kill .row .name { font-weight: 500; }
+  .qs { counter-reset: q; display: flex; flex-direction: column; gap: 10px; }
+  .q { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; }
+  .q p { margin: 0; font-size: 14.5px; }
+  .q p b { color: var(--accent); font-family: var(--mono); font-weight: 400; margin-right: 6px; }
+  .q small { color: var(--muted); font-size: 12.5px; }
+
+  /* ── barra de marcação ───────────────────────────── */
+  .markbar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px); border-top: 1px solid var(--border);
+    padding: 10px 20px; display: flex; align-items: center; gap: 14px; justify-content: center;
+    font-size: 13px;
+  }
+  .markbar .count { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .markbar button {
+    font-family: var(--sans); font-size: 13px; font-weight: 600;
+    background: var(--accent); color: var(--bg); border: 0; border-radius: 10px;
+    padding: 8px 18px; cursor: pointer;
+  }
+  .markbar button:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+  footer { margin-top: 70px; font-size: 13px; color: var(--muted); }
+  code { font-family: var(--mono); font-size: .92em; color: var(--accent); }
+  @media (prefers-reduced-motion: no-preference) {
+    .row, .face { transition: border-color .15s; }
+    .row:hover { border-color: color-mix(in srgb, var(--accent) 35%, var(--border)); }
+  }
+</style>
+
+<main>
+<header>
+  <p class="eyebrow">mindroot · onda 2 → onda 3 · 26 jul 2026</p>
+  <h1>O motor virou φ.<br>A carcaça ainda é de <em>abril</em>.</h1>
+  <p class="lede">Oito fases construíram os verticais — alma, tempo, ação, agente — <strong>sobre a casca da Espiral 1</strong>: 14 rotas nascidas de wireframes, uma Home que virou corredor de banners. Este mapa mostra tudo que existe, como se conecta por baixo, e propõe onde cada peça mora na casca nova. <strong>Marca cada linha: ✓ ok · ✗ não · ? discutir</strong> — e eu transformo em plano.</p>
+  <div class="arc"><span class="sun">☀ aurora</span><span class="line"></span><span>◆ zênite</span><span class="line"></span><span>☽ crepúsculo</span></div>
+</header>
+
+<!-- ════════ 1 · DIAGNÓSTICO ════════ -->
+<h2><span class="glyph">△</span>O diagnóstico — a pilha e o motor</h2>
+<p class="sub">À esquerda, a Home real de hoje: onze blocos empilhados, cada fase colou o seu. À direita, o que o motor já sabe fazer. O problema não é falta de função — é que <b>a tela não tem tese</b>: tudo compete, nada respira.</p>
+<div class="diag">
+  <div class="phone" aria-label="Home atual, empilhada">
+    <div class="cap">home hoje — a pilha</div>
+    <div class="slab">☀ aurora (overlay 1×/dia)</div>
+    <div class="slab">bom dia, rick · aurora</div>
+    <div class="slab">soul — emoção · energia</div>
+    <div class="slab hot">🪜 banner escada (F4)</div>
+    <div class="slab hot">◈ banner protocolo (F7)</div>
+    <div class="slab">○ raiz · 78%</div>
+    <div class="slab">captura ————————</div>
+    <div class="slab hot">◈ prateleira protocolos (F7)</div>
+    <div class="slab">items ativos (5 cards)</div>
+    <div class="slab">criados hoje · inbox (7)</div>
+    <div class="slab">▂▄ health bar (audit)</div>
+    <div class="navbar" style="border:none;padding-top:4px">home · pipeline · raiz · projects · search</div>
+  </div>
+  <div class="motorlist" aria-label="O motor: as 8 fases vivas">
+    <div class="motor-row"><span class="g">·</span>F1 · chão — fuso, CD, Pro <span class="n">✅ vivido</span></div>
+    <div class="motor-row"><span class="g">—</span>F2 · aurora — chegada + journaling <span class="n">✅ vivido</span></div>
+    <div class="motor-row"><span class="g">△</span>F3 · crepúsculo — wrap + shift <span class="n">✅ 7 wraps</span></div>
+    <div class="motor-row"><span class="g">□</span>F4 · escada de meaning <span class="n">🪜 semanal acordou</span></div>
+    <div class="motor-row"><span class="g">⬠</span>F5 · pessoas no calendário <span class="n">◐ não vivido</span></div>
+    <div class="motor-row"><span class="g">⬡</span>F6 · cadeias de hábitos <span class="n">◐ não vivido</span></div>
+    <div class="motor-row"><span class="g">◈</span>F7 · protocolos (quando X, faço Y) <span class="n">◐ não vivido</span></div>
+    <div class="motor-row"><span class="g">⛓</span>F8 · projetos-presença + listas <span class="n">◐ recém-nascido</span></div>
+    <div class="motor-row"><span class="g">○</span>F9 · espelho emocional no tempo <span class="n">⚪ falta — precisa de dias</span></div>
+  </div>
+</div>
+
+<!-- ════════ 2 · INTERAÇÕES ════════ -->
+<h2><span class="glyph">⬠</span>Como tudo se conecta por baixo</h2>
+<p class="sub">Dois ciclos giram o sistema inteiro. Tudo que a UI mostra é derivação destes fluxos — nenhuma tela tem dado próprio.</p>
+
+<figure class="flow">
+  <figcaption>ciclo do dia — a alma gira o tempo</figcaption>
+  <div class="chain">
+    <span class="node">☀ aurora <small>emoção · energia · intenção</small></span>
+    <span class="arr">＋</span>
+    <span class="node">✳ bot <small>«sinto: X»</small></span>
+    <span class="arr">→</span>
+    <span class="node core">tronco <small>checkpoints no banco</small></span>
+    <span class="arr">→</span>
+    <span class="node">☽ wrap <small>shift · seeds · audit</small></span>
+    <span class="arr">→</span>
+    <span class="node">🪜 escada <small>semana → mês → ano</small></span>
+  </div>
+  <div class="chain">
+    <span class="branch">↳</span>
+    <span class="node core">tronco</span>
+    <span class="arr">acorda</span>
+    <span class="node">◈ protocolo <small>«a situação chamou»</small></span>
+    <span class="arr">→</span>
+    <span class="node">passos vividos <small>rastro em atom_events</small></span>
+  </div>
+  <div class="chain">
+    <span class="branch">↳</span>
+    <span class="node">⛓ cadeia do zênite <small>elos → sela sozinha</small></span>
+    <span class="arr">→</span>
+    <span class="node">☽ wrap</span>
+    <span class="arr soft">⇢ seeds voltam pra</span>
+    <span class="node">☀ aurora de amanhã</span>
+  </div>
+  <div class="chain">
+    <span class="branch">↳</span>
+    <span class="node ghost">○ espelho no tempo (F9 — falta) <small>lê a escada + os rastros ◈</small></span>
+  </div>
+</figure>
+
+<figure class="flow">
+  <figcaption>ciclo do item — genesis, da captura ao selo</figcaption>
+  <div class="chain">
+    <span class="node">boca: captura <small>!list · #mod · @hoje</small></span>
+    <span class="arr">＋</span>
+    <span class="node">boca: Gmail ★ + Calendar</span>
+    <span class="arr">＋</span>
+    <span class="node">boca: E. / Telegram</span>
+    <span class="arr">→</span>
+    <span class="node core">· inbox</span>
+  </div>
+  <div class="chain">
+    <span class="branch">↳</span>
+    <span class="node core">· inbox</span>
+    <span class="arr">→</span>
+    <span class="node">triage IA <small>3 bandas de confiança</small></span>
+    <span class="arr">→</span>
+    <span class="node">— classified</span>
+    <span class="arr">→</span>
+    <span class="node">△ □ ⬠ ⬡ <small>pipeline FSM</small></span>
+    <span class="arr">→</span>
+    <span class="node core">○ committed</span>
+  </div>
+  <div class="chain">
+    <span class="branch">↳</span>
+    <span class="node">— classified</span>
+    <span class="arr">belongs_to</span>
+    <span class="node">⛓ projeto <small>«2 de 5 abertos»</small></span>
+  </div>
+  <div class="chain">
+    <span class="branch">↳</span>
+    <span class="node">eventos + attendees <small>do Calendar</small></span>
+    <span class="arr">→</span>
+    <span class="node">⬠ pessoas <small>sugestão curada, 1 toque</small></span>
+  </div>
+</figure>
+
+<!-- ════════ 3 · INVENTÁRIO ════════ -->
+<h2><span class="glyph">⬡</span>Inventário completo — e o destino proposto</h2>
+<p class="sub">Toda funcionalidade que existe (ou falta), onde mora hoje, o estado real (banco consultado ontem), e a face onde ela moraria. <b>Os botões ✓ ✗ ? gravam tua marcação neste aparelho</b> — no fim, «copiar marcação» e me devolve.</p>
+
+<p class="pillar">tempo — o dia como espinha</p>
+<div class="inv">
+  <div class="row" data-f="Aurora (chegada + journaling)"><span class="name">☀ Aurora <small>· overlay na Home, 1×/dia</small></span><span class="dest">→ <b>HOJE</b>: o topo do dia — deixa de ser overlay, vira a própria chegada</span><span class="side"><span class="chip vivo">vivo</span><span class="marks"></span></span></div>
+  <div class="row" data-f="Zênite"><span class="name">◆ Zênite <small>· hoje é só período/cor</small></span><span class="dest">→ <b>HOJE</b>: um toque no arco (pausa + cadeia), nunca uma tela</span><span class="side"><span class="chip meio">meio-vivo</span><span class="marks"></span></span></div>
+  <div class="row" data-f="Crepúsculo / wrap"><span class="name">☽ Crepúsculo + wrap <small>· /wrap, 7 passos</small></span><span class="dest">→ <b>HOJE</b>: fechar o dia no fim do arco (a tela /wrap se dissolve nele)</span><span class="side"><span class="chip vivo">vivo · 7 wraps</span><span class="marks"></span></span></div>
+  <div class="row" data-f="Calendario + fixos Google"><span class="name">Calendário + fixos <small>· /calendar, sync Google</small></span><span class="dest">→ <b>HOJE</b> mostra os fixos do dia; /calendar continua como visão da semana</span><span class="side"><span class="chip vivo">vivo</span><span class="marks"></span></span></div>
+  <div class="row" data-f="Pessoas (F5)"><span class="name">⬠ Pessoas <small>· chips nos eventos + sugestão curada</small></span><span class="dest">→ ficam nos eventos; a casa delas vira drill-down do ramo família na <b>ÁRVORE</b></span><span class="side"><span class="chip meio">não vivido</span><span class="marks"></span></span></div>
+  <div class="row" data-f="Cadeias / rotinas (F6)"><span class="name">⛓ Cadeias de hábitos <small>· blocos de ritual no calendar</small></span><span class="dest">→ <b>HOJE</b>: dentro do arco, no slot delas (aurora/zênite/crep)</span><span class="side"><span class="chip meio">não vivido</span><span class="marks"></span></span></div>
+</div>
+
+<p class="pillar">alma — como tu tá chegando</p>
+<div class="inv">
+  <div class="row" data-f="Check-in soul (app + telegram)"><span class="name">Check-in soul <small>· aurora + «sinto:» no bot</small></span><span class="dest">→ <b>HOJE</b> (chegada) + <b>@</b> (o bot é boca da alma) — já é assim, consagra</span><span class="side"><span class="chip vivo">vivo</span><span class="marks"></span></span></div>
+  <div class="row" data-f="Journaling (aurora/crepusculo)"><span class="name">Journaling <small>· página inteira nas pontas do dia</small></span><span class="dest">→ <b>HOJE</b>: intacto dentro dos ritos (primeira classe por lei)</span><span class="side"><span class="chip vivo">vivo</span><span class="marks"></span></span></div>
+  <div class="row" data-f="Escada de meaning (F4)"><span class="name">🪜 Escada de meaning <small>· /review + banner na Home</small></span><span class="dest">→ <b>ÁRVORE</b>: as janelas φ (semana·mês·ano) são leituras da árvore, não rota solta</span><span class="side"><span class="chip vivo">semanal acordou</span><span class="marks"></span></span></div>
+  <div class="row" data-f="Espelho emocional (F9)"><span class="name">○ Espelho no tempo <small>· F9, última da spec</small></span><span class="dest">→ <b>ÁRVORE</b>: a síntese que nomeia sem julgar («a árvore pende: trabalho cheio»)</span><span class="side"><span class="chip falta">falta</span><span class="marks"></span></span></div>
+</div>
+
+<p class="pillar">ação — o que você faz</p>
+<div class="inv">
+  <div class="row" data-f="Captura + tokens"><span class="name">Captura <small>· input na Home, tokens #mod !type @hoje</small></span><span class="dest">→ <b>@</b>: uma boca só — texto, voz, colar lista; a conversa absorve a captura</span><span class="side"><span class="chip vivo">vivo</span><span class="marks"></span></span></div>
+  <div class="row" data-f="Triage IA"><span class="name">Triage IA <small>· edge fn, 3 bandas de confiança</small></span><span class="dest">→ <b>@</b>: invisível dentro da conversa (o E. classifica, tu confirmas)</span><span class="side"><span class="chip vivo">vivo</span><span class="marks"></span></span></div>
+  <div class="row" data-f="Pipeline FSM (funil 7 estagios)"><span class="name">Pipeline <small>· /pipeline, funil de 7 estágios</small></span><span class="dest">→ <b>ÁRVORE</b>: maturação vira <b>leitura no galho</b> (broto → folha); o funil-tela morre</span><span class="side"><span class="chip colado">colado</span><span class="marks"></span></span></div>
+  <div class="row" data-f="Tasks / o que cabe agora"><span class="name">Tasks + «items ativos» <small>· cards empilhados na Home</small></span><span class="dest">→ <b>HOJE</b>: «o que cabe agora» — 1 sugestão (capacidade × momento), não lista</span><span class="side"><span class="chip vivo">vivo</span><span class="marks"></span></span></div>
+  <div class="row" data-f="Projetos (F8)"><span class="name">⛓ Projetos-presença <small>· /projects, belongs_to + «2 de 5 abertos»</small></span><span class="dest">→ <b>ÁRVORE</b>: projeto é galho grosso do ramo — drill-down, não aba própria</span><span class="side"><span class="chip meio">recém-nascido</span><span class="marks"></span></span></div>
+  <div class="row" data-f="Listas keep-style (F8)"><span class="name">Listas <small>· checklist no ItemDetail, !list na captura</small></span><span class="dest">→ <b>@</b> cria («lista: leite, pão») · <b>HOJE</b> puxa quando precisa (mercado)</span><span class="side"><span class="chip meio">recém-nascido</span><span class="marks"></span></span></div>
+  <div class="row" data-f="Protocolos (F7)"><span class="name">◈ Protocolos <small>· banner + prateleira na Home</small></span><span class="dest">→ <b>HOJE</b>: sentinela do arco («ainda dá» — sem-shame), como o wireframe previa</span><span class="side"><span class="chip meio">não vivido</span><span class="marks"></span></span></div>
+</div>
+
+<p class="pillar">agente — transversal</p>
+<div class="inv">
+  <div class="row" data-f="E. (bot + porta agent-capture)"><span class="name">✳ E. <small>· @Atomhsbot + porta agent-capture (pull, nunca push)</small></span><span class="dest">→ <b>@</b>: a face inteira é dele — captura, alma, e os bilhetes quando nascerem</span><span class="side"><span class="chip vivo">vivo</span><span class="marks"></span></span></div>
+  <div class="row" data-f="Bilhetes do E."><span class="name">Bilhetes do E. <small>· não existe (proto no sprint 5 morto)</small></span><span class="dest">→ <b>@</b>: o companheiro fala aqui (300 linhas de cherry-pick esperando)</span><span class="side"><span class="chip falta">falta</span><span class="marks"></span></span></div>
+</div>
+
+<p class="pillar">carcaça da espiral 1 — as 14 rotas</p>
+<div class="inv">
+  <div class="row" data-f="Home (hub)"><span class="name">Home <small>· o hub que virou pilha</small></span><span class="dest">→ morre como hub: <b>vira o próprio HOJE</b> (o /hoje já é o embrião)</span><span class="side"><span class="chip colado">colado</span><span class="marks"></span></span></div>
+  <div class="row" data-f="Raiz (9 dominios)"><span class="name">○ Raiz <small>· /raiz, 9 domínios + saúde</small></span><span class="dest">→ <b>ÁRVORE</b>: drill-down do ramo (a raiz É a raiz da árvore); onboarding fica</span><span class="side"><span class="chip vivo">vivo</span><span class="marks"></span></span></div>
+  <div class="row" data-f="Graph D3"><span class="name">Graph <small>· /graph, força D3</small></span><span class="dest">→ a <b>ÁRVORE absorve</b> — ela é o grafo com tese; o raio-x genérico morre</span><span class="side"><span class="chip colado">colado</span><span class="marks"></span></span></div>
+  <div class="row" data-f="Analytics"><span class="name">Analytics <small>· /analytics, painéis</small></span><span class="dest">→ morre → vira <b>ÁRVORE</b> (veredito #28 da linhagem: síntese sem cobrança)</span><span class="side"><span class="chip colado">colado</span><span class="marks"></span></span></div>
+  <div class="row" data-f="Library"><span class="name">Library <small>· /library, tabs + filtros</small></span><span class="dest">→ despensa: drill do ramo + busca + contextual (cadeia→workout). <b>Horizonte registrado: curadora da net</b> (semente 26 Jul)</span><span class="side"><span class="chip meio">pouco vivida</span><span class="marks"></span></span></div>
+  <div class="row" data-f="Search"><span class="name">Search <small>· /search + filtros avançados</small></span><span class="dest">→ fica, transversal — mas talvez seja pergunta feita ao <b>@</b></span><span class="side"><span class="chip vivo">vivo</span><span class="marks"></span></span></div>
+  <div class="row" data-f="Settings / Norte"><span class="name">Settings <small>· conectores, tema, sobre</small></span><span class="dest">→ fica discreto (fora da barra), como o wireframe: norte/ajustes em pull</span><span class="side"><span class="chip vivo">vivo</span><span class="marks"></span></span></div>
+</div>
+
+<!-- ════════ 4 · AS 3 FACES ════════ -->
+<h2><span class="glyph">○</span>A carcaça nova — 3 faces</h2>
+<p class="sub">A decisão de 11 Jun (Home B+C, matriz #6: «CORE — construir») aterrissada no MindRoot que existe hoje. Barra com 3 lugares; norte e ajustes em pull. Cada face absorve o que está listado — nada se perde, tudo muda de casa.</p>
+<div class="faces">
+  <div class="face">
+    <h3><span class="g">·</span>HOJE</h3>
+    <p class="tag">o arco do dia — a única tela ativa</p>
+    <ul>
+      <li>☀ chegada + journaling <small>(aurora)</small></li>
+      <li>⛓ cadeias no slot delas</li>
+      <li>◈ protocolos — sentinela do arco</li>
+      <li>fixos do dia <small>(Google Cal)</small></li>
+      <li>«o que cabe agora» <small>— 1 sugestão</small></li>
+      <li>☽ fechar o dia <small>(wrap + semente)</small></li>
+    </ul>
+  </div>
+  <div class="face">
+    <h3><span class="g">⬡</span>ÁRVORE</h3>
+    <p class="tag">a vida vista — o espelho inteiro</p>
+    <ul>
+      <li>ramos φ <small>real × ideal, maturação no galho</small></li>
+      <li>○ raiz — drill-down do ramo</li>
+      <li>⛓ projetos — galhos grossos</li>
+      <li>🪜 janelas φ <small>(semana · mês · ano)</small></li>
+      <li>○ espelho emocional <small>(F9 mora aqui)</small></li>
+      <li>absorve: pipeline · graph · analytics</li>
+    </ul>
+  </div>
+  <div class="face">
+    <h3><span class="g">✳</span>@</h3>
+    <p class="tag">a conversa — captura e companhia</p>
+    <ul>
+      <li>uma boca só <small>— texto, voz, colar, !list</small></li>
+      <li>triage invisível <small>(o E. classifica)</small></li>
+      <li>«sinto:» — a alma pelo bot</li>
+      <li>bilhetes do E. <small>(quando nascer)</small></li>
+      <li>busca = perguntar</li>
+    </ul>
+  </div>
+</div>
+<div class="navbar"><b>· hoje</b> — <b>⬡ árvore</b> — <b>✳ @</b> <span style="opacity:.6">(norte · ajustes: pull)</span></div>
+
+<!-- ════════ 5 · MORTES ════════ -->
+<h2><span class="glyph">✕</span>O que morre de tela (nada morre de dado)</h2>
+<p class="sub">Toda morte aqui é de superfície — o tronco fica intacto. Regra da casa: substituição, não convivência.</p>
+<div class="inv kill">
+  <div class="row" data-f="MORTE: Home-hub"><span class="name">Home como hub de banners</span><span class="dest">o HOJE assume; banners viram momentos do arco</span><span class="side"><span class="marks"></span></span></div>
+  <div class="row" data-f="MORTE: Pipeline-funil"><span class="name">Pipeline como funil-tela</span><span class="dest">maturação se <b>vê</b> no galho, não se administra em kanban</span><span class="side"><span class="marks"></span></span></div>
+  <div class="row" data-f="MORTE: Graph"><span class="name">Graph D3 genérico</span><span class="dest">a árvore é o grafo com tese</span><span class="side"><span class="marks"></span></span></div>
+  <div class="row" data-f="MORTE: Analytics"><span class="name">Analytics de painéis</span><span class="dest">síntese sem cobrança = árvore (linhagem #28, já selado)</span><span class="side"><span class="marks"></span></span></div>
+  <div class="row" data-f="MORTE: BottomNav 5 abas"><span class="name">Barra de 5 abas</span><span class="dest">3 lugares: hoje · árvore · @</span><span class="side"><span class="marks"></span></span></div>
+</div>
+
+<!-- ════════ 6 · PERGUNTAS ════════ -->
+<h2><span class="glyph">?</span>O que só tu sabes</h2>
+<div class="qs">
+  <div class="q"><p><b>q1</b>O /calendar (semana) sobrevive como quarta vista em pull, ou o HOJE + fixos basta?</p></div>
+  <div class="q"><p><b>q2</b>A ÁRVORE nasce de quê: transplante da radial φ do atom-zero (a muda nº 2), ou desenho novo sobre os 8 módulos do tronco?</p></div>
+  <div class="q"><p><b>q3</b>«O que cabe agora» com 1 sugestão só exige um motor de capacidade × momento que não existe. Nasce simples (regra fixa: peso + período) ou espera o E. ficar mais esperto?</p></div>
+  <div class="q"><p><b>q4</b>Ordem da Onda 3: F9 primeiro (fecha a Onda 2 na casca velha) e depois as faces — ou as faces primeiro e a F9 já nasce dentro da ÁRVORE? <small>Meu voto: viver 1 semana → F9 dentro da ÁRVORE, uma obra só.</small></p></div>
+  <div class="q"><p><b>q5</b>André/segundo usuário pesa no redesenho, ou o app volta a ser só teu até a carcaça nova firmar?</p></div>
+</div>
+
+<footer>
+  <p>Protocolo: marca as linhas (✓ ok · ✗ não · ? discutir) → «copiar marcação» → cola na conversa. Eu transformo em plano por fases — commits pequenos, como a casa gosta. Fontes: <code>onda-2-log.md</code> · <code>WIREFRAME_V2.md</code> (projeto-e, 11 Jun) · matriz de 28 vereditos da linhagem · banco consultado em 25–26 Jul.</p>
+</footer>
+</main>
+
+<div class="markbar">
+  <span class="count" id="count">0 marcadas</span>
+  <button id="copy">copiar marcação</button>
+</div>
+
+<script>
+(function () {
+  var KEY = 'mindroot-ux-marks-v1';
+  var marks = {};
+  try { marks = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) { marks = {}; }
+  var SY = ['✓', '✗', '?'];
+  var rows = document.querySelectorAll('.row[data-f]');
+  var countEl = document.getElementById('count');
+
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(marks)); } catch (e) {}
+    var n = Object.keys(marks).length;
+    countEl.textContent = n + ' de ' + rows.length + ' marcadas';
+  }
+
+  rows.forEach(function (row) {
+    var f = row.getAttribute('data-f');
+    var holder = row.querySelector('.marks');
+    SY.forEach(function (s) {
+      var b = document.createElement('button');
+      b.className = 'mk';
+      b.type = 'button';
+      b.textContent = s;
+      b.setAttribute('aria-label', f + ' — marcar ' + s);
+      if (marks[f] === s) b.classList.add('on');
+      b.addEventListener('click', function () {
+        if (marks[f] === s) { delete marks[f]; } else { marks[f] = s; }
+        holder.querySelectorAll('.mk').forEach(function (x) {
+          x.classList.toggle('on', x.textContent === marks[f]);
+        });
+        save();
+      });
+      holder.appendChild(b);
+    });
+  });
+  save();
+
+  document.getElementById('copy').addEventListener('click', function () {
+    var lines = ['marcação mindroot — motor × carcaça:'];
+    rows.forEach(function (row) {
+      var f = row.getAttribute('data-f');
+      if (marks[f]) lines.push(marks[f] + ' ' + f);
+    });
+    if (lines.length === 1) lines.push('(nada marcado ainda)');
+    var text = lines.join('\n');
+    var done = function () {
+      var b = document.getElementById('copy');
+      b.textContent = 'copiado ✓';
+      setTimeout(function () { b.textContent = 'copiar marcação'; }, 1600);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { window.prompt('copia daqui:', text); });
+    } else {
+      window.prompt('copia daqui:', text);
+    }
+  });
+})();
+</script>
+</html>

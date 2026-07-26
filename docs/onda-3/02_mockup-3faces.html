@@ -1,0 +1,439 @@
+﻿<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head><title>MindRoot — mockup das 3 faces</title>
+<style>
+  /* mundo único, deliberado: o app é escuro à luz de vela — o mockup também */
+  :root {
+    --bg: #0f0d09;
+    --halo: #17130d;
+    --card: #1c1712;
+    --card2: #241e16;
+    --border: #33291c;
+    --border-soft: #2a2217;
+    --text: #ece3cd;
+    --muted: #91876f;
+    --faint: #5f5745;
+    --gold: #d4b872;
+    --gold-dim: #a3884f;
+    --gold-bg: rgba(212, 184, 114, .10);
+    --work: #7a8fb8; --body: #8a9e7a; --mind: #9e7ab8; --family: #c4a882;
+    --purpose: #b87a8f; --bridge: #8a8578; --finance: #7aada3; --social: #8f86c2;
+    --mono: ui-monospace, "Cascadia Code", Consolas, Menlo, monospace;
+    --sans: "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: radial-gradient(1200px 700px at 50% -10%, var(--halo), var(--bg) 60%);
+    color: var(--text); font-family: var(--sans); line-height: 1.5;
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+    padding: 34px 16px 60px;
+  }
+  .studio { text-align: center; margin-bottom: 22px; max-width: 620px; }
+  .studio .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--faint); margin: 0 0 8px; }
+  .studio h1 { font-size: clamp(20px, 4vw, 27px); font-weight: 350; margin: 0 0 6px; letter-spacing: .01em; }
+  .studio h1 b { color: var(--gold); font-weight: 500; }
+  .studio p { font-size: 13.5px; color: var(--muted); margin: 0; }
+
+  /* ── o aparelho ── */
+  .phone {
+    width: min(400px, 100%); background: var(--bg);
+    border: 1px solid var(--border); border-radius: 34px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.02);
+    overflow: hidden; display: flex; flex-direction: column;
+    height: 780px; max-height: 88vh;
+  }
+  .screen { flex: 1; overflow-y: auto; padding: 26px 20px 18px; scrollbar-width: thin; }
+  .face { display: none; flex-direction: column; gap: 14px; }
+  .face.on { display: flex; }
+
+  /* nav */
+  nav {
+    display: flex; border-top: 1px solid var(--border-soft);
+    background: color-mix(in srgb, var(--bg) 70%, black);
+  }
+  nav button {
+    flex: 1; background: none; border: 0; color: var(--faint); cursor: pointer;
+    font-family: var(--mono); font-size: 12px; padding: 13px 0 15px;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+  }
+  nav button .g { font-size: 16px; line-height: 1; }
+  nav button.on { color: var(--gold); }
+  nav button:focus-visible { outline: 2px solid var(--gold); outline-offset: -4px; border-radius: 10px; }
+
+  /* peças comuns */
+  .label { font-family: var(--mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--faint); }
+  .card { background: var(--card); border: 1px solid var(--border-soft); border-radius: 16px; padding: 13px 15px; }
+  .soul-line { color: var(--muted); font-size: 13px; font-style: italic; }
+  .soul-line b { color: var(--gold); font-weight: 500; font-style: normal; }
+
+  /* ══ HOJE ══ */
+  .arc-wrap { padding: 4px 2px 0; }
+  .arc-svg { width: 100%; display: block; }
+  .arrival { text-align: center; margin-top: -6px; }
+  .arrival .feel { font-size: 16.5px; font-weight: 350; }
+  .arrival .feel b { color: var(--gold); font-weight: 500; }
+  .arrival .intent { font-size: 12.5px; color: var(--muted); margin-top: 2px; font-style: italic; }
+  .sent { border-color: color-mix(in srgb, var(--gold) 35%, var(--border-soft)); background: linear-gradient(160deg, var(--gold-bg), var(--card)); }
+  .sent .hd { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px; }
+  .sent .hd .t { font-size: 13.5px; color: var(--gold); }
+  .steps { display: flex; flex-wrap: wrap; gap: 6px; }
+  .step { font-size: 12px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); background: var(--card2); }
+  .step.done { color: var(--gold-dim); border-color: color-mix(in srgb, var(--gold) 30%, var(--border)); text-decoration: line-through; text-decoration-color: var(--faint); }
+  .ainda { font-size: 11px; color: var(--muted); font-style: italic; margin-top: 7px; }
+  .fixo { display: flex; align-items: baseline; gap: 10px; padding: 6px 0; border-bottom: 1px dashed var(--border-soft); font-size: 13.5px; }
+  .fixo:last-child { border-bottom: 0; }
+  .fixo .h { font-family: var(--mono); font-size: 12px; color: var(--gold-dim); width: 42px; flex-shrink: 0; }
+  .fixo .p { margin-left: auto; font-size: 11px; color: var(--muted); background: var(--card2); border-radius: 999px; padding: 2px 8px; white-space: nowrap; }
+  .cabe { border-color: color-mix(in srgb, var(--body) 30%, var(--border-soft)); }
+  .cabe .sug { font-size: 14.5px; margin: 3px 0 2px; }
+  .cabe .why { font-size: 12px; color: var(--muted); font-style: italic; }
+  .chain-mini { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .chain-mini .elo { color: var(--muted); }
+  .chain-mini .elo.ok { color: var(--body); }
+  .pull-row { display: flex; gap: 8px; }
+  .pill {
+    font-size: 12px; color: var(--muted); border: 1px solid var(--border-soft);
+    background: var(--card); border-radius: 999px; padding: 5px 12px;
+  }
+  .pill b { color: var(--text); font-weight: 500; }
+  .close-day {
+    margin: 6px auto 2px; display: block; background: none; cursor: pointer;
+    border: 1px solid color-mix(in srgb, var(--gold) 40%, var(--border));
+    color: var(--gold); font-family: var(--mono); font-size: 13px;
+    border-radius: 999px; padding: 9px 26px;
+  }
+
+  /* ══ ÁRVORE ══ */
+  .tree-wrap { position: relative; margin: -4px -6px 0; }
+  canvas { width: 100%; display: block; }
+  .sintese { text-align: center; font-size: 14px; font-style: italic; color: var(--muted); margin: -2px 8px 0; text-wrap: balance; }
+  .sintese b { color: var(--gold); font-weight: 500; font-style: normal; }
+  .windows { display: flex; gap: 7px; justify-content: center; }
+  .win { font-family: var(--mono); font-size: 11px; color: var(--muted); border: 1px solid var(--border-soft); border-radius: 999px; padding: 4px 12px; background: var(--card); }
+  .win.on { color: var(--gold); border-color: color-mix(in srgb, var(--gold) 40%, var(--border)); background: var(--gold-bg); }
+  .espelho { border-color: color-mix(in srgb, var(--mind) 35%, var(--border-soft)); }
+  .espelho .label { color: color-mix(in srgb, var(--mind) 70%, var(--muted)); }
+  .espelho p { margin: 6px 0 0; font-size: 13px; color: var(--muted); }
+  .espelho p b { color: var(--text); font-weight: 500; }
+  .folha { display: flex; align-items: baseline; gap: 9px; padding: 5px 0; font-size: 13px; border-bottom: 1px dashed var(--border-soft); }
+  .folha:last-child { border-bottom: 0; }
+  .folha .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; align-self: center; }
+  .folha .m { margin-left: auto; font-family: var(--mono); font-size: 10.5px; color: var(--faint); }
+
+  /* ══ @ ══ */
+  .chat { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .msg { max-width: 85%; border-radius: 16px; padding: 9px 13px; font-size: 13.5px; }
+  .me { align-self: flex-end; background: var(--card2); border: 1px solid var(--border-soft); border-bottom-right-radius: 5px; }
+  .e { align-self: flex-start; background: transparent; border: 1px solid color-mix(in srgb, var(--gold) 25%, var(--border-soft)); border-bottom-left-radius: 5px; }
+  .e .sig { font-family: var(--mono); font-size: 10px; color: var(--gold-dim); letter-spacing: .12em; margin-bottom: 3px; }
+  .msg .chipline { display: flex; gap: 5px; margin-top: 7px; flex-wrap: wrap; }
+  .tchip { font-family: var(--mono); font-size: 10.5px; padding: 2px 8px; border-radius: 999px; background: var(--card2); border: 1px solid var(--border); color: var(--muted); }
+  .tchip.hot { color: var(--gold); border-color: color-mix(in srgb, var(--gold) 35%, var(--border)); }
+  .boca { display: flex; gap: 8px; align-items: center; margin-top: 12px; }
+  .boca .in {
+    flex: 1; background: var(--card); border: 1px solid var(--border);
+    border-radius: 999px; padding: 10px 16px; font-size: 13px; color: var(--faint);
+  }
+  .boca .mic { font-size: 16px; color: var(--gold-dim); }
+
+  .foot-hint { text-align: center; font-family: var(--mono); font-size: 10.5px; color: var(--faint); margin-top: 18px; }
+  @media (prefers-reduced-motion: reduce) { .breath { animation: none !important; } }
+</style>
+
+<div class="studio">
+  <p class="eyebrow">mindroot · mockup onda 3 · 26 jul 2026</p>
+  <h1>As 3 faces — <b>com a alma como seiva</b>, não como seção</h1>
+  <p>Navega embaixo: <b>· hoje</b> (o arco) · <b>⬡ árvore</b> (o espelho) · <b>✳ @</b> (a conversa).<br>A lei do desenho: <b>simples na superfície</b> — resolve a ansiedade do dia; <b>fundo inteiro atrás</b>, pra quem e quando quiser. Cresce preservando presença. O céu anda no horário real.</p>
+</div>
+
+<div class="phone">
+  <div class="screen">
+
+    <!-- ═══════════ FACE · HOJE ═══════════ -->
+    <section class="face on" id="f-hoje" aria-label="Face hoje">
+      <div class="arc-wrap">
+        <svg class="arc-svg" viewBox="0 0 360 104" role="img" aria-label="arco do dia — sol e lua no horário real">
+          <path id="arc-base" d="M 24 88 Q 180 -22 336 88" fill="none" stroke="#33291c" stroke-width="1.5"/>
+          <path id="arc-walk" d="M 24 88 Q 180 -22 336 88" fill="none" stroke="#d4b872" stroke-width="1.5" opacity=".85"/>
+          <circle cx="24" cy="88" r="3" fill="#a3884f"/>
+          <text x="24" y="102" text-anchor="middle" font-size="9.5" fill="#5f5745" font-family="monospace">☀ 6:31</text>
+          <circle cx="180" cy="33" r="2.5" fill="#5f5745"/>
+          <text x="180" y="22" text-anchor="middle" font-size="9.5" fill="#5f5745" font-family="monospace">◆ 11:50</text>
+          <circle cx="336" cy="88" r="3" fill="#5f5745"/>
+          <text x="336" y="102" text-anchor="middle" font-size="9.5" fill="#5f5745" font-family="monospace">☽ 17:09</text>
+          <g id="arc-now">
+            <circle id="now-dot" r="6" fill="#d4b872" opacity=".18"><animate attributeName="r" values="6;10;6" dur="5s" repeatCount="indefinite"/></circle>
+            <text id="now-glyph" text-anchor="middle" font-size="13" fill="#d4b872" dy="4">☀</text>
+            <text id="now-time" text-anchor="middle" font-size="10" fill="#91876f" font-family="monospace" dy="20"></text>
+          </g>
+        </svg>
+        <div class="label" id="sky-line" style="text-align:center; margin-top:2px"></div>
+      </div>
+
+      <div class="arrival">
+        <div class="feel">cheguei <b>ansioso</b> · energia média</div>
+        <div class="intent">«um dia de cada coisa no seu lugar»</div>
+      </div>
+
+      <!-- sentinela: o protocolo acordou PELA alma da chegada -->
+      <div class="card sent">
+        <div class="hd">
+          <span class="t">◈ a situação chamou — ansiedade bateu</span>
+          <span class="label">sentinela</span>
+        </div>
+        <div class="steps">
+          <span class="step done">respira 4-7-8</span>
+          <span class="step">água gelada</span>
+          <span class="step">nomeia em 1 linha</span>
+        </div>
+        <div class="ainda">sem pressa — o resto do protocolo ainda dá.</div>
+      </div>
+
+      <div class="card">
+        <div class="label" style="margin-bottom:6px">⛓ zênite · pausa do meio-dia</div>
+        <div class="chain-mini">
+          <span class="elo ok">● alongar</span><span style="color:var(--faint)">—</span>
+          <span class="elo">○ caminhar 10 min</span>
+          <span style="margin-left:auto;font-size:11px;color:var(--muted);font-style:italic">1 de 2 · sela sozinha</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="label" style="margin-bottom:4px">fixos de hoje · google</div>
+        <div class="fixo"><span class="h">09:00</span> levar Sofia <span class="p">⬠ sofia</span></div>
+        <div class="fixo"><span class="h">14:00</span> call Atlas — orçamento <span class="p">⬠ willi</span></div>
+      </div>
+
+      <div class="card cabe">
+        <div class="label" style="margin-bottom:2px">o que cabe agora</div>
+        <div class="sug">responder Willi sobre o vidro</div>
+        <div class="why">leve, 10 min — cabe antes da call das 14h. só esta; o resto espera.</div>
+      </div>
+
+      <div class="pull-row">
+        <span class="pill">🛒 compra da semana · <b>2 de 3</b></span>
+        <span class="pill">⛓ obra do estúdio · <b>2 de 5</b></span>
+      </div>
+
+      <button class="close-day">○ fechar o dia</button>
+    </section>
+
+    <!-- ═══════════ FACE ⬡ ÁRVORE ═══════════ -->
+    <section class="face" id="f-arvore" aria-label="Face árvore">
+      <div class="tree-wrap">
+        <canvas id="tree" width="720" height="640" aria-label="árvore da vida: 8 ramos, real × ideal"></canvas>
+      </div>
+      <p class="sintese">a árvore pende: <b>trabalho cheio</b> · corpo pedindo água · <b>família em folha nova</b></p>
+      <div class="windows">
+        <span class="win on">🪜 semana</span><span class="win">lunar 21</span><span class="win">estação 55</span><span class="win">ano</span>
+      </div>
+      <div class="card espelho">
+        <span class="label">○ espelho no tempo · f9</span>
+        <p>nas últimas <b>3 manhãs ansiosas</b>, a tarde ficou leve depois do protocolo. o corpo já sabe o caminho — <b>a aurora só precisa lembrar</b>.</p>
+      </div>
+      <div class="card">
+        <div class="label" style="margin-bottom:4px">folhas recentes · a seiva nova</div>
+        <div class="folha"><span class="dot" style="background:var(--bridge)"></span> wrap W30 — «semana que coube» <span class="m">ponte</span></div>
+        <div class="folha"><span class="dot" style="background:var(--body)"></span> dormir 21:30 ○ selado <span class="m">corpo</span></div>
+        <div class="folha"><span class="dot" style="background:var(--work)"></span> obra do estúdio · 2 de 5 abertos <span class="m">trabalho</span></div>
+        <div class="folha"><span class="dot" style="background:var(--family)"></span> ⬠ sofia — 3 momentos esta semana <span class="m">família</span></div>
+      </div>
+      <p class="soul-line" style="text-align:center">toca um ramo → ele abre: items, pessoas, a raiz dele. <b>maturação se vê no galho</b> (· → ○), não em funil.</p>
+    </section>
+
+    <!-- ═══════════ FACE ✳ @ ═══════════ -->
+    <section class="face" id="f-at" aria-label="Face arroba, a conversa">
+      <div class="chat">
+        <div class="msg e"><div class="sig">E.</div>o que chegou?</div>
+        <div class="msg me">sinto: apertado no peito antes da call</div>
+        <div class="msg e"><div class="sig">E.</div>anotei na tua chegada. o ◈ «ansiedade bateu» tá de pé — o primeiro passo é 1 respiração. quer que eu deixe ele aberto no HOJE?
+          <div class="chipline"><span class="tchip hot">◈ abrir no hoje</span><span class="tchip">agora não</span></div>
+        </div>
+        <div class="msg me">lista: leite, pão, café</div>
+        <div class="msg e"><div class="sig">E.</div>🛒 <b>compra da semana</b> criada · 3 itens. fica de pill no HOJE pra puxar no mercado.</div>
+        <div class="msg me">"Segue o orçamento revisado do vidro — precisamos fechar até sexta" (colado do email)</div>
+        <div class="msg e"><div class="sig">E.</div>li assim:
+          <div class="chipline"><span class="tchip hot">△ task</span><span class="tchip">#trabalho</span><span class="tchip">⬠ willi</span><span class="tchip">@sexta</span><span class="tchip">92%</span></div>
+          <div class="chipline"><span class="tchip hot">confirma</span><span class="tchip">ajusta</span></div>
+        </div>
+        <div class="msg e"><div class="sig">E. · bilhete</div>a janela do remédio ainda dá. sem pressa.</div>
+      </div>
+      <div class="boca">
+        <div class="in">fala, cola, despeja…</div>
+        <span class="mic">🎤</span>
+      </div>
+    </section>
+  </div>
+
+  <nav aria-label="as 3 faces">
+    <button class="on" data-face="f-hoje"><span class="g">·</span>hoje</button>
+    <button data-face="f-arvore"><span class="g">⬡</span>árvore</button>
+    <button data-face="f-at"><span class="g">✳</span>@</button>
+  </nav>
+</div>
+
+<p class="foot-hint">item único · de dentro pra fora · geometria φ — tudo acima já existe no motor (F1–F8) ou é a F9 no lugar dela</p>
+
+<script>
+(function () {
+  // ── o céu no horário real: sol de dia, lua de noite, fase calculada ──
+  var SUNRISE = 6 * 60 + 31, SUNSET = 17 * 60 + 9; // brisbane, inverno
+  var base = document.getElementById('arc-base');
+  var walk = document.getElementById('arc-walk');
+  var L = base.getTotalLength();
+
+  function moonPhase(d) {
+    var syn = 29.53058867;
+    var age = ((d.getTime() / 86400000 - 10957.764) % syn + syn) % syn; // epoch: lua nova 06 jan 2000
+    var names = ['lua nova', 'lua crescente', 'quarto crescente', 'gibosa crescente', 'lua cheia', 'gibosa minguante', 'quarto minguante', 'lua minguante'];
+    var glyphs = ['●', '☽', '☽', '☽', '○', '☾', '☾', '☾'];
+    var i = Math.floor(((age + syn / 16) % syn) / (syn / 8));
+    return { name: names[i], glyph: glyphs[i], age: age };
+  }
+
+  function sky() {
+    var now = new Date();
+    var mins = now.getHours() * 60 + now.getMinutes();
+    var hhmm = String(now.getHours()) + ':' + String(now.getMinutes()).padStart(2, '0');
+    var isDay = mins >= SUNRISE && mins <= SUNSET;
+    var t, glyph, color;
+    if (isDay) {
+      t = (mins - SUNRISE) / (SUNSET - SUNRISE);
+      glyph = '☀'; color = '#d4b872';
+    } else {
+      var nightMins = mins > SUNSET ? mins - SUNSET : mins + (1440 - SUNSET);
+      t = nightMins / (1440 - (SUNSET - SUNRISE));
+      glyph = moonPhase(now).glyph; color = '#aeb6c6';
+    }
+    var p = base.getPointAtLength(L * Math.min(1, Math.max(0, t)));
+    var g = document.getElementById('arc-now');
+    g.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ',' + p.y.toFixed(1) + ')');
+    document.getElementById('now-glyph').textContent = glyph;
+    document.getElementById('now-glyph').setAttribute('fill', color);
+    document.getElementById('now-dot').setAttribute('fill', color);
+    document.getElementById('now-time').textContent = hhmm;
+    walk.setAttribute('stroke', color);
+    walk.setAttribute('stroke-dasharray', (L * t).toFixed(1) + ' ' + (L * 1.2).toFixed(1));
+    var mp = moonPhase(now);
+    document.getElementById('sky-line').textContent =
+      (isDay ? '☀ dia caminhando · ' : glyph + ' noite · ') + mp.name;
+  }
+  sky();
+  setInterval(sky, 60000);
+
+  // ── navegação entre faces ──
+  var btns = document.querySelectorAll('nav button');
+  btns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      btns.forEach(function (x) { x.classList.toggle('on', x === b); });
+      document.querySelectorAll('.face').forEach(function (f) {
+        f.classList.toggle('on', f.id === b.getAttribute('data-face'));
+      });
+      if (b.getAttribute('data-face') === 'f-arvore') drawTree(breath);
+    });
+  });
+
+  // ── a árvore: 8 ramos φ, real × ideal, folhas ──
+  var MODS = [
+    { k: 'trabalho', c: '#7a8fb8', real: .92, ideal: .70, leaves: 3 },
+    { k: 'corpo',    c: '#8a9e7a', real: .45, ideal: .80, leaves: 2 },
+    { k: 'mente',    c: '#9e7ab8', real: .60, ideal: .65, leaves: 2 },
+    { k: 'família',  c: '#c4a882', real: .75, ideal: .75, leaves: 4 },
+    { k: 'propósito',c: '#b87a8f', real: .50, ideal: .60, leaves: 1 },
+    { k: 'ponte',    c: '#8a8578', real: .70, ideal: .55, leaves: 3 },
+    { k: 'finanças', c: '#7aada3', real: .55, ideal: .60, leaves: 1 },
+    { k: 'social',   c: '#8f86c2', real: .35, ideal: .55, leaves: 1 }
+  ];
+  var cv = document.getElementById('tree');
+  var ctx = cv.getContext('2d');
+  var breath = 0;
+
+  function drawTree(b) {
+    var W = cv.width, H = cv.height;
+    ctx.clearRect(0, 0, W, H);
+    var cx = W / 2, cy = H * 0.58;
+    var maxR = Math.min(W, H) * 0.42;
+    var puls = 1 + Math.sin(b) * 0.012;
+
+    // espiral φ de fundo, quase invisível
+    ctx.strokeStyle = 'rgba(212,184,114,.05)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    var GA = 2.399963;
+    for (var t = 0; t < 46; t += .1) {
+      var r = 5 * Math.exp(.115 * t);
+      if (r > maxR * 1.15) break;
+      var x = cx + r * Math.cos(t + GA), y = cy - r * Math.sin(t + GA) * .9;
+      t === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    MODS.forEach(function (m, i) {
+      // 8 ramos em leque no hemisfério de cima (±80°)
+      var a = Math.PI - (Math.PI * (i + .8) / (MODS.length + .6));
+      var dx = Math.cos(a), dy = -Math.sin(a) * .95;
+      var ideal = maxR * (0.35 + m.ideal * 0.65);
+      var real = maxR * (0.35 + m.real * 0.65) * puls;
+      // curva orgânica: control point desloca perpendicular
+      var px = -dy * 26, py = dx * 26;
+
+      function branch(len, color, width, alpha, dash) {
+        ctx.strokeStyle = color; ctx.globalAlpha = alpha; ctx.lineWidth = width;
+        ctx.setLineDash(dash || []);
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.quadraticCurveTo(cx + dx * len * .5 + px, cy + dy * len * .5 + py, cx + dx * len, cy + dy * len);
+        ctx.stroke();
+        ctx.setLineDash([]); ctx.globalAlpha = 1;
+      }
+      branch(ideal, m.c, 1.2, .30, [4, 5]);           // o ideal: contorno tracejado
+      branch(real, m.c, 3.2, .85);                    // o real: cheio
+
+      // folhas ao longo do real
+      for (var l = 1; l <= m.leaves; l++) {
+        var f = .45 + (l / (m.leaves + 1)) * .55;
+        var lx = cx + dx * real * f + px * (1 - f) * .4;
+        var ly = cy + dy * real * f + py * (1 - f) * .4;
+        ctx.fillStyle = m.c; ctx.globalAlpha = .9;
+        ctx.beginPath(); ctx.arc(lx, ly, 4.2, 0, 7); ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+      // ponta: saturação (real > ideal = cheio demais → anel)
+      var tipx = cx + dx * real, tipy = cy + dy * real;
+      if (m.real > m.ideal + .08) {
+        ctx.strokeStyle = m.c; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(tipx, tipy, 8, 0, 7); ctx.stroke();
+      }
+      // rótulo
+      ctx.fillStyle = 'rgba(236,227,205,.55)';
+      ctx.font = '17px ui-monospace, monospace';
+      ctx.textAlign = dx > .25 ? 'left' : (dx < -.25 ? 'right' : 'center');
+      ctx.fillText(m.k, cx + dx * (ideal + 30), cy + dy * (ideal + 30) + 5);
+    });
+
+    // o tronco + a raiz
+    ctx.strokeStyle = '#a3884f'; ctx.lineWidth = 5; ctx.globalAlpha = .9;
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx, cy + 74); ctx.stroke();
+    ctx.globalAlpha = .45; ctx.lineWidth = 1.6;
+    [-38, -14, 12, 36].forEach(function (rx) {
+      ctx.beginPath(); ctx.moveTo(cx, cy + 74);
+      ctx.quadraticCurveTo(cx + rx * .5, cy + 96, cx + rx, cy + 106); ctx.stroke();
+    });
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = 'rgba(212,184,114,.75)';
+    ctx.font = '15px ui-monospace, monospace'; ctx.textAlign = 'center';
+    ctx.fillText('○ raiz · 78%', cx, cy + 128);
+  }
+
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced) { drawTree(0); }
+  else {
+    (function loop() {
+      breath += 0.012;
+      if (document.getElementById('f-arvore').classList.contains('on')) drawTree(breath);
+      requestAnimationFrame(loop);
+    })();
+    drawTree(0);
+  }
+})();
+</script>
+</html>
