@@ -21,7 +21,7 @@ export function OfflineBanner() {
 
   return (
     <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50 bg-warning-bg text-warning-text text-xs font-medium text-center py-2 px-4">
-      sem rede — o que despejares fica na fila e sobe quando voltar
+      sem rede — o que você despejar fica na fila e sobe quando voltar
     </div>
   );
 }

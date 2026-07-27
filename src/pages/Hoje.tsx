@@ -263,7 +263,7 @@ export function HojePage() {
             </button>
           </>
         ) : (
-          <p className="text-sm text-text-muted">nada pedindo agora — o dia é teu</p>
+          <p className="text-sm text-text-muted">nada pedindo agora — o dia é seu</p>
         )}
       </section>
 

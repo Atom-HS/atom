@@ -77,14 +77,14 @@ export function AtPage() {
           getSnoozedIds(user.id),
         )[0];
         if (awake) {
-          e(`senti contigo — anotei na tua chegada. o ◈ «${awake.title}» tá de pé.`, {
+          e(`senti com você — anotei na sua chegada. o ◈ «${awake.title}» tá de pé.`, {
             chips: [
               { label: '◈ abrir no hoje', hot: true, action: { type: 'open-hoje' } },
               { label: 'agora não', action: { type: 'dismiss' } },
             ],
           });
         } else {
-          e('senti contigo — anotei na tua chegada.');
+          e('senti com você — anotei na sua chegada.');
         }
         return;
       }
@@ -125,7 +125,7 @@ export function AtPage() {
           reading.dueDate ? { operations: { due_date: reading.dueDate } } : {},
         );
         invalidate();
-        e('guardei do teu jeito:', {
+        e('guardei do seu jeito:', {
           infoChips: [`△ ${reading.type}`, `#${reading.module}`, ...(reading.dueDate ? [`@${reading.dueDate.slice(5)}`] : [])],
           chips: [{ label: 'abrir', action: { type: 'open-item', itemId: item.id } }],
         });

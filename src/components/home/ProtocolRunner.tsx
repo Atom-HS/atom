@@ -72,7 +72,7 @@ export function ProtocolRunner({
         <p className="text-xs text-text-muted mb-4">
           {trigger === 'auto'
             ? `a situação chamou${soul.emotion ? ` — ${soul.emotion}` : ''}`
-            : 'tu chamaste'}
+            : 'você chamou'}
         </p>
 
         <div className="space-y-1.5 mb-5">

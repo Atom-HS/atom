@@ -72,7 +72,7 @@ export function PersonSuggestions() {
       });
       await personService.syncEventConnections(user.id);
       queryClient.invalidateQueries({ queryKey: ['items'] });
-      toast.success(`${s.name} entrou no teu mundo`);
+      toast.success(`${s.name} entrou no seu mundo`);
     } catch {
       toast.error(`Não deu pra criar ${s.name}`);
     } finally {
@@ -91,7 +91,7 @@ export function PersonSuggestions() {
             <p className="text-sm text-text font-medium">
               ⬠ {suggestions.length === 1 ? '1 pessoa nova' : `${suggestions.length} pessoas novas`} no calendário
             </p>
-            <p className="text-xs text-text-muted mt-0.5">toca pra decidir quem entra no teu mundo</p>
+            <p className="text-xs text-text-muted mt-0.5">toca pra decidir quem entra no seu mundo</p>
           </div>
           <span className="text-accent text-sm">{expanded ? '↑' : '→'}</span>
         </div>

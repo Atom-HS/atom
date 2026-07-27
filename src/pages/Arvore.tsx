@@ -174,7 +174,7 @@ export function ArvorePage() {
         {espelho ? (
           <p className="text-[13px] text-text-muted">{espelho.text}</p>
         ) : (
-          <p className="text-[13px] text-text-muted italic">ainda ouvindo teus dias — o espelho acorda com a semana vivida.</p>
+          <p className="text-[13px] text-text-muted italic">ainda ouvindo seus dias — o espelho acorda com a semana vivida.</p>
         )}
       </section>
 

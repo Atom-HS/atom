@@ -78,7 +78,7 @@ export function ReviewPage() {
             <div className="pt-4 mb-4">
               <h1 className="text-lg font-medium text-text-heading">{available.rung.invite}</h1>
               <p className="text-xs text-text-muted mt-0.5">
-                {available.reads.length} {available.rung.reads === 'wrap' ? 'dias' : 'sínteses'} acumulados · o sistema apresenta, tu significas
+                {available.reads.length} {available.rung.reads === 'wrap' ? 'dias' : 'sínteses'} acumulados · o sistema apresenta, você significa
               </p>
             </div>
 
