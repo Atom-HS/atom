@@ -13,6 +13,7 @@ import { getCurrentPeriod } from '@/types/ui';
 import { AuroraRitual } from '@/components/home/AuroraRitual';
 import { ProtocolBanner } from '@/components/home/ProtocolBanner';
 import { skyNow, sunTimes, fmtMin } from '@/engine/sky';
+import { MODULE_COLORS } from '@/components/atoms/tokens';
 import { suggestNow } from '@/engine/today';
 import { routinesForSlot, chainProgress } from '@/engine/routine';
 import { listLists, listSummary } from '@/engine/list';
@@ -34,11 +35,20 @@ function timeOf(iso: string): string {
   return new Date(iso).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 }
 
+// um acontecimento do dia pousado no arco (D59)
+export interface ArcMark {
+  t: number;      // 0..1 na caminhada do sol
+  color: string;  // a cor do módulo
+  title: string;
+}
+
 // ─── o céu no horário real ───────────────────────────
-function SkyArc() {
+function SkyArc({ marks }: { marks: ArcMark[] }) {
   const baseRef = useRef<SVGPathElement>(null);
   const [tick, setTick] = useState(0);
-  const [geo, setGeo] = useState({ px: 170, py: 14, dash: '0 1000' });
+  const [geo, setGeo] = useState<{ px: number; py: number; dash: string; pts: Array<ArcMark & { x: number; y: number }> }>({
+    px: 170, py: 14, dash: '0 1000', pts: [],
+  });
 
   useEffect(() => {
     const id = setInterval(() => setTick((n) => n + 1), 60_000);
@@ -49,6 +59,7 @@ function SkyArc() {
   const sky = skyNow(now);
   const { sunriseMin, sunsetMin } = sunTimes(now);
   const color = sky.isDay ? 'var(--color-warning)' : '#aeb6c6';
+  const marksKey = marks.map((m) => `${m.t.toFixed(3)}${m.color}`).join('|');
 
   // mede o path real (bezier) fora do render — lint da casa
   useEffect(() => {
@@ -60,9 +71,14 @@ function SkyArc() {
       px: p.x,
       py: p.y,
       dash: `${(L * sky.t).toFixed(1)} ${(L * 1.2).toFixed(1)}`,
+      pts: marks.map((m) => {
+        const q = base.getPointAtLength(L * m.t);
+        return { ...m, x: q.x, y: q.y };
+      }),
     });
-  }, [sky.t, tick]);
-  const { px, py, dash } = geo;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sky.t, tick, marksKey]);
+  const { px, py, dash, pts } = geo;
 
   return (
     <div className="pt-4 text-center">
@@ -71,6 +87,12 @@ function SkyArc() {
         <path d="M 20 64 Q 170 -20 320 64" fill="none" stroke={color} strokeWidth="1.5" strokeDasharray={dash} opacity=".8" />
         <circle cx="20" cy="64" r="3" fill="var(--color-warning)" opacity=".7" />
         <circle cx="320" cy="64" r="3" fill="var(--color-border)" />
+        {/* os acontecimentos do dia, na cor do módulo (D59) — estado, nunca cobrança */}
+        {pts.map((m, i) => (
+          <circle key={i} cx={m.x} cy={m.y} r="2.6" fill={m.color} opacity=".9">
+            <title>{m.title}</title>
+          </circle>
+        ))}
         <g transform={`translate(${px.toFixed(1)},${py.toFixed(1)})`}>
           <circle r="9" fill={color} opacity=".14" />
           <text textAnchor="middle" dy="4" fontSize="12" fill={color}>{sky.glyph}</text>
@@ -99,6 +121,30 @@ export function HojePage() {
   const [skip, setSkip] = useState(0);
 
   const all = useMemo(() => (items ?? []) as AtomItem[], [items]);
+
+  // os acontecimentos de hoje pousam no arco: nasceu ou selou → ponto na
+  // cor do módulo, na hora em que aconteceu (pedido do Rick, D59)
+  const marks = useMemo(() => {
+    const { sunriseMin, sunsetMin } = sunTimes(new Date());
+    const span = Math.max(1, sunsetMin - sunriseMin);
+    return all
+      .filter((i) => i.module)
+      .map((i) => {
+        const born = isTodayISO(i.created_at);
+        const sealed = i.status === 'completed' && isTodayISO(i.updated_at);
+        if (!born && !sealed) return null;
+        const when = new Date(born ? i.created_at : i.updated_at);
+        const min = when.getHours() * 60 + when.getMinutes();
+        return {
+          t: Math.min(0.97, Math.max(0.03, (min - sunriseMin) / span)),
+          color: MODULE_COLORS[i.module as keyof typeof MODULE_COLORS],
+          title: `${i.title} · ${when.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`,
+        };
+      })
+      .filter((m): m is NonNullable<typeof m> => m !== null)
+      .sort((a, b) => a.t - b.t)
+      .slice(0, 16);
+  }, [all]);
 
   const fixos = useMemo(
     () =>
@@ -148,7 +194,7 @@ export function HojePage() {
     <div className="px-5 pb-24">
       <AuroraRitual />
 
-      <SkyArc />
+      <SkyArc marks={marks} />
 
       {/* chegada */}
       <div className="text-center my-4">
