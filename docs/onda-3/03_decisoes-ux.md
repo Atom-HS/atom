@@ -41,6 +41,7 @@ sobrevivem de lá seguem valendo onde não conflitam; em conflito, a Onda 3 venc
 | **D57** | **Mundo único, escuro, deliberado** — o app à luz de vela. Dourado é raro e sagrado (rito, sentinela, caminho convidado); módulos dessaturados; mono marca, sans fala, itálico acolhe. Tokens no `03_mapa-navegacao.html` §1. | mockup |
 | **D58** | **Builder = a entrevista das doors** — o Routine Builder (Abr, `features/raiz/`) sobrevive e muda de casa: vive no chão da árvore (drill da raiz, D50), on-demand. Reforma junto com a face ÁRVORE: as respostas passam a parir **cadeias (`routine`) e protocolos (`◈`)**, não só hábitos soltos — hoje ele é pré-F6 e alimenta o motor velho. | Rick 27 Jul |
 | **D59** | **O arco marca os acontecimentos** — o que nasceu ou selou hoje pousa no arco como ponto na cor do módulo, na hora em que aconteceu. O dia se vê caminhando; estado, nunca cobrança (D46). | Rick 27 Jul |
+| **D60** | **Lei do Tom — primeiros vetos do Rick:** Art. 7 ratificado (**«você», nunca «tu»**) — as falas em tu da casca nova entram na fila de correção antes do gate; proibição de emoji **vetada** — emoji permitido. Demais vetáveis (exclamação, raridade do bilhete, push 3 casos, precedência conversa×SPEC) em análise. | Rick 28 Jul |
 
 ## A lei do desenho (nomeada pelo Rick, rege todas)
 
