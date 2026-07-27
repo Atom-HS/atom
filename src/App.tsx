@@ -14,6 +14,8 @@ import { OfflineBanner } from '@/components/shared/OfflineBanner';
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
 import { ToastContainer } from '@/components/shared/ToastContainer';
 import { checkSoulMidnightReset } from '@/store/soul-store';
+import { initSimFromUrl } from '@/dev/sim-week';
+import { SimBanner } from '@/dev/SimBanner';
 import type { AppPage } from '@/types/ui';
 
 // Static pages (pre-auth)
@@ -159,6 +161,7 @@ function AuthenticatedApp() {
     <>
       <ToastContainer />
       <AppShell onOpenSettings={() => routerNavigate('/settings')}>
+        <SimBanner />
         <OfflineBanner />
         <RouteSync />
         <FirstTimeRaizRedirect />
@@ -176,6 +179,7 @@ function AppContent() {
     const saved = localStorage.getItem('mindroot-theme') as ThemeMode | null;
     applyTheme(saved ?? 'system');
     checkSoulMidnightReset();
+    initSimFromUrl(); // ?sim=1 liga a semana simulada (client-only)
   }, []);
   const { user, loading } = useAuth();
   const [showAuth, setShowAuth] = useState(false);

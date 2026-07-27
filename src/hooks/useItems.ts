@@ -5,6 +5,7 @@ import { useAppStore } from '@/store/app-store';
 import { useMemo } from 'react';
 import { isToday, parseISO } from 'date-fns';
 import { applyVirtualReset } from '@/engine/recurrence';
+import { simItems } from '@/dev/sim-week';
 
 export function useItems() {
   const user = useAppStore((s) => s.user);
@@ -17,9 +18,10 @@ export function useItems() {
     staleTime: 30_000,
   });
 
-  // Apply virtual reset to recurring items
+  // Apply virtual reset to recurring items.
+  // Semana simulada (?sim=1) entra aqui — client-only, o banco nunca a vê.
   const items = useMemo(
-    () => applyVirtualReset(query.data ?? []),
+    () => applyVirtualReset([...(query.data ?? []), ...simItems()]),
     [query.data]
   );
 

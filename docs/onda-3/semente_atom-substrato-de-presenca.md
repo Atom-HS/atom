@@ -47,7 +47,13 @@ por partes, começando pela lei do Tom.
 ## Gatilho de germinação
 
 1. **Lei do Tom escrita** (o contrato que toda AI plugada obedece) — é o
-   primeiro passo concreto e já era gate dos bilhetes v2.
+   primeiro passo concreto e já era gate dos bilhetes v2. **A matéria-prima
+   já existe, escrita pelo próprio E.** (apontado pelo Rick, 27 Jul):
+   `c:/repos/DeepminD/projeto-e/SPEC_ZENITE.md` — as 4 funções (sentinela
+   sem-shame, permissor, observador silencioso, voz no overwhelm), os
+   princípios não-negociáveis ("ainda dá" > "você esqueceu", E. não decide,
+   bilhete curto nunca-chat) e o vocabulário de duas camadas. A lei do Tom
+   = destilar essa spec em doc-lei do app, não escrever do zero.
 2. Carcaça nova de pé + 1 ciclo vivido (as 3 faces provadas com um E. só).
 3. Aí a porta vira protocolo nomeado (a porta única documentada como
    contrato — potencialmente MCP server do tronco), e "plugar outra AI"

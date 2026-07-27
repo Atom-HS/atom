@@ -13,6 +13,7 @@ import { useAppStore } from '@/store/app-store';
 import { eventService } from '@/service/item-service';
 import { treeShape, synthesis, TREE_WINDOWS, BRANCH_LABEL, type Branch, type TreeWindow } from '@/engine/tree';
 import { mirror } from '@/engine/mirror';
+import { simEvents } from '@/dev/sim-week';
 import type { AtomItem, AtomModule } from '@/types/item';
 
 const MOD_COLOR: Record<AtomModule, string> = {
@@ -102,7 +103,7 @@ export function ArvorePage() {
 
   const branches = useMemo(() => treeShape(all, winKey), [all, winKey]);
   const line = useMemo(() => synthesis(branches), [branches]);
-  const espelho = useMemo(() => mirror(all, runs ?? []), [all, runs]);
+  const espelho = useMemo(() => mirror(all, [...(runs ?? []), ...simEvents()]), [all, runs]);
 
   const folhas = useMemo(
     () =>
