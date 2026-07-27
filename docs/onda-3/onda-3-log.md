@@ -51,13 +51,16 @@ por construção.
 - ✅ 205 testes verdes · typecheck limpo · build ok
 - ✅ 3 faces em embrião funcional + sim-week + mapa/template
 - ✅ prod intocada (casca velha) · tronco intocado (sim é client-only)
-- ⚠️ **branch `v2-faces` NÃO pushada** — 14 commits só locais (freio vermelho, espera o sim)
+- ✅ branch `v2-faces` pushada (27 Jul 16:53, logo após este wrap) — tracking `-u` selado 28 Jul
+- ⚠️ **preview Vercel NÃO existe** — projeto `atom` (conta r-6103) tem zero deployments; a
+  integração git do repo `Atom-HS/atom` não está ligada nesse projeto. Prod (`mindroot.com.au`)
+  deve viver noutra conta Vercel (rr@?) — confirmar antes de ligar
 - ⚠️ lint: 62 erros pré-existentes (funções supabase/casca velha — débito antigo, não desta onda)
 - ⚠️ espelhos de lei no app desatualizados (docs/genesis v5.0.1 × lei viva v5.0.4)
 - 🔧 `supabase/.temp` sujava o status — gitignored neste wrap
 
 ### → Next (o roadmap vivo)
-1. **Push do `v2-faces`** (sim do Rick) → preview Vercel automático = mundo novo em qualquer aparelho
+1. ~~Push do `v2-faces`~~ ✅ feito 27 Jul → **ligar a integração git no Vercel** (qual conta? r@ ou rr@?) pra preview automático = mundo novo em qualquer aparelho
 2. **Offline/PWA fila+sync** — condição da face HOJE (D55), maior pendência técnica
 3. **Lei do Tom** — destilar SPEC_ZENITE em doc; destrava bilhetes do E. e é o passo 1 da semente-mãe
 4. **O gate** (decisões do Rick): André na casca nova? corte confirmado? → nav vira `· ⬡ ✳`, telas velhas morrem no merge (D41)
