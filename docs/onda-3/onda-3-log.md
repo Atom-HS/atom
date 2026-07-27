@@ -68,6 +68,44 @@ por construção.
 
 ---
 
+## Wrap · 28 Jul 2026 — offline: a fila do avô (D55)
+
+### ○ Soul
+Sessão de retomada: primeiro o diário alcançou a realidade (o push de 27 Jul
+já existia; o preview também — o susto era projeção de conta errada no Vercel),
+depois a maior pendência técnica da onda caiu: **o app agora vive sem rede**.
+
+### · Items
+- `engine/outbox.ts` + testes — a fila pura: leitura da boca vira entrada
+  versionada; serialização defensiva (fila corrompida nunca derruba a boca)
+- `service/outbox-service.ts` — persistência por usuário (localStorage) +
+  flush FIFO que para no primeiro erro; entrada só sai DEPOIS de subir
+- `service/items-snapshot.ts` — o tronco de bolso: último fetch bom; sem
+  rede, o HOJE lê dele (a lista no mercado, o protocolo na rua)
+- `hooks/useOutboxSync.ts` — no shell autenticado: rede voltou → fila sobe
+  em qualquer face; toast quieto (D46)
+- face @ — sem rede a boca não trava: enfileira e avisa; rede caindo no
+  meio do gesto cai na mesma rede de segurança
+- `OfflineBanner` — de alarme pra estado: "fica na fila e sobe quando voltar"
+
+### △ Decidido
+- Fila guarda a LEITURA (sinto:/lista:/captura), não o texto cru — a
+  gramática da boca não diverge entre online e offline
+- `lista:` offline resolve o alvo no flush, contra o tronco fresco — mesma
+  regra da boca online
+- Duplicar é melhor que perder: erro no meio do gesto → fila (nada se perde)
+
+### □ Audit
+- ✅ 213 testes verdes (8 novos) · typecheck limpo · build ok
+- ⚠️ triage AI não roda no flush — capturas da fila nascem ponto (·) puro,
+  salvo tokens explícitos; leitura fica pro toque online (aceito, v1)
+
+### → Next
+2. ~~Offline/PWA fila+sync~~ ✅ feito 28 Jul → **Lei do Tom** vira o próximo
+   (destilar SPEC_ZENITE; destrava bilhetes do E.), depois o gate (item 4)
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. O formato é o do wrap do app,
 porque a casa come a própria comida.*

@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import { useRealtime } from '@/hooks/useRealtime';
+import { useOutboxSync } from '@/hooks/useOutboxSync';
 import { useAppStore, applyTheme } from '@/store/app-store';
 import type { ThemeMode } from '@/store/app-store';
 import { AppShell } from '@/components/shell/AppShell';
@@ -156,6 +157,7 @@ function FirstTimeRaizRedirect() {
 
 function AuthenticatedApp() {
   useRealtime();
+  useOutboxSync(); // D55: a fila offline sobe quando a rede volta, em qualquer face
   const routerNavigate = useNavigate();
 
   return (

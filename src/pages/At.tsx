@@ -19,6 +19,7 @@ import { getCurrentPeriod } from '@/types/ui';
 import { getSnoozedIds } from '@/components/home/protocol-snooze';
 import { pipelineService } from '@/service/pipeline-service';
 import { itemService } from '@/service/item-service';
+import { outboxService } from '@/service/outbox-service';
 import { soulService } from '@/service/soul-service';
 import { triageService, getConfidenceBand } from '@/service/triage-service';
 import type { AtomItem } from '@/types/item';
@@ -53,6 +54,17 @@ export function AtPage() {
     chat.push({ from: 'me', text: input });
 
     const reading = readMouth(input);
+
+    // D55 — sem rede, a boca não trava: a leitura vai pra fila do avô e
+    // sobe sozinha quando a rede voltar (useOutboxSync). Nada se perde.
+    if (!navigator.onLine) {
+      const n = outboxService.enqueue(user.id, reading);
+      e(n === 1
+        ? 'sem rede — guardei na fila. sobe sozinho quando a rede voltar.'
+        : `sem rede — guardei na fila (${n} esperando). sobem sozinhos quando a rede voltar.`);
+      return;
+    }
+
     try {
       if (reading.kind === 'soul') {
         await soulService.persistSoulCheckin({ userId: user.id, emotion: reading.emotion, note: reading.note });
@@ -155,7 +167,9 @@ export function AtPage() {
         setLendo(false);
       }
     } catch {
-      e('não consegui guardar agora — tenta de novo?');
+      // a rede caiu no meio do gesto — mesma rede de segurança: fila
+      const n = outboxService.enqueue(user.id, reading);
+      e(`não consegui guardar agora — foi pra fila (${n}). sobe sozinho quando der.`);
     }
   }
 

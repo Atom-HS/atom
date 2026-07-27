@@ -1,6 +1,7 @@
 // hooks/useItems.ts — TanStack Query wrapper + filtros derivados + virtual reset
 import { useQuery } from '@tanstack/react-query';
 import { itemService } from '@/service/item-service';
+import { saveItemsSnapshot, loadItemsSnapshot } from '@/service/items-snapshot';
 import { useAppStore } from '@/store/app-store';
 import { useMemo } from 'react';
 import { isToday, parseISO } from 'date-fns';
@@ -13,7 +14,19 @@ export function useItems() {
 
   const query = useQuery({
     queryKey: ['items', user?.id],
-    queryFn: () => itemService.list(user!.id),
+    // D55: fetch bom alimenta o tronco de bolso; sem rede, lê-se dele —
+    // a lista no mercado, o protocolo na rua.
+    queryFn: async () => {
+      try {
+        const items = await itemService.list(user!.id);
+        saveItemsSnapshot(user!.id, items);
+        return items;
+      } catch (err) {
+        const snap = loadItemsSnapshot(user!.id);
+        if (snap) return snap;
+        throw err;
+      }
+    },
     enabled: !!user,
     staleTime: 30_000,
   });
