@@ -19,8 +19,17 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
+      // SW só em produção — em dev ele servia bundle velho por cima do HMR
+      // (achado 27 Jul: "quando loga cai no antigo"). Em localhost, além de
+      // não registrar, desregistra e limpa caches de visitas antigas.
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+        const isDev = ['localhost', '127.0.0.1'].includes(location.hostname);
+        if (isDev) {
+          navigator.serviceWorker.getRegistrations().then((rs) => rs.forEach((r) => r.unregister()));
+          if (window.caches) caches.keys().then((ks) => ks.forEach((k) => caches.delete(k)));
+        } else {
+          window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+        }
       }
     </script>
   </body>
