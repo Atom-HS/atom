@@ -1,7 +1,8 @@
-// dev/SimBanner.tsx — o aviso da semana simulada + atalhos das faces novas
-// Visível sempre que a sim está ligada: ninguém confunde ficção com tronco,
-// e ninguém se perde na casca velha (a raiz "/" segue sendo a Home antiga
-// até o gate — D41). Os atalhos são affordance de dev, não a nav do gate.
+// dev/SimBanner.tsx — a barra de dev da v2-faces
+// Duas funções: (1) atalhos das 3 faces — SEMPRE visíveis nesta branch,
+// porque a nav de baixo ainda é a casca velha e sem porta o Rick se perde;
+// (2) o aviso da semana simulada quando ?sim=1 está ligada (tronco intocado).
+// Isto é affordance de dev, não a nav do gate — morre quando a nav virar · ⬡ ✳ (D41).
 import { NavLink } from 'react-router-dom';
 import { simActive } from './sim-week';
 
@@ -12,10 +13,9 @@ const FACES = [
 ];
 
 export function SimBanner() {
-  if (!simActive()) return null;
+  const sim = simActive();
   return (
     <div className="sticky top-0 z-30 text-[11px] font-mono py-1.5 px-3 bg-warning/15 text-warning border-b border-warning/25 flex items-center justify-center gap-3 flex-wrap">
-      <span>🜂 semana simulada · tronco intocado</span>
       <span className="flex gap-2">
         {FACES.map((f) => (
           <NavLink
@@ -27,7 +27,11 @@ export function SimBanner() {
           </NavLink>
         ))}
       </span>
-      <a href="?sim=0" className="underline opacity-80">desligar</a>
+      {sim ? (
+        <span>🜂 semana simulada · tronco intocado · <a href="?sim=0" className="underline">desligar</a></span>
+      ) : (
+        <a href="?sim=1" className="underline opacity-70">simular semana</a>
+      )}
     </div>
   );
 }

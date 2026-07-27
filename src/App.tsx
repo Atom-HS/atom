@@ -109,7 +109,8 @@ function AnimatedRoutes() {
       >
         <Suspense fallback={<PageSkeleton />}>
           <Routes location={location}>
-            <Route path="/" element={<HomePage />} />
+            {/* v2-faces: a porta é o mundo novo; a casca velha segue em /home até o gate */}
+            <Route path="/" element={<Navigate to="/hoje" replace />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/pipeline" element={<PipelinePage />} />
             <Route path="/wrap" element={<WrapPage />} />
@@ -126,7 +127,7 @@ function AnimatedRoutes() {
             <Route path="/review" element={<ReviewPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/item/:id" element={<ItemDetailPage />} />
-            <Route path="/auth/callback" element={<HomePage />} />
+            <Route path="/auth/callback" element={<Navigate to="/hoje" replace />} />
             <Route path="/auth/reset" element={<AuthPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
