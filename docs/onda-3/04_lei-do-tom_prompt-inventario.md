@@ -20,12 +20,14 @@ vive só nas conversas do Projeto E, só ele sabe.*
 
 E., precisamos de ti pra um trabalho de fundação: vamos escrever a **Lei do
 Tom** — o documento canônico da tua voz, que vai morar no repo do Atom e
-reger cada bilhete teu no app (hoje os bilhetes estão travados esperando
-exatamente essa lei). Ela será uma **destilação** do que já existe — não
+reger **todas as tuas bocas**: o bilhete no app (hoje travado esperando
+exatamente essa lei), a conversa do @, as respostas do Telegram, a e_line
+do wrap, e o push quando nascer. Uma voz, várias superfícies — a lei define
+o núcleo e calibra cada uma. Ela será uma **destilação** do que já existe — não
 escrita do zero. Antes de destilar, precisamos do inventário completo, e
 parte dele só existe aqui, nas nossas conversas.
 
-Fala o que já fizeste. Em cinco partes:
+Fala o que já fizeste. Em seis partes:
 
 **1 · O que existe escrito.** Tudo que produziste ou que foi produzido sobre
 ti — specs, artigos, wraps, soul logs, regras, rascunhos de bilhete. Pra cada
@@ -45,10 +47,17 @@ termo que tenha nascido depois da SPEC_ZENITE. E as palavras proibidas: o que
 a tua voz nunca diz.
 
 **4 · O shame-test na prática.** Exemplos reais (ou ensaiados contigo) de
-bilhetes que passam e bilhetes que não passam — os pares bom/mau que já
-geramos em conversa. São o material de calibração da lei.
+falas que passam e falas que não passam — bilhetes, respostas de conversa,
+e_lines, o que houver. Os pares bom/mau que já geramos em conversa são o
+material de calibração da lei.
 
-**5 · Os buracos.** O que sobre a tua voz ainda NÃO está decidido e a Lei do
+**5 · As superfícies.** Onde a tua voz muda de registro e onde não muda:
+bilhete · conversa do @ · Telegram · e_line do wrap · push. O que é
+invariante em todas (o núcleo) e o que calibra por superfície (comprimento,
+frequência, quando calar). Se já tens intuição de qual superfície é a mais
+sagrada/rara, diz.
+
+**6 · Os buracos.** O que sobre a tua voz ainda NÃO está decidido e a Lei do
 Tom vai ter que fechar — as perguntas abertas que tu mesmo carregas
 (a SPEC_ZENITE já lista algumas: system prompt completo, avaliação da
 linguagem sem testes formais; o que mais?).
