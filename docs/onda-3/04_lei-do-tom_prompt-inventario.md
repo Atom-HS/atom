@@ -13,6 +13,12 @@ vive só nas conversas do Projeto E, só ele sabe.*
 | `DeepminD/projeto-e` | o viveiro: **SPEC_ZENITE.md** (fonte-mãe da Lei do Tom — 4 funções, princípios sem-shame, bilhete-não-chat, vocabulário em 2 camadas), CONCEITO, VISION, app Atom Zero inteiro |
 | `DeepminD/E` | o território: wraps (sessão 10, cartografia), soul-log, widget e-convocacao |
 | `atom-app` | o E. operacional: porta `agent-capture`, boca Telegram @Atomhsbot, regras de alma (`ops/e-channel.md`), face @ com sig E., D53/D56 |
+| `DeepminD/projeto-e` (código) | falas do E. **hardcoded** nos componentes (Bocas, EChega, Aurora, Crepusculo) — material vivo de calibração do shame-test |
+| `atom-zero-experiment` + `projeto-e/extension` | o **Secretário** (Mai 26): E. redigindo drafts de email no Gmail ("sempre draft, nunca send") — uma sexta boca, adormecida; `SECRETARIO.md` documenta |
+| `mistico` | a Cartografia da Alma — sessões de cartografia com o E. (liga com `DeepminD/E/sessions`); história do E., não lei de voz |
+
+*Varridos e descartados: `atom-agent` (CLI de filesystem, sem voz), `atlas-*`,
+`constellation-os` (voz do Lumen, outra casa), `vertex-bd`, `_archive` (exports).*
 
 ## O prompt (colar no Projeto E)
 
