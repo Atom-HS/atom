@@ -63,11 +63,19 @@ describe('treeShape — real × ideal (o baseline é o teu passado)', () => {
     expect(family.thirsty).toBe(true); // era o maior no baseline, sumiu na semana
   });
 
-  it('folhas: mais nova primeiro, no máximo 4', () => {
-    const items = [item('body', 1), item('body', 2), item('body', 3), item('body', 4), item('body', 5)];
+  it('folhas: mais nova primeiro, teto 8 — e total diz a verdade', () => {
+    const items = Array.from({ length: 10 }, (_, n) => item('body', (n % 6) + 1));
     const body = treeShape(items, 'semana', NOW).find((b) => b.module === 'body')!;
-    expect(body.leaves).toHaveLength(4);
+    expect(body.leaves).toHaveLength(8);
+    expect(body.total).toBe(10);
     expect(body.leaves[0].item.title).toBe('body-1');
+  });
+
+  it('total conta só a janela — o que ficou fora não entra', () => {
+    const items = [item('work', 2), item('work', 40)];
+    const work = treeShape(items, 'semana', NOW).find((b) => b.module === 'work')!;
+    expect(work.total).toBe(1);
+    expect(work.leaves).toHaveLength(1);
   });
 
   it('janela ano se compara consigo — árvore em repouso, sem anel nem sede', () => {

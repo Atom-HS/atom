@@ -16,6 +16,12 @@ import { mirror } from '@/engine/mirror';
 import { simEvents } from '@/dev/sim-week';
 import type { AtomItem, AtomModule } from '@/types/item';
 
+// idade da folha, quieta: hoje · ontem · Nd (estado, nunca cobrança — D46)
+function ageLabel(iso: string): string {
+  const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000);
+  return days <= 0 ? 'hoje' : days === 1 ? 'ontem' : `${days}d`;
+}
+
 const MOD_COLOR: Record<AtomModule, string> = {
   work: 'var(--color-mod-work)', body: 'var(--color-mod-body)',
   mind: 'var(--color-mod-mind)', family: 'var(--color-mod-family)',
@@ -49,8 +55,9 @@ function TreeCrown({ branches, selected, onSelect }: {
           <g key={b.module} opacity={dim ? 0.25 : 1} onClick={() => onSelect(b.module)} style={{ cursor: 'pointer' }}>
             <path d={path(ideal)} fill="none" stroke={color} strokeWidth="1.2" strokeDasharray="4 5" opacity=".35" />
             <path d={path(real)} fill="none" stroke={color} strokeWidth="3" opacity=".85" strokeLinecap="round" />
-            {b.leaves.map((_, l) => {
-              const f = 0.45 + ((l + 1) / (b.leaves.length + 1)) * 0.55;
+            {b.leaves.slice(0, 4).map((_, l) => {
+              const n = Math.min(b.leaves.length, 4);
+              const f = 0.45 + ((l + 1) / (n + 1)) * 0.55;
               return (
                 <circle key={l}
                   cx={cx + dx * real * f + px * (1 - f) * 0.4}
@@ -148,9 +155,9 @@ export function ArvorePage() {
       {drill && (
         <section className="bg-card border border-border rounded-xl p-4 mb-3" style={{ borderLeftWidth: 3, borderLeftColor: MOD_COLOR[drill.module] }}>
           <h4 className="text-[11px] font-semibold tracking-wider text-text-muted mb-1.5">
-            🌿 {BRANCH_LABEL[drill.module]} · {drill.leaves.length > 0 ? `${drill.leaves.length} folhas na janela` : 'sem folha nesta janela'}
+            {BRANCH_LABEL[drill.module]} · {drill.total > 0 ? `${drill.total} ${drill.total === 1 ? 'folha' : 'folhas'} na janela` : 'sem folha nesta janela'}
           </h4>
-          {drill.leaves.map(({ item }) => (
+          {drill.leaves.map(({ item, when }) => (
             <button
               key={item.id}
               onClick={() => selectItem(item.id)}
@@ -159,10 +166,15 @@ export function ArvorePage() {
               <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: MOD_COLOR[drill.module] }} />
               <span className="truncate text-text">{item.title}</span>
               <span className="ml-auto text-[10px] font-mono text-text-muted shrink-0">
-                {item.status === 'completed' ? '○' : '·'}
+                {ageLabel(when)} {item.status === 'completed' ? '○' : '·'}
               </span>
             </button>
           ))}
+          {drill.total > drill.leaves.length && (
+            <p className="text-[10px] font-mono text-text-muted mt-1.5">
+              +{drill.total - drill.leaves.length} mais antigas na janela
+            </p>
+          )}
         </section>
       )}
 

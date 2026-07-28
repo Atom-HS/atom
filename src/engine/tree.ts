@@ -14,8 +14,9 @@ export interface TreeWindow {
 }
 
 // janelas φ da árvore (≠ escada F4, que é cadência de calendário)
+// labels sem emoji: a casa fala em glifos, e aqui nada há a informar (lei 3.5)
 export const TREE_WINDOWS: TreeWindow[] = [
-  { key: 'semana', days: 7, label: '🪜 semana' },
+  { key: 'semana', days: 7, label: 'semana 7' },
   { key: 'lunar', days: 21, label: 'lunar 21' },
   { key: 'estacao', days: 55, label: 'estação 55' },
   { key: 'ano', days: 365, label: 'ano' },
@@ -39,7 +40,8 @@ export interface Branch {
   module: AtomModule;
   real: number;   // 0..1 — presença na janela ativa, relativa ao ramo mais cheio
   ideal: number;  // 0..1 — presença no baseline, mesma régua
-  leaves: Leaf[]; // folhas recentes (mais nova primeiro)
+  leaves: Leaf[]; // folhas recentes (mais nova primeiro; teto de 8 pro drill)
+  total: number;  // quantas folhas a janela tem de verdade (sem teto — o drill não mente)
   saturated: boolean; // real folgado acima do baseline → anel (cheio)
   thirsty: boolean;   // real bem abaixo do baseline → pedindo água
 }
@@ -83,16 +85,16 @@ export function treeShape(items: AtomItem[], windowKey: TreeWindow['key'], now: 
   return MODULES.map((m) => {
     const real = realRaw[m] / realMax;
     const ideal = idealRaw[m] / idealMax;
-    const leaves = items
+    const inWindow = items
       .filter((i) => i.module === m && LIVE(i) && touchOf(i) >= since)
-      .sort((a, b) => touchOf(b).localeCompare(touchOf(a)))
-      .slice(0, 4)
-      .map((item) => ({ item, when: touchOf(item) }));
+      .sort((a, b) => touchOf(b).localeCompare(touchOf(a)));
+    const leaves = inWindow.slice(0, 8).map((item) => ({ item, when: touchOf(item) }));
     return {
       module: m,
       real,
       ideal,
       leaves,
+      total: inWindow.length,
       saturated: real > ideal + DELTA,
       thirsty: ideal > 0 && real < ideal - DELTA,
     };
