@@ -176,6 +176,20 @@ export const eventService = {
     return (data ?? []) as AtomEvent[];
   },
 
+  /** os toques de verdade na vida (touch/checkin/protocol_run) — o que o cofre lê (D63) */
+  async listSignificantSince(userId: string, types: readonly string[], sinceISO: string): Promise<AtomEvent[]> {
+    const { data, error } = await supabase
+      .from('atom_events')
+      .select('*')
+      .eq('user_id', userId)
+      .in('event_type', [...types])
+      .gte('created_at', sinceISO)
+      .order('created_at', { ascending: false })
+      .limit(1000);
+    if (error) throw error;
+    return (data ?? []) as AtomEvent[];
+  },
+
   async create(
     userId: string,
     sourceId: string,

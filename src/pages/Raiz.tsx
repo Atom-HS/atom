@@ -9,6 +9,7 @@ import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePipeline } from '@/hooks/usePipeline';
 import { useRaiz } from '@/hooks/useRaiz';
+import { useVault } from '@/hooks/useVault';
 import { useItems } from '@/hooks/useItems';
 import { RoutineBuilder } from '@/features/raiz/components/RoutineBuilder';
 import { useNav } from '@/hooks/useNav';
@@ -22,11 +23,12 @@ const anim = { initial: { opacity: 0, y: 12 }, animate: { opacity: 1, y: 0 }, ex
 type RaizMode = 'welcome' | 'panorama' | 'doors' | 'inventory';
 
 export function RaizPage() {
-  const { domains: domainHealthRaw, activeCount: healthyCount, healthPct, totalItems } = useRaiz();
+  const { domains: domainHealthRaw, activeCount: healthyCount, staleCount, emptyCount } = useRaiz();
+  const { vencendo, ausencias } = useVault();
   const { items: allItems } = useItems();
   const { captureWithModule } = usePipeline();
   const [builderOpen, setBuilderOpen] = useState(false);
-  const { navigate } = useNav();
+  const { navigate, selectItem } = useNav();
   const user = useAppStore((s) => s.user);
 
   const hasSeenWelcome = user?.user_metadata?.raiz_welcomed === true;
@@ -122,13 +124,11 @@ export function RaizPage() {
             className="flex-1 flex flex-col items-center justify-center px-8 text-center min-h-[calc(100dvh-120px)]"
           >
             <div className="relative w-24 h-24 mb-8">
-              <div className="absolute inset-0 rounded-full border border-accent-light/15 animate-pulse" style={{ animationDuration: '4s' }} />
-              <div className="absolute inset-2 rounded-full border border-accent-light/25 animate-pulse" style={{ animationDuration: '3.5s' }} />
-              <div className="absolute inset-4 rounded-full border border-accent-light/35 animate-pulse" style={{ animationDuration: '3s' }} />
+              <div className="absolute inset-0 rounded-full border border-gold/15 animate-pulse" style={{ animationDuration: '4s' }} />
+              <div className="absolute inset-2 rounded-full border border-gold/25 animate-pulse" style={{ animationDuration: '3.5s' }} />
+              <div className="absolute inset-4 rounded-full border border-gold/40 animate-pulse" style={{ animationDuration: '3s' }} />
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-ai-purple to-ai-green flex items-center justify-center">
-                  <span className="text-white text-lg">·</span>
-                </div>
+                <span className="text-gold text-2xl">·</span>
               </div>
             </div>
 
@@ -142,7 +142,7 @@ export function RaizPage() {
 
             <button
               onClick={enterPanorama}
-              className="bg-gradient-to-r from-accent-light to-accent text-white rounded-xl px-8 py-3.5 text-sm font-medium mb-3 w-full max-w-[240px]"
+              className="bg-gold-bg border border-gold-dim/40 text-gold rounded-xl px-8 py-3.5 text-sm font-medium mb-3 w-full max-w-[240px]"
             >
               ver minhas gavetas
             </button>
@@ -159,45 +159,58 @@ export function RaizPage() {
         {mode === 'panorama' && (
           <motion.div key="panorama" {...anim} className="px-5 pb-6">
             <div className="pt-4 pb-3">
-              <h1 className="text-[24px] font-medium tracking-tight">raiz</h1>
-              <p className="text-[13px] text-text-muted">sua vida · 9 gavetas</p>
+              <h1 className="text-[24px] font-medium tracking-tight"><span className="text-gold">○</span> o chão da árvore</h1>
+              <p className="text-[13px] text-text-muted">a raiz mora embaixo do tronco — estado quieto, nunca meta</p>
+              {healthyCount + staleCount > 0 && (
+                <p className="font-mono text-[11px] text-text-faint mt-1.5">
+                  {healthyCount} {healthyCount === 1 ? 'gaveta viva' : 'gavetas vivas'}
+                  {staleCount > 0 && <> · {staleCount} {staleCount === 1 ? 'quieta' : 'quietas'}</>}
+                  {emptyCount > 0 && <> · {emptyCount} {emptyCount === 1 ? 'vazia' : 'vazias'}</>}
+                </p>
+              )}
             </div>
 
-            {/* Health ring */}
-            {healthyCount > 0 && (
-              <div className="bg-card border border-border rounded-[14px] p-4 flex items-center gap-4 mb-4">
-                <div className="relative w-14 h-14 shrink-0">
-                  <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
-                    <circle cx="18" cy="18" r="15.5" fill="none" className="stroke-border" strokeWidth="3" />
-                    <motion.circle
-                      cx="18" cy="18" r="15.5" fill="none"
-                      className="stroke-success"
-                      strokeWidth="3" strokeLinecap="round"
-                      initial={{ strokeDasharray: '0 100' }}
-                      animate={{ strokeDasharray: `${healthPct} ${100 - healthPct}` }}
-                      transition={{ duration: 1, ease: 'easeOut' }}
-                    />
-                  </svg>
-                  <span className="absolute inset-0 flex items-center justify-center text-sm font-medium">{healthPct}%</span>
-                </div>
-                <div>
-                  <div className="text-sm font-medium">{healthyCount}/9 gavetas ativas</div>
-                  <div className="text-xs text-text-muted mt-0.5">{totalItems} items total</div>
-                </div>
+            {/* O cofre lê: validades na janela de aviso (D63) */}
+            {vencendo.length > 0 && (
+              <div className="bg-card border border-border-soft rounded-[14px] px-4 py-3 mb-2">
+                <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint mb-1.5">no vencimento</div>
+                {vencendo.slice(0, 5).map(({ item, daysLeft }) => (
+                  <button
+                    key={item.id}
+                    onClick={() => selectItem(item.id)}
+                    className="w-full flex items-baseline gap-2 py-1.5 text-left border-b border-border-soft/50 last:border-0"
+                  >
+                    <span className="flex-1 text-[13px] truncate">{item.title}</span>
+                    <span className={`font-mono text-[11px] shrink-0 ${daysLeft < 0 ? 'text-warning' : 'text-text-muted'}`}>
+                      {daysLeft < 0 ? `venceu há ${-daysLeft}d` : daysLeft === 0 ? 'vence hoje' : `vence em ${daysLeft}d`}
+                    </span>
+                  </button>
+                ))}
               </div>
             )}
 
-            {/* Stale alerts */}
-            {domainHealth.filter((d) => d.status === 'stale').map((d) => (
-              <button
-                key={d.key}
-                onClick={() => enterDomain(d.key)}
-                className="w-full bg-warning-bg border border-warning/20 rounded-lg px-3.5 py-2.5 mb-1.5 flex items-center gap-2 text-xs text-warning-text text-left"
-              >
-                <span>{d.emoji}</span>
-                <span><b>{d.label}</b> — {d.oldest}d sem atividade</span>
-              </button>
-            ))}
+            {/* O cofre lê: ausências por toque de verdade (D63) */}
+            {ausencias.length > 0 && (
+              <div className="bg-card border border-border-soft rounded-[14px] px-4 py-3 mb-2">
+                <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint mb-1.5">faz tempo</div>
+                {ausencias.slice(0, 4).map(({ domain, daysSince }) => {
+                  const d = RAIZ_DOMAINS.find((x) => x.key === domain);
+                  if (!d) return null;
+                  return (
+                    <button
+                      key={domain}
+                      onClick={() => enterDomain(domain)}
+                      className="w-full flex items-baseline gap-2 py-1.5 text-left border-b border-border-soft/50 last:border-0"
+                    >
+                      <span className="flex-1 text-[13px] text-text-muted truncate">{d.emoji} {d.label}</span>
+                      <span className="font-mono text-[11px] text-text-faint shrink-0">
+                        {daysSince === null ? 'sem registro ainda' : daysSince >= 365 ? `${Math.floor(daysSince / 365)}a sem toque` : `${daysSince}d sem toque`}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
 
             {/* 3x3 Domain Grid */}
             <div className="grid grid-cols-3 gap-2 mb-4 mt-2">
@@ -213,7 +226,7 @@ export function RaizPage() {
                     className={`relative rounded-xl border p-3 text-left transition-all ${
                       isEmpty
                         ? 'bg-surface/50 border-border/30 opacity-50 hover:opacity-75'
-                        : 'bg-card border-border hover:border-accent-light/50'
+                        : 'bg-card border-border hover:border-gold-dim/50'
                     }`}
                   >
                     <div
@@ -229,7 +242,7 @@ export function RaizPage() {
                       <>
                         <div className="text-xs font-medium mt-1">{displayCount}</div>
                         {domain.status === 'stale' && (
-                          <div className="text-[9px] text-warning">{domain.oldest}d</div>
+                          <div className="font-mono text-[9px] text-text-faint">{domain.oldest}d</div>
                         )}
                       </>
                     ) : (
@@ -243,17 +256,17 @@ export function RaizPage() {
             {/* Guided session button */}
             <button
               onClick={enterDoors}
-              className="w-full bg-card border border-border rounded-xl p-3.5 text-center text-sm text-text-muted hover:border-accent-light/50 transition-colors mb-3"
+              className="w-full bg-card border border-border rounded-xl p-3.5 text-center text-sm text-text-muted hover:border-gold-dim/50 transition-colors mb-3"
             >
-              {healthyCount > 0 ? '○ sessao guiada — completar gavetas' : '○ sessao guiada — escolher por onde comecar'}
+              ○ sessão guiada — {healthyCount > 0 ? 'completar gavetas' : 'escolher por onde começar'}
             </button>
 
-            {/* Routine builder button */}
+            {/* Builder — a entrevista que pare cadeias e protocolos (D58/D64) */}
             <button
               onClick={() => setBuilderOpen(true)}
-              className="w-full bg-accent-bg border border-accent/20 rounded-xl p-3.5 text-center text-sm text-accent hover:border-accent/40 transition-colors mb-3"
+              className="w-full bg-gold-bg border border-gold-dim/30 rounded-xl p-3.5 text-center text-sm text-gold hover:border-gold-dim/60 transition-colors mb-3"
             >
-              + construir minha rotina
+              △ construir minha rotina
             </button>
 
             {/* Session summary (items already saved — this is feedback) */}
@@ -290,11 +303,11 @@ export function RaizPage() {
                   key={d.key}
                   onClick={() => enterDoorSession(d.key)}
                   className={`w-full text-left bg-card border rounded-xl p-4 transition-all relative overflow-hidden ${
-                    d.recommended ? 'border-accent shadow-sm shadow-accent/5' : 'border-border'
+                    d.recommended ? 'border-gold-dim/60 shadow-sm shadow-gold/5' : 'border-border'
                   }`}
                 >
                   {d.recommended && (
-                    <span className="absolute top-2.5 right-3 text-[10px] bg-accent-bg text-accent px-2 py-0.5 rounded-full font-medium">
+                    <span className="absolute top-2.5 right-3 text-[10px] bg-gold-bg text-gold px-2 py-0.5 rounded-full font-medium">
                       recomendado
                     </span>
                   )}
@@ -401,9 +414,9 @@ function DomainInventory({
                 key={dk}
                 className={`w-2 h-2 rounded-full transition-all ${
                   i < doorProgress.current
-                    ? hasCaptured ? 'bg-accent' : 'bg-accent/40'
+                    ? hasCaptured ? 'bg-gold' : 'bg-gold/40'
                     : i === doorProgress.current - 1
-                      ? 'bg-accent scale-125'
+                      ? 'bg-gold scale-125'
                       : 'bg-border'
                 }`}
               />
@@ -439,7 +452,7 @@ function DomainInventory({
           <button
             key={ex}
             onClick={() => onAdd(ex)}
-            className="text-xs px-3 py-1.5 rounded-xl border border-border bg-card text-text-muted hover:border-accent-light transition-colors"
+            className="text-xs px-3 py-1.5 rounded-xl border border-border bg-card text-text-muted hover:border-gold-dim transition-colors"
           >
             {ex}
           </button>
@@ -453,10 +466,10 @@ function DomainInventory({
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && add()}
           placeholder="despejar mais..."
-          className="flex-1 border border-border rounded-xl px-4 py-3 text-sm bg-card text-text outline-none focus:border-accent-light transition-colors"
+          className="flex-1 border border-border rounded-xl px-4 py-3 text-sm bg-card text-text outline-none focus:border-gold-dim transition-colors"
           autoFocus
         />
-        <button onClick={add} disabled={!text.trim()} className="px-4 py-3 bg-accent text-white rounded-xl text-sm disabled:opacity-30">
+        <button onClick={add} disabled={!text.trim()} className="px-4 py-3 bg-gold-bg border border-gold-dim/40 text-gold rounded-xl text-sm disabled:opacity-30">
           +
         </button>
       </div>
@@ -489,18 +502,18 @@ function DomainInventory({
 
       {/* Navigation */}
       <div className="mt-auto flex justify-between items-center pt-4">
-        <button onClick={onBack} className="text-sm text-accent">
+        <button onClick={onBack} className="text-sm text-gold-dim">
           {isDoorSession ? 'anterior' : 'voltar'}
         </button>
         <button onClick={onPanorama} className="text-xs text-text-muted">
-          ver panorama
+          ver o chão
         </button>
         <div className="flex gap-2">
           {isDoorSession && inputs.length === 0 && (
             <button onClick={onNext} className="text-sm text-text-muted">pular</button>
           )}
-          <button onClick={onNext} className="bg-accent text-white rounded-xl px-5 py-2.5 text-sm font-medium">
-            {isDoorSession ? (doorProgress?.current === doorProgress?.total ? 'ver panorama' : 'proximo') : 'pronto'}
+          <button onClick={onNext} className="bg-gold-bg border border-gold-dim/40 text-gold rounded-xl px-5 py-2.5 text-sm font-medium">
+            {isDoorSession ? (doorProgress?.current === doorProgress?.total ? 'ver o chão' : 'próximo') : 'pronto'}
           </button>
         </div>
       </div>

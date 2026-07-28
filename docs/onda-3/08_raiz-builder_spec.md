@@ -99,5 +99,7 @@ motor. (Connections `references` opcionais item→routine ficam pra depois.)
 
 ---
 
-*Status: aguardando as 3 respostas do Rick (incertezas acima). Regra de
-Ouro: não se constrói sobre dúvida não resolvida.*
+*Status: **ratificada** (Rick, 29 Jul — "sim sim sim"): D63 cofre v1 ·
+D64 builder motor · D65 mindmate · D66 válvula digest. Incertezas
+fechadas; obra em execução pelas etapas 1→4. O digest (D66) e a reescrita
+das perguntas correm como sub-obras após o motor.*
