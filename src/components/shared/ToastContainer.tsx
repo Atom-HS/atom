@@ -2,10 +2,11 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useToastStore } from '@/store/toast-store';
 
+// D57: aviso é estado, não alarme — madeira funda, borda quieta, a cor fala no texto
 const TOAST_STYLES = {
-  success: 'bg-success',
-  error: 'bg-error',
-  info: 'bg-accent',
+  success: 'border-success/40 text-success-text',
+  error: 'border-error/40 text-error-text',
+  info: 'border-gold-dim/40 text-gold',
 } as const;
 
 export function ToastContainer() {
@@ -21,7 +22,7 @@ export function ToastContainer() {
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            className={`${TOAST_STYLES[t.type]} text-white rounded-xl px-4 py-2.5 text-sm font-medium shadow-lg pointer-events-auto flex items-center gap-3 w-full`}
+            className={`${TOAST_STYLES[t.type]} bg-surface border rounded-xl px-4 py-2.5 text-sm font-medium shadow-lg pointer-events-auto flex items-center gap-3 w-full`}
           >
             <span className="flex-1">{t.message}</span>
             {t.undoAction && (

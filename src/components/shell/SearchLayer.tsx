@@ -74,7 +74,7 @@ export function SearchLayer({ onClose }: SearchLayerProps) {
             <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint mb-1.5">recentes</div>
             {recentes.map((item) => <ResultRow key={item.id} item={item} onOpen={open} />)}
             <p className="font-mono text-[10px] text-text-faint text-center mt-6">
-              mod: tipo: tag: · v2: buscar = perguntar ao @
+              pra afinar: mod: · tipo: · tag:
             </p>
           </>
         )}

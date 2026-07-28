@@ -97,7 +97,7 @@ export function SettingsSheet({ onClose }: SettingsSheetProps) {
 
         {/* sobre */}
         <p className="font-mono text-[10px] text-text-faint text-center mb-4">
-          Atom · Genesis v5.0.1 · o mundo é um só (D57)
+          Atom · Genesis v5.0.4 · o mundo é um só (D57)
         </p>
 
         <button

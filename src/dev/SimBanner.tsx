@@ -8,7 +8,7 @@ import { simActive } from './sim-week';
 export function SimBanner() {
   if (!simActive()) return null;
   return (
-    <div className="sticky top-0 z-30 text-[11px] font-mono py-1.5 px-3 bg-warning-bg text-warning border-b border-warning/25 text-center">
+    <div className="text-[11px] font-mono py-1.5 px-3 bg-warning-bg text-warning border-b border-warning/25 text-center">
       🜂 semana simulada · tronco intocado · <a href="?sim=0" className="underline">desligar</a>
     </div>
   );

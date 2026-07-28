@@ -158,8 +158,11 @@ function AuthenticatedApp() {
     <>
       <ToastContainer />
       <AppShell>
-        <SimBanner />
-        <OfflineBanner />
+        {/* um teto só: os avisos empilham em vez de disputar o topo */}
+        <div className="sticky top-0 z-30">
+          <SimBanner />
+          <OfflineBanner />
+        </div>
         <RouteSync />
         <FirstTimeRaizRedirect />
         <AnimatedRoutes />

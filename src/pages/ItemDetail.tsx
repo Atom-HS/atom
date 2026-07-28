@@ -289,7 +289,7 @@ export function ItemDetailPage() {
       <SectionLabel>detalhes</SectionLabel>
       <div className="space-y-1 mb-4">
         <DetailRow label="nasceu" value={formatDate(item.created_at)} />
-        <DetailRow label="tocada" value={leafAge(touched)} />
+        <DetailRow label="tocada" value={leafAge(touched).endsWith('d') ? `há ${leafAge(touched)}` : leafAge(touched)} />
         {item.source && <DetailRow label="veio de" value={item.source} />}
         {item.project_id && <DetailRow label="projeto" value={item.project_id.slice(0, 8)} />}
       </div>
