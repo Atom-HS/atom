@@ -1,5 +1,6 @@
 // shell/AppShell.tsx — App layout wrapper
-// TopBar + content area + BottomNav. Light-first, responsive.
+// TopBar + content area + nav das faces. Mundo único, escuro, deliberado
+// (D57) — o app à luz de vela. Coluna de 430px como o aparelho do mockup.
 
 import type { ReactNode } from 'react';
 import { TopBar } from './TopBar';

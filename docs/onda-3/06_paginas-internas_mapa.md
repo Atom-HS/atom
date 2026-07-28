@@ -24,7 +24,7 @@ visual de que o fluxo funciona.*
 
 | Página | Estado hoje | Decisão que rege | Veredito |
 |---|---|---|---|
-| **AppShell / TopBar / BottomNav** | casca velha, "light-first", 5 abas | D41 (nav · ⬡ ✳), D57 (tokens) | **REFORMA JÁ** — na branch; o banner âmbar morre |
+| **AppShell / TopBar / BottomNav** | ✅ **reformado 28 Jul** — nav `· ⬡ ✳`, tokens D57, banner âmbar morto | D41 (nav · ⬡ ✳), D57 (tokens) | **FEITO** — obra 1 entregue |
 | **ItemDetail** | stage bar, classify/advance, era pipeline | D48 (maturação no galho), D46 (número = estado), D57 | **REFORMA JÁ** — página interna nº 1: todo chip "abrir/ajusta" cai aqui |
 | **Wrap** | flow F3 novo (lê o tronco), pele velha | D57 + Lei do Tom 4.4 (e_line 0-ou-1, sem repetição) | **REFORMA** — reskin + e_line sob a lei |
 | **Search** | aba com chips de filtro | D54: busca = gesto (puxar pra baixo) | **VIRA GESTO** — motor (`engine/search`) fica; aba morre |
@@ -50,8 +50,11 @@ vira a prova objetiva de "a tela tá certa" e o guarda de regressão do gate.
 
 ## Ordem proposta (cada passo destrava o seguinte)
 
-1. **Shell novo** — nav `· ⬡ ✳` na branch, tokens D57, banner âmbar morre.
-   O mundo novo ganha corpo de app de verdade.
+1. ✅ **Shell novo** *(28 Jul)* — nav `· ⬡ ✳` na branch, tokens D57 no
+   `index.css` (mundo único — media query e `html.light/dark` caíram; o
+   toggle de tema fica inerte até a obra 5 levar Settings pro sheet),
+   banner âmbar morto (sobrou só o aviso `?sim=1`). TopBar quieto com as
+   duas portas de andaime (buscar/menu) que a obra 5 mata (D54).
 2. **ItemDetail reformado** — a página interna mais tocada; maturação vira
    glifo no galho, linguagem de presença, corpo por tipo (list entries já
    vive lá).
