@@ -68,6 +68,25 @@ async function mockSupabaseAuth(page: Page) {
     await route.abort('connectionfailed');
   });
 
+  // Intercept edge functions — teste hermético nunca toca prod.
+  // (Sem isto, o mock-JWT vaza pra função real e volta 401 vestido de CORS.)
+  // Ordem importa: o Playwright consulta da última registrada pra primeira,
+  // então a catch-all entra ANTES da específica.
+  await page.route('**/functions/v1/**', async (route) => {
+    await route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+  });
+  await page.route('**/functions/v1/triage-classify*', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        title: 'comprar cafe', type: 'task', module: 'body',
+        confidence: 92, reasoning: 'mocked triage', tags: [],
+        due_date: null, emotion: null,
+      }),
+    });
+  });
+
   // Intercept atom_events
   await page.route('**/rest/v1/atom_events*', async (route) => {
     await route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
