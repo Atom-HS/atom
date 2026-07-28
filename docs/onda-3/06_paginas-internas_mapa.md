@@ -26,7 +26,7 @@ visual de que o fluxo funciona.*
 |---|---|---|---|
 | **AppShell / TopBar / BottomNav** | ✅ **reformado 28 Jul** — nav `· ⬡ ✳`, tokens D57, banner âmbar morto | D41 (nav · ⬡ ✳), D57 (tokens) | **FEITO** — obra 1 entregue |
 | **ItemDetail** | ✅ **reformado 28 Jul** — glifo no galho, linha de presença, chips de assentimento, excluir morreu (§8.2) | D48 (maturação no galho), D46 (número = estado), D57 | **FEITO** — wireframe no `07_paginas-internas_wireframe.html` |
-| **Wrap** | flow F3 novo (lê o tronco), pele velha | D57 + Lei do Tom 4.4 (e_line 0-ou-1, sem repetição) | **REFORMA** — reskin + e_line sob a lei |
+| **Wrap** | ✅ **reformado 28 Jul** — pele D57, "selar ○", % morto, e_line com portão executável (`admitELine`) | D57 + Lei do Tom 4.4 (e_line 0-ou-1, sem repetição) | **FEITO** — a voz da e_line vem com bilhetes v2 |
 | **Search** | aba com chips de filtro | D54: busca = gesto (puxar pra baixo) | **VIRA GESTO** — motor (`engine/search`) fica; aba morre |
 | **Settings** | aba cheia (profile, conectores, export) | D54: pull discreto (sheet) | **VIRA SHEET** — conteúdo sobrevive, lugar muda |
 | **Raiz** | doors de onboarding, HealthBar | D50 (chão da árvore), D58 (Builder mora aqui) | **REFORMA JUNTO DO BUILDER** — já é destino do drill da ÁRVORE |
@@ -67,7 +67,15 @@ a pixel contra a baseline commitada — o guarda de regressão do gate.
    Date — parado na foto). Mundo único: sem eixo light/dark. Os specs da
    casca velha morreram com as baselines. `pnpm test:visual` = o guarda
    do gate; `test:visual:update` re-fotografa após obra intencional.
-4. **Wrap reskin** + e_line sob a lei (0-ou-1, sem repetição).
+4. ✅ **Wrap reskin + e_line sob a lei** *(28 Jul)* — pele D57: geometrias
+   douradas caminham como progresso (estado, não barra), "selar ○" no lugar
+   de commitar, o % de "saúde" morreu (D46 — virou "2 no inbox · a casa
+   está quieta"). A e_line agora é lei executável: `admitELine` no
+   `engine/wrap` (0-ou-1, repetição literal-ou-próxima reprova — 12
+   testes); o slot no fim do rito renderiza só o que passa no portão.
+   A voz que escreve a frase é do E. — pós-gate, motor de bilhetes v2
+   (spec 4.1.1). ConnectionsSection compartilhada virou "a teia" (tecer,
+   dourado) — o roxo residual saiu do mundo novo.
 5. **Settings-sheet + Search-gesto** (D54).
 6. **Raiz + Builder** (D50 + D58) — a obra grande que o roadmap já tinha.
 

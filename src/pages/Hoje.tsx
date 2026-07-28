@@ -258,7 +258,7 @@ export function HojePage() {
               {sugestao.item.title}
             </button>
             <p className="text-xs text-text-muted italic mt-0.5">{sugestao.reason}</p>
-            <button onClick={() => setSkip((s) => s + 1)} className="text-[11px] text-accent mt-2">
+            <button onClick={() => setSkip((s) => s + 1)} className="font-mono text-[11px] text-gold-dim mt-2">
               me dá outra
             </button>
           </>
@@ -293,7 +293,8 @@ export function HojePage() {
       {/* fechar o dia → wrap (a cerimônia fica) */}
       <button
         onClick={() => navigate('/wrap')}
-        className="w-full py-3.5 rounded-xl text-sm font-medium border border-border text-accent bg-surface"
+        className="w-full py-3.5 rounded-xl text-sm font-mono text-gold bg-gold-bg"
+        style={{ border: '1px solid color-mix(in srgb, var(--color-gold) 30%, var(--color-border-soft))' }}
       >
         ○ fechar o dia
       </button>

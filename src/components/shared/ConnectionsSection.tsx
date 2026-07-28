@@ -76,10 +76,10 @@ export function ConnectionsSection({ itemId }: ConnectionsSectionProps) {
   return (
     <>
       <div className="flex items-center justify-between mb-1.5">
-        <div className="text-[11px] font-medium tracking-wider uppercase text-text-muted">
-          connections
+        <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint">
+          a teia
           {resolved.length > 0 && (
-            <span className="ml-1.5 text-[10px] px-1.5 py-px rounded-md bg-surface font-medium">{resolved.length}</span>
+            <span className="ml-1.5 text-[10px] px-1.5 py-px rounded-md bg-surface text-text-muted">{resolved.length}</span>
           )}
         </div>
       </div>
@@ -98,7 +98,7 @@ export function ConnectionsSection({ itemId }: ConnectionsSectionProps) {
               <div key={c.id} className="flex items-center gap-2 bg-card border border-border rounded-lg px-3 py-2 text-[12px]">
                 <span className="text-text-muted text-[10px] shrink-0">{c.direction}</span>
                 <span className="text-text-muted text-[10px] shrink-0">{label}</span>
-                <button onClick={() => selectItem(c.otherId)} className="flex-1 truncate text-left text-[12px] hover:text-accent transition-colors">
+                <button onClick={() => selectItem(c.otherId)} className="flex-1 truncate text-left text-[12px] hover:text-gold transition-colors">
                   {c.otherTitle}
                 </button>
                 {c.otherType && (
@@ -112,13 +112,13 @@ export function ConnectionsSection({ itemId }: ConnectionsSectionProps) {
           })}
         </div>
       ) : (
-        <p className="text-xs text-text-muted mb-3">nenhuma conexao</p>
+        <p className="text-xs text-text-faint italic mb-3">solta por enquanto</p>
       )}
 
       {adding ? (
         <ConnectionPicker items={items} excludeId={itemId} onSelect={handleAdd} onCancel={() => setAdding(false)} />
       ) : (
-        <button onClick={() => setAdding(true)} className="text-xs text-accent mb-4">+ conectar</button>
+        <button onClick={() => setAdding(true)} className="font-mono text-[11px] text-gold-dim mb-4">+ tecer</button>
       )}
     </>
   );
@@ -146,8 +146,8 @@ function ConnectionPicker({ items, excludeId, onSelect, onCancel }: {
     <div className="bg-surface border border-border rounded-xl p-3 mb-4">
       {!selectedTarget ? (
         <>
-          <input value={search} onChange={(e) => setSearch(e.target.value)} autoFocus placeholder="buscar item..."
-            className="w-full text-sm bg-card border border-border rounded-lg px-3 py-2 outline-none focus:border-accent-light mb-2" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} autoFocus placeholder="buscar…"
+            className="w-full text-sm bg-card border border-border rounded-lg px-3 py-2 outline-none mb-2" />
           {filtered.length > 0 && (
             <div className="space-y-0.5 max-h-40 overflow-y-auto">
               {filtered.map((item) => {
@@ -174,14 +174,15 @@ function ConnectionPicker({ items, excludeId, onSelect, onCancel }: {
           <div className="flex flex-wrap gap-1.5 mb-3">
             {RELATION_OPTIONS.map((r) => (
               <button key={r.key} onClick={() => setRelation(r.key)}
-                className={`text-[10px] px-2.5 py-1 rounded-lg border transition-colors ${relation === r.key ? 'border-accent bg-accent-bg text-accent font-medium' : 'border-border text-text-muted'}`}>
+                className={`font-mono text-[10px] px-2.5 py-1 rounded-full border transition-colors ${relation === r.key ? 'text-gold bg-gold-bg' : 'border-border text-text-muted'}`}
+                style={relation === r.key ? { borderColor: 'color-mix(in srgb, var(--color-gold) 35%, var(--color-border))' } : undefined}>
                 {r.label}
               </button>
             ))}
           </div>
           <div className="flex gap-2">
-            <button onClick={onCancel} className="flex-1 py-2 text-center text-xs border border-border rounded-lg text-text-muted">cancelar</button>
-            <button onClick={() => onSelect(selectedTarget!, relation)} className="flex-1 py-2 text-center text-xs bg-accent text-white rounded-lg font-medium">conectar</button>
+            <button onClick={onCancel} className="flex-1 py-2 text-center text-xs border border-border rounded-lg text-text-muted">deixa</button>
+            <button onClick={() => onSelect(selectedTarget!, relation)} className="flex-1 py-2 text-center text-xs text-gold bg-gold-bg rounded-lg" style={{ border: '1px solid color-mix(in srgb, var(--color-gold) 30%, var(--color-border-soft))' }}>tecer</button>
           </div>
         </>
       )}

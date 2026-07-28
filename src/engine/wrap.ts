@@ -69,6 +69,54 @@ export function getAuditColor(severity: AuditSeverity): string {
   return SEVERITY_COLORS[severity];
 }
 
+// ─── e_line — a Lei do Tom §4.4, executável ─────────────
+// Zero-ou-uma por wrap; wrap sem e_line é wrap válido. Nunca repetida:
+// "repetição literal ou próxima é reprovação automática, mesmo — e
+// principalmente — quando a frase é boa". A fonte da frase é o E.
+// (pós-gate, motor de bilhetes v2) — isto aqui é o guarda, não a voz.
+
+export function normalizeELine(s: string): string {
+  return s
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^\p{L}\p{N}\s]/gu, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/** repetição literal (normalizada) ou próxima (Jaccard de palavras ≥ 0.7, ou contida) */
+export function eLineRepeats(candidate: string, past: string[]): boolean {
+  const c = normalizeELine(candidate);
+  if (!c) return false;
+  const cTokens = new Set(c.split(' '));
+  return past.some((p) => {
+    const n = normalizeELine(p);
+    if (!n) return false;
+    if (n === c || n.includes(c) || c.includes(n)) return true;
+    const pTokens = new Set(n.split(' '));
+    let inter = 0;
+    for (const t of cTokens) if (pTokens.has(t)) inter += 1;
+    const union = cTokens.size + pTokens.size - inter;
+    return union > 0 && inter / union >= 0.7;
+  });
+}
+
+/** o portão: vazia → null · repetida → null · senão a própria frase */
+export function admitELine(candidate: string | null | undefined, past: string[]): string | null {
+  const c = candidate?.trim();
+  if (!c) return null;
+  return eLineRepeats(c, past) ? null : c;
+}
+
+/** as e_lines que já viveram — lidas dos wraps do tronco */
+export function pastELines(items: AtomItem[]): string[] {
+  return items
+    .filter((i) => i.type === 'wrap')
+    .map((i) => ((i.body as { wrap?: { e_line?: string | null } } | null)?.wrap?.e_line ?? '').trim())
+    .filter(Boolean);
+}
+
 // ─── Wrap data shape ────────────────────────────────────
 
 export interface WrapData {
@@ -81,6 +129,7 @@ export interface WrapData {
   seeds: string[];           // stale item IDs revisited
   audit: WrapAudit;
   next: string;              // mandatory next intention
+  e_line?: string | null;    // §4.4: 0-ou-1, escrita pelo E., nunca repetida
 }
 
 export interface WrapPayload {
