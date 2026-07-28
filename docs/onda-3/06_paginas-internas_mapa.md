@@ -27,8 +27,8 @@ visual de que o fluxo funciona.*
 | **AppShell / TopBar / BottomNav** | ✅ **reformado 28 Jul** — nav `· ⬡ ✳`, tokens D57, banner âmbar morto | D41 (nav · ⬡ ✳), D57 (tokens) | **FEITO** — obra 1 entregue |
 | **ItemDetail** | ✅ **reformado 28 Jul** — glifo no galho, linha de presença, chips de assentimento, excluir morreu (§8.2) | D48 (maturação no galho), D46 (número = estado), D57 | **FEITO** — wireframe no `07_paginas-internas_wireframe.html` |
 | **Wrap** | ✅ **reformado 28 Jul** — pele D57, "selar ○", % morto, e_line com portão executável (`admitELine`) | D57 + Lei do Tom 4.4 (e_line 0-ou-1, sem repetição) | **FEITO** — a voz da e_line vem com bilhetes v2 |
-| **Search** | aba com chips de filtro | D54: busca = gesto (puxar pra baixo) | **VIRA GESTO** — motor (`engine/search`) fica; aba morre |
-| **Settings** | aba cheia (profile, conectores, export) | D54: pull discreto (sheet) | **VIRA SHEET** — conteúdo sobrevive, lugar muda |
+| **Search** | ✅ **virou gesto 28 Jul** — puxar pra baixo (ou `/`) abre `SearchLayer`; aba morta, motor vivo | D54: busca = gesto (puxar pra baixo) | **FEITO** — v2: buscar = perguntar ao @ |
+| **Settings** | ✅ **virou sheet 28 Jul** — puxador acima da nav abre `SettingsSheet` (perfil, conectores, export); tema morreu (D57) | D54: pull discreto (sheet) | **FEITO** — aba e TopBar mortos |
 | **Raiz** | doors de onboarding, HealthBar | D50 (chão da árvore), D58 (Builder mora aqui) | **REFORMA JUNTO DO BUILDER** — já é destino do drill da ÁRVORE |
 | **Review** | ritual da escada F4, funcional | D57 | **RESKIN LEVE** — o ritual fica |
 | **Library** | aba com cards | D51: despensa, não aba | **VIRA DESTINO DE DRILL** — reskin quando a despensa nascer |
@@ -76,7 +76,12 @@ a pixel contra a baseline commitada — o guarda de regressão do gate.
    A voz que escreve a frase é do E. — pós-gate, motor de bilhetes v2
    (spec 4.1.1). ConnectionsSection compartilhada virou "a teia" (tecer,
    dourado) — o roxo residual saiu do mundo novo.
-5. **Settings-sheet + Search-gesto** (D54).
+5. ✅ **Settings-sheet + Search-gesto** *(28 Jul, D54)* — nada é aba: busca
+   é puxar pra baixo em qualquer face (teclado: `/`), a casa é o puxador
+   discreto acima da nav. As rotas `/search` e `/settings` morreram; o
+   TopBar inteiro morreu com elas (as duas portas eram o que restava).
+   Sobreviveram: `engine/search` (motor), perfil + conectores + export
+   (na sheet). O tema morreu — o mundo é um só (D57). e2e: 9 fotos.
 6. **Raiz + Builder** (D50 + D58) — a obra grande que o roadmap já tinha.
 
 ---

@@ -15,8 +15,6 @@ const PAGE_ROUTES: Record<AppPage, string> = {
   raiz: '/raiz',
   analytics: '/analytics',
   library: '/library',
-  search: '/search',
-  settings: '/settings',
   'item-detail': '/item',
   graph: '/graph',
 };

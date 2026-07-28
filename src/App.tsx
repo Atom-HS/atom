@@ -32,9 +32,7 @@ const CalendarPage = lazy(() => import('@/pages/Calendar').then((m) => ({ defaul
 const AnalyticsPage = lazy(() => import('@/pages/Analytics').then((m) => ({ default: m.AnalyticsPage })));
 const LibraryPage = lazy(() => import('@/pages/Library').then((m) => ({ default: m.LibraryPage })));
 const GraphPage = lazy(() => import('@/pages/Graph').then((m) => ({ default: m.GraphPage })));
-const SettingsPage = lazy(() => import('@/pages/Settings').then((m) => ({ default: m.SettingsPage })));
 const RaizPage = lazy(() => import('@/pages/Raiz').then((m) => ({ default: m.RaizPage })));
-const SearchPage = lazy(() => import('@/pages/Search').then((m) => ({ default: m.SearchPage })));
 const ItemDetailPage = lazy(() => import('@/pages/ItemDetail').then((m) => ({ default: m.ItemDetailPage })));
 const HojePage = lazy(() => import('@/pages/Hoje').then((m) => ({ default: m.HojePage })));
 const AtPage = lazy(() => import('@/pages/At').then((m) => ({ default: m.AtPage })));
@@ -72,8 +70,6 @@ const PATH_TO_PAGE: Record<string, AppPage> = {
   '/raiz': 'raiz',
   '/analytics': 'analytics',
   '/library': 'library',
-  '/search': 'search',
-  '/settings': 'settings',
   '/graph': 'graph',
 };
 
@@ -121,12 +117,11 @@ function AnimatedRoutes() {
             <Route path="/analytics" element={<AnalyticsPage />} />
             <Route path="/library" element={<LibraryPage />} />
             <Route path="/graph" element={<GraphPage />} />
-            <Route path="/search" element={<SearchPage />} />
+            {/* D54: /search e /settings morreram — busca é gesto, a casa é sheet */}
             <Route path="/hoje" element={<HojePage />} />
             <Route path="/at" element={<AtPage />} />
             <Route path="/arvore" element={<ArvorePage />} />
             <Route path="/review" element={<ReviewPage />} />
-            <Route path="/settings" element={<SettingsPage />} />
             <Route path="/item/:id" element={<ItemDetailPage />} />
             <Route path="/auth/callback" element={<Navigate to="/hoje" replace />} />
             <Route path="/auth/reset" element={<AuthPage />} />
@@ -158,12 +153,11 @@ function FirstTimeRaizRedirect() {
 function AuthenticatedApp() {
   useRealtime();
   useOutboxSync(); // D55: a fila offline sobe quando a rede volta, em qualquer face
-  const routerNavigate = useNavigate();
 
   return (
     <>
       <ToastContainer />
-      <AppShell onOpenSettings={() => routerNavigate('/settings')}>
+      <AppShell>
         <SimBanner />
         <OfflineBanner />
         <RouteSync />

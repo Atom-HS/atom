@@ -13,8 +13,6 @@ export type AppPage =
   | 'raiz'
   | 'analytics'
   | 'library'
-  | 'search'
-  | 'settings'
   | 'item-detail'
   | 'graph';
 

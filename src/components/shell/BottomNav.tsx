@@ -12,7 +12,7 @@ const FACES = [
   { to: '/at', glyph: '✳', label: '@' },           // ✳
 ];
 
-export function BottomNav() {
+export function BottomNav({ onOpenCasa }: { onOpenCasa?: () => void }) {
   return (
     <nav
       className="fixed bottom-0 left-0 right-0 w-full z-20 border-t border-border-soft"
@@ -20,6 +20,16 @@ export function BottomNav() {
       role="navigation"
       aria-label="Navegacao principal"
     >
+      {/* o puxador da casa — pull discreto (D54): settings é sheet, não lugar */}
+      {onOpenCasa && (
+        <button
+          onClick={onOpenCasa}
+          className="w-full flex justify-center pt-1.5 pb-1"
+          aria-label="a casa — perfil, conectores, export"
+        >
+          <span className="w-9 h-1 rounded-full bg-border" />
+        </button>
+      )}
       <div className="flex items-stretch pb-[max(0rem,env(safe-area-inset-bottom))]">
         {FACES.map((f) => (
           <NavLink

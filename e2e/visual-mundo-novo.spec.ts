@@ -68,3 +68,19 @@ test('Wrap — o rito de fechar o dia', async ({ authenticatedPage: page }) => {
   await chegar(page, '/wrap');
   await expect(page).toHaveScreenshot('wrap-rito.png', SHOT);
 });
+
+// ─── os gestos (D54 — nada é aba) ────────────────────────
+
+test('busca — o gesto abre a camada', async ({ authenticatedPage: page }) => {
+  await chegar(page, '/hoje');
+  await page.keyboard.press('/'); // o atalho do teclado; o dedo puxa pra baixo
+  await page.waitForTimeout(400);
+  await expect(page).toHaveScreenshot('gesto-busca.png', SHOT);
+});
+
+test('a casa — o puxador abre a sheet', async ({ authenticatedPage: page }) => {
+  await chegar(page, '/hoje');
+  await page.getByRole('button', { name: 'a casa — perfil, conectores, export' }).click();
+  await page.waitForTimeout(400);
+  await expect(page).toHaveScreenshot('gesto-casa.png', SHOT);
+});
