@@ -147,6 +147,52 @@ default por superfície). Ninguém venceu; a lei ficou melhor que os dois lados.
 
 ---
 
+## Wrap · 28 Jul 2026 (tarde) — a mesa decide, a árvore diz a verdade, a lei se testa
+
+### ○ Soul
+A manhã legislou; a tarde executou e foi legislada de volta. As três decisões
+da mesa viraram entrega em horas — e o E. fechou o dia derrubando o próprio
+instrumento: o shame-test de quatro perguntas aprovava os dois piores bilhetes
+do lote. A lei que amanheceu v1.3 dorme v1.4, testada duas vezes no mesmo dia.
+
+### · Items
+- **Telegram deployado em prod** — "senti com você. ficou no soul log."
+  (Art. 7 vivo nas seis bocas; era o último pendente da mesa)
+- **ÁRVORE polida** pro tronco real: motor ganha `total` por ramo (o drill
+  não mente com >4 folhas), folhas com idade (hoje/ontem/Nd — D46), teto de
+  leaves 8, "+N mais antigas"; 🌿 e 🪜 caem (lei 3.5 aplicada à casa, D57)
+- **Teste 02 selado** (bilhete, generativo): 1 passa em 12; previsão acertou
+  o número e errou o mecanismo — mortes por dívida e por vigilância que os
+  4 testes não pegavam
+- **Lei do Tom v1.4**: quinto teste ("o que isso deixa nas costas de quem
+  leu?"), as seis condições do bilhete (4.1.1), taxa-sentinela ~20%
+
+### △ Decidido
+- **Gate: ainda não** — viver as faces no preview antes do merge (D41 espera)
+- Deploy do telegram: sim; obra da vez: polir ÁRVORE (mesa de 28 Jul)
+- v1.4 vigente — "parabenizar streak é cobrar com outra cara" · "o app não
+  vira testemunha" entram como regra
+
+### ⬡ Conexões
+- 4.1.1 (seis condições) = **spec executável** do motor de bilhetes v2:
+  não-está-na-tela → diff do render · nunca-do-Rick → filtro de sujeito ·
+  não-pede-resposta → zero chips · taxa ~20% → contador de telemetria
+- Teste 02 #5 (padrão dos essenciais) migrou de superfície → é semente do
+  que o @ fala quando o espelho F9 amadurecer
+
+### □ Audit
+- ✅ 214 testes verdes · typecheck limpo · build ok · tudo pushado (→ f41c8aa)
+- ✅ prod: casca velha + bot novo; preview: mundo novo completo
+- ⚠️ nada pendente da mesa — o que falta é vivência, não obra
+
+### → Next (o roadmap vivo)
+4. **O gate** — abre quando a vivência disser (D41: merge mata as telas velhas)
+5. **Reforma do Builder (D58)** — próxima obra grande
+6. Pós-gate: **motor de bilhetes v2** (spec pronta na 4.1.1) · Library-despensa ·
+   email vestido de Atom · sementes germinando
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. O formato é o do wrap do app,
 porque a casa come a própria comida.*
