@@ -13,7 +13,9 @@ depois (§8.7 do CLAUDE.md).*
 Decisões vigentes: **D50** (raiz = chão da árvore, % vira estado quieto,
 nunca meta), **D58** (Builder = entrevista das doors, pare cadeias e
 protocolos, não hábitos soltos), **D57** (mundo escuro, dourado raro),
-**D46** (número = estado, nunca julgamento), **D61** (indigo = E.).
+**D46** (número = estado, nunca julgamento), **D61** (indigo = E.),
+**D62** (o crivo do topo de mercado — esta obra abre com benchmark;
+relatórios em `09_benchmark-crivo.md` quando os agentes selarem).
 Leis: inbox obrigatório (nada nasce structured), state machine sequencial,
 entropy é archive.
 
@@ -78,11 +80,13 @@ motor. (Connections `references` opcionais item→routine ficam pra depois.)
 
 ## Decisões propostas (ganham número quando o Rick ratificar)
 
-- **D62 (proposta):** o chão fala validade e ausência — cofre v1 nesta
+*(D62 já nasceu: virou a lei do crivo. As propostas abaixo correm a fila.)*
+
+- **D63 (proposta):** o chão fala validade e ausência — cofre v1 nesta
   onda, leitura-só, zero schema.
-- **D63 (proposta):** Builder pare cadeias e protocolos nascendo no inbox;
+- **D64 (proposta):** Builder pare cadeias e protocolos nascendo no inbox;
   o assentimento do mini-wrap executa a maturação sequencial.
-- **D64 (proposta):** MindMate é patrimônio do chão — o gatilho continua;
+- **D65 (proposta):** MindMate é patrimônio do chão — o gatilho continua;
   a reforma não o toca. (Ampliação — quote do dia no chão? — só se o Rick
   quiser.)
 

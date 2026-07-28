@@ -43,6 +43,7 @@ sobrevivem de lá seguem valendo onde não conflitam; em conflito, a Onda 3 venc
 | **D59** | **O arco marca os acontecimentos** — o que nasceu ou selou hoje pousa no arco como ponto na cor do módulo, na hora em que aconteceu. O dia se vê caminhando; estado, nunca cobrança (D46). | Rick 27 Jul |
 | **D60** | **Lei do Tom — primeiros vetos do Rick:** Art. 7 ratificado (**«você», nunca «tu»**) — as falas em tu da casca nova entram na fila de correção antes do gate; proibição de emoji **vetada** — emoji permitido. Demais vetáveis (exclamação, raridade do bilhete, push 3 casos, precedência conversa×SPEC) em análise. | Rick 28 Jul |
 | **D61** | **Indigo é a cor do E.** — quando algo fala em indigo (bolhas do @, espelho F9, janela de tempo da ÁRVORE), é o E. presente, não a casa. O dourado segue sendo da casa (D57); o roxo saiu de tudo que não é a voz dele (a teia virou dourada na obra 4). Ratificada no teste de usabilidade de 28 Jul. | Rick 29 Jul |
+| **D62** | **O crivo do topo de mercado (lei)** — toda função executiva do app tem que funcionar no nível do melhor software da categoria; nossas inovações nascem POR CIMA dessa base, nunca no lugar dela ("inovação com base ruim não serve"). Na prática: toda obra abre com benchmark (pesquisa de mercado + evidência) antes do código, e o crivo se aplica face a face — o projetos como bom software de projetos, a presença, o cofre, e assim vai. | Rick 29 Jul |
 
 ## A lei do desenho (nomeada pelo Rick, rege todas)
 
