@@ -82,7 +82,9 @@ a pixel contra a baseline commitada — o guarda de regressão do gate.
    TopBar inteiro morreu com elas (as duas portas eram o que restava).
    Sobreviveram: `engine/search` (motor), perfil + conectores + export
    (na sheet). O tema morreu — o mundo é um só (D57). e2e: 9 fotos.
-6. **Raiz + Builder** (D50 + D58) — a obra grande que o roadmap já tinha.
+6. ✅ **Raiz + Builder** *(29 Jul)* — o chão da árvore lê o cofre (D63:
+   validade + ausência), Builder pare cadeias e protocolos (D64), MindMate
+   intacto (D65). Spec: `08_raiz-builder_spec.md` · benchmark: `09`.
 
 ---
 

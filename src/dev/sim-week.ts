@@ -168,6 +168,34 @@ function build(): { items: AtomItem[]; events: AtomEvent[] } {
     body: { slot: 'zenite', chain: [alongar.id, caminhar.id] },
   }));
 
+  // o chão da árvore — as gavetas que o cofre lê (D63)
+  const inDays = (n: number): string => {
+    const d = new Date();
+    d.setDate(d.getDate() + n);
+    d.setHours(12, 0, 0, 0);
+    return d.toISOString();
+  };
+  const gaveta = (
+    title: string, domain: string, module: AtomModule, deadlineDays: number | null, createdBack = 40,
+  ): AtomItem => item({
+    title,
+    type: 'doc',
+    module,
+    tags: [`#domain:${domain}`, '#raiz'],
+    created_at: at(createdBack, 10),
+    body: deadlineDays === null ? {} : {
+      operations: {
+        deadline: inDays(deadlineDays),
+        due_date: null, priority: null, project_status: null, progress_mode: null, progress: null,
+      },
+    },
+  });
+  items.push(gaveta('passaporte AU', 'documents', 'bridge', 113));       // janela de 9m: já avisa
+  items.push(gaveta('tax return FY26', 'finance', 'finance', 16));       // perto
+  items.push(gaveta('conta principal', 'identity', 'bridge', null, 3));  // gaveta viva
+  items.push(gaveta('dentista — limpeza', 'health', 'body', null, 640)); // faz tempo (~2a)
+  items.push(gaveta('google drive', 'storage', 'bridge', null, 400));    // faz tempo (~1a)
+
   // o rastro do protocolo (atom_events) — nos dias ansiosos
   const events: AtomEvent[] = [1, 3, 5].map((d) => ({
     id: `sim-ev-${d}`,

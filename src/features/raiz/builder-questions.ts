@@ -51,7 +51,8 @@ const BODY_QUESTIONS: BuilderQuestion[] = [
   { id: 'body-3', module: 'body', text: 'Quantas vezes por semana?', inputType: 'frequency', nextQuestionId: 'body-4' },
   { id: 'body-4', module: 'body', text: 'Que horas voce acorda e dorme?', subtext: 'Nao precisa ser exato — uma media.', inputType: 'time', nextQuestionId: 'body-5' },
   { id: 'body-5', module: 'body', text: 'Toma agua de manha como primeira coisa?', inputType: 'yesno', nextQuestionId: 'body-6' },
-  { id: 'body-6', module: 'body', text: 'Tem algum habito de saude que quer manter?', subtext: 'Medicacao, suplemento, alongamento, meditacao...', inputType: 'freetext', nextQuestionId: null },
+  { id: 'body-6', module: 'body', text: 'Tem algum habito de saude que quer manter?', subtext: 'Medicacao, suplemento, alongamento, meditacao...', inputType: 'freetext', nextQuestionId: 'body-7' },
+  { id: 'body-7', module: 'body', text: 'Quando o corpo pesa — cansaco, tensao — o que ajuda?', subtext: 'isso vira um protocolo: dorme quieto ate voce precisar. separe por virgula.', inputType: 'freetext', nextQuestionId: null },
 ];
 
 const MIND_QUESTIONS: BuilderQuestion[] = [
@@ -64,7 +65,8 @@ const MIND_QUESTIONS: BuilderQuestion[] = [
     { value: 'crepusculo', label: 'De noite (crepusculo)' },
     { value: 'both', label: 'Manha e noite' },
   ], nextQuestionId: 'mind-6' },
-  { id: 'mind-6', module: 'mind', text: 'Algo que quer aprender esse ano?', inputType: 'freetext', nextQuestionId: null },
+  { id: 'mind-6', module: 'mind', text: 'Algo que quer aprender esse ano?', inputType: 'freetext', nextQuestionId: 'mind-7' },
+  { id: 'mind-7', module: 'mind', text: 'Quando a cabeca acelera — ansiedade, dispersao — o que ajuda?', subtext: 'isso vira um protocolo: dorme quieto ate voce precisar. separe por virgula.', inputType: 'freetext', nextQuestionId: null },
 ];
 
 const FAMILY_QUESTIONS: BuilderQuestion[] = [
@@ -85,7 +87,8 @@ const WORK_QUESTIONS: BuilderQuestion[] = [
   ], nextQuestionId: 'work-4' },
   { id: 'work-4', module: 'work', text: 'Tem reunioes recorrentes?', inputType: 'yesno', branchOn: { 'true': 'work-5', 'false': 'work-6' } },
   { id: 'work-5', module: 'work', text: 'Quais reunioes?', subtext: 'Ex: standup diaria, planning semanal...', inputType: 'freetext', nextQuestionId: 'work-6' },
-  { id: 'work-6', module: 'work', text: 'O que te trava no trabalho?', subtext: 'Nao precisa ter resposta — so despejar.', inputType: 'freetext', nextQuestionId: null },
+  { id: 'work-6', module: 'work', text: 'O que te trava no trabalho?', subtext: 'Nao precisa ter resposta — so despejar.', inputType: 'freetext', nextQuestionId: 'work-7' },
+  { id: 'work-7', module: 'work', text: 'E quando trava, o que costuma destravar?', subtext: 'isso vira um protocolo: dorme quieto ate voce precisar. separe por virgula.', inputType: 'freetext', nextQuestionId: null },
 ];
 
 const FINANCE_QUESTIONS: BuilderQuestion[] = [

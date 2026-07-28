@@ -109,6 +109,10 @@ function FreetextInput({ question, onAnswer }: Props) {
       >
         Continuar
       </motion.button>
+      {/* pular sempre visível, sem custo (benchmark 09 / NN-g) — vazio não pare nada */}
+      <button onClick={() => onAnswer('')} className="w-full mt-1.5 py-2 text-xs text-text-muted">
+        pular essa
+      </button>
     </div>
   );
 }

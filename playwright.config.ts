@@ -13,7 +13,9 @@ export default defineConfig({
     ['list'],
   ],
   use: {
-    baseURL: 'http://localhost:5173',
+    // porta exclusiva do e2e — a 5173 é disputada por outros apps da casa
+    // (um vite do Constellation chegou a tomá-la no meio de uma rodada)
+    baseURL: 'http://localhost:5199',
     screenshot: 'on',
     trace: 'retain-on-failure',
     viewport: { width: 390, height: 844 }, // iPhone 14 Pro
@@ -44,8 +46,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run dev',
-    port: 5173,
+    command: 'npm run dev -- --port 5199 --strictPort',
+    port: 5199,
     reuseExistingServer: true,
     timeout: 30_000,
   },

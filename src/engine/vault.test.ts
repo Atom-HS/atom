@@ -53,33 +53,41 @@ describe('validade — antecedência por domínio', () => {
     expect(leadDays(item({ tags: [] }))).toBe(30);
   });
 
-  it('passaporte a 200 dias JÁ está na janela; nota a 200 dias não', () => {
+  it('passaporte a 200 dias JÁ está na janela; finanças a 200 dias não', () => {
     const passaporte = item({ id: 'p', tags: ['#domain:documents'], body: { operations: { deadline: days(200) } as never } });
-    const nota = item({ id: 'n', body: { operations: { deadline: days(200) } as never } });
-    const out = expiries([passaporte, nota], NOW);
+    const seguro = item({ id: 'n', tags: ['#domain:finance'], body: { operations: { deadline: days(200) } as never } });
+    const out = expiries([passaporte, seguro], NOW);
     expect(out.map((e) => e.item.id)).toEqual(['p']);
     expect(out[0].daysLeft).toBe(200);
   });
 
+  it('item sem gaveta (#domain:) não entra no cofre — prazo de tarefa é assunto do HOJE', () => {
+    const tarefa = item({ id: 't', body: { operations: { deadline: days(1) } as never } });
+    expect(expiries([tarefa], NOW)).toEqual([]);
+  });
+
   it('vencidos vêm primeiro, depois por proximidade', () => {
-    const a = item({ id: 'a', body: { operations: { deadline: days(10) } as never } });
-    const b = item({ id: 'b', body: { operations: { deadline: days(-5) } as never } });
+    const a = item({ id: 'a', tags: ['#domain:health'], body: { operations: { deadline: days(10) } as never } });
+    const b = item({ id: 'b', tags: ['#domain:health'], body: { operations: { deadline: days(-5) } as never } });
     const out = expiries([a, b], NOW);
     expect(out.map((e) => e.item.id)).toEqual(['b', 'a']);
     expect(out[0].daysLeft).toBeLessThan(0);
   });
 
   it('arquivado e concluído não vencem; sem deadline não entra; data inválida não derruba', () => {
-    const arch = item({ id: 'x', status: 'archived', body: { operations: { deadline: days(1) } as never } });
-    const done = item({ id: 'y', status: 'completed', body: { operations: { deadline: days(1) } as never } });
-    const semData = item({ id: 'z' });
-    const invalida = item({ id: 'w', body: { operations: { deadline: 'não é data' } as never } });
+    const arch = item({ id: 'x', status: 'archived', tags: ['#domain:finance'], body: { operations: { deadline: days(1) } as never } });
+    const done = item({ id: 'y', status: 'completed', tags: ['#domain:finance'], body: { operations: { deadline: days(1) } as never } });
+    const semData = item({ id: 'z', tags: ['#domain:finance'] });
+    const invalida = item({ id: 'w', tags: ['#domain:finance'], body: { operations: { deadline: 'não é data' } as never } });
     expect(expiries([arch, done, semData, invalida], NOW)).toEqual([]);
   });
 
-  it('due_date serve quando deadline falta', () => {
-    const i = item({ id: 'd', body: { operations: { due_date: days(5).slice(0, 10) } as never } });
+  it('due_date serve quando deadline falta — e data-só de hoje diz "hoje", nunca "ontem"', () => {
+    const i = item({ id: 'd', tags: ['#domain:finance'], body: { operations: { due_date: days(5).slice(0, 10) } as never } });
     expect(expiries([i], NOW)).toHaveLength(1);
+    const hoje = item({ id: 'h', tags: ['#domain:finance'], body: { operations: { due_date: '2026-07-29' } as never } });
+    const [e] = expiries([hoje], NOW);
+    expect(e.daysLeft).toBe(0);
   });
 
   it('renovar rola o deadline preservando o resto do body', () => {

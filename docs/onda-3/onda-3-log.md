@@ -193,6 +193,69 @@ do lote. A lei que amanheceu v1.3 dorme v1.4, testada duas vezes no mesmo dia.
 
 ---
 
+## Wrap · 29 Jul 2026 — o crivo vira lei, o chão vira cofre, a entrevista pare
+
+### ○ Soul
+O dia inteiro numa espiral só: o teste de usabilidade da véspera fechou seus
+achados de manhã, o Rick despejou o sonho do cofre ("minha eterna batalha
+para me organizar") e cunhou a lei do crivo — e à noite a obra grande do
+roadmap estava de pé, com benchmark de mercado embaixo. O mindmate, que o
+Rick lembrou de cabeça meses depois, já morava no código esperando.
+
+### · Items
+- **Fechamento do teste de usabilidade**: banners empilham, toast vira
+  estado D57, Genesis v5.0.4 no rodapé, busca sem jargão, e2e hermético
+  (o "bug de CORS" era miragem do mock — prod nunca esteve quebrada)
+- **Benchmark sob o crivo** (`09_benchmark-crivo.md`): 3 agentes, mercado
+  2024-26 + ciência. Veredito: cadeia+protocolo À FRENTE do mercado
+  (implementation intentions d=0.65-0.91; ninguém dispara por estado);
+  cofre com 1 falha estrutural achada ANTES do código (updated_at mente);
+  "uma gaveta por vez" validada pelo topo do mercado
+- **`engine/vault`** (12 testes): validade com antecedência por domínio
+  (passaporte 9m) + renovação; ausência por evento significativo — retag
+  não silencia; concluir deixa rastro `touch` em atom_events
+- **O chão da árvore**: Raiz na pele D57, % morto, cards "no vencimento"
+  e "faz tempo", grid quieto — o embrião do cofre respirando
+- **Builder D64**: a entrevista pare `routine` (chain de elos, ids reais
+  no assentimento) e `protocol` (pergunta-condição nova por módulo, steps,
+  when por estado); mini-wrap virou assentimento ("que nasçam ·");
+  pular sempre visível; MindMate intacto (D65)
+- **e2e**: 11 cenas (2 novas: chão + assentimento), porta exclusiva 5199
+  (um vite do Constellation tomou a 5173 no meio da rodada), sincronia
+  por texto (relógio fake trava AnimatePresence mode="wait")
+
+### △ Decidido
+- **D61** indigo é a cor do E. · **D62** o crivo do topo de mercado (lei)
+- **D63** cofre v1 no chão · **D64** builder pare estruturas
+- **D65** mindmate é patrimônio · **D66** a válvula do cofre (digest)
+
+### ⬡ Conexões
+- A pergunta-condição do Builder escreve exatamente o que `engine/protocol`
+  (F7) lê — a entrevista alimenta o motor que o espelho F9 observa
+- O rastro `touch` que o cofre lê é o mesmo trilho do `protocol_run` — a
+  ausência entra na família de leituras honestas do tronco
+- Benchmark: chain player + força-de-hábito que perdoa → specs pro HOJE
+
+### ✳ Seeds
+- `semente_cofre-da-vida-adulta.md` — "quando o Rick não lembrar mais de
+  cabeça quando o passaporte vence, ela deu fruto"
+- Digest D66 (voz do E. no Telegram) e reescrita das perguntas em
+  capítulos-gaveta: sub-obras da fila
+
+### □ Audit
+- ✅ 245 testes (31 novos) · typecheck limpo · build ok · visual 11/11 ×2
+- ✅ zero schema novo — tudo sobre campos e trilhos que já existiam
+- ⚠️ semana simulada ganhou uma gaveta (5 itens) — as faces mudaram de
+  foto com intenção; baselines refotografadas
+
+### → Next (o roadmap vivo)
+4. **O gate (D41)** — a vivência agora testa o mundo INTEIRO (chão incluso)
+5. Sub-obras da 6: digest D66 · perguntas em capítulos-gaveta (com o E.) ·
+   chain player no HOJE · Raiz como destino do drill polido
+6. Pós-gate: bilhetes v2 · Library-despensa · email vestido de Atom
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. O formato é o do wrap do app,
 porque a casa come a própria comida.*

@@ -2,15 +2,17 @@
 
 import { create } from 'zustand';
 import type { AtomModule } from '@/types/item';
-import type { BuilderAnswer, BuilderGeneratedItem } from './builder-types';
+import type { BuilderAnswer, BuilderGeneratedItem, BuilderProtocol, BuilderRoutine } from './builder-types';
 import { BUILDER_MODULE_MAP, BUILDER_QUESTION_MAP } from './builder-questions';
-import { generateItems } from './builder-mapper';
+import { generateStructures } from './builder-mapper';
 
 interface BuilderState {
   activeModule: AtomModule | null;
   currentQuestionId: string | null;
   answers: BuilderAnswer[];
   generatedItems: BuilderGeneratedItem[];
+  generatedRoutines: BuilderRoutine[];   // D64: a entrevista pare cadeias
+  generatedProtocols: BuilderProtocol[]; // D64: e protocolos
   completedModules: AtomModule[];
   mindmateMode: boolean;
 
@@ -27,6 +29,8 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
   currentQuestionId: null,
   answers: [],
   generatedItems: [],
+  generatedRoutines: [],
+  generatedProtocols: [],
   completedModules: [],
   mindmateMode: false,
 
@@ -58,9 +62,9 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
     if (nextId && BUILDER_QUESTION_MAP[nextId]) {
       set({ answers: newAnswers, currentQuestionId: nextId });
     } else {
-      // Module complete — generate items
+      // Module complete — a entrevista pare estruturas (D64)
       if (activeModule) {
-        const newItems = generateItems(newAnswers.filter(a => {
+        const { items, routine, protocol } = generateStructures(newAnswers.filter(a => {
           const q = BUILDER_QUESTION_MAP[a.questionId];
           return q?.module === activeModule;
         }), activeModule);
@@ -69,7 +73,9 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
           answers: newAnswers,
           activeModule: null,
           currentQuestionId: null,
-          generatedItems: [...s.generatedItems, ...newItems],
+          generatedItems: [...s.generatedItems, ...items],
+          generatedRoutines: routine ? [...s.generatedRoutines, routine] : s.generatedRoutines,
+          generatedProtocols: protocol ? [...s.generatedProtocols, protocol] : s.generatedProtocols,
           completedModules: [...s.completedModules, activeModule],
         }));
       }
@@ -113,6 +119,8 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
     currentQuestionId: null,
     answers: [],
     generatedItems: [],
+    generatedRoutines: [],
+    generatedProtocols: [],
     completedModules: [],
     mindmateMode: false,
   }),

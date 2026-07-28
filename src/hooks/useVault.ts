@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useItems } from '@/hooks/useItems';
 import { useAppStore } from '@/store/app-store';
 import { eventService } from '@/service/item-service';
+import { simEvents } from '@/dev/sim-week';
 import { RAIZ_DOMAINS } from '@/config/raiz';
 import {
   SIGNIFICANT_EVENTS,
@@ -46,7 +47,7 @@ export function useVault() {
         .filter((t) => t.startsWith('#domain:')).map((t) => t.slice('#domain:'.length)),
     );
     const keys = RAIZ_DOMAINS.map((d) => d.key).filter((k) => inhabited.has(k));
-    return quietAbsences(absences(keys, items, events, now));
+    return quietAbsences(absences(keys, items, [...events, ...simEvents()], now));
   }, [items, events]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return { vencendo, ausencias };

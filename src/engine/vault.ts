@@ -36,7 +36,8 @@ function readDeadline(item: AtomItem): Date | null {
   const ops = item.body?.operations;
   const raw = ops?.deadline ?? ops?.due_date;
   if (!raw) return null;
-  const date = new Date(raw);
+  // data-só vale até o FIM do dia — "vence hoje" nunca vira "venceu ontem"
+  const date = /^\d{4}-\d{2}-\d{2}$/.test(raw) ? new Date(`${raw}T23:59:59`) : new Date(raw);
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
@@ -48,15 +49,18 @@ export interface VaultExpiry {
 
 const MS_DAY = 86_400_000;
 
-/** O que está na janela de aviso — vencidos primeiro, depois por proximidade. */
+/** O que está na janela de aviso — vencidos primeiro, depois por proximidade.
+ *  Só gaveta (#domain:) entra: prazo de tarefa comum é assunto do HOJE, não do cofre. */
 export function expiries(items: AtomItem[], now: Date): VaultExpiry[] {
   const out: VaultExpiry[] = [];
   for (const item of items) {
     if (item.status === 'archived' || item.state === 'archived' || item.status === 'completed') continue;
+    const domain = domainOf(item);
+    if (!domain) continue;
     const deadline = readDeadline(item);
     if (!deadline) continue;
     const daysLeft = Math.floor((deadline.getTime() - now.getTime()) / MS_DAY);
-    if (daysLeft <= leadDays(item)) out.push({ item, domain: domainOf(item), daysLeft });
+    if (daysLeft <= leadDays(item)) out.push({ item, domain, daysLeft });
   }
   return out.sort((a, b) => a.daysLeft - b.daysLeft);
 }

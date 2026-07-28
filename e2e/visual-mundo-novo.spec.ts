@@ -26,6 +26,16 @@ async function chegar(page: import('@playwright/test').Page, path: string) {
   await page.waitForTimeout(700); // animações de entrada assentam
 }
 
+// Pra cena INTERATIVA com transições (AnimatePresence mode="wait"):
+// qualquer relógio fake do Playwright trava a troca de telas (a pergunta
+// nova fica em opacity 0 e o clique cai no botão fantasma da anterior).
+// A cena dispensa relógio — nada nela renderiza data/idade.
+async function chegarSemRelogio(page: import('@playwright/test').Page, path: string) {
+  await page.goto(`${path}${path.includes('?') ? '&' : '?'}sim=1`);
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(700);
+}
+
 // ─── as 3 faces ──────────────────────────────────────────
 
 test('face HOJE — o arco, a chegada, o que cabe', async ({ authenticatedPage: page }) => {
@@ -67,6 +77,41 @@ test('ItemDetail — a coisa no galho (estagio 3)', async ({ authenticatedPage: 
 test('Wrap — o rito de fechar o dia', async ({ authenticatedPage: page }) => {
   await chegar(page, '/wrap');
   await expect(page).toHaveScreenshot('wrap-rito.png', SHOT);
+});
+
+// ─── o chão da árvore (obra 6 · D63/D64) ─────────────────
+
+test('raiz — o chao da arvore le o cofre', async ({ authenticatedPage: page }) => {
+  await chegar(page, '/raiz');
+  await expect(page).toHaveScreenshot('raiz-chao.png', SHOT);
+});
+
+test('builder — a entrevista pare cadeia e protocolo', async ({ authenticatedPage: page }) => {
+  await chegarSemRelogio(page, '/raiz');
+  await page.getByText('construir minha rotina').click();
+  await page.getByText('Corpo', { exact: true }).click();
+
+  // sincronia positiva: cada resposta espera a PRÓXIMA pergunta chegar
+  await page.getByRole('button', { name: 'Sim' }).click();                    // body-1
+  await page.getByText('Que tipo de exercicio?').waitFor();
+  await page.locator('textarea').fill('caminhada');                            // body-2
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.getByText('Quantas vezes por semana?').waitFor();
+  await page.getByRole('button', { name: '3x', exact: true }).click();         // body-3
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.getByText('Que horas voce acorda e dorme?').waitFor();
+  await page.getByRole('button', { name: 'Continuar' }).click();               // body-4: horários default
+  await page.getByText('Toma agua de manha').waitFor();
+  await page.getByRole('button', { name: 'Sim' }).click();                     // body-5
+  await page.getByText('Tem algum habito de saude').waitFor();
+  await page.locator('textarea').fill('meditacao 10 min');                     // body-6
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.getByText('Quando o corpo pesa').waitFor();
+  await page.locator('textarea').fill('alongar, respirar fundo');              // body-7: a condição → protocolo
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.getByText('o que a conversa pariu').waitFor();                    // o assentimento
+  await page.waitForTimeout(600); // entrada dos cards assenta
+  await expect(page).toHaveScreenshot('builder-assentimento.png', SHOT);
 });
 
 // ─── os gestos (D54 — nada é aba) ────────────────────────
