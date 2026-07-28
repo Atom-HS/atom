@@ -42,7 +42,12 @@ nasce structured, nunca pula.
 - protocol: `body.steps: string[]` + `body.when {emotion|challenging|energy|period}`
   — período sozinho NÃO acorda protocolo (seria rotina disfarçada)
 - validade: `body.operations.deadline` (campo existente; zero migration)
-**Ausência:** derivada de `updated_at` — dado que já existe, leitura nova.
+  + `lead_time` por tipo/tag com default de domínio (passaporte 9m, cartão
+  2m — benchmark `09`, table stake 1) + gesto de renovação (rola o deadline)
+**Ausência:** derivada de **evento significativo** (toque real em
+`atom_events`, trilho que `checkin`/`protocol_run` já usam) — NUNCA de
+`updated_at`, que mente a cada retag (falha estrutural apontada pelo
+benchmark `09`).
 **Connections:** chain é `body.chain`, NÃO connections tipadas — seguir o
 motor. (Connections `references` opcionais item→routine ficam pra depois.)
 **Pisos mínimos:** routine sem elos não nasce; protocol sem steps não nasce.
@@ -68,8 +73,10 @@ motor. (Connections `references` opcionais item→routine ficam pra depois.)
    quieto por domínio, sem %), destino do drill que a ÁRVORE já aponta.
    Welcome/doors ficam (D50), na pele nova.
 2. **A leitura do cofre (v1)** — `useRaiz` cresce: validades próximas
-   (`deadline` ≤ 90d nos domínios documents/finance/health) + ausências
-   ("dentista — 2 anos sem registro"). Tom D46: estado, nunca cobrança.
+   (`deadline` com lead time por tipo) + ausências (por evento
+   significativo). Tom D46: estado, nunca cobrança — mas o benchmark é
+   claro: leitura quieta como canal único mata o cofre (Life OS de Notion
+   morre em ~1 mês); a válvula assíncrona (digest raro) entra na decisão 3.
    *Depende da incerteza 1.*
 3. **O Builder D58** — a entrevista pare: respostas de frequência viram
    `habit`-elos + uma `routine` com a chain; respostas de condição ("quando
