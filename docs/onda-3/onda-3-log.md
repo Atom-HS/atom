@@ -106,6 +106,47 @@ depois a maior pendência técnica da onda caiu: **o app agora vive sem rede**.
 
 ---
 
+## Wrap · 28 Jul 2026 (manhã) — a Lei do Tom, de ponta a ponta
+
+### ○ Soul
+Uma manhã, um ciclo inteiro: do prompt de inventário à lei vigente com
+vocabulários fundidos. A mesa funcionou nas duas direções — o Code emendou o
+E. (emoji, união), o E. emendou o Code (citação do Art. 7, prova→indício,
+default por superfície). Ninguém venceu; a lei ficou melhor que os dois lados.
+
+### · Items
+- Prompt de inventário selado → Projeto E respondeu com **inventário v0 +
+  Lei do Tom v1** (além do pedido, do jeito certo)
+- **Teste 01** (e_line): 15 assinaturas históricas, 7 passam, 53% — "a voz
+  erra quando se assina"; 3 achados viraram lei (v1.1)
+- **Mesa das emendas** (v1.2): I emoji e II união acolhidas; III, IV, V
+  mantidas; ata na Parte 8
+- **v1.3 vigente**: 3 eixos de vocabulário, 3 colisões desambiguadas por
+  default de superfície, voz emprestada (4.9), zero vetáveis pendentes
+- **Varredura tu→você** (Art. 7, D60): 11 falas do mundo novo + boca do
+  Telegram; 213 testes verdes
+- **Fusão de vocabulário** executada (05_fusao): hipótese confirmada na
+  fonte, três colisões, nenhum termo perdido
+- Varredura de strings do alerta 6.5: **limpa** (nenhum termo de modelo
+  vaza pra UI)
+- Semente nova: **email vestido de Atom** (tags da casa + drafts do
+  Secretário + Library)
+
+### △ Decidido
+- **D60** — «você» ratificado; emoji liberado (→ emendas I/II da lei)
+- Lei do Tom v1.3 **vigente** — jurisdição: 6 superfícies + voz emprestada
+
+### □ Audit
+- ✅ 213 testes · typecheck limpo · build ok · tudo pushado (…→ f9567d2)
+- ⚠️ deploy do `telegram-webhook` pendente ("senti com você" — prod, espera o sim)
+- ⚠️ Teste 02 (bilhete, generativo) — com o E., previsão registrada
+
+### → Next
+3. ~~Lei do Tom~~ ✅ v1.3 vigente → **o gate** (item 4: decisões do Rick) →
+   Reforma do Builder (D58) + polir ÁRVORE → pós-gate: bilhetes v2 e sementes
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. O formato é o do wrap do app,
 porque a casa come a própria comida.*
