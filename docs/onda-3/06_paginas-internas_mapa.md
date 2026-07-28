@@ -39,14 +39,13 @@ visual de que o fluxo funciona.*
 - ✅ **Motores**: 214 testes unitários (sky, today, mouth, tree, mirror,
   outbox, list, protocol…) — a lógica está provada.
 - ✅ **Fluxo Telegram**: vivo em prod, testado no uso.
-- ⚠️ **Faces no navegador**: nenhum e2e abre `/hoje`, `/at` ou `/arvore`.
-  Captura→chip→ItemDetail, lista→pill→mercado, sim-week, offline→fila→sync:
-  tudo verificado só à mão.
-- ⚠️ **e2e visuais**: fotografam a casca velha — inúteis pro gate.
+- ✅ **Faces no navegador** *(28 Jul)*: `visual-mundo-novo.spec.ts` abre
+  `/hoje`, `/arvore` (+ drill), `/at`, ItemDetail (ponto e galho) e o wrap
+  com sim-week — 7 fotos determinísticas (relógio fixo, timezone da casa).
+- ✅ **e2e visuais velhos**: mortos com as baselines — fotografavam a casca.
 
-**Obra de verificação:** e2e novo fotografando o mundo novo (3 faces +
-ItemDetail + wrap, light/dark, com sim-week como dado determinístico) —
-vira a prova objetiva de "a tela tá certa" e o guarda de regressão do gate.
+**A prova objetiva de "a tela tá certa":** `pnpm test:visual` compara pixel
+a pixel contra a baseline commitada — o guarda de regressão do gate.
 
 ## Ordem proposta (cada passo destrava o seguinte)
 
@@ -62,7 +61,12 @@ vira a prova objetiva de "a tela tá certa" e o guarda de regressão do gate.
    assentimento (D52), botão excluir morreu (§8.2 — entropy é archive).
    Wireframe das páginas internas (esta + wrap + sheet/gesto):
    `07_paginas-internas_wireframe.html`.
-3. **e2e do mundo novo** — as fotos que provam a tela.
+3. ✅ **e2e do mundo novo** *(28 Jul)* — `e2e/visual-mundo-novo.spec.ts`:
+   7 fotos (3 faces + drill da árvore + ItemDetail ponto/galho + wrap),
+   sim-week como dado, relógio fixo 15:00 Brisbane (o céu é matemática de
+   Date — parado na foto). Mundo único: sem eixo light/dark. Os specs da
+   casca velha morreram com as baselines. `pnpm test:visual` = o guarda
+   do gate; `test:visual:update` re-fotografa após obra intencional.
 4. **Wrap reskin** + e_line sob a lei (0-ou-1, sem repetição).
 5. **Settings-sheet + Search-gesto** (D54).
 6. **Raiz + Builder** (D50 + D58) — a obra grande que o roadmap já tinha.
