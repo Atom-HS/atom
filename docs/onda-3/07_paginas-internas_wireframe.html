@@ -1,0 +1,212 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MindRoot — páginas internas · wireframe · Onda 3</title>
+<style>
+  /* ═══ tokens D57 — réplica do 03_mapa-navegacao.html §1 ═══ */
+  :root {
+    --bg: #0f0d09; --halo: #17130d;
+    --card: #1c1712; --card2: #241e16;
+    --border: #33291c; --border-soft: #2a2217;
+    --text: #ece3cd; --muted: #91876f; --faint: #5f5745;
+    --gold: #d4b872; --gold-dim: #a3884f; --gold-bg: rgba(212,184,114,.10);
+    --work: #7a8fb8; --body: #8a9e7a; --mind: #9e7ab8; --family: #c4a882;
+    --purpose: #b87a8f; --bridge: #8a8578; --finance: #7aada3; --social: #8f86c2;
+    --mono: ui-monospace, "Cascadia Code", Consolas, Menlo, monospace;
+    --sans: "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: radial-gradient(1200px 700px at 50% -10%, var(--halo), var(--bg) 60%);
+    color: var(--text); font-family: var(--sans); line-height: 1.5;
+    padding: 34px 18px 80px; display: flex; flex-direction: column; align-items: center;
+  }
+  .studio { text-align: center; max-width: 700px; margin-bottom: 26px; }
+  .studio .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--faint); margin: 0 0 8px; }
+  .studio h1 { font-size: clamp(20px, 4vw, 27px); font-weight: 350; margin: 0 0 6px; }
+  .studio h1 b { color: var(--gold); font-weight: 500; }
+  .studio p { font-size: 13.5px; color: var(--muted); margin: 0; }
+  h2.sec { font-family: var(--mono); font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold-dim); margin: 44px 0 14px; text-align: center; }
+  .duo { display: flex; gap: 26px; align-items: flex-start; justify-content: center; flex-wrap: wrap; }
+
+  .phone { width: min(400px, 100%); background: var(--bg); border: 1px solid var(--border); border-radius: 34px; box-shadow: 0 30px 80px rgba(0,0,0,.55); overflow: hidden; display: flex; flex-direction: column; height: 760px; max-height: 86vh; }
+  .crumb { font-family: var(--mono); font-size: 10px; color: var(--faint); text-align: center; padding: 12px 16px 0; letter-spacing: .06em; min-height: 28px; }
+  .crumb b { color: var(--gold-dim); font-weight: 500; }
+  .screen { flex: 1; overflow-y: auto; padding: 14px 18px 16px; display: flex; flex-direction: column; gap: 11px; scrollbar-width: thin; }
+  nav.faces { display: flex; border-top: 1px solid var(--border-soft); background: color-mix(in srgb, var(--bg) 70%, black); }
+  nav.faces span { flex: 1; color: var(--faint); font-family: var(--mono); font-size: 11.5px; padding: 12px 0 14px; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  nav.faces span .g { font-size: 15px; line-height: 1; }
+
+  .card { background: var(--card); border: 1px solid var(--border-soft); border-radius: 16px; padding: 12px 14px; }
+  .label { font-family: var(--mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--faint); }
+  .tchip { font-family: var(--mono); font-size: 10.5px; padding: 2px 8px; border-radius: 999px; background: var(--card2); border: 1px solid var(--border); color: var(--muted); display: inline-block; }
+  .tchip.hot { color: var(--gold); border-color: color-mix(in srgb, var(--gold) 35%, var(--border)); background: var(--gold-bg); }
+  .back { font-family: var(--mono); font-size: 11px; color: var(--gold-dim); }
+  .row { display: flex; gap: 7px; flex-wrap: wrap; }
+  .titulo { font-size: 17px; font-weight: 400; color: var(--text); }
+  .sub { font-size: 11.5px; color: var(--muted); font-style: italic; }
+  .ghost { border: 1px dashed var(--border); border-radius: 14px; padding: 10px 13px; font-size: 11.5px; color: var(--faint); font-style: italic; }
+  .nota { font-size: 12.5px; color: var(--muted); }
+  .det { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--muted); padding: 3px 0; }
+  .det span:first-child { color: var(--faint); }
+  .convite { border: 1px solid color-mix(in srgb, var(--gold) 30%, var(--border-soft)); background: var(--gold-bg); border-radius: 16px; padding: 11px 14px; font-size: 12.5px; color: var(--gold); }
+  .convite .sub { color: var(--gold-dim); }
+  .geo { font-family: var(--mono); color: var(--gold); }
+  .conn { font-size: 12px; color: var(--muted); padding: 4px 0; border-bottom: 1px dashed var(--border-soft); }
+  .conn:last-child { border-bottom: 0; }
+  .conn b { color: var(--text); font-weight: 500; }
+  .conn .rel { font-family: var(--mono); font-size: 10px; color: var(--gold-dim); }
+  .anota { max-width: 400px; font-size: 12px; color: var(--muted); }
+  .anota b { color: var(--gold-dim); font-weight: 500; }
+  .anota p { margin: 6px 0; }
+  .sheet { border: 1px solid var(--border); border-bottom: 0; border-radius: 22px 22px 0 0; background: var(--card); padding: 14px 16px 20px; box-shadow: 0 -20px 60px rgba(0,0,0,.5); }
+  .grab { width: 36px; height: 4px; border-radius: 2px; background: var(--border); margin: 0 auto 12px; }
+  .check { font-size: 13px; color: var(--muted); padding: 4px 0; }
+  .check b { color: var(--text); font-weight: 400; }
+  .foot-hint { text-align: center; font-family: var(--mono); font-size: 10.5px; color: var(--faint); margin-top: 26px; max-width: 660px; }
+</style>
+
+<div class="studio">
+  <p class="eyebrow">mindroot · onda 3 · páginas internas · 28 jul 2026</p>
+  <h1>As páginas internas, <b>na pele do mundo novo</b></h1>
+  <p>Par do <span style="font-family:var(--mono)">06_paginas-internas_mapa.md</span> (a fila) e filho do
+  <span style="font-family:var(--mono)">03_mapa-navegacao.html</span> (tokens §1 replicados aqui).
+  Blueprint, não pixel final (D0). Regem: D46 (número = estado), D48 (maturação no galho),
+  D54 (busca gesto · settings sheet), D57 (à luz de vela), Lei do Tom (você; convite, nunca cobrança).</p>
+</div>
+
+<!-- ═══════════ ITEMDETAIL — a página da coisa ═══════════ -->
+<h2 class="sec">obra 2 · itemdetail — "a página da coisa"</h2>
+<div class="duo">
+
+  <!-- estado A: ponto recém-nascido -->
+  <div>
+    <div class="phone">
+      <div class="crumb">✳ @ → <b>· a coisa</b> · veio do telegram</div>
+      <div class="screen">
+        <span class="back">← voltar</span>
+        <div>
+          <div class="titulo"><span class="geo" style="font-size:20px">·</span> ligar pro contador antes de sexta</div>
+          <div class="sub" style="font-family:var(--mono);font-style:normal;margin-top:3px">ainda um ponto · nasceu hoje</div>
+        </div>
+        <div class="row">
+          <span class="tchip">forma?</span><span class="tchip">galho?</span><span class="tchip">ativo</span>
+        </div>
+        <div class="convite">
+          o @ leu: parece <b>task</b> no galho de <b>finanças</b> — assim?
+          <div class="row" style="margin-top:8px">
+            <span class="tchip hot">assim ·</span><span class="tchip">outra forma</span><span class="tchip">deixa quieto</span>
+          </div>
+        </div>
+        <div class="ghost">toque pra escrever uma nota…</div>
+        <div class="card">
+          <div class="label" style="margin-bottom:6px">detalhes</div>
+          <div class="det"><span>nasceu</span><span>hoje · 14:02</span></div>
+          <div class="det"><span>veio de</span><span>telegram</span></div>
+        </div>
+        <div class="ghost" style="text-align:center">guardar no arquivo — <i>entropy é archive, nunca delete</i></div>
+      </div>
+      <nav class="faces"><span><span class="g">·</span>hoje</span><span><span class="g">⬡</span>árvore</span><span><span class="g">✳</span>@</span></nav>
+    </div>
+    <p class="anota"><b>o que morreu:</b> a barra de 7 stages, "classificar com AI" (gradiente roxo),
+    os botões "estruturar → stage 3". <b>O que nasceu:</b> o glifo do estágio na frente do título,
+    a linha de presença ("ainda um ponto · nasceu hoje" — idade quieta, D46), e a leitura do @
+    como <b>chips de assentimento</b> (D52). Um convite por vez (D45). O dourado só no caminho convidado.</p>
+  </div>
+
+  <!-- estado B: task estruturada no galho -->
+  <div>
+    <div class="phone">
+      <div class="crumb">⬡ árvore → corpo → <b>△ a coisa</b></div>
+      <div class="screen">
+        <span class="back">← voltar</span>
+        <div style="border-left:3px solid var(--body);padding-left:11px">
+          <div class="titulo"><span class="geo" style="font-size:18px">△</span> treino de força 3× na semana</div>
+          <div class="sub" style="font-family:var(--mono);font-style:normal;margin-top:3px">no galho do corpo · folha de ontem</div>
+        </div>
+        <div class="row">
+          <span class="tchip">task</span><span class="tchip" style="color:var(--body);border-color:color-mix(in srgb,var(--body) 35%,var(--border))">corpo</span><span class="tchip">ativo</span>
+        </div>
+        <div class="convite">
+          <span class="geo">△ → □</span> quando quiser dar forma final — sem pressa
+          <div class="sub" style="margin-top:2px">a maturação se vê no galho, não num funil (D48)</div>
+        </div>
+        <div class="card">
+          <div class="label" style="margin-bottom:4px">notas</div>
+          <div class="nota">seg/qua/sex de manhã. começar leve — barra vazia tá ótimo.</div>
+        </div>
+        <div class="card">
+          <div class="label" style="margin-bottom:4px">a teia</div>
+          <div class="conn"><span class="rel">alimenta →</span> <b>⬡ protocolo do sono</b></div>
+          <div class="conn"><span class="rel">← pertence a</span> <b>□ rotina da manhã</b></div>
+        </div>
+        <div class="row"><span class="tchip">#corpo</span><span class="tchip">+ tag</span></div>
+        <div class="card">
+          <div class="label" style="margin-bottom:6px">detalhes</div>
+          <div class="det"><span>nasceu</span><span>12 jul</span></div>
+          <div class="det"><span>tocada</span><span>ontem</span></div>
+        </div>
+      </div>
+      <nav class="faces"><span><span class="g">·</span>hoje</span><span><span class="g">⬡</span>árvore</span><span><span class="g">✳</span>@</span></nav>
+    </div>
+    <p class="anota"><b>corpo por tipo:</b> list mostra as entradas checáveis (já vive),
+    protocol mostra os passos, routine mostra a cadeia — mesmo esqueleto, corpo próprio.
+    A borda esquerda é a cor do galho (dessaturada). Conexões viram <b>a teia</b>, com a
+    relação em mono. Números só como estado: "folha de ontem", nunca %.</p>
+  </div>
+</div>
+
+<!-- ═══════════ WRAP — pele nova, rito antigo ═══════════ -->
+<h2 class="sec">obra 4 · wrap — o rito na pele nova</h2>
+<div class="duo">
+  <div>
+    <div class="phone" style="height:620px">
+      <div class="crumb">· hoje → <b>○ fechar o dia</b></div>
+      <div class="screen">
+        <div style="text-align:center;padding:10px 0 2px">
+          <div style="font-family:var(--mono);color:var(--gold);letter-spacing:.3em;font-size:14px">· — △ <span style="opacity:.35">□ ⬠ ⬡ ○</span></div>
+          <div class="sub" style="margin-top:6px">passo 3 de 7 · o triângulo</div>
+        </div>
+        <div class="card">
+          <div class="label" style="margin-bottom:6px">△ o que se decidiu hoje</div>
+          <div class="nota">"gate ainda não — viver as faces antes do merge"</div>
+        </div>
+        <div class="ghost">o E. fala aqui no máximo uma vez por wrap (e_line 0-ou-1, lei 4.4) — e só quando tem algo que não está na tela</div>
+        <div class="convite" style="text-align:center">seguir → □</div>
+      </div>
+      <nav class="faces"><span><span class="g">·</span>hoje</span><span><span class="g">⬡</span>árvore</span><span><span class="g">✳</span>@</span></nav>
+    </div>
+    <p class="anota"><b>o rito fica</b> (7 passos = 7 estágios, D44); a pele muda: geometrias douradas
+    caminhando no topo como progresso — estado, não barra. A e_line entra sob a Lei do Tom
+    v1.4: no máximo uma por wrap, seis condições (4.1.1), nunca parabéns-cobrança.</p>
+  </div>
+
+  <!-- ═══ settings-sheet + search-gesto ═══ -->
+  <div>
+    <div class="phone" style="height:620px;justify-content:flex-end">
+      <div class="crumb">qualquer face → <b>puxar</b></div>
+      <div class="screen" style="justify-content:flex-start">
+        <div class="ghost" style="text-align:center">↓ puxar pra baixo em qualquer face = buscar (D54)</div>
+        <div class="card" style="border-color:color-mix(in srgb,var(--gold) 30%,var(--border))">
+          <span class="sub" style="font-family:var(--mono);font-style:normal">busca…</span>
+        </div>
+        <div class="check">· <b>ligar pro contador</b> <span class="rel" style="font-family:var(--mono);font-size:10px;color:var(--gold-dim)">finanças · hoje</span></div>
+        <div class="check">⬡ <b>protocolo do sono</b> <span class="rel" style="font-family:var(--mono);font-size:10px;color:var(--gold-dim)">corpo · 3d</span></div>
+      </div>
+      <div class="sheet">
+        <div class="grab"></div>
+        <div class="label" style="margin-bottom:8px">a casa · settings vira sheet (D54)</div>
+        <div class="check"><b>perfil</b> — nome, e-mail</div>
+        <div class="check"><b>conectores</b> — telegram vivo · email em breve</div>
+        <div class="check"><b>export</b> — teus dados são teus</div>
+        <div class="check" style="color:var(--faint)">tema — não há: o mundo é um só (D57)</div>
+      </div>
+    </div>
+    <p class="anota"><b>obra 5:</b> nem busca nem settings são abas. Busca = puxar pra baixo
+    (o motor <span style="font-family:var(--mono)">engine/search</span> fica); settings = sheet
+    discreto puxado da borda. As duas portas de andaime do TopBar morrem aqui.</p>
+  </div>
+</div>
+
+<p class="foot-hint">ordem da fila (06_mapa): 1 shell ✅ · 2 itemdetail · 3 e2e do mundo novo · 4 wrap ·
+5 sheet+gesto · 6 raiz+builder — cada passo destrava o seguinte. blueprint D0: o código decide o pixel.</p>
+</html>

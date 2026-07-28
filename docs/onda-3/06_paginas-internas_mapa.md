@@ -25,7 +25,7 @@ visual de que o fluxo funciona.*
 | Página | Estado hoje | Decisão que rege | Veredito |
 |---|---|---|---|
 | **AppShell / TopBar / BottomNav** | ✅ **reformado 28 Jul** — nav `· ⬡ ✳`, tokens D57, banner âmbar morto | D41 (nav · ⬡ ✳), D57 (tokens) | **FEITO** — obra 1 entregue |
-| **ItemDetail** | stage bar, classify/advance, era pipeline | D48 (maturação no galho), D46 (número = estado), D57 | **REFORMA JÁ** — página interna nº 1: todo chip "abrir/ajusta" cai aqui |
+| **ItemDetail** | ✅ **reformado 28 Jul** — glifo no galho, linha de presença, chips de assentimento, excluir morreu (§8.2) | D48 (maturação no galho), D46 (número = estado), D57 | **FEITO** — wireframe no `07_paginas-internas_wireframe.html` |
 | **Wrap** | flow F3 novo (lê o tronco), pele velha | D57 + Lei do Tom 4.4 (e_line 0-ou-1, sem repetição) | **REFORMA** — reskin + e_line sob a lei |
 | **Search** | aba com chips de filtro | D54: busca = gesto (puxar pra baixo) | **VIRA GESTO** — motor (`engine/search`) fica; aba morre |
 | **Settings** | aba cheia (profile, conectores, export) | D54: pull discreto (sheet) | **VIRA SHEET** — conteúdo sobrevive, lugar muda |
@@ -55,9 +55,13 @@ vira a prova objetiva de "a tela tá certa" e o guarda de regressão do gate.
    toggle de tema fica inerte até a obra 5 levar Settings pro sheet),
    banner âmbar morto (sobrou só o aviso `?sim=1`). TopBar quieto com as
    duas portas de andaime (buscar/menu) que a obra 5 mata (D54).
-2. **ItemDetail reformado** — a página interna mais tocada; maturação vira
-   glifo no galho, linguagem de presença, corpo por tipo (list entries já
-   vive lá).
+2. ✅ **ItemDetail reformado** *(28 Jul)* — a página interna mais tocada;
+   maturação virou glifo no galho + convite único ("— → △ dar corpo, quando
+   você quiser"), linha de presença no vocabulário da ÁRVORE ("no galho do
+   corpo · folha de ontem"), triage virou leitura do @ com chips de
+   assentimento (D52), botão excluir morreu (§8.2 — entropy é archive).
+   Wireframe das páginas internas (esta + wrap + sheet/gesto):
+   `07_paginas-internas_wireframe.html`.
 3. **e2e do mundo novo** — as fotos que provam a tela.
 4. **Wrap reskin** + e_line sob a lei (0-ou-1, sem repetição).
 5. **Settings-sheet + Search-gesto** (D54).
