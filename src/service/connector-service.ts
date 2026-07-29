@@ -4,6 +4,7 @@
 
 import { supabase } from './supabase';
 import { itemService } from './item-service';
+import { desiredLabels, ATOM_CALENDAR_SUMMARY } from '@/engine/taxonomy';
 
 export interface ConnectorStatus {
   provider: string;
@@ -28,6 +29,24 @@ export interface CalendarEvent {
   all_day?: boolean;
   attendees?: EventAttendee[];
 }
+
+export type TaxonomyAction = 'preview' | 'apply' | 'remove';
+
+export interface TaxonomyBranchReport {
+  key: string;
+  name: string;
+  action: 'create' | 'created' | 'exists' | 'disabled' | 'off';
+}
+
+export interface TaxonomyReport {
+  action: TaxonomyAction;
+  labels?: TaxonomyBranchReport[];
+  calendar?: TaxonomyBranchReport;
+  removed?: string[];
+}
+
+/** Erro-sinal: o token não tem os escopos da ida — pede reconexão Google. */
+export const RECONNECT_SCOPES = 'RECONNECT_SCOPES';
 
 export interface GmailMessage {
   id: string;
@@ -74,6 +93,8 @@ export const connectorService = {
         scopes: [
           'https://www.googleapis.com/auth/calendar.readonly',
           'https://www.googleapis.com/auth/gmail.readonly',
+          'https://www.googleapis.com/auth/gmail.labels',
+          'https://www.googleapis.com/auth/calendar.app.created',
         ],
         metadata: metadata ?? {},
       },
@@ -183,6 +204,33 @@ export const connectorService = {
       created++;
     }
     return created;
+  },
+
+  // A ida (D68): projeta a lei da casa lá fora, via edge taxonomy-sync.
+  // preview = só olha · apply = cria o delta · remove = desfaz o que a casa criou
+  async taxonomySync(action: TaxonomyAction): Promise<TaxonomyReport> {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) throw new Error('Not authenticated');
+
+    const resp = await supabase.functions.invoke('taxonomy-sync', {
+      body: {
+        user_id: session.user.id,
+        action,
+        labels: desiredLabels(),
+        calendar_summary: ATOM_CALENDAR_SUMMARY,
+      },
+    });
+
+    if (resp.error) {
+      const ctx = (resp.error as { context?: Response }).context;
+      if (ctx && typeof ctx.json === 'function') {
+        const body = (await ctx.json().catch(() => null)) as { code?: string } | null;
+        if (body?.code === 'TAX_401') throw new Error(RECONNECT_SCOPES);
+        if (body?.code === 'TAX_101') throw new Error(RECONNECT_SCOPES);
+      }
+      throw new Error(resp.error.message);
+    }
+    return resp.data as TaxonomyReport;
   },
 
   async disconnect(provider: string): Promise<void> {

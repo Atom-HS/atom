@@ -3,12 +3,14 @@
 // conectores e export (06_paginas-internas_mapa). O tema morreu: o mundo
 // é um só (D57). A aba /settings foi embora com a porta do TopBar.
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppStore } from '@/store/app-store';
 import { useItems } from '@/hooks/useItems';
 import { useAuth } from '@/hooks/useAuth';
 import { useConnectors } from '@/hooks/useConnectors';
 import { exportService } from '@/service/export-service';
+import { readTaxonomy, isApplied, taxonomySummary } from '@/engine/taxonomy';
+import type { TaxonomyReport } from '@/service/connector-service';
 import { toast } from '@/store/toast-store';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -20,9 +22,34 @@ interface SettingsSheetProps {
 export function SettingsSheet({ onClose }: SettingsSheetProps) {
   const user = useAppStore((s) => s.user);
   const { items } = useItems();
-  const { signOut } = useAuth();
-  const { getStatus, syncCalendar, syncGmail, disconnect, syncState } = useConnectors();
+  const { signOut, signInWithGoogle } = useAuth();
+  const { getStatus, syncCalendar, syncGmail, disconnect, syncState, taxonomy, idaBusy, needsReconnect } = useConnectors();
   const isGoogleUser = user?.app_metadata?.provider === 'google';
+
+  // a ida (D68): preview → assentimento → estado quieto → desfazer
+  const [idaPlan, setIdaPlan] = useState<TaxonomyReport | null>(null);
+  const idaRecord = readTaxonomy(getStatus('google')?.metadata);
+  const idaViva = isApplied(idaRecord);
+
+  const handleIdaPreview = async () => {
+    const report = await taxonomy('preview');
+    if (report) setIdaPlan(report);
+  };
+
+  const handleIdaApply = async () => {
+    const report = await taxonomy('apply');
+    setIdaPlan(null);
+    if (report) {
+      const created = (report.labels ?? []).filter((l) => l.action === 'created').length
+        + (report.calendar?.action === 'created' ? 1 : 0);
+      toast.success(created > 0 ? `a lei vive lá fora — ${created} nascendo agora` : 'a lei já vivia lá fora');
+    }
+  };
+
+  const handleIdaRemove = async () => {
+    const report = await taxonomy('remove');
+    if (report) toast.success('a estrutura saiu — como se nunca tivesse entrado');
+  };
 
   const email = user?.email ?? '';
   const name = user?.user_metadata?.full_name ?? email.split('@')[0];
@@ -86,6 +113,81 @@ export function SettingsSheet({ onClose }: SettingsSheetProps) {
             onDisconnect={isGoogleUser ? () => disconnect('google') : undefined}
           />
           <ConnectorRow name="Google Drive" comingSoon />
+
+          {/* a ida (D68) — o Genesis legisla pra fora: cria estrutura, nunca move conteúdo */}
+          {isGoogleUser && (
+            <div className="px-4 py-3 border-t border-border-soft">
+              <div className="text-[13px] text-text">a lei projetada</div>
+              {needsReconnect ? (
+                <>
+                  <p className="text-[11px] text-text-muted mt-0.5">
+                    pra criar labels e o calendário, o Google precisa te perguntar de novo — um login resolve.
+                  </p>
+                  <button
+                    onClick={() => signInWithGoogle()}
+                    className="font-mono text-[10.5px] px-2.5 py-1 rounded-full text-gold bg-gold-bg mt-2"
+                    style={{ border: '1px solid color-mix(in srgb, var(--color-gold) 30%, var(--color-border-soft))' }}
+                  >
+                    reconectar com Google
+                  </button>
+                </>
+              ) : idaPlan ? (
+                <>
+                  <p className="text-[11px] text-text-muted mt-0.5">
+                    {(idaPlan.labels ?? []).filter((l) => l.action === 'create').length} labels{' '}
+                    <span className="font-mono">Atom/</span> a nascer no Gmail
+                    {idaPlan.calendar?.action === 'create' ? ' · calendário «Atom» no GCal' : ''}
+                    {(idaPlan.labels ?? []).some((l) => l.action === 'exists') ? ' · o que já existe fica como está' : ''}
+                    {(idaPlan.labels ?? []).some((l) => l.action === 'off' || l.action === 'disabled') ? ' · o que você desligou segue desligado' : ''}
+                  </p>
+                  <div className="flex items-center gap-2 mt-2">
+                    <button
+                      onClick={handleIdaApply}
+                      disabled={idaBusy}
+                      className="font-mono text-[10.5px] px-2.5 py-1 rounded-full text-gold bg-gold-bg disabled:opacity-50"
+                      style={{ border: '1px solid color-mix(in srgb, var(--color-gold) 30%, var(--color-border-soft))' }}
+                    >
+                      {idaBusy ? 'projetando…' : 'assentir ✓'}
+                    </button>
+                    <button onClick={() => setIdaPlan(null)} className="text-[11px] text-text-muted">
+                      agora não
+                    </button>
+                  </div>
+                </>
+              ) : idaViva ? (
+                <>
+                  <p className="text-[11px] text-text-muted mt-0.5">{taxonomySummary(idaRecord)}</p>
+                  <div className="flex items-center gap-2 mt-2">
+                    <button
+                      onClick={handleIdaPreview}
+                      disabled={idaBusy}
+                      className="text-[11px] text-text-muted disabled:opacity-50"
+                    >
+                      {idaBusy ? 'olhando…' : 'reprojetar'}
+                    </button>
+                    <button onClick={handleIdaRemove} disabled={idaBusy} className="text-[11px] text-error">
+                      desfazer tudo
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="text-[11px] text-text-muted mt-0.5">
+                    os 9 domínios como labels <span className="font-mono">Atom/</span> no Gmail + calendário «Atom» —
+                    cria estrutura, nunca mexe no seu conteúdo.
+                  </p>
+                  <button
+                    onClick={handleIdaPreview}
+                    disabled={idaBusy}
+                    className="font-mono text-[10.5px] px-2.5 py-1 rounded-full text-gold bg-gold-bg mt-2 disabled:opacity-50"
+                    style={{ border: '1px solid color-mix(in srgb, var(--color-gold) 30%, var(--color-border-soft))' }}
+                  >
+                    {idaBusy ? 'olhando lá fora…' : 'ver o plano'}
+                  </button>
+                </>
+              )}
+            </div>
+          )}
         </div>
 
         {/* exportar */}
