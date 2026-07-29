@@ -333,11 +333,74 @@ de risco, ordem linear de 26 passos.
 - ⚠️ `singleEvents` segue expandindo instâncias; a herança de série só vale
   pra instância NOVA (o que já está no inbox espera o humano, como deve)
 
-### → Next (o roteiro vivo)
-- **Atos IV–VII** do `15_roteiro-do-mago.md`: a lente que não mente (pressão
-  da semana) · o chão e a válvula (a lei do cofre está escrita duas vezes) ·
-  a dissecação 02–04 (features 4–13) · o gate carregado
-- **Mesa do Rick:** ratificar (ou virar) DP-A a DP-F
+### → Next
+- Atos IV e V ✅ na mesma noite (abaixo) · restam VI (dissecação 02–04) e
+  VII (o gate carregado)
+
+---
+
+## Wrap · 29 Jul 2026 (madrugada) — os atos IV e V, e a lei que a obra 8 atropelou
+
+### ○ Soul
+O Rick devolveu a sessão inteira: «entre nós dois, você é o mais preparado
+pra isso — mete ficha». Então a mesa virou minha por delegação, e a primeira
+coisa que a mesa fez foi julgar a obra da noite anterior. A obra 8 tinha
+nascido atropelando o inbox obrigatório. Corrigir isso veio antes de
+qualquer coisa nova.
+
+### · Items
+
+**A dívida de lei da obra 8** (`6f24fe7`)
+A instância que herda o selo da série nascia direto em `classified`/2 —
+atropelando «inbox obrigatório» e «não pula estágio» (CLAUDE.md §6). Agora
+toda instância nasce no estágio 1 e é selada pelo portão, igual ao
+assentimento manual. **Herdar poupa a pergunta, nunca o caminho.** Se o selo
+falha, ela fica no inbox e pergunta: degradar pedindo é seguro; degradar
+selando calado não seria.
+
+**Ato IV — a lente que não mente** (`6f24fe7`)
+- `engine/week` (13 testes): a pressão dos próximos dias em UMA linha —
+  «adiante · amanhã: 3 horas marcadas». Table stake 3 do benchmark `10`,
+  resolvida sem virar vista de semana (isso nos faria virar o app que
+  espelha). Silêncio quando a semana é leve
+- fixos ignoram arquivado · as marcas do arco (D59) se leem no toque
+  (`<title>` de SVG é mudo no celular, e 2.6px não se acerta com o dedo)
+- «me dá outra» avisa quando deu a volta · os tokens ficam descobríveis ·
+  uma linha de chão na primeira aurora
+
+**Ato V — o chão e a válvula** (`edd849e`)
+- **Uma lei, um lugar:** a edge `daily-digest` copiava a lei do cofre à mão
+  e nada forçava. Agora `vault-espelho.test.ts` lê a edge como TEXTO (`?raw`
+  — ela é Deno, não se executa aqui) e quebra na divergência. Verificado com
+  divergência real antes de virar guarda
+- **O raro ganha memória (DP-F reformulada):** não é prazo, é mudança de
+  estado. Prazo seria relógio; espelho é falar de novo quando a banda muda —
+  113→112 dias não é notícia, 8→7 é. Zero schema novo: `digest_sent` no
+  `atom_events` que já existia
+
+### △ Decidido (por delegação do Rick, esperando ratificação)
+- **DP-A, DP-B, DP-D** ratificadas como estão
+- **DP-C** ratificada, com a correção do caminho (acima)
+- **DP-E** SEGURA — decidir `/projects` sem examinar a feature 12 seria
+  decisão executiva sem evidência, exatamente o que a D62 proíbe
+- **DP-F** reformulada: mudança de estado no lugar de prazo
+
+### ⬡ Conexões
+- A memória do digest e o guarda do espelho são a mesma família: as duas
+  fazem a casa **provar** o que antes só prometia em comentário
+- `engine/week` reusa `fixosOfDay` — a higiene do sinal da obra 7 (all-day,
+  fuso, conflito) já vale de graça pra pressão da semana
+
+### □ Audit
+- ✅ 348 testes verdes (72 novos na noite) · typecheck · build · gate 13/13
+- ✅ 8 cenas de asserção em `e2e/atos.spec.ts`
+- ⚠️ a edge segue sem teste de runtime — o guarda cobre as constantes, não o
+  comportamento; um erro de lógica no espelho passa
+- ⚠️ o digest com memória ainda não rodou contra dado real (dry-run pendente)
+
+### → Next
+- **Ato VI**: dissecação 02–04 (features 4–13) · **Ato VII**: o gate carregado
+- **Mesa do Rick:** ratificar DP-A a DP-F · dry-run do digest novo
 
 ---
 

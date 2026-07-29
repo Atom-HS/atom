@@ -54,7 +54,7 @@ proposta; o Rick ratifica ou vira depois — nenhuma delas para a marcha.
 | **DP-C** *(D72?)* | Assentimento por instância ou por série? | **Por série.** Um gesto sela o ritual semanal inteiro; instância nova herda o selo. |
 | **DP-D** *(D73?)* | Onde mora o assentimento, já que `/pipeline` está sentenciada (D48)? | **Não é lugar, é camada** (D40): puxador no HOJE + sheet de assentimento. Ver Ato II. |
 | **DP-E** *(D74?)* | `/projects` — reformar ou matar? | **Vive como camada, morre como tela.** A pill do HOJE já é a porta; a página vira sheet no gate. |
-| **DP-F** | O digest repete as mesmas 5 ausências todo dia? | **Não.** O raro ganha memória: o que já foi dito não se repete antes de 7 dias (ver Ato V). |
+| **DP-F** | O digest repete as mesmas 5 ausências todo dia? | **Não** — e a formulação mudou na execução: não é prazo, é **mudança de estado**. Prazo seria relógio; espelho é dizer de novo quando a banda muda (30 → 7 dias É notícia; 113 → 112 não é). Ver Ato V. |
 
 ### 0.4 As três condições de parada
 
@@ -427,18 +427,20 @@ ATO III — a esteira honesta                      ✅ 29 Jul (89f96ea, 7106fa0)
   [x] 11. o módulo trocável                       (obra pequena)
   [x] 12. toasts na Lei do Tom                    (gesto)
 
-ATO IV — a lente que não mente
-  [ ] 13. a pressão dos próximos dias             (obra com mesa)
-  [ ] 14. fixos ignoram arquivados                (gesto)
-  [ ] 15. marcas do arco no toque                 (gesto)
-  [ ] 16. "me dá outra" avisa a volta             (gesto)
-  [ ] 17. tokens descobríveis                     (gesto)
-  [ ] 18. chão na primeira aurora                 (gesto)
+ATO IV — a lente que não mente                   ✅ 29 Jul (6f24fe7)
+  [x] 13. a pressão dos próximos dias             (obra com mesa)
+  [x] 14. fixos ignoram arquivados                (gesto)
+  [x] 15. marcas do arco no toque                 (gesto)
+  [x] 16. "me dá outra" avisa a volta             (gesto)
+  [x] 17. tokens descobríveis                     (gesto)
+  [x] 18. chão na primeira aurora                 (gesto)
 
-ATO V — o chão e a válvula
-  [ ] 19. uma lei, um lugar (vault × digest)      (obra pequena)
-  [ ] 20. o raro ganha memória                    (obra pequena)
-  [ ] 21. o primeiro teste de edge                (gesto)
+ATO V — o chão e a válvula                       ✅ 29 Jul (edd849e)
+  [x] 19. uma lei, um lugar (vault × digest)      (obra pequena)
+  [x] 20. o raro ganha memória                    (obra pequena)
+  [x] 21. o primeiro teste de edge                (feito como guarda de
+          espelho — a edge é Deno e entra no vitest como TEXTO, lida
+          nunca executada; cobre as constantes, não o runtime)
 
 ATO VI — a dissecação continua
   [ ] 22. 14_dissecacao-02 (features 4, 5, 6)     (obra com mesa)
@@ -468,9 +470,16 @@ duas coisas que ninguém tinha visto — ambas da família das mentiras:
    ao trocar índice por leitura sempre-pelo-topo.
 2. **O erro cru do FSM vazava pra tela** — «Item nao esta no inbox», sem
    acento, empilhado três vezes. Não é mensagem: é implementação escapando.
+3. **A obra 8 nasceu atropelando a lei.** Pra herdar o selo da série, a
+   instância nova nascia direto em `classified`/2 — e o CLAUDE.md §6 diz
+   «inbox obrigatório» e «não pula estágio». Corrigida no Ato IV: toda
+   instância nasce no 1 e é selada pelo portão. **Herdar poupa a pergunta,
+   nunca o caminho.** O Guardião existe pra pegar isso e não pegou; quem
+   pegou foi reler a lei antes de seguir.
 
-Ambas confirmam a tese do prompt da dissecação (`13_`): o que MENTE só
-aparece vivendo, nunca lendo.
+As três confirmam a tese do prompt da dissecação (`13_`): o que MENTE só
+aparece vivendo, nunca lendo — inclusive quando quem mente é a obra que
+acabou de nascer.
 
 ---
 
