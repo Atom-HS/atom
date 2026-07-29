@@ -1,6 +1,13 @@
 // engine/outbox.test.ts — a fila do avô (Onda 3 · D55)
 import { describe, it, expect } from 'vitest';
-import { entryFromReading, parseQueue, serializeQueue, type OutboxEntry } from './outbox';
+import {
+  bornItemId,
+  entryFromReading,
+  parseQueue,
+  rememberItem,
+  serializeQueue,
+  type OutboxEntry,
+} from './outbox';
 import { readMouth } from './mouth';
 
 const AT = '2026-07-28T09:00:00.000Z';
@@ -49,5 +56,43 @@ describe('parseQueue / serializeQueue', () => {
   it('versão desconhecida cai fora', () => {
     const v2 = { ...cap, v: 2 } as unknown as OutboxEntry;
     expect(parseQueue(serializeQueue([v2, soul]))).toEqual([soul]);
+  });
+});
+
+// A mentira que a dissecação 01 achou: a fila que existe pra NÃO perder
+// passava a duplicar quando o selo falhava depois da captura.
+describe('memória do que já nasceu — a retomada sela, não recaptura', () => {
+  const cap = entryFromReading(readMouth('pagar contador #work @task'), 'b', AT);
+  const lista = entryFromReading(readMouth('lista feira: manga'), 'c', AT);
+  const soul = entryFromReading(readMouth('sinto: leve'), 'a', AT);
+
+  it('entrada nova ainda não nasceu', () => {
+    expect(bornItemId(cap)).toBeNull();
+    expect(bornItemId(lista)).toBeNull();
+  });
+
+  it('lembrar o ponto preserva o resto da entrada', () => {
+    const lembrada = rememberItem(cap, 'item-42');
+    expect(bornItemId(lembrada)).toBe('item-42');
+    expect(lembrada).toMatchObject({ title: 'pagar contador', type: 'task', module: 'work', hasTokens: true });
+  });
+
+  it('lista também lembra (o caminho que criava lista dobrada)', () => {
+    expect(bornItemId(rememberItem(lista, 'item-7'))).toBe('item-7');
+  });
+
+  it('alma não cria ponto — passa reto e nunca finge id', () => {
+    expect(rememberItem(soul, 'item-9')).toEqual(soul);
+    expect(bornItemId(soul)).toBeNull();
+  });
+
+  it('a memória sobrevive ao roundtrip (é ela que atravessa a janela de rede)', () => {
+    const lembrada = rememberItem(cap, 'item-42');
+    expect(parseQueue(serializeQueue([lembrada]))).toEqual([lembrada]);
+  });
+
+  it('memória corrompida derruba a entrada — selar o item errado é pior que recapturar', () => {
+    const sujo = JSON.stringify([{ ...cap, itemId: 42 }, soul]);
+    expect(parseQueue(sujo)).toEqual([soul]);
   });
 });

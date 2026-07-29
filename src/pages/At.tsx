@@ -65,6 +65,10 @@ export function AtPage() {
       return;
     }
 
+    // captura-primeiro tem consequência no erro: se o ponto JÁ nasceu, a fila
+    // duplicaria. Guardamos quem nasceu pra falar a verdade no catch.
+    let nascido: AtomItem | null = null;
+
     try {
       if (reading.kind === 'soul') {
         await soulService.persistSoulCheckin({ userId: user.id, emotion: reading.emotion, note: reading.note });
@@ -103,6 +107,7 @@ export function AtPage() {
         } else {
           const titulo = reading.name ?? 'lista de hoje';
           const item = await pipelineService.capture(titulo, user.id);
+          nascido = item;
           await pipelineService.quickClassifyAndStructure(item.id, 'list', 'bridge', {
             entries: reading.entries.map((t) => ({ text: t, done: false })),
           });
@@ -116,6 +121,7 @@ export function AtPage() {
 
       // captura — o ponto nasce ANTES de qualquer leitura
       const item = await pipelineService.capture(reading.title, user.id);
+      nascido = item;
       if (reading.notes) await itemService.update(item.id, { notes: reading.notes });
 
       if (reading.hasTokens) {
@@ -167,7 +173,15 @@ export function AtPage() {
         setLendo(false);
       }
     } catch {
-      // a rede caiu no meio do gesto — mesma rede de segurança: fila
+      // o ponto já nasceu e só o selo falhou: enfileirar aqui criaria um
+      // segundo ponto igual. A verdade é que está guardado, sem leitura.
+      if (nascido) {
+        e('guardei como ponto (·) — não consegui selar agora. nada se perdeu.', {
+          chips: [{ label: 'abrir', action: { type: 'open-item', itemId: nascido.id } }],
+        });
+        return;
+      }
+      // nada nasceu — a rede caiu antes do ponto; aí sim a fila é a rede de segurança
       const n = outboxService.enqueue(user.id, reading);
       e(`não consegui guardar agora — foi pra fila (${n}). sobe sozinho quando der.`);
     }

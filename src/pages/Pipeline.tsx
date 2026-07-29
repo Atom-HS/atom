@@ -223,10 +223,12 @@ function TriageView() {
   useEffect(() => setLeituraEscolhida(null), [current?.id]);
   const leitura = leituraEscolhida ?? current?.type ?? null;
 
+  // o selo é do humano (D69): se a gravação falhou, o card NÃO anda — senão
+  // a esteira mente ("assenti 6") e os itens voltam na próxima volta
   const handleAcceptLeitura = async () => {
     if (!current || !leitura) return;
-    await classify(current.id, leitura, (current.module ?? 'bridge') as AtomModule);
-    next();
+    const selado = await classify(current.id, leitura, (current.module ?? 'bridge') as AtomModule);
+    if (selado) next();
   };
 
   if (total === 0) {
@@ -249,9 +251,8 @@ function TriageView() {
       const result = await aiClassify({ input: current.title });
       const band = getConfidenceBand(result);
       if (band === 'auto') {
-        await classify(current.id, result.type as AtomItem['type'], result.module as AtomModule);
-        toast.success('auto-classificado ✓');
-        next();
+        const selado = await classify(current.id, result.type as AtomItem['type'], result.module as AtomModule);
+        if (selado) next();
       }
       // 'suggest' and 'manual' stay on card for user action
     } catch {
@@ -261,8 +262,8 @@ function TriageView() {
 
   const handleAccept = async (result: TriageResult) => {
     if (!current) return;
-    await classify(current.id, result.type as AtomItem['type'], result.module as AtomModule);
-    next();
+    const selado = await classify(current.id, result.type as AtomItem['type'], result.module as AtomModule);
+    if (selado) next();
   };
 
   const handleSkip = () => next();
