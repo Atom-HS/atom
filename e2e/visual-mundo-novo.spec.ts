@@ -114,6 +114,42 @@ test('builder — a entrevista pare cadeia e protocolo', async ({ authenticatedP
   await expect(page).toHaveScreenshot('builder-assentimento.png', SHOT);
 });
 
+// ─── a lente (obra 7 · D67/D68/D69) ──────────────────────
+
+test('triage — a leitura do conector no chip (D69)', async ({ authenticatedPage: page }) => {
+  // sem relógio: a troca de card do Triage é AnimatePresence mode="wait"
+  await chegarSemRelogio(page, '/pipeline');
+  await page.getByText('Triage', { exact: true }).click();
+  await page.waitForTimeout(500);
+  await page.getByRole('button', { name: 'Pular' }).click(); // passa o ponto do @; chega o conector
+  await page.waitForTimeout(600);
+  await expect(page).toHaveScreenshot('triage-leitura-conector.png', SHOT);
+});
+
+test('a casa — o plano da ida (D68)', async ({ authenticatedPage: page }) => {
+  // preview determinístico: a edge respondida aqui, nunca a de produção
+  await page.route('**/functions/v1/taxonomy-sync*', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        action: 'preview',
+        labels: [
+          'identidade', 'documentos', 'saude', 'financas', 'arquivos',
+          'memorias', 'tempo', 'comunicacao', 'projetos',
+        ].map((l, i) => ({ key: `k${i}`, name: `Atom/${l}`, action: 'create' })),
+        calendar: { key: '_calendar', name: 'Atom', action: 'create' },
+      }),
+    }),
+  );
+  await chegarSemRelogio(page, '/hoje');
+  await page.getByRole('button', { name: 'a casa — perfil, conectores, export' }).click();
+  await page.waitForTimeout(400);
+  await page.getByRole('button', { name: /ver o plano/ }).click();
+  await page.waitForTimeout(500);
+  await expect(page).toHaveScreenshot('casa-plano-ida.png', SHOT);
+});
+
 // ─── os gestos (D54 — nada é aba) ────────────────────────
 
 test('busca — o gesto abre a camada', async ({ authenticatedPage: page }) => {

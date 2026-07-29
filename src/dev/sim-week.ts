@@ -125,7 +125,26 @@ function build(): { items: AtomItem[]; events: AtomEvent[] } {
     body: { soul: { energy_level: 'medium', emotion_before: 'focado', emotion_after: null, needs_checkin: false, ritual_slot: 'aurora' } },
   }));
   items.push(task('family', 'levar Sofia', 0, { body: { start: at(0, 9) } }));
-  items.push(task('work', 'call Atlas — orçamento', 0, { body: { start: at(0, 14) } }));
+  items.push(task('work', 'call Atlas — orçamento', 0, { body: { start: at(0, 14), end: at(0, 15) } }));
+  // o céu que não mente (obra 7): all-day sem hora falsa + duas horas cruzando
+  items.push(task('family', 'aniversário da Bella', 0, { body: { start: dayKey(today), all_day: true } }));
+  items.push(task('family', 'dentista Sofia', 0, { body: { start: at(0, 14, 30), end: at(0, 15, 30) } }));
+  // o item que a lente trouxe — leitura esperando assentimento no chip (D69)
+  items.push(item({
+    title: 'Reunião Operacional Atlas',
+    type: 'ritual',
+    module: 'bridge',
+    tags: ['#domain:time', '#source:google-calendar', '#connector', '#who:andre-tanaka'],
+    status: 'inbox',
+    state: 'inbox',
+    genesis_stage: 1,
+    created_at: at(0, 8),
+    body: {
+      google_id: 'sim-gcal-1', start: at(0, 16), end: at(0, 17),
+      calendar: 'sim', recurring: true, all_day: false,
+      attendees: [{ email: 'andre.tanaka@example.com', name: 'Andre Tanaka', response: 'accepted' }],
+    },
+  }));
   items.push(task('work', 'responder Willi sobre o vidro', 1, {
     body: {
       operations: {
