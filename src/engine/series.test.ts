@@ -74,18 +74,21 @@ describe('sealedSeries — a memória do assentimento', () => {
 describe('birthOf — como a instância nova nasce', () => {
   it('sem selo, espera o humano no inbox', () => {
     expect(birthOf(undefined, PADRAO)).toEqual({
-      type: 'ritual', module: 'bridge', state: 'inbox', genesis_stage: 1,
+      type: 'ritual', module: 'bridge', herdou: false,
     });
   });
 
   it('com selo, herda a leitura e NÃO pede de novo', () => {
     expect(birthOf({ type: 'task', module: 'work' }, PADRAO)).toEqual({
-      type: 'task', module: 'work', state: 'classified', genesis_stage: 2,
+      type: 'task', module: 'work', herdou: true,
     });
   });
 
-  it('a herança reproduz o que o assentimento manual produz — estágio 2', () => {
-    // (fsm classify: inbox/1 → classified/2; a série não inventa atalho)
-    expect(birthOf({ type: 'ritual', module: 'bridge' }, PADRAO).genesis_stage).toBe(2);
+  it('herdar poupa a pergunta, nunca o caminho — quem sela é o portão (§6)', () => {
+    // inbox é obrigatório e a máquina é sequencial: birthOf NÃO devolve estágio.
+    // Ela diz o QUE selar; o 1→2 é do fsm, igual ao assentimento manual.
+    const b = birthOf({ type: 'ritual', module: 'bridge' }, PADRAO);
+    expect(b).not.toHaveProperty('genesis_stage');
+    expect(b).not.toHaveProperty('state');
   });
 });

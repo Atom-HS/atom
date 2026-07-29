@@ -293,6 +293,11 @@ export function AtPage() {
             </svg>
           </button>
         </div>
+        {/* a gramática era privada — os tokens não apareciam em canto nenhum
+            da interface. Uma linha faint ensina uma vez, sem virar tutorial. */}
+        <p className="text-[10px] font-mono text-text-faint text-center mt-1.5">
+          #módulo · @tipo · @amanhã — se já souber onde vai
+        </p>
       </div>
     </div>
   );

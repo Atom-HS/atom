@@ -18,6 +18,7 @@ import { skyNow, sunTimes, fmtMin } from '@/engine/sky';
 import { MODULE_COLORS } from '@/components/atoms/tokens';
 import { suggestNow } from '@/engine/today';
 import { fixosOfDay } from '@/engine/fixos';
+import { pressureLine, weekAhead } from '@/engine/week';
 import { routinesForSlot, chainProgress } from '@/engine/routine';
 import { listLists, listSummary } from '@/engine/list';
 import { listProjects, projectPresence, presenceLine } from '@/engine/project';
@@ -49,6 +50,9 @@ export interface ArcMark {
 function SkyArc({ marks }: { marks: ArcMark[] }) {
   const baseRef = useRef<SVGPathElement>(null);
   const [tick, setTick] = useState(0);
+  // <title> de SVG é mudo no celular: o acontecimento do dia (D59) só se
+  // deixava ler com mouse. Tocar acende a legenda embaixo do arco.
+  const [tocada, setTocada] = useState<string | null>(null);
   const [geo, setGeo] = useState<{ px: number; py: number; dash: string; pts: Array<ArcMark & { x: number; y: number }> }>({
     px: 170, py: 14, dash: '0 1000', pts: [],
   });
@@ -92,9 +96,30 @@ function SkyArc({ marks }: { marks: ArcMark[] }) {
         <circle cx="320" cy="64" r="3" fill="var(--color-border)" />
         {/* os acontecimentos do dia, na cor do módulo (D59) — estado, nunca cobrança */}
         {pts.map((m, i) => (
-          <circle key={i} cx={m.x} cy={m.y} r="2.6" fill={m.color} opacity=".9">
+          <circle
+            key={i}
+            cx={m.x}
+            cy={m.y}
+            r={tocada === m.title ? '4' : '2.6'}
+            fill={m.color}
+            opacity=".9"
+            onClick={() => setTocada((t) => (t === m.title ? null : m.title))}
+            style={{ cursor: 'pointer' }}
+          >
+            {/* área de toque: 2.6px de raio não se acerta com o dedo */}
             <title>{m.title}</title>
           </circle>
+        ))}
+        {pts.map((m, i) => (
+          <circle
+            key={`toque-${i}`}
+            cx={m.x}
+            cy={m.y}
+            r="11"
+            fill="transparent"
+            onClick={() => setTocada((t) => (t === m.title ? null : m.title))}
+            style={{ cursor: 'pointer' }}
+          />
         ))}
         <g transform={`translate(${px.toFixed(1)},${py.toFixed(1)})`}>
           <circle r="9" fill={color} opacity=".14" />
@@ -109,6 +134,7 @@ function SkyArc({ marks }: { marks: ArcMark[] }) {
         <span className="opacity-70">{sky.isDay ? 'dia caminhando' : 'noite'} · {sky.phaseName}</span>
         <span>☽ {fmtMin(sunsetMin)}</span>
       </div>
+      {tocada && <p className="text-[11px] text-text-muted mt-1.5">{tocada}</p>}
     </div>
   );
 }
@@ -157,6 +183,13 @@ export function HojePage() {
   // o hoje nunca mente (etapa 3 da obra 7): all-day sem hora falsa,
   // date-only sem deslizar de fuso, conflito refletido — engine/fixos
   const fixos = useMemo(() => fixosOfDay(all, new Date()), [all]);
+
+  // a pressão dos próximos dias (benchmark 10): um sussurro, nunca uma vista
+  // de semana — vira o app que espelha, e a lente deixa de ser lente
+  const pressao = useMemo(() => {
+    const agora = new Date();
+    return pressureLine(weekAhead(all, agora), agora);
+  }, [all]);
 
   const cadeias = useMemo(() => routinesForSlot(all, period.key), [all, period.key]);
   const sugestao = useMemo(() => suggestNow(all, new Date().toISOString(), skip), [all, skip]);
@@ -262,6 +295,12 @@ export function HojePage() {
             )}
           </div>
         ))}
+        {/* o que vem depois de hoje — só quando há o que dizer */}
+        {pressao && (
+          <p className="text-[11px] text-text-faint mt-2.5 pt-2 border-t border-border-soft">
+            adiante · {pressao}
+          </p>
+        )}
       </section>
 
       {/* o que cabe agora — UMA sugestão */}
@@ -275,9 +314,15 @@ export function HojePage() {
               {sugestao.item.title}
             </button>
             <p className="text-xs text-text-muted italic mt-0.5">{sugestao.reason}</p>
-            <button onClick={() => setSkip((s) => s + 1)} className="font-mono text-[11px] text-gold-dim mt-2">
-              me dá outra
-            </button>
+            <div className="flex items-baseline gap-2 mt-2">
+              <button onClick={() => setSkip((s) => s + 1)} className="font-mono text-[11px] text-gold-dim">
+                me dá outra
+              </button>
+              {/* ciclar em silêncio faz parecer que há mais do que há */}
+              {sugestao.deuAVolta && (
+                <span className="text-[11px] text-text-faint">já passou por todas</span>
+              )}
+            </div>
           </>
         ) : (
           <p className="text-sm text-text-muted">nada pedindo agora — o dia é seu</p>

@@ -46,22 +46,26 @@ export function sealedSeries(items: AtomItem[]): Map<string, SeriesSeal> {
   return out;
 }
 
-export interface BirthState {
+export interface Birth {
   type: AtomType;
   module: AtomModule;
-  state: 'inbox' | 'classified';
-  genesis_stage: 1 | 2;
+  /**
+   * Herdou o selo da série. NÃO significa nascer selada: **inbox é
+   * obrigatório** e a máquina de estados é sequencial (CLAUDE.md §6) — a
+   * instância nasce no estágio 1 como todo mundo e é selada em seguida,
+   * passando pelo portão. Herdar poupa a pergunta, nunca o caminho.
+   */
+  herdou: boolean;
 }
 
 /**
- * Como uma instância nasce: herdando o selo da série (sem pedir de novo) ou
- * no inbox esperando o humano. A herança reproduz EXATAMENTE o que o
- * assentimento manual produz — nada de estado que só existe por atalho.
+ * Como uma instância nasce: herdando a leitura já assentida da série (sem
+ * perguntar de novo) ou no inbox esperando o humano.
  */
 export function birthOf(
   selo: SeriesSeal | undefined,
   leituraPadrao: { type: AtomType; module: AtomModule },
-): BirthState {
-  if (selo) return { type: selo.type, module: selo.module, state: 'classified', genesis_stage: 2 };
-  return { ...leituraPadrao, state: 'inbox', genesis_stage: 1 };
+): Birth {
+  if (selo) return { type: selo.type, module: selo.module, herdou: true };
+  return { ...leituraPadrao, herdou: false };
 }

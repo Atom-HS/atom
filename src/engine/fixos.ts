@@ -42,6 +42,8 @@ export function fixosOfDay(items: AtomItem[], now: Date): Fixo[] {
   const dayKey = localDayKey(now);
 
   const doDia = items.filter((i) => {
+    // arquivado saiu do dia — entropy é archive, e o hoje não mostra fantasma
+    if (i.status === 'archived' || i.state === 'archived') return false;
     const b = bodyOf(i);
     const start = b?.start;
     if (typeof start !== 'string' || start === '') return false;

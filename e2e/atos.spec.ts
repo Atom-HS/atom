@@ -211,6 +211,56 @@ test('ato III — o card mostra o que a lente trouxe, e pular manda pro fim', as
   await expect(page.getByText('todos já passaram uma vez')).toBeVisible();
 });
 
+// ─── Ato IV — a lente que não mente ──────────────────────
+
+test('ato IV — a pressão dos próximos dias sussurra, e cala quando não há', async ({
+  authenticatedPage: page,
+}) => {
+  const amanha = new Date();
+  amanha.setDate(amanha.getDate() + 1);
+  const emAmanha = (h: number) => {
+    const d = new Date(amanha);
+    d.setHours(h, 0, 0, 0);
+    return d.toISOString();
+  };
+  const bloco = (i: number, h: number) => ({
+    ...conector(i),
+    title: `Bloco ${i}`,
+    type: 'task',
+    tags: [],
+    state: 'structured',
+    genesis_stage: 3,
+    status: 'active',
+    body: { start: emAmanha(h), end: emAmanha(h + 1) },
+  });
+
+  // dia leve: silêncio
+  await page.route('**/rest/v1/items*', (route) =>
+    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([bloco(0, 9)]) }),
+  );
+  await page.goto('/hoje?sim=0');
+  await page.waitForLoadState('networkidle');
+  await passarAurora(page);
+  await expect(page.getByText('fixos de hoje')).toBeVisible();
+  await expect(page.getByText(/adiante ·/)).toHaveCount(0);
+
+  // semana que pesa: uma linha, em estado
+  await page.route('**/rest/v1/items*', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify([bloco(0, 9), bloco(1, 11), bloco(2, 14)]),
+    }),
+  );
+  await page.reload();
+  await page.waitForLoadState('networkidle');
+  await passarAurora(page);
+  await expect(page.getByText('adiante · amanhã: 3 horas marcadas')).toBeVisible();
+  // sussurro, nunca alarme (D46)
+  await expect(page.getByText(/sobrecarr|cuidado|demais/)).toHaveCount(0);
+  await page.screenshot({ path: 'docs/onda-3/14_dissecacao-01_fotos/27-ato4-pressao.png', fullPage: true });
+});
+
 // ─── Ato I · obra 4 — o gesto que o digest promete ───────
 
 test('ato I.4 — renovar existe no chão da árvore (o digest não promete porta falsa)', async ({

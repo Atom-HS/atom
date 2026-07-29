@@ -5,6 +5,7 @@
 import { supabase } from './supabase';
 import { itemService } from './item-service';
 import { desiredLabels, ATOM_CALENDAR_SUMMARY } from '@/engine/taxonomy';
+import { fsmService } from './fsm-service';
 import { birthOf, sealedSeries } from '@/engine/series';
 import type { AtomItem } from '@/types/item';
 
@@ -182,11 +183,13 @@ export const connectorService = {
         const whoTag = extractWhoTag(a.name ? `${a.name} <${a.email}>` : `<${a.email}>`);
         if (whoTag && !tags.includes(whoTag)) tags.push(whoTag);
       }
-      await itemService.create({
+      // inbox obrigatório (CLAUDE.md §6): TODO item nasce no estágio 1, mesmo
+      // o que herda leitura de série. Herdar poupa a pergunta, nunca o caminho.
+      const criado = await itemService.create({
         title: event.title, user_id: userId,
         type: nascimento.type, module: nascimento.module,
         tags,
-        status: 'inbox', state: nascimento.state, genesis_stage: nascimento.genesis_stage,
+        status: 'inbox', state: 'inbox', genesis_stage: 1,
         source: 'atom-engine',
         body: {
           google_id: event.google_id, start: event.start, end: event.end,
@@ -195,6 +198,14 @@ export const connectorService = {
           all_day: event.all_day ?? false, attendees,
         },
       });
+      if (nascimento.herdou) {
+        // o selo da série passa pelo portão 1→2, igual ao assentimento manual.
+        // Se falhar, a instância fica no inbox e pergunta — degradar pedindo
+        // é seguro; degradar selando calado não seria.
+        await fsmService
+          .classify(criado.id, nascimento.type, nascimento.module)
+          .catch(() => {});
+      }
       created++;
     }
     return created;

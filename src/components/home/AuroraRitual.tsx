@@ -105,6 +105,8 @@ export function AuroraRitual() {
     (i) => i.status !== 'completed' && i.status !== 'archived' && i.state !== 'inbox',
   ).length;
   const inbox = (items ?? []).filter((i) => i.state === 'inbox').length;
+  // tronco vazio = ninguém passou por aqui ainda
+  const primeiraVez = (items ?? []).length === 0;
 
   const submitCheckin = () => {
     const e = emotion.trim();
@@ -146,6 +148,13 @@ export function AuroraRitual() {
               className="flex flex-col items-center text-center">
               <div className="aurora-breath mb-6" />
               <p className="text-sm italic text-text-muted min-h-[22px]">{breathWord}…</p>
+              {/* quem chega agora vê um círculo e nada mais: bonito pra quem é
+                  da casa, mudo pra quem acabou de entrar. Uma linha de chão. */}
+              {primeiraVez && (
+                <p className="text-xs text-text-faint mt-3 max-w-[260px]">
+                  três respiros — depois o dia pergunta como você chegou
+                </p>
+              )}
               <button onClick={() => setStep('checkin')} className="mt-8 text-xs text-text-muted underline underline-offset-4">
                 pular
               </button>

@@ -9,6 +9,8 @@ import type { AtomItem } from '@/types/item';
 export interface Suggestion {
   item: AtomItem;
   reason: string;
+  /** "me dá outra" já passou por todas — daqui em diante elas se repetem */
+  deuAVolta: boolean;
 }
 
 const ACTIONABLE = new Set(['task', 'habit']);
@@ -69,5 +71,5 @@ export function suggestNow(
     );
     reason = ageDays >= 8 ? `aberto há ${ageDays} dias — um gesto já muda` : 'o mais antigo da fila — só este por agora';
   }
-  return { item, reason };
+  return { item, reason, deuAVolta: skip >= ranked.length };
 }

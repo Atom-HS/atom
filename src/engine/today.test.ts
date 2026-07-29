@@ -84,4 +84,13 @@ describe('suggestNow', () => {
   it('vazio devolve null (nunca inventa urgência)', () => {
     expect(suggestNow([item({ type: 'note' })], TODAY)).toBeNull();
   });
+
+  it('a volta completa é dita, não escondida', () => {
+    const a = item({ id: 'a', type: 'task', created_at: '2026-07-01T00:00:00Z' });
+    const b = item({ id: 'b', type: 'task', created_at: '2026-07-10T00:00:00Z' });
+    expect(suggestNow([a, b], TODAY, 0)?.deuAVolta).toBe(false);
+    expect(suggestNow([a, b], TODAY, 1)?.deuAVolta).toBe(false);
+    // pediu a terceira de duas: daqui em diante elas se repetem
+    expect(suggestNow([a, b], TODAY, 2)?.deuAVolta).toBe(true);
+  });
 });

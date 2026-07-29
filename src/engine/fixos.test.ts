@@ -44,6 +44,13 @@ describe('fixosOfDay — o que pertence ao dia', () => {
     expect(fixosOfDay([acabou], NOW)).toHaveLength(0);
   });
 
+  it('arquivado não volta ao dia — o hoje não mostra fantasma', () => {
+    const vivo = fixo('vivo', { start: at(9) });
+    const morto = { ...fixo('morto', { start: at(10) }), status: 'archived' as const };
+    const enterrado = { ...fixo('enterrado', { start: at(11) }), state: 'archived' as const };
+    expect(fixosOfDay([vivo, morto, enterrado], NOW).map((f) => f.item.title)).toEqual(['vivo']);
+  });
+
   it('item sem body.start não é fixo', () => {
     const solto = fixo('a', {});
     expect(fixosOfDay([solto], NOW)).toHaveLength(0);
