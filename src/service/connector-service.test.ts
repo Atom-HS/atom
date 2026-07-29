@@ -168,6 +168,18 @@ describe('ingestCalendarEvents — a volta do calendar (hora marcada é céu)', 
     expect((arg.body as Record<string, unknown>).google_id).toBe('g1');
   });
 
+  it('all_day atravessa até o body (o hoje nunca mente — sem hora falsa)', async () => {
+    mockExistingItems([]);
+
+    await connectorService.ingestCalendarEvents(
+      [calEvent({ start: '2026-07-30', end: '2026-07-31', all_day: true })],
+      USER,
+    );
+
+    const arg = vi.mocked(itemService.create).mock.calls[0][0];
+    expect((arg.body as Record<string, unknown>).all_day).toBe(true);
+  });
+
   it('evento recorrente nasce ritual (leitura sugerida — o assentimento é o gate)', async () => {
     mockExistingItems([]);
 

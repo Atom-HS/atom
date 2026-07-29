@@ -25,6 +25,7 @@ export interface CalendarEvent {
   end: string;
   calendar: string;
   recurring: boolean;
+  all_day?: boolean;
   attendees?: EventAttendee[];
 }
 
@@ -150,7 +151,7 @@ export const connectorService = {
         title: event.title, user_id: userId, type, module: 'bridge',
         tags,
         status: 'inbox', state: 'inbox', genesis_stage: 1, source: 'atom-engine',
-        body: { google_id: event.google_id, start: event.start, end: event.end, calendar: event.calendar, recurring: event.recurring, attendees },
+        body: { google_id: event.google_id, start: event.start, end: event.end, calendar: event.calendar, recurring: event.recurring, all_day: event.all_day ?? false, attendees },
       });
       created++;
     }

@@ -66,6 +66,11 @@ async function fetchEvents(at: string): Promise<{ events: CalendarEvent[]; tz: s
   const d = await r.json().catch(() => ({ items: [] }));
   const events: CalendarEvent[] = (d.items ?? [])
     .filter((e: any) => e.status !== "cancelled" && e.summary)
+    // o hoje nunca mente: recusei ou "talvez" não é hora imóvel — não vira céu
+    .filter((e: any) => {
+      const self = (e.attendees ?? []).find((a: any) => a.self);
+      return self?.responseStatus !== "declined" && self?.responseStatus !== "tentative";
+    })
     .map((e: any) => ({
       google_id: String(e.id ?? ""), title: String(e.summary ?? ""),
       start: e.start?.dateTime ?? e.start?.date ?? "", end: e.end?.dateTime ?? e.end?.date ?? "",

@@ -2,7 +2,7 @@
 // Wireframe: mindroot-wireframe-triage-pipeline-v2.html
 // Two tabs: Pipeline (funnel + stage rows) and Triage (swipe cards)
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useItems } from '@/hooks/useItems';
 import { usePipeline } from '@/hooks/usePipeline';
@@ -211,6 +211,24 @@ function TriageView() {
   const current = inboxItems[currentIdx];
   const total = inboxItems.length;
 
+  // D69 — a heurística nunca decide quieta: item de conector chega com
+  // leitura pronta (recorrente→ritual, único→task, email→note); o chip
+  // mostra a leitura e deixa trocar num toque. AI não re-lê o que o
+  // conector já leu.
+  const isConnector = current?.tags?.includes('#connector') ?? false;
+  const leituraOpcoes: Array<AtomItem['type']> = current?.tags?.includes('#source:google-calendar')
+    ? ['ritual', 'task']
+    : ['note', 'task'];
+  const [leituraEscolhida, setLeituraEscolhida] = useState<AtomItem['type'] | null>(null);
+  useEffect(() => setLeituraEscolhida(null), [current?.id]);
+  const leitura = leituraEscolhida ?? current?.type ?? null;
+
+  const handleAcceptLeitura = async () => {
+    if (!current || !leitura) return;
+    await classify(current.id, leitura, (current.module ?? 'bridge') as AtomModule);
+    next();
+  };
+
   if (total === 0) {
     return (
       <div className="text-center py-12">
@@ -303,8 +321,35 @@ function TriageView() {
               {current.title}
             </div>
 
-            {/* AI Result or classify button */}
-            {triageResult ? (
+            {/* Leitura do conector (D69) — visível e trocável, nunca quieta */}
+            {isConnector ? (
+              <div className="bg-surface rounded-xl p-3.5 mb-3">
+                <span className="text-xs text-text-muted block mb-2">
+                  li assim pelo {current.tags?.includes('#source:google-calendar') ? 'calendar' : 'gmail'} — troca se não for isso
+                </span>
+                <div className="flex gap-1.5 flex-wrap">
+                  {leituraOpcoes.map((t) => {
+                    const color = getTypeColor(t as import('@/types/item').AtomType);
+                    const ativo = leitura === t;
+                    return (
+                      <button
+                        key={t}
+                        onClick={() => setLeituraEscolhida(t)}
+                        className="text-[13px] font-medium px-3 py-1.5 rounded-lg border transition-colors"
+                        style={
+                          ativo
+                            ? { background: `${color}18`, color, borderColor: color }
+                            : { background: 'transparent', color: 'var(--color-text-muted)', borderColor: 'var(--color-border)' }
+                        }
+                      >
+                        {ativo ? '● ' : '○ '}{t}
+                      </button>
+                    );
+                  })}
+                  {current.module && <ModuleChip module={current.module} />}
+                </div>
+              </div>
+            ) : triageResult ? (
               <div className="bg-surface rounded-xl p-3.5 mb-3">
                 {/* Confidence bar */}
                 <ConfidenceBar value={triageResult.confidence} className="mb-3" />
@@ -376,7 +421,15 @@ function TriageView() {
         >
           →
         </button>
-        {triageResult ? (
+        {isConnector ? (
+          <button
+            onClick={handleAcceptLeitura}
+            className="w-14 h-14 rounded-full bg-success text-white flex items-center justify-center text-xl shadow-lg shadow-success/25"
+            aria-label="Assentir leitura do conector"
+          >
+            ✓
+          </button>
+        ) : triageResult ? (
           <button
             onClick={() => handleAccept(triageResult)}
             className="w-14 h-14 rounded-full bg-success text-white flex items-center justify-center text-xl shadow-lg shadow-success/25"
@@ -397,7 +450,7 @@ function TriageView() {
       </div>
       <div className="flex justify-center gap-9 text-[10px] text-text-muted mt-1.5">
         <span>pular</span>
-        <span>{triageResult ? 'aceitar' : 'classificar'}</span>
+        <span>{isConnector ? 'assentir' : triageResult ? 'aceitar' : 'classificar'}</span>
       </div>
     </div>
   );

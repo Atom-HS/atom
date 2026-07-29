@@ -15,6 +15,7 @@ import { ProtocolBanner } from '@/components/home/ProtocolBanner';
 import { skyNow, sunTimes, fmtMin } from '@/engine/sky';
 import { MODULE_COLORS } from '@/components/atoms/tokens';
 import { suggestNow } from '@/engine/today';
+import { fixosOfDay } from '@/engine/fixos';
 import { routinesForSlot, chainProgress } from '@/engine/routine';
 import { listLists, listSummary } from '@/engine/list';
 import { listProjects, projectPresence, presenceLine } from '@/engine/project';
@@ -146,20 +147,9 @@ export function HojePage() {
       .slice(0, 16);
   }, [all]);
 
-  const fixos = useMemo(
-    () =>
-      all
-        .filter((i) => {
-          const start = (i.body as Record<string, unknown> | null)?.start;
-          return typeof start === 'string' && isTodayISO(start);
-        })
-        .sort((a, b) =>
-          String((a.body as Record<string, unknown>).start).localeCompare(
-            String((b.body as Record<string, unknown>).start),
-          ),
-        ),
-    [all],
-  );
+  // o hoje nunca mente (etapa 3 da obra 7): all-day sem hora falsa,
+  // date-only sem deslizar de fuso, conflito refletido — engine/fixos
+  const fixos = useMemo(() => fixosOfDay(all, new Date()), [all]);
 
   const cadeias = useMemo(() => routinesForSlot(all, period.key), [all, period.key]);
   const sugestao = useMemo(() => suggestNow(all, new Date().toISOString(), skip), [all, skip]);
@@ -237,12 +227,19 @@ export function HojePage() {
       <section className="bg-card border border-border rounded-xl p-4 mb-3">
         <h4 className="text-[11px] font-semibold tracking-wider text-text-muted mb-2">fixos de hoje</h4>
         {fixos.length === 0 && <p className="text-sm text-text-muted">nenhum bloco duro hoje</p>}
-        {fixos.map((i) => (
-          <div key={i.id} className="flex gap-3 py-1.5 text-sm border-b border-surface last:border-0">
-            <span className="text-text-muted text-xs pt-0.5 font-mono">
-              {timeOf(String((i.body as Record<string, unknown>).start))}
-            </span>
-            <span className="text-text">{i.title}</span>
+        {fixos.map((f) => (
+          <div key={f.item.id} className="py-1.5 text-sm border-b border-surface last:border-0">
+            <div className="flex gap-3">
+              <span className="text-text-muted text-xs pt-0.5 font-mono whitespace-nowrap">
+                {f.allDay ? 'dia todo' : timeOf(f.start)}
+              </span>
+              <span className="text-text">{f.item.title}</span>
+            </div>
+            {f.conflictsWith.length > 0 && (
+              <p className="text-[11px] text-text-muted italic mt-0.5 ml-15">
+                cruza com «{f.conflictsWith[0]}» — duas horas no mesmo lugar
+              </p>
+            )}
           </div>
         ))}
       </section>
