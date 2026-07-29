@@ -7,11 +7,13 @@ import { useBuilderStore } from '../builder-store';
 import { protocolToPayload, routineToPayload, toSupabasePayload } from '../builder-mapper';
 import { itemService } from '@/service/item-service';
 import { useAppStore } from '@/store/app-store';
+import { getTypeColor } from '@/components/atoms/tokens';
+import type { AtomType } from '@/types/item';
 import type { BuilderGeneratedItem, BuilderProtocol, BuilderRoutine } from '../builder-types';
 
-const TYPE_LABELS: Record<string, string> = {
-  ritual: 'Ritual', habit: 'Habito', task: 'Tarefa', note: 'Nota',
-};
+// D69 — a heurística nunca decide quieta: a leitura do mapper é sugestão
+// visível e trocável (mesma gramática do chip da triage)
+const TYPE_OPTIONS: AtomType[] = ['task', 'habit', 'ritual', 'note'];
 
 const SLOT_LABELS: Record<string, string> = {
   aurora: 'Aurora', zenite: 'Zenite', crepusculo: 'Crepusculo',
@@ -155,22 +157,33 @@ function ProtocolCard({ protocol }: { protocol: BuilderProtocol }) {
 }
 
 function ItemCard({ item }: { item: BuilderGeneratedItem }) {
-  const typeLabel = TYPE_LABELS[item.type] ?? item.type;
+  const setItemType = useBuilderStore((s) => s.setItemType);
   const slotLabel = item.ritualSlot ? SLOT_LABELS[item.ritualSlot] : null;
 
   return (
-    <div className="flex items-start gap-3 p-3.5 rounded-xl bg-surface border border-border">
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-text truncate">{item.title}</p>
-        <div className="flex items-center gap-2 mt-0.5">
-          <span className="text-xs text-text-muted">{typeLabel}</span>
-          {slotLabel && (
-            <>
-              <span className="text-text-muted">·</span>
-              <span className="text-xs text-text-muted">{slotLabel}</span>
-            </>
-          )}
-        </div>
+    <div className="p-3.5 rounded-xl bg-surface border border-border">
+      <p className="text-sm font-medium text-text truncate">{item.title}</p>
+      {/* o tipo é sugestão trocável (D69) — trocar aqui muda o que nasce */}
+      <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+        {TYPE_OPTIONS.map((t) => {
+          const color = getTypeColor(t);
+          const ativo = item.type === t;
+          return (
+            <button
+              key={t}
+              onClick={() => setItemType(item.tempId, t)}
+              className="text-[11px] font-medium px-2 py-1 rounded-md border transition-colors"
+              style={
+                ativo
+                  ? { background: `${color}18`, color, borderColor: color }
+                  : { background: 'transparent', color: 'var(--color-text-faint)', borderColor: 'var(--color-border)' }
+              }
+            >
+              {ativo ? '● ' : '○ '}{t}
+            </button>
+          );
+        })}
+        {slotLabel && <span className="text-[11px] text-text-muted ml-0.5">{slotLabel}</span>}
       </div>
     </div>
   );

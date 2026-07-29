@@ -1,7 +1,8 @@
 // features/raiz/builder-store.ts — Zustand store for Routine Builder
 
 import { create } from 'zustand';
-import type { AtomModule } from '@/types/item';
+import { persist } from 'zustand/middleware';
+import type { AtomModule, AtomType } from '@/types/item';
 import type { BuilderAnswer, BuilderGeneratedItem, BuilderProtocol, BuilderRoutine } from './builder-types';
 import { BUILDER_MODULE_MAP, BUILDER_QUESTION_MAP } from './builder-questions';
 import { generateStructures } from './builder-mapper';
@@ -18,13 +19,17 @@ interface BuilderState {
 
   startModule: (module: AtomModule) => void;
   answerQuestion: (questionId: string, value: string | boolean) => void;
+  setItemType: (tempId: string, type: AtomType) => void;
   goBack: () => void;
   completeModule: () => void;
   checkMindmateTrigger: (text: string) => void;
   reset: () => void;
 }
 
-export const useBuilderStore = create<BuilderState>((set, get) => ({
+// persist (MANCA 3 da dissecação 02): reload não apaga a entrevista — o
+// store retoma onde parou. A reescrita em capítulos-gaveta retomáveis segue
+// sendo obra de voz com o E. (D64); aqui é só não perder o que foi dito.
+export const useBuilderStore = create<BuilderState>()(persist((set, get) => ({
   activeModule: null,
   currentQuestionId: null,
   answers: [],
@@ -82,6 +87,13 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
     }
   },
 
+  // D69 — a heurística nunca decide quieta: o chip do mini-wrap troca o
+  // tipo antes do parto, e o que nasce é o que o humano disse
+  setItemType: (tempId, type) =>
+    set((s) => ({
+      generatedItems: s.generatedItems.map((i) => (i.tempId === tempId ? { ...i, type } : i)),
+    })),
+
   goBack: () => {
     const { answers, activeModule } = get();
     if (answers.length === 0 || !activeModule) return;
@@ -124,4 +136,4 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
     completedModules: [],
     mindmateMode: false,
   }),
-}));
+}), { name: 'mindroot.builder.v1' }));

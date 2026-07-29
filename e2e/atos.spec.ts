@@ -357,6 +357,73 @@ test('bolso — sem rede, o HOJE lê do snapshot (a promessa da D55 cumprida)', 
   await expect(page.getByRole('button', { name: 'comprar manga no mercado' })).toBeVisible({ timeout: 15_000 });
 });
 
+// ─── Cirurgia · obra 1 — o parto honesto do builder ──────
+
+test('builder — a meta financeira nasce task, reload não apaga, e o chip muda o que nasce', async ({
+  authenticatedPage: page,
+}) => {
+  test.setTimeout(90_000);
+  // o mundo mockado engole o POST do parto — e guarda o que nasceu pra prova
+  const partos: Array<Record<string, unknown>> = [];
+  await page.route('**/rest/v1/items*', (route) => {
+    if (route.request().method() === 'POST') {
+      const body = route.request().postDataJSON() as Record<string, unknown>;
+      partos.push(body);
+      route.fulfill({
+        status: 201,
+        contentType: 'application/json',
+        body: JSON.stringify({ ...body, id: `parto-${partos.length}` }),
+      });
+    } else {
+      route.fallback();
+    }
+  });
+  await chegar(page, '/raiz');
+
+  await page.getByRole('button', { name: /construir minha rotina/ }).click();
+  await page.getByRole('button', { name: /Finan/ }).click();
+  await page.waitForTimeout(400);
+
+  // finance-1: acompanha gastos? → sim · finance-2: como? → contexto, não nasce nada
+  await page.getByRole('button', { name: 'Sim', exact: true }).click();
+  await page.waitForTimeout(400);
+  await page.getByRole('button', { name: 'App ou planilha' }).click();
+  await page.waitForTimeout(400);
+  await expect(page.getByText('Tem uma meta financeira esse ano?')).toBeVisible();
+
+  // a MANCA 3 morta: reload no meio da entrevista, e nada se perdeu
+  await page.reload();
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(600);
+  await page.getByRole('button', { name: /construir minha rotina/ }).click();
+  await expect(page.getByText('Tem uma meta financeira esse ano?')).toBeVisible();
+
+  await page.getByRole('textbox').fill('guardar 20 mil este ano');
+  await page.getByRole('button', { name: 'Continuar' }).click();
+  await page.waitForTimeout(400);
+  await page.getByRole('button', { name: 'Mensal' }).click();
+  await page.waitForTimeout(600);
+
+  // o mini-wrap mostra a meta como TASK — a MANCA 1 morta (antes: «Habito»)
+  await expect(page.getByText('o que a conversa pariu')).toBeVisible();
+  await expect(page.getByText('guardar 20 mil este ano')).toBeVisible();
+  await expect(page.getByRole('button', { name: '● task' })).toBeVisible();
+  await page.screenshot({ path: 'docs/onda-3/14_dissecacao-01_fotos/71-cirurgia-builder-parto-task.png', fullPage: true });
+
+  // a MANCA 2 morta: o chip troca a leitura num toque (D69)…
+  await page.getByRole('button', { name: '○ ritual' }).click();
+  await expect(page.getByRole('button', { name: '● ritual' })).toBeVisible();
+  await page.screenshot({ path: 'docs/onda-3/14_dissecacao-01_fotos/72-cirurgia-builder-chip-trocado.png', fullPage: true });
+
+  // …e o que nasce é o que o humano disse
+  await page.getByRole('button', { name: 'que nasçam ·' }).click();
+  await expect(page.getByText('nasceu — está no inbox')).toBeVisible({ timeout: 10_000 });
+  expect(partos).toHaveLength(1);
+  expect(partos[0].type).toBe('ritual');
+  expect(partos[0].title).toBe('guardar 20 mil este ano');
+  expect(partos[0].genesis_stage).toBe(1);
+});
+
 // ─── Obra 24a — o selo vale com o dia vazio ──────────────
 
 test('wrap — um dia vazio também se sela (nenhum campo trava o rito)', async ({
