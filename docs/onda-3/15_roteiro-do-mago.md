@@ -409,23 +409,23 @@ A sessão fecha do jeito que a casa come a própria comida:
 A sessão executa nesta ordem. Cada linha fecha com hooks verdes e commit.
 
 ```
-ATO I — as mentiras
-  [ ] 1. @ para de negar o que guardou            (gesto)
-  [ ] 2. assentir que falha não avança            (gesto)
-  [ ] 3. outbox idempotente                       (obra pequena)
-  [ ] 4. o gesto de renovar nasce                 (obra pequena)
+ATO I — as mentiras                              ✅ 29 Jul (5066454, aa73823)
+  [x] 1. @ para de negar o que guardou            (gesto)
+  [x] 2. assentir que falha não avança            (gesto)
+  [x] 3. outbox idempotente                       (obra pequena)
+  [x] 4. o gesto de renovar nasce                 (obra pequena)
 
-ATO II — a porta que falta
-  [ ] 5. o puxador no HOJE                        (obra pequena)
-  [ ] 6. a camada de assentimento                 (obra pequena)
-  [ ] 7. os detritos de rota                      (gesto)
+ATO II — a porta que falta                       ✅ 29 Jul (1ed8028)
+  [x] 5. o puxador no HOJE                        (obra pequena)
+  [x] 6. a camada de assentimento                 (obra pequena)
+  [x] 7. os detritos de rota                      (gesto)
 
-ATO III — a esteira honesta
-  [ ] 8. assentimento por série                   (obra com mesa)
-  [ ] 9. o card deixa de ser cego                 (obra pequena)
-  [ ] 10. pular com semântica                     (gesto)
-  [ ] 11. o módulo trocável                       (obra pequena)
-  [ ] 12. toasts na Lei do Tom                    (gesto)
+ATO III — a esteira honesta                      ✅ 29 Jul (89f96ea, 7106fa0)
+  [x] 8. assentimento por série                   (obra com mesa)
+  [x] 9. o card deixa de ser cego                 (obra pequena)
+  [x] 10. pular com semântica                     (gesto)
+  [x] 11. o módulo trocável                       (obra pequena)
+  [x] 12. toasts na Lei do Tom                    (gesto)
 
 ATO IV — a lente que não mente
   [ ] 13. a pressão dos próximos dias             (obra com mesa)
@@ -451,6 +451,26 @@ ATO VII — o gate
 FECHO
   [ ] 26. wrap no diário + DPs pra mesa + fila que sobrou
 ```
+
+---
+
+---
+
+## Achados nascidos da execução (não estavam no plano)
+
+O roteiro previu 12 obras nos três primeiros atos. A execução achou mais
+duas coisas que ninguém tinha visto — ambas da família das mentiras:
+
+1. **A esteira pulava um item a cada selo bem-sucedido.** O índice do card
+   era fixo enquanto a lista encolhia embaixo dele: selar A em `[A,B,C]`
+   deixava a fila `[B,C]` e o índice ia pra 1 → o card mostrava C, e **B
+   sumia da sessão sem nunca ter sido visto**. Morreu junto com a obra 10,
+   ao trocar índice por leitura sempre-pelo-topo.
+2. **O erro cru do FSM vazava pra tela** — «Item nao esta no inbox», sem
+   acento, empilhado três vezes. Não é mensagem: é implementação escapando.
+
+Ambas confirmam a tese do prompt da dissecação (`13_`): o que MENTE só
+aparece vivendo, nunca lendo.
 
 ---
 

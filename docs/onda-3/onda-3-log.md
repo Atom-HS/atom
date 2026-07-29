@@ -256,6 +256,91 @@ Rick lembrou de cabeça meses depois, já morava no código esperando.
 
 ---
 
+## Wrap · 29 Jul 2026 (noite) — a dissecação, o roteiro, e três atos
+
+### ○ Soul
+O dia que começou benchmarkando terminou se olhando no espelho. O Rick pediu
+dissecação — «funciona de verdade? faz sentido pela intenção?» — e a casa
+descobriu que a lei mais nova dela morava atrás de uma porta que não existia.
+Depois o roteiro do mago foi escrito pra uma sessão não parar no meio, e não
+parou: três atos de pé antes do fim da noite.
+
+### · Items
+
+**A dissecação 01** (`14_dissecacao-01.md` + 26 fotos)
+- Features 1–3 vividas antes de lidas: 22 cenas de Playwright no mundo
+  simulado e num mundo mockado de 50 itens, depois o código linha a linha
+- Vereditos: HOJE **viva** · @ **manca** (um canto que MENTE) · triage **manca**
+- Fila de 14 ajustes, 3 decisões propostas, 3 sementes
+
+**O achado que reordenou tudo:** a triage não tinha porta. O chip D69 morava
+dentro de `/pipeline` — fora da nav, sentenciada pela D48 — e o único caminho
+era digitar a URL. Não faltou vontade de triar em 29 Jul: faltou porta.
+
+**O roteiro do mago** (`15_roteiro-do-mago.md`): 7 atos, autorização
+declarada na frente, 6 decisões pré-resolvidas com default (DP-A…DP-F), mapa
+de risco, ordem linear de 26 passos.
+
+**Ato I — as mentiras** (`5066454`, `aa73823`)
+- o @ para de negar o que guardou: falha do selo depois da captura dizia
+  «foi pra fila» e duplicava o ponto; agora diz a verdade
+- assentir que falha não avança o card (a esteira fingia ter selado 6 de 50)
+- outbox idempotente: a entrada lembra o `item_id` assim que o ponto nasce
+- **o gesto de renovar nasce** — `renewalPatch` estava órfã e o digest
+  prometia essa porta todo dia às 07:15; renovar deixa rastro `touch`, então
+  a ausência zera por evento (D63), nunca por `updated_at`
+
+**Ato II — a porta que faltava** (`1ed8028`)
+- `components/triage/Assentimento`: a esteira sai da tela e vira componente
+  com uma casa só — sobrevive à morte de `/pipeline` no gate
+- `AssentimentoSheet` (D40/D54: não é lugar, é camada) + puxador no HOJE:
+  «N esperando leitura», estado quieto, some quando a fila zera
+- detritos: `PATH_TO_PAGE` conhece as três faces; `FirstTimeRaizRedirect`
+  morre (esperava `/`, que virou redirect na Onda 3)
+
+**Ato III — a esteira honesta** (`89f96ea`, `7106fa0`)
+- `engine/connector`: o card mostra hora, «se repete», quem vem junto,
+  remetente e trecho — tudo já vinha no body; a tela é que não abria a mão
+- pular manda pro fim da fila (DP-B); módulo trocável (tudo selava `bridge`)
+- `engine/series`: **assentir uma vez vale pra série** (DP-C) — o standup
+  semanal pedia assentimento toda semana, pra sempre
+- tom: 50 selos não viram 50 toasts, e o erro cru do FSM para de vazar
+
+### △ Decidido
+- **DP-A…DP-F** propostas com default aplicado (esperam ratificação do Rick):
+  fixos mostram conector não-assentido · pular vai pro fim · assentimento por
+  série · assentimento é camada · `/projects` vive como camada · digest com
+  memória de 7 dias
+- Dissecação e cirurgia são ritos separados — a fila do exame virou os atos
+
+### ⬡ Conexões
+- O rastro `touch` do renovar entra na mesma família do `protocol_run` e do
+  concluir — o cofre lê ausência por vida vivida, nunca por edição
+- `engine/series` é o que destrava a cadência automática da volta (D69): sem
+  ele, ligar o cron da lente encheria o inbox pra sempre
+
+### ✳ Seeds
+- Assentir em punhados (agrupar por remetente/série)
+- Fatura→cofre (email estrelado conversando com D63/D66)
+- Céu com perfil de lugar (o Brisbane fixo de `sky.ts` é escolha, não lei)
+
+### □ Audit
+- ✅ 310 testes verdes (65 novos no dia) · typecheck limpo · build ok
+- ✅ 7 cenas de asserção nova em `e2e/atos.spec.ts` (não são fotos: provam)
+- ✅ gate visual 13/13, baselines refotografadas por intenção declarada
+- ⚠️ dois achados nasceram da execução, não do plano: a esteira **pulava um
+  item a cada selo** e o erro cru do FSM vazava pra tela — os dois mortos
+- ⚠️ `singleEvents` segue expandindo instâncias; a herança de série só vale
+  pra instância NOVA (o que já está no inbox espera o humano, como deve)
+
+### → Next (o roteiro vivo)
+- **Atos IV–VII** do `15_roteiro-do-mago.md`: a lente que não mente (pressão
+  da semana) · o chão e a válvula (a lei do cofre está escrita duas vezes) ·
+  a dissecação 02–04 (features 4–13) · o gate carregado
+- **Mesa do Rick:** ratificar (ou virar) DP-A a DP-F
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. O formato é o do wrap do app,
 porque a casa come a própria comida.*
