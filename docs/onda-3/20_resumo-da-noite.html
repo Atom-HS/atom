@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<title>Atom · o resumo da noite — 30 Jul 2026</title>
+<style>
+  /* O mundo é um só, escuro, deliberado (D57) — o resumo veste a pele da
+     casa: tema único é escolha de lei, não omissão. Dourado raro e sagrado;
+     mono marca, sans fala, itálico acolhe. */
+  :root {
+    --bg: #12100c;
+    --card: #1a1712;
+    --surface: #211d16;
+    --border: #2e2820;
+    --border-soft: #262119;
+    --text: #e9e2d3;
+    --muted: #a29781;
+    --faint: #6f675a;
+    --gold: #d4a94e;
+    --gold-dim: #a8843a;
+    --gold-bg: rgba(212, 169, 78, .08);
+    --mente: #c9705c;
+    --viva: #8fae7d;
+    --manca: #c9a45c;
+  }
+  html { background: var(--bg); }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    line-height: 1.6; margin: 0;
+  }
+  .pagina { max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
+  .mono { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; }
+
+  header.topo { margin-bottom: 36px; }
+  .kicker {
+    font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold-dim); margin: 0 0 10px;
+  }
+  h1 {
+    font-size: clamp(26px, 5vw, 34px); font-weight: 500; line-height: 1.2;
+    margin: 0 0 10px; text-wrap: balance;
+  }
+  h1 .geo { color: var(--gold); }
+  .lede { color: var(--muted); font-size: 15px; max-width: 62ch; margin: 0; }
+  .lede em { color: var(--text); }
+
+  h2 {
+    font-size: 19px; font-weight: 500; margin: 56px 0 6px;
+    padding-top: 22px; border-top: 1px solid var(--border-soft);
+    text-wrap: balance;
+  }
+  h2 .geo { color: var(--gold); font-weight: 400; }
+  .sub { color: var(--muted); font-size: 14px; margin: 0 0 18px; max-width: 66ch; }
+
+  p { max-width: 66ch; }
+
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; margin: 18px 0; }
+  th, td { text-align: left; padding: 8px 12px 8px 0; border-bottom: 1px solid var(--border-soft); vertical-align: top; }
+  th {
+    font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--faint); font-weight: 500;
+  }
+  td:first-child { color: var(--text); }
+  td { color: var(--muted); }
+  .num { font-variant-numeric: tabular-nums; }
+
+  .selo { font-family: ui-monospace, Consolas, monospace; font-size: 11px; padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
+  .selo.viva  { color: var(--viva);  background: rgba(143,174,125,.09); }
+  .selo.manca { color: var(--manca); background: rgba(201,164,92,.09); }
+  .selo.mente { color: var(--mente); background: rgba(201,112,92,.10); }
+  .selo.nv    { color: var(--muted); background: rgba(162,151,129,.09); }
+  .selo.ok    { color: var(--viva);  background: rgba(143,174,125,.09); }
+
+  /* a fita de prints — telas de celular, rolagem própria */
+  .fita {
+    display: flex; gap: 14px; overflow-x: auto; padding: 6px 2px 14px;
+    scroll-snap-type: x proximity;
+  }
+  .fita figure {
+    margin: 0; flex: 0 0 216px; scroll-snap-align: start;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .fita .tela {
+    border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+    background: #000; aspect-ratio: 39/70;
+  }
+  .fita .tela.curta { aspect-ratio: auto; }
+  .fita img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  .fita .tela.curta img { height: auto; }
+  .fita figcaption { font-size: 12px; color: var(--muted); line-height: 1.45; }
+  .fita figcaption b { color: var(--text); font-weight: 500; }
+  .tag-antes, .tag-depois {
+    font-family: ui-monospace, Consolas, monospace; font-size: 10px;
+    letter-spacing: .16em; text-transform: uppercase; display: inline-block; margin-right: 6px;
+  }
+  .tag-antes { color: var(--mente); }
+  .tag-depois { color: var(--viva); }
+
+  .carta {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 18px 20px; margin: 16px 0;
+  }
+  .carta h3 { margin: 0 0 6px; font-size: 15.5px; font-weight: 500; }
+  .carta h3 .geo { color: var(--mente); }
+  .carta p { margin: 6px 0; font-size: 14px; color: var(--muted); }
+  .carta p b { color: var(--text); font-weight: 500; }
+  .carta .lei {
+    font-family: ui-monospace, Consolas, monospace; font-size: 11px;
+    color: var(--gold-dim); margin-top: 10px;
+  }
+
+  .aviso {
+    border-left: 3px solid var(--gold-dim); background: var(--gold-bg);
+    border-radius: 0 12px 12px 0; padding: 12px 16px; margin: 18px 0;
+    font-size: 14px; color: var(--muted); max-width: 66ch;
+  }
+  .aviso b { color: var(--gold); font-weight: 500; }
+
+  ol.mesa { padding-left: 22px; margin: 14px 0; max-width: 66ch; }
+  ol.mesa li { margin: 9px 0; color: var(--muted); font-size: 14.5px; }
+  ol.mesa li b { color: var(--text); font-weight: 500; }
+
+  code, .mono-inline {
+    font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    font-size: .92em; color: var(--gold-dim);
+    background: var(--surface); padding: 1px 5px; border-radius: 5px;
+  }
+
+  footer.pe {
+    margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--border-soft);
+    font-size: 12.5px; color: var(--faint); font-style: italic; max-width: 66ch;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .fita { scroll-behavior: smooth; }
+  }
+</style>
+
+<div class="pagina">
+  <header class="topo">
+    <p class="kicker">atom · onda 3 · sessão desacompanhada</p>
+    <h1><span class="geo">○</span> O resumo da noite — pra quem acorda agora</h1>
+    <p class="lede">30 Jul 2026, madrugada. O exame das 13 features terminou, <em>três
+    mentiras foram achadas ao vivo e mortas na mesma noite</em>, duas obras do
+    benchmark fecharam, e o gate está carregado na mesa — sem disparar. Onze
+    commits em <code>v2-faces</code>, 392 testes verdes, nada subiu: deploy,
+    push e merge continuam sendo gesto do Rick.</p>
+  </header>
+
+  <h2><span class="geo">·</span> Em uma tela</h2>
+  <table>
+    <thead><tr><th>O quê</th><th>Estado</th></tr></thead>
+    <tbody>
+      <tr><td>Ato VI — dissecações 02 · 03 · 04</td><td><span class="selo ok">✓</span> 10 features vividas, 3 docs, fotos 32–70</td></tr>
+      <tr><td>As 3 MENTEs achadas ao vivo</td><td><span class="selo ok">✓</span> mortas na mesma noite, cada uma com teste</td></tr>
+      <tr><td>Obra 24a — selo do WRAP com dia vazio</td><td><span class="selo ok">✓</span> <span class="mono num">9b84a9e</span></td></tr>
+      <tr><td>Obra 24b — cold start + confiança por ramo</td><td><span class="selo ok">✓</span> <span class="mono num">0521514</span></td></tr>
+      <tr><td>Ato VII — o gate carregado</td><td><span class="selo ok">✓</span> <code>19_gate.md</code> · não disparado</td></tr>
+      <tr><td>Hooks</td><td><span class="selo ok">✓</span> <span class="num">392</span> testes (18 novos) · tsc · build · 12 cenas · visual 13/13</td></tr>
+    </tbody>
+  </table>
+
+  <h2><span class="geo">—</span> 1 · O exame terminou</h2>
+  <p class="sub">Três rodadas no rito da dissecação — viver primeiro, ler código
+  depois, crivo D62 contra os benchmarks. Os vereditos das dez features que faltavam:</p>
+  <table>
+    <thead><tr><th>Doc</th><th>Features</th><th>Vereditos</th></tr></thead>
+    <tbody>
+      <tr><td class="mono num">14_dissecacao-02</td><td>ÁRVORE · Raiz/cofre · Builder</td>
+        <td><span class="selo viva">viva</span> <span class="selo viva">viva</span> <span class="selo manca">manca</span></td></tr>
+      <tr><td class="mono num">14_dissecacao-03</td><td>casa/conectores · a ida · digest</td>
+        <td><span class="selo manca">manca</span> <span class="selo nv">não verificada</span> <span class="selo manca">manca</span></td></tr>
+      <tr><td class="mono num">14_dissecacao-04</td><td>Wrap · busca · projetos · offline</td>
+        <td><span class="selo viva">viva</span> <span class="selo viva">viva</span> <span class="selo manca">manca</span> <span class="selo mente">mentia</span></td></tr>
+    </tbody>
+  </table>
+  <div class="fita">
+    <figure>
+      <div class="tela"><img src="14_dissecacao-01_fotos/36-arvore-drill-escala.png" alt="Drill da árvore com 22 folhas: teto de 8 e o total declarado"></div>
+      <figcaption><b>O drill não mente:</b> 22 folhas na janela, teto de 8 na tela, «+14 mais antigas» declarado.</figcaption>
+    </figure>
+    <figure>
+      <div class="tela"><img src="14_dissecacao-01_fotos/45-builder-miniwrap.png" alt="Mini-wrap do builder: a meta financeira rotulada Habito"></div>
+      <figcaption><b>O parto do builder trai:</b> 4 perguntas de finanças pariram 1 item — a meta do ano rotulada «Habito», sem chip pra trocar.</figcaption>
+    </figure>
+    <figure>
+      <div class="tela curta"><img src="14_dissecacao-01_fotos/47-casa-puxador.png" alt="A barra fina do puxador da casa, quase invisível acima da nav"></div>
+      <figcaption><b>A porta invisível, de novo:</b> o puxador da casa é isto — a barra de 36×4px que o Rick não achou (dado real de 29 Jul).</figcaption>
+    </figure>
+    <figure>
+      <div class="tela"><img src="14_dissecacao-01_fotos/50-casa-ida-assentida.png" alt="A ida assentida: toast «a lei vive lá fora» e o estado quieto"></div>
+      <figcaption><b>A ida flui em mock:</b> plano → assentir → «a lei vive lá fora» → desfazer. No Gmail real, segue esperando o assentimento do Rick.</figcaption>
+    </figure>
+  </div>
+
+  <h2><span class="geo">△</span> 2 · As três mentiras — mortas com teste</h2>
+  <p class="sub">A tese do rito se confirmou pela terceira vez: o que MENTE só
+  aparece vivendo, nunca lendo.</p>
+
+  <div class="carta">
+    <h3><span class="geo">1 ·</span> A volta do cron não conhecia a série</h3>
+    <p>O <code>ingestVolta</code> da edge — o caminho que produz <b>100% dos
+    itens reais</b> — ingeria instância de série sem <code>recurring_event_id</code>
+    e sem herança de selo. A DP-C estava morta em produção: o standup ia pedir
+    assentimento toda semana, pra sempre, e item nascido pelo cron nem
+    <b>ensinava</b> selo.</p>
+    <p><b>Cirurgia:</b> a edge espelha o contrato do client (nasce no estágio 1,
+    herda pelo portão); o guarda novo <code>series-espelho.test.ts</code> lê a
+    edge como texto e quebra se divergir de novo.</p>
+    <p class="lei">⚠ só vale em produção depois do deploy — gesto do Rick · commit b6332bc</p>
+  </div>
+
+  <div class="carta">
+    <h3><span class="geo">2 ·</span> O tronco de bolso era código inalcançável</h3>
+    <p>Sem rede, o fetch do supabase <b>pendura sem rejeitar</b> — o catch que
+    leria o snapshot nunca rodava. O HOJE ficava em «…» pra sempre, com o bolso
+    gravado do lado (provado: 1703 bytes no localStorage e a tela em loading).</p>
+    <p><b>Cirurgia:</b> <code>comPrazo()</code> corre o fetch contra 6 segundos;
+    sem resposta, o bolso assume. A cena 10 do <code>atos.spec</code> prova com
+    rede morta de verdade.</p>
+    <p class="lei">D55: nada se perde — nem a leitura · commit 8312196</p>
+  </div>
+
+  <div class="carta">
+    <h3><span class="geo">3 ·</span> A busca dizia «o filtro foi ignorado»</h3>
+    <p>O motor — por desenho certo — <b>trava a busca</b> com filtro inválido
+    (nunca alargar em silêncio). Mas a fala dizia o oposto: o usuário lia
+    «ignorado», esperava os resultados do texto livre, via nada.</p>
+    <p><b>Cirurgia:</b> a fala agora diz o que o motor faz — <i>«corrige ou tira
+    o filtro pra busca andar»</i>.</p>
+    <p class="lei">lei 3: espelho que nega o que fez não é estado · commit 8312196</p>
+  </div>
+
+  <div class="fita">
+    <figure>
+      <div class="tela"><img src="14_dissecacao-01_fotos/70-offline-bolso.png" alt="O HOJE em loading eterno sem rede, antes da correção"></div>
+      <figcaption><span class="tag-antes">antes</span><b>o «…» eterno:</b> sem rede, o dia nunca chegava — com o snapshot gravado do lado.</figcaption>
+    </figure>
+    <figure>
+      <div class="tela"><img src="14_dissecacao-01_fotos/66-busca-filtro-errado.png" alt="A busca dizendo «o filtro foi ignorado» e devolvendo nada"></div>
+      <figcaption><span class="tag-antes">antes</span><b>a fala torta:</b> «foi ignorado» + zero resultado de «vidro» — que existia.</figcaption>
+    </figure>
+    <figure>
+      <div class="tela"><img src="14_dissecacao-01_fotos/30-busca-filtro-invalido.png" alt="A busca com a fala corrigida sobre o filtro inválido"></div>
+      <figcaption><span class="tag-depois">depois</span><b>a fala certa:</b> o filtro errado é nomeado e a tela diz o que fazer.</figcaption>
+    </figure>
+  </div>
+
+  <h2><span class="geo">□</span> 3 · As obras do benchmark 16</h2>
+  <div class="fita">
+    <figure>
+      <div class="tela"><img src="14_dissecacao-01_fotos/61-wrap-selo-vazio.png" alt="O selo do wrap travado: «falta o que fica pra amanhã»"></div>
+      <figcaption><span class="tag-antes">antes</span><b>o selo que cobrava:</b> dia vazio não selava — culpa fabricada, a armadilha medida do benchmark.</figcaption>
+    </figure>
+    <figure>
+      <div class="tela"><img src="14_dissecacao-01_fotos/58-wrap-sementes.png" alt="O passo 5 do wrap: um cartão vazio prometendo a Fase 5"></div>
+      <figcaption><b>O passo oco</b> (fila): «sementes» é um cartão-promessa — rito não devia ter passo decorativo.</figcaption>
+    </figure>
+    <figure>
+      <div class="tela"><img src="14_dissecacao-01_fotos/37-arvore-vazia.png" alt="A árvore vazia declarando o cold start"></div>
+      <figcaption><span class="tag-depois">depois</span><b>cold start declarado:</b> «a árvore nasce vazia… sem dado, e tudo bem» — distinguível de «caiu», com confiança por ramo no drill.</figcaption>
+    </figure>
+  </div>
+  <p class="sub"><b style="color:var(--text)">24a</b> — o selo vale com os 7 passos
+  vazios; o plano de amanhã segue no lugar de honra, mas convite não trava rito.
+  <b style="color:var(--text)">24b</b> — cold start declarado + leitura
+  firme · rala · sem-dado por ramo, no motor puro, com 6 testes.</p>
+
+  <h2><span class="geo">⬠</span> 4 · O gate está na mesa — carregado, não disparado</h2>
+  <p class="sub"><code>19_gate.md</code>: a lista das 8 telas com cobertura
+  verificada tela a tela, o censo de dependências, o checklist da cirurgia e as
+  fotos do antes. Nenhum PR, nenhum merge, nenhum push.</p>
+  <div class="fita">
+    <figure>
+      <div class="tela"><img src="14_dissecacao-01_fotos/67-hoje-pill-projeto.png" alt="A pill do projeto viva no HOJE"></div>
+      <figcaption><b>O projeto já vive como camada:</b> a pill comunica presença e a sugestão puxa o filho aberto mais antigo.</figcaption>
+    </figure>
+    <figure>
+      <div class="tela"><img src="14_dissecacao-01_fotos/68-projects-pagina.png" alt="A página /projects da casca velha"></div>
+      <figcaption><b>…e deságua na casca velha:</b> inglês, indigo fora da lei D61, chrome de gerenciador. <b>DP-E confirmada</b> — vive como camada, morre como tela.</figcaption>
+    </figure>
+  </div>
+  <div class="aviso"><b>Duas condições seguram o gatilho:</b> a sheet do projeto
+  (DP-E) ainda não nasceu — a pill viraria porta pro nada — e a escada F4
+  (<code>/review</code>) ficaria sem boca: a única função do mundo velho sem
+  porta nova. Recomendação: um puxador quieto na ÁRVORE, obra pequena pré-merge.</div>
+
+  <h2><span class="geo">⬡</span> 5 · A mesa do Rick — em ordem de peso</h2>
+  <ol class="mesa">
+    <li><b>Deploy da <code>daily-digest</code></b> — a MENTE do cron só morre em produção com o deploy (e o dry-run do digest segue pendente).</li>
+    <li><b>Ratificar</b>: DP-E → D74? (validada por vivência + mercado) · DP-A…DP-F que rodam com default.</li>
+    <li><b>Decidir a escada</b> (gate §3): porta na ÁRVORE <i>(recomendada)</i> · morte consciente · adiar <code>/review</code>.</li>
+    <li><b>A sheet do projeto</b> — obra pequena, condição do gate.</li>
+    <li><b>O gatilho do gate (D41)</b> — quando 3 e 4 fecharem.</li>
+    <li><b>A fila MANCA das dissecações</b> — o maior pacote é o parto honesto do builder; depois: puxador da casa com corpo, desligar-que-desfaz (D68), grid da raiz na lei do cofre, reconciliação no cron.</li>
+    <li><b>Pendências antigas</b>: redirect URL na prod nova · viver a ida real no Gmail · instalar o PWA no celular.</li>
+  </ol>
+
+  <footer class="pe">Filho do 18_handoff-mega-sessao.md. A trilha do detalhe:
+  as três dissecações (14_dissecacao-02/03/04) → o gate (19_gate.md) → o wrap
+  da noite no onda-3-log.md. As três condições de parada nunca dispararam —
+  a noite inteira coube na autorização.</footer>
+</div>
+
+</body>
+</html>
