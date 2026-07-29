@@ -38,14 +38,22 @@ export function usePipeline() {
     }
   };
 
-  const classify = async (itemId: string, type: AtomItem['type'], module: AtomModule): Promise<AtomItem | null> => {
+  // quiet: o assentimento em esteira não celebra cada selo (50 toasts é ruído,
+  // e "sucesso" a cada gesto é cobrança com outra cara — Lei do Tom). O erro
+  // continua falando, na voz da casa em vez do erro cru do FSM.
+  const classify = async (
+    itemId: string,
+    type: AtomItem['type'],
+    module: AtomModule,
+    opts: { quiet?: boolean } = {},
+  ): Promise<AtomItem | null> => {
     try {
       const item = await pipelineService.classify(itemId, type, module);
       invalidate();
-      toast.success('Item classificado');
+      if (!opts.quiet) toast.success('Item classificado');
       return item;
     } catch (err: any) {
-      toast.error(err.message ?? 'Erro ao classificar');
+      toast.error(opts.quiet ? 'não consegui selar — o ponto segue esperando' : err.message ?? 'Erro ao classificar');
       return null;
     }
   };

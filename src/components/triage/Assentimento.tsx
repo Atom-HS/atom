@@ -14,6 +14,8 @@ import type { TriageResult } from '@/service/triage-service';
 import type { AtomItem, AtomModule, AtomType } from '@/types/item';
 import { MODULE_COLORS, getTypeColor } from '@/components/atoms/tokens';
 import { ConfidenceBar } from '@/components/atoms/ConfidenceBar';
+import { connectorContext } from '@/engine/connector';
+import { MODULES } from '@/engine/token-parser';
 import { toast } from '@/store/toast-store';
 
 const BAND_COLORS = {
@@ -31,12 +33,26 @@ export function Assentimento() {
   const { items } = useItems();
   const { classify } = usePipeline();
   const { classify: aiClassify, isClassifying, result: triageResult, reset: resetTriage } = useTriage();
-  const [currentIdx, setCurrentIdx] = useState(0);
 
-  const inboxItems = useMemo(() => items.filter((i) => i.state === 'inbox'), [items]);
+  // DP-B: pular manda pro FIM da fila, não gira em círculo. E a fila é sempre
+  // lida pelo topo — assim selar (o item sai do inbox) nunca pula o seguinte,
+  // que era o que um índice fixo fazia calado.
+  const [pulados, setPulados] = useState<string[]>([]);
 
-  const current = inboxItems[currentIdx];
-  const total = inboxItems.length;
+  const fila = useMemo(() => {
+    const inbox = items.filter((i) => i.state === 'inbox');
+    if (pulados.length === 0) return inbox;
+    const atras = new Set(pulados);
+    const frente = inbox.filter((i) => !atras.has(i.id));
+    const fundo = pulados
+      .map((id) => inbox.find((i) => i.id === id))
+      .filter((i): i is AtomItem => !!i);
+    return [...frente, ...fundo];
+  }, [items, pulados]);
+
+  const current = fila[0];
+  const total = fila.length;
+  const deuAVolta = total > 0 && pulados.length >= total;
 
   // D69 — a heurística nunca decide quieta: item de conector chega com
   // leitura pronta (recorrente→ritual, único→task, email→note); o chip
@@ -47,21 +63,26 @@ export function Assentimento() {
     ? ['ritual', 'task']
     : ['note', 'task'];
   const [leituraEscolhida, setLeituraEscolhida] = useState<AtomItem['type'] | null>(null);
-  useEffect(() => setLeituraEscolhida(null), [current?.id]);
-  const leitura = leituraEscolhida ?? current?.type ?? null;
-
-  const next = () => {
+  const [moduloEscolhido, setModuloEscolhido] = useState<AtomModule | null>(null);
+  // card novo, leitura limpa — a sugestão de um nunca vaza pro seguinte
+  useEffect(() => {
+    setLeituraEscolhida(null);
+    setModuloEscolhido(null);
     resetTriage();
-    if (currentIdx < total - 1) setCurrentIdx((i) => i + 1);
-    else setCurrentIdx(0);
-  };
+  }, [current?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const leitura = leituraEscolhida ?? current?.type ?? null;
+  const modulo = moduloEscolhido ?? (current?.module as AtomModule | null) ?? 'bridge';
+  const contexto = useMemo(
+    () => (current ? connectorContext(current) : { origin: null, lines: [] }),
+    [current],
+  );
 
   // o selo é do humano (D69): se a gravação falhou, o card NÃO anda — senão
   // a esteira mente ("assenti 6") e os itens voltam na próxima volta
   const handleAcceptLeitura = async () => {
     if (!current || !leitura) return;
-    const selado = await classify(current.id, leitura, (current.module ?? 'bridge') as AtomModule);
-    if (selado) next();
+    await classify(current.id, leitura, modulo, { quiet: true });
   };
 
   if (total === 0) {
@@ -84,47 +105,39 @@ export function Assentimento() {
       const result = await aiClassify({ input: current.title });
       const band = getConfidenceBand(result);
       if (band === 'auto') {
-        const selado = await classify(current.id, result.type as AtomItem['type'], result.module as AtomModule);
-        if (selado) next();
+        await classify(current.id, result.type as AtomItem['type'], result.module as AtomModule, { quiet: true });
       }
       // 'suggest' and 'manual' stay on card for user action
     } catch {
-      toast.error('Erro na classificacao AI');
+      toast.error('não consegui ler agora — o ponto segue esperando');
     }
   };
 
   const handleAccept = async (result: TriageResult) => {
     if (!current) return;
-    const selado = await classify(current.id, result.type as AtomItem['type'], result.module as AtomModule);
-    if (selado) next();
+    await classify(current.id, result.type as AtomItem['type'], moduloEscolhido ?? (result.module as AtomModule), { quiet: true });
   };
 
-  const handleSkip = () => next();
+  // pular manda pro fim da fila (DP-B): o item volta, mas depois de todos os
+  // outros — adiar não é esconder, e não é snooze (cobrança adiada)
+  const handleSkip = () => {
+    if (!current) return;
+    setPulados((p) => [...p.filter((id) => id !== current.id), current.id]);
+  };
 
   const band = triageResult ? getConfidenceBand(triageResult) : null;
   const bandStyle = band ? BAND_COLORS[band] : null;
 
   return (
     <div>
-      {/* Progress */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2 text-text-muted text-[13px]">
-          <span className="text-xl font-medium text-text-heading">{currentIdx + 1}</span>
-          <span>/</span>
-          <span>{total}</span>
-        </div>
-      </div>
-
-      {/* Progress dots */}
-      <div className="flex justify-center gap-1.5 mb-5">
-        {inboxItems.slice(0, 10).map((_, i) => (
-          <div
-            key={i}
-            className={`h-2 rounded-full transition-all ${
-              i === currentIdx ? 'w-5 bg-text-heading' : i < currentIdx ? 'w-2 bg-success' : 'w-2 bg-border'
-            }`}
-          />
-        ))}
+      {/* quantos faltam — estado, nunca corrida (D46). A posição na fila não
+          significa mais nada: pular manda pro fim, selar tira da fila. */}
+      <div className="flex items-baseline gap-2 mb-4">
+        <span className="text-xl font-medium text-text-heading">{total}</span>
+        <span className="text-[13px] text-text-muted">{total === 1 ? 'esperando' : 'esperando'}</span>
+        {deuAVolta && (
+          <span className="ml-auto font-mono text-[11px] text-text-faint">todos já passaram uma vez</span>
+        )}
       </div>
 
       {/* o card */}
@@ -144,10 +157,19 @@ export function Assentimento() {
             />
 
             {/* Title */}
-            <div className="text-lg leading-relaxed mb-4">
+            <div className="text-lg leading-relaxed mb-2">
               <span className="text-sm text-text-muted mr-1.5">·</span>
               {current.title}
             </div>
+
+            {/* o que a lente trouxe junto — não se assente o que não se vê */}
+            {contexto.lines.length > 0 && (
+              <div className="mb-4 space-y-0.5">
+                {contexto.lines.map((l) => (
+                  <p key={l} className="text-[12px] text-text-muted leading-snug">{l}</p>
+                ))}
+              </div>
+            )}
 
             {/* Leitura do conector (D69) — visível e trocável, nunca quieta */}
             {isConnector ? (
@@ -174,7 +196,30 @@ export function Assentimento() {
                       </button>
                     );
                   })}
-                  {current.module && <ModuleChip module={current.module} />}
+                </div>
+
+                {/* onde mora — sem isto tudo nascia bridge e a árvore recebia
+                    a colheita inteira num galho só */}
+                <span className="text-xs text-text-muted block mt-3 mb-1.5">onde mora</span>
+                <div className="flex gap-1 flex-wrap">
+                  {MODULES.map((m) => {
+                    const color = MODULE_COLORS[m as keyof typeof MODULE_COLORS];
+                    const ativo = modulo === m;
+                    return (
+                      <button
+                        key={m}
+                        onClick={() => setModuloEscolhido(m)}
+                        className="text-[11px] font-medium px-2 py-1 rounded-md border transition-colors"
+                        style={
+                          ativo
+                            ? { background: `${color}18`, color, borderColor: color }
+                            : { background: 'transparent', color: 'var(--color-text-faint)', borderColor: 'var(--color-border)' }
+                        }
+                      >
+                        {m}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             ) : triageResult ? (
