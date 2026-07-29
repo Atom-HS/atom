@@ -25,3 +25,20 @@ export function loadItemsSnapshot(userId: string): AtomItem[] | null {
     return null;
   }
 }
+
+/**
+ * Corrida com prazo: a promessa que não responde perde pro bolso.
+ * A dissecação 04 provou que sem rede o fetch do tronco NUNCA resolve —
+ * nem rejeita — e o catch que leria o snapshot era código inalcançável:
+ * o HOJE ficava em «…» pra sempre, com o bolso gravado do lado. Um erro
+ * de rede que não chega é pior que um que chega; o prazo o materializa.
+ */
+export function comPrazo<T>(promessa: Promise<T>, ms: number): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const relogio = setTimeout(() => reject(new Error('a rede não respondeu')), ms);
+    promessa.then(
+      (v) => { clearTimeout(relogio); resolve(v); },
+      (e) => { clearTimeout(relogio); reject(e); },
+    );
+  });
+}

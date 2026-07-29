@@ -130,9 +130,11 @@ export function SearchLayer({ onClose }: SearchLayerProps) {
 
         {/* o filtro que não existe é dito. Antes virava texto livre e a busca
             devolvia zero calada — o usuário concluía que não tinha o item */}
+        {/* a fala diz o que o motor FAZ: filtro errado trava a busca (nunca
+            alarga em silêncio) — dizer «foi ignorado» aqui seria mentir */}
         {filtros.desconhecidos.map((d) => (
           <p key={`${d.prefix}:${d.value}`} className="text-[12px] text-text-muted mb-2">
-            «{d.value}» não é um valor de <span className="font-mono">{d.prefix}:</span> — o filtro foi ignorado
+            «{d.value}» não é um valor de <span className="font-mono">{d.prefix}:</span> — corrige ou tira o filtro pra busca andar
           </p>
         ))}
 

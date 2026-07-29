@@ -163,6 +163,10 @@ test('ato II — dia sem fila não mostra puxador (o silêncio é estado)', asyn
 test('ato III — o card mostra o que a lente trouxe, e pular manda pro fim', async ({
   authenticatedPage: page,
 }) => {
+  // datas dinâmicas: com data fixa a cena quebrava à meia-noite («hoje»
+  // vira «ontem» quando o relógio vira — pago em 30 Jul)
+  const as16 = new Date(); as16.setHours(16, 0, 0, 0);
+  const as17 = new Date(); as17.setHours(17, 0, 0, 0);
   const evento = (i: number) => ({
     ...conector(i),
     title: `Reunião ${i}`,
@@ -170,8 +174,8 @@ test('ato III — o card mostra o que a lente trouxe, e pular manda pro fim', as
     module: 'bridge',
     tags: ['#connector', '#source:google-calendar'],
     body: {
-      start: '2026-07-29T16:00:00+10:00',
-      end: '2026-07-29T17:00:00+10:00',
+      start: as16.toISOString(),
+      end: as17.toISOString(),
       recurring: true,
       attendees: [{ name: 'André Tanaka', email: 'andre@x.com' }],
     },
@@ -316,4 +320,39 @@ test('ato I.4 — renovar existe no chão da árvore (o digest não promete port
   // e sempre dá pra sair sem selar nada — assentimento é do humano
   await page.getByRole('button', { name: 'agora não' }).click();
   await expect(data).toHaveCount(0);
+});
+
+// ─── Dissecação 04 · MENTE 1 — o tronco de bolso segura ──
+
+test('bolso — sem rede, o HOJE lê do snapshot (a promessa da D55 cumprida)', async ({
+  authenticatedPage: page,
+}) => {
+  test.setTimeout(60_000);
+  const NOW = new Date().toISOString();
+  const itens = [
+    {
+      id: 'bolso-1', title: 'comprar manga no mercado', type: 'task', module: 'body',
+      tags: [], status: 'active', state: 'structured', genesis_stage: 3,
+      source: 'mindroot', created_by: 'e2e-test-user-0001',
+      created_at: NOW, updated_at: NOW, body: {},
+    },
+  ];
+  await page.route('**/rest/v1/items*', (route) =>
+    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(itens) }),
+  );
+  // 1ª visita com rede: o fetch bom alimenta o bolso
+  await page.goto('/hoje?sim=0');
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(800);
+  await passarAurora(page);
+
+  // a rede morre de verdade (o fetch pendura, não rejeita — a MENTE da
+  // dissecação 04); recarrega: o prazo tem que entregar o bolso
+  await page.unroute('**/rest/v1/items*');
+  await page.route('**/rest/v1/items*', (route) => route.abort('failed'));
+  await page.reload();
+  await passarAurora(page);
+
+  // dentro do prazo de 6s + folga, a sugestão vem do snapshot
+  await expect(page.getByRole('button', { name: 'comprar manga no mercado' })).toBeVisible({ timeout: 15_000 });
 });
