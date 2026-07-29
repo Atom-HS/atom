@@ -24,7 +24,7 @@ type RaizMode = 'welcome' | 'panorama' | 'doors' | 'inventory';
 
 export function RaizPage() {
   const { domains: domainHealthRaw, activeCount: healthyCount, staleCount, emptyCount } = useRaiz();
-  const { vencendo, ausencias } = useVault();
+  const { vencendo, ausencias, renovar } = useVault();
   const { items: allItems } = useItems();
   const { captureWithModule } = usePipeline();
   const [builderOpen, setBuilderOpen] = useState(false);
@@ -36,6 +36,8 @@ export function RaizPage() {
   const [activeDomainKey, setActiveDomainKey] = useState<string | null>(null);
   const [doorKey, setDoorKey] = useState<RaizDoorKey | null>(null);
   const [domainInputs, setDomainInputs] = useState<Record<string, string[]>>({});
+  const [renovando, setRenovando] = useState<string | null>(null); // id em renovação
+  const [novaData, setNovaData] = useState('');
 
   // Merge hook data with full domain config (prompt, examples)
   const domainHealth = useMemo(() => {
@@ -175,16 +177,54 @@ export function RaizPage() {
               <div className="bg-card border border-border-soft rounded-[14px] px-4 py-3 mb-2">
                 <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint mb-1.5">no vencimento</div>
                 {vencendo.slice(0, 5).map(({ item, daysLeft }) => (
-                  <button
-                    key={item.id}
-                    onClick={() => selectItem(item.id)}
-                    className="w-full flex items-baseline gap-2 py-1.5 text-left border-b border-border-soft/50 last:border-0"
-                  >
-                    <span className="flex-1 text-[13px] truncate">{item.title}</span>
-                    <span className={`font-mono text-[11px] shrink-0 ${daysLeft < 0 ? 'text-warning' : 'text-text-muted'}`}>
-                      {daysLeft < 0 ? `venceu há ${-daysLeft}d` : daysLeft === 0 ? 'vence hoje' : `vence em ${daysLeft}d`}
-                    </span>
-                  </button>
+                  <div key={item.id} className="py-1.5 border-b border-border-soft/50 last:border-0">
+                    <div className="flex items-baseline gap-2">
+                      <button onClick={() => selectItem(item.id)} className="flex-1 text-[13px] truncate text-left">
+                        {item.title}
+                      </button>
+                      <span className={`font-mono text-[11px] shrink-0 ${daysLeft < 0 ? 'text-warning' : 'text-text-muted'}`}>
+                        {daysLeft < 0 ? `venceu há ${-daysLeft}d` : daysLeft === 0 ? 'vence hoje' : `vence em ${daysLeft}d`}
+                      </span>
+                      {renovando !== item.id && (
+                        <button
+                          onClick={() => { setRenovando(item.id); setNovaData(''); }}
+                          className="font-mono text-[11px] text-gold-dim shrink-0"
+                        >
+                          renovar
+                        </button>
+                      )}
+                    </div>
+                    {/* rolar a validade fecha o ciclo — sem isto o item vira lixo vencido */}
+                    {renovando === item.id && (
+                      <div className="flex items-center gap-2 mt-1.5">
+                        <input
+                          type="date"
+                          value={novaData}
+                          onChange={(ev) => setNovaData(ev.target.value)}
+                          aria-label={`nova validade de ${item.title}`}
+                          className="flex-1 bg-surface border border-border rounded-lg px-2 py-1 text-[13px] text-text"
+                        />
+                        <button
+                          disabled={!novaData || renovar.isPending}
+                          onClick={() => {
+                            renovar.mutate(
+                              { item, until: `${novaData}T12:00:00` },
+                              { onSuccess: () => setRenovando(null) },
+                            );
+                          }}
+                          className="font-mono text-[11px] text-gold shrink-0 disabled:opacity-30"
+                        >
+                          vale até aí
+                        </button>
+                        <button
+                          onClick={() => setRenovando(null)}
+                          className="font-mono text-[11px] text-text-faint shrink-0"
+                        >
+                          agora não
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 ))}
               </div>
             )}

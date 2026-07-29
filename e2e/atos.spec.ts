@@ -88,3 +88,27 @@ test('ato I.2 — assentir que falha NÃO avança o card', async ({ authenticate
   await expect(page.getByText('Fatura #1000')).toBeVisible();
   await expect(page.getByText('Fatura #1001')).toHaveCount(0);
 });
+
+// ─── Ato I · obra 4 — o gesto que o digest promete ───────
+
+test('ato I.4 — renovar existe no chão da árvore (o digest não promete porta falsa)', async ({
+  authenticatedPage: page,
+}) => {
+  await chegar(page, '/raiz');
+
+  // o cofre lê validades (D63) — e agora deixa agir sobre elas
+  await expect(page.getByText('no vencimento')).toBeVisible();
+  const renovar = page.getByRole('button', { name: 'renovar' }).first();
+  await expect(renovar).toBeVisible();
+
+  await renovar.click();
+  const data = page.getByLabel(/nova validade/).first();
+  await expect(data).toBeVisible();
+  await data.fill('2027-03-12');
+  await expect(page.getByRole('button', { name: 'vale até aí' })).toBeEnabled();
+  await page.screenshot({ path: 'docs/onda-3/14_dissecacao-01_fotos/23-ato1-renovar.png', fullPage: true });
+
+  // e sempre dá pra sair sem selar nada — assentimento é do humano
+  await page.getByRole('button', { name: 'agora não' }).click();
+  await expect(data).toHaveCount(0);
+});
