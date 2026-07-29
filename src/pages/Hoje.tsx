@@ -12,6 +12,8 @@ import { useSoulStore } from '@/store/soul-store';
 import { getCurrentPeriod } from '@/types/ui';
 import { AuroraRitual } from '@/components/home/AuroraRitual';
 import { ProtocolBanner } from '@/components/home/ProtocolBanner';
+import { esperandoLeitura } from '@/components/triage/Assentimento';
+import { AssentimentoSheet } from '@/components/triage/AssentimentoSheet';
 import { skyNow, sunTimes, fmtMin } from '@/engine/sky';
 import { MODULE_COLORS } from '@/components/atoms/tokens';
 import { suggestNow } from '@/engine/today';
@@ -120,8 +122,13 @@ export function HojePage() {
   const soul = useSoulStore();
   const period = getCurrentPeriod();
   const [skip, setSkip] = useState(0);
+  const [assentindo, setAssentindo] = useState(false);
 
   const all = useMemo(() => (items ?? []) as AtomItem[], [items]);
+
+  // o que a lente trouxe e ainda espera o humano (D69). O gesto vivia numa
+  // tela sem porta — o cron enchia o inbox e ninguém alcançava o assentimento.
+  const esperando = useMemo(() => esperandoLeitura(all), [all]);
 
   // os acontecimentos de hoje pousam no arco: nasceu ou selou → ponto na
   // cor do módulo, na hora em que aconteceu (pedido do Rick, D59)
@@ -200,6 +207,19 @@ export function HojePage() {
 
       {/* sentinela — o protocolo acordado pela alma (F7, reusado) */}
       <ProtocolBanner />
+
+      {/* o que espera leitura — estado quieto, nunca badge que grita (D46) */}
+      {esperando > 0 && (
+        <button
+          onClick={() => setAssentindo(true)}
+          className="w-full flex items-baseline gap-2 py-2.5 mb-3 border-b border-border-soft text-left"
+        >
+          <span className="text-[13px] text-text-muted flex-1">
+            {esperando === 1 ? '1 esperando leitura' : `${esperando} esperando leitura`}
+          </span>
+          <span className="font-mono text-[11px] text-gold-dim shrink-0">assentir</span>
+        </button>
+      )}
 
       {/* cadeia do período atual */}
       {cadeias.map((rotina) => {
@@ -295,6 +315,8 @@ export function HojePage() {
       >
         ○ fechar o dia
       </button>
+
+      {assentindo && <AssentimentoSheet onClose={() => setAssentindo(false)} />}
     </div>
   );
 }

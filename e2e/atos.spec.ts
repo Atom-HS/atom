@@ -11,6 +11,19 @@ async function chegar(page: Page, path: string) {
   await page.waitForTimeout(500);
 }
 
+// o rito da chegada abre o dia por cima de tudo (D42) — quem chega passa por
+// ele antes de qualquer gesto. Sem sim=1 não há chegada registrada hoje, então
+// a aurora aparece: é o caminho real de quem abre o app pela manhã.
+// (a aurora tem dois tempos: a respiração e a pergunta — cada um com seu pular)
+async function passarAurora(page: Page) {
+  for (let i = 0; i < 3; i++) {
+    const pular = page.getByRole('button', { name: 'pular' });
+    if (!(await pular.isVisible().catch(() => false))) return;
+    await pular.click();
+    await page.waitForTimeout(400);
+  }
+}
+
 // ─── Ato I · obra 1 — o @ para de negar o que guardou ────
 
 test('ato I.1 — selo que falha depois da captura não vira fila (nem duplicata)', async ({
@@ -87,6 +100,60 @@ test('ato I.2 — assentir que falha NÃO avança o card', async ({ authenticate
   // e mesmo assim o card não andou: a esteira não finge que selou
   await expect(page.getByText('Fatura #1000')).toBeVisible();
   await expect(page.getByText('Fatura #1001')).toHaveCount(0);
+});
+
+// ─── Ato II — a porta que faltava ────────────────────────
+
+test('ato II — o assentimento se alcança do HOJE, sem digitar URL', async ({
+  authenticatedPage: page,
+}) => {
+  await page.route('**/rest/v1/items*', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(Array.from({ length: 12 }, (_, i) => conector(i))),
+    }),
+  );
+  await page.goto('/hoje?sim=0');
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(600);
+  await passarAurora(page);
+
+  // o puxador diz o estado, sem badge que grita (D46)
+  await expect(page.getByText('12 esperando leitura')).toBeVisible();
+  await page.screenshot({ path: 'docs/onda-3/14_dissecacao-01_fotos/24-ato2-puxador.png', fullPage: true });
+
+  // e leva ao gesto — o caminho que o Rick não achou em 29 Jul
+  await page.getByRole('button', { name: /assentir/ }).click();
+  await page.waitForTimeout(500);
+  const folha = page.getByRole('dialog', { name: 'Esperando leitura' });
+  await expect(folha).toBeVisible();
+  await expect(folha.getByText('Fatura #1000')).toBeVisible();
+  await expect(folha.getByText(/li assim pelo gmail/)).toBeVisible();
+  await page.screenshot({ path: 'docs/onda-3/14_dissecacao-01_fotos/25-ato2-folha.png', fullPage: true });
+
+  // a folha fecha e devolve o dia
+  // toque fora, acima da folha — o gesto real de quem fecha um sheet
+  await folha
+    .getByRole('button', { name: 'Fechar', exact: true })
+    .click({ position: { x: 100, y: 30 } });
+  await expect(folha).toHaveCount(0);
+  await expect(page.getByText('fixos de hoje')).toBeVisible();
+});
+
+test('ato II — dia sem fila não mostra puxador (o silêncio é estado)', async ({
+  authenticatedPage: page,
+}) => {
+  await page.route('**/rest/v1/items*', (route) =>
+    route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+  );
+  await page.goto('/hoje?sim=0');
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(600);
+  await passarAurora(page);
+  // o dia abriu de verdade (senão o teste passaria por baixo da aurora)
+  await expect(page.getByText('fixos de hoje')).toBeVisible();
+  await expect(page.getByText(/esperando leitura/)).toHaveCount(0);
 });
 
 // ─── Ato I · obra 4 — o gesto que o digest promete ───────

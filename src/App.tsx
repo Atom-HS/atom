@@ -1,8 +1,8 @@
 // App.tsx — MindRoot v2
 // BrowserRouter + lazy pages + auth gate
 
-import { useState, useEffect, useLayoutEffect, lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useState, useLayoutEffect, lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
@@ -62,6 +62,11 @@ function PageSkeleton() {
 const PATH_TO_PAGE: Record<string, AppPage> = {
   '/': 'home',
   '/home': 'home',
+  // as três faces do mundo novo — sem elas o app-store apontava pra tela
+  // velha enquanto o usuário estava numa face (D40)
+  '/hoje': 'home',
+  '/arvore': 'raiz',
+  '/at': 'inbox',
   '/inbox': 'inbox',
   '/pipeline': 'pipeline',
   '/wrap': 'wrap',
@@ -135,20 +140,10 @@ function AnimatedRoutes() {
 
 // ─── Authenticated App ────────────────────────────────
 
-// First-time redirect to Raiz (non-blocking)
-function FirstTimeRaizRedirect() {
-  const user = useAppStore((s) => s.user);
-  const routerNavigate = useNavigate();
-  const location = useLocation();
-
-  useEffect(() => {
-    if (user && !user.user_metadata?.raiz_welcomed && location.pathname === '/') {
-      routerNavigate('/raiz', { replace: true });
-    }
-  }, [user, routerNavigate, location.pathname]);
-
-  return null;
-}
+// O redirect de primeira vez pra /raiz morreu aqui: ele esperava pathname
+// '/', e '/' virou <Navigate to="/hoje"> — nunca disparou desde a Onda 3.
+// Quem chega agora pousa no HOJE; a orientação de primeira vez é obra da
+// aurora, não de um desvio de rota.
 
 function AuthenticatedApp() {
   useRealtime();
@@ -164,7 +159,6 @@ function AuthenticatedApp() {
           <OfflineBanner />
         </div>
         <RouteSync />
-        <FirstTimeRaizRedirect />
         <AnimatedRoutes />
       </AppShell>
     </>
