@@ -404,6 +404,119 @@ selando calado não seria.
 
 ---
 
+## Wrap · 30 Jul 2026 (a noite inteira) — o exame completo, as três mentiras, e o gate na mesa
+
+### ○ Soul
+A sessão que rodou enquanto a casa dormia. O handoff dizia «leia tudo antes
+de tocar em qualquer coisa» — li, e depois o exame não parou: dez features
+vividas antes de lidas, três mentiras achadas AO VIVO e mortas na mesma
+noite, duas obras do benchmark fechadas, e o gate carregado sem disparar.
+A tese do prompt da dissecação se confirmou pela terceira vez: o que MENTE
+só aparece vivendo — a maior delas dormia no caminho que produz 100% dos
+itens reais, e a casa tinha certeza de que estava consertada.
+
+### · Items
+
+**Ato VI — as três dissecações que faltavam** (3 docs, fotos 32–70)
+- **02 (ÁRVORE · Raiz · Builder)**: árvore VIVA (teto do drill honesto,
+  síntese que muda com a janela) · raiz VIVA (lead certo, renovar inline)
+  · builder MANCA — o `inferType` testa strings que nunca batem (meta
+  financeira nasce «Habito», braços task/ritual são código morto),
+  finanças/família não parem estrutura, reload apaga a entrevista. Zero
+  MENTE; fila de 6 MANCA + 7 polimentos.
+- **03 (casa · ida · digest)**: a sheet digna e o fluxo da ida inteiro em
+  mock (plano → assentir → lei viva → desfazer → reconexão) · o puxador
+  invisível confirmado por foto · `disconnect()` queima o token que o
+  desfazer precisaria (contra a D68) · a ida REAL segue não verificada
+  (espera o assentimento do Rick). **MENTE: a volta do cron ingeria série
+  sem `recurring_event_id` nem herança de selo** — a DP-C estava morta em
+  produção; item nascido pelo cron nem ENSINAVA selo.
+- **04 (Wrap · busca · projetos · offline)**: o rito já é um passo por
+  tela, mas o selo exigia «o que fica pra amanhã» e o passo 5 é um cartão
+  oco · a busca reformada vive, mas a fala do filtro inválido dizia «foi
+  ignorado» quando o motor trava a busca · a pill do projeto comunica e
+  deságua na casca velha — **DP-E confirmada pela vivência** · **MENTE: o
+  tronco de bolso era código inalcançável** — sem rede o fetch pendura sem
+  rejeitar, o catch nunca rodava, o HOJE ficava em «…» com o snapshot
+  gravado do lado.
+
+**As cirurgias (só o que MENTE — a regra do rito)**
+- a volta do cron conhece a série: espelho do contrato do client na edge,
+  instância herdada nasce no 1 e passa pelo portão; guarda novo
+  `series-espelho.test.ts` lê a edge como texto e quebra na divergência
+- o bolso funciona: `comPrazo()` corre o fetch contra 6s; sem resposta, o
+  snapshot assume — cena 10 do atos.spec prova com rede morta de verdade
+- a fala do filtro diz o que o motor faz («corrige ou tira o filtro»)
+
+**As obras do benchmark 16 (autorizadas na fila)**
+- **24a**: o selo do wrap vale com o dia vazio — o plano de amanhã segue
+  no lugar de honra, mas convite não trava rito (cena de prova nova)
+- **24b**: cold start declarado («a árvore nasce vazia… sem dado, e tudo
+  bem») + confiança por ramo (firme · rala · sem-dado) — motor puro, 6
+  testes, foto 37 refotografada com intenção
+
+**Ato VII — o gate carregado** (`19_gate.md` + 8 fotos do antes)
+- cobertura verificada tela a tela; censo de dependências limpo
+- **duas condições seguram o gatilho**: a sheet do projeto (DP-E) ainda
+  não nasceu (a pill viraria porta pro nada), e a escada F4 ficaria sem
+  boca — a única função do mundo velho sem porta nova, com 3 opções na
+  mesa (recomendada: puxador quieto na ÁRVORE, obra pequena pré-merge)
+- nenhum PR, nenhum merge, nenhum push — a arma na mesa, o gesto é do Rick
+
+### △ Decidido (nada ratificado — tudo DP ou fila)
+- **DP-E pronta pra virar D74**: /projects vive como camada, morre como
+  tela — confirmada por vivência (dissecação 04) e mercado (benchmark 16)
+- Nenhuma DP nova precisou nascer: todos os achados são aplicação de leis
+  já ratificadas (D46, D54, D55, D60, D63, D64, D68, D69, DP-C)
+
+### ⬡ Conexões
+- O guarda `series-espelho` é irmão do `vault-espelho` — a casa agora
+  força os DOIS contratos que a edge espelha à mão; a família de guardas
+  de espelho virou padrão (terceiro espelho que nascer já tem molde
+- O `comPrazo` do bolso e o «não consegui selar» do @ são a mesma lei
+  vista de lados opostos: erro que não chega é pior que erro que chega
+- A confiança por ramo (24b) responde a mesma pergunta do card cego do
+  conector (Ato III): não se assente — nem se lê — o que não se vê
+
+### ✳ Seeds
+- «O que mudou desde que você olhou» — recap ancorado no último open
+  (benchmark 16, a resposta mais barata ao problema de retenção)
+- Pergunta-condição pra finanças/família no builder (protocolo nascer nos
+  5 módulos) — obra de voz, com o E. na mesa
+- Sinal «sem próxima ação» (OmniFocus) na futura sheet do projeto
+- Status da lente no HOJE («a lente trouxe 3 esta manhã») — pra fila de
+  leitura não depender de abrir a casa
+
+### □ Audit
+- ✅ 392 testes verdes (18 novos na noite) · tsc limpo · build ok
+- ✅ atos.spec 12 cenas · gate visual 13/13 (zero baseline sem intenção;
+  única refotografada: 37, com o porquê no commit)
+- ✅ 10 commits, um por obra, nenhum com hook vermelho
+- ⚠ a cena do ato III quebrava à meia-noite (data fixa «hoje» virou
+  «ontem») — consertada com data dinâmica; armadilha nova da casa: cena
+  que afirma «hoje» nunca usa data fixa
+- ⚠ o diagnóstico fino do porquê do fetch pendurar (supabase-js × rede
+  morta) ficou registrado mas não resolvido — o `comPrazo` torna a
+  resposta irrelevante pro usuário, mas a curiosidade fica
+- ⚠ deploy da edge `daily-digest` corrigida é gesto do Rick — até lá o
+  cron de produção segue com a volta cega de série
+
+### → Next — a mesa do Rick (em ordem de peso)
+1. **Deploy da `daily-digest`** — a correção da MENTE do cron só vale em
+   produção depois do deploy (e o dry-run do digest segue pendente)
+2. **Ratificar**: DP-E (D74?) · e as DP-A…DP-F que já rodam com default
+3. **Decidir a escada** (gate §3): porta na ÁRVORE (recomendada) · morte
+   consciente · adiar /review
+4. **A sheet do projeto** (obra pequena, condição do gate §2)
+5. **O gatilho do gate** (D41) — quando as duas condições fecharem
+6. Fila MANCA das dissecações 02–04 (o parto honesto do builder é o maior
+   pacote; puxador da casa com corpo; desligar-desfaz D68; grid da raiz
+   na lei do cofre; reconciliação no cron)
+7. Pendências antigas que seguem: redirect URL do Supabase na prod nova ·
+   viver a ida real no Gmail · instalar o PWA no celular (SW é prod-only)
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. O formato é o do wrap do app,
 porque a casa come a própria comida.*
