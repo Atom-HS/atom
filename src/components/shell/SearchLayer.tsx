@@ -5,7 +5,7 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { useItems } from '@/hooks/useItems';
 import { useNav } from '@/hooks/useNav';
-import { parseSearchQuery, searchItems } from '@/engine/search';
+import { parseSearchQuery, prefixVocabulary, searchItems } from '@/engine/search';
 import { MODULE_COLORS, STAGE_GEOMETRIES, getTypeColor } from '@/components/atoms/tokens';
 import type { AtomItem } from '@/types/item';
 
@@ -30,9 +30,10 @@ export function SearchLayer({ onClose }: SearchLayerProps) {
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
 
+  const filtros = useMemo(() => parseSearchQuery(query), [query]);
   const results = useMemo(
-    () => (query.trim() ? searchItems(items, parseSearchQuery(query)) : []),
-    [items, query],
+    () => (query.trim() ? searchItems(items, filtros) : []),
+    [items, query, filtros],
   );
 
   // recentes — as últimas coisas tocadas, quando a boca está vazia
@@ -44,6 +45,21 @@ export function SearchLayer({ onClose }: SearchLayerProps) {
         .slice(0, 6),
     [items],
   );
+
+  // prefixo aberto sem valor (`mod:`) → oferecer os valores que existem, em
+  // vez de deixar adivinhar. É o padrão do GitHub, o mais eficaz medido.
+  const prefixAberto = useMemo(() => {
+    const ultimo = query.trim().split(/\s+/).pop() ?? '';
+    const m = ultimo.match(/^([a-z]+):([a-z]*)$/i);
+    return m ? { prefix: m[1].toLowerCase(), parcial: m[2].toLowerCase() } : null;
+  }, [query]);
+
+  const sugestoes = useMemo(() => {
+    if (!prefixAberto) return [];
+    const v = prefixVocabulary().find((p) => p.prefix === prefixAberto.prefix);
+    if (!v) return [];
+    return v.values.filter((x) => x.startsWith(prefixAberto.parcial)).slice(0, 12);
+  }, [prefixAberto]);
 
   const open = (id: string) => {
     selectItem(id);
@@ -73,17 +89,62 @@ export function SearchLayer({ onClose }: SearchLayerProps) {
           <>
             <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint mb-1.5">recentes</div>
             {recentes.map((item) => <ResultRow key={item.id} item={item} onOpen={open} />)}
-            <p className="font-mono text-[10px] text-text-faint text-center mt-6">
-              pra afinar: mod: · tipo: · tag:
-            </p>
+            {/* a tela vazia é o único manual que alguém lê: os 7 prefixos
+                aparecem inteiros e entram na boca com um toque */}
+            <div className="mt-6">
+              <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint mb-1.5">pra afinar</div>
+              <div className="flex flex-wrap gap-1.5">
+                {prefixVocabulary().map(({ prefix }) => (
+                  <button
+                    key={prefix}
+                    onClick={() => { setQuery(`${prefix}:`); inputRef.current?.focus(); }}
+                    className="font-mono text-[11px] text-text-muted border border-border bg-card rounded-full px-2.5 py-1"
+                  >
+                    {prefix}:
+                  </button>
+                ))}
+              </div>
+            </div>
           </>
         )}
+
+        {/* prefixo aberto: os valores que existem, em vez de adivinhação */}
+        {sugestoes.length > 0 && (
+          <div className="mb-3">
+            <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint mb-1.5">
+              valores de {prefixAberto?.prefix}:
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {sugestoes.map((v) => (
+                <button
+                  key={v}
+                  onClick={() => { setQuery(`${prefixAberto?.prefix}:${v} `); inputRef.current?.focus(); }}
+                  className="font-mono text-[11px] text-text-muted border border-border bg-card rounded-full px-2.5 py-1"
+                >
+                  {v}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* o filtro que não existe é dito. Antes virava texto livre e a busca
+            devolvia zero calada — o usuário concluía que não tinha o item */}
+        {filtros.desconhecidos.map((d) => (
+          <p key={`${d.prefix}:${d.value}`} className="text-[12px] text-text-muted mb-2">
+            «{d.value}» não é um valor de <span className="font-mono">{d.prefix}:</span> — o filtro foi ignorado
+          </p>
+        ))}
 
         {query.trim() && (
           <>
             {results.map(({ item }) => <ResultRow key={item.id} item={item} onOpen={open} />)}
             {results.length === 0 && (
-              <p className="text-sm text-text-muted text-center py-10">nada com esse nome no tronco</p>
+              <p className="text-sm text-text-muted text-center py-10">
+                {filtros.desconhecidos.length > 0
+                  ? 'nada — e há filtro que não existe acima'
+                  : 'nada com esse nome no tronco'}
+              </p>
             )}
           </>
         )}

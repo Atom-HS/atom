@@ -261,6 +261,38 @@ test('ato IV — a pressão dos próximos dias sussurra, e cala quando não há'
   await page.screenshot({ path: 'docs/onda-3/14_dissecacao-01_fotos/27-ato4-pressao.png', fullPage: true });
 });
 
+// ─── Ato VI · busca — o filtro que não existe é dito ─────
+
+test('busca — prefixo ensina, e filtro inválido não vira busca literal calada', async ({
+  authenticatedPage: page,
+}) => {
+  await chegar(page, '/hoje');
+  await page.keyboard.press('/');
+  await page.waitForTimeout(400);
+  const busca = page.getByRole('dialog', { name: 'Buscar' });
+  await expect(busca).toBeVisible();
+
+  // a tela vazia é o único manual que alguém lê: os 7 prefixos, inteiros
+  await expect(busca.getByText('pra afinar')).toBeVisible();
+  await expect(busca.getByRole('button', { name: 'prio:', exact: true })).toBeVisible();
+  await expect(busca.getByRole('button', { name: 'emo:', exact: true })).toBeVisible();
+  await page.screenshot({ path: 'docs/onda-3/14_dissecacao-01_fotos/28-busca-prefixos.png', fullPage: true });
+
+  // tocar o prefixo abre os valores que existem (padrão GitHub)
+  await busca.getByRole('button', { name: 'mod:', exact: true }).click();
+  await page.waitForTimeout(300);
+  await expect(busca.getByText('valores de mod:')).toBeVisible();
+  await expect(busca.getByRole('button', { name: 'work', exact: true })).toBeVisible();
+  await page.screenshot({ path: 'docs/onda-3/14_dissecacao-01_fotos/29-busca-valores.png', fullPage: true });
+
+  // e o filtro que não existe é nomeado, em vez de devolver zero calado
+  await busca.getByRole('textbox').fill('mod:xyz');
+  await page.waitForTimeout(300);
+  await expect(busca.getByText(/não é um valor de/)).toBeVisible();
+  await expect(busca.getByText('nada — e há filtro que não existe acima')).toBeVisible();
+  await page.screenshot({ path: 'docs/onda-3/14_dissecacao-01_fotos/30-busca-filtro-invalido.png', fullPage: true });
+});
+
 // ─── Ato I · obra 4 — o gesto que o digest promete ───────
 
 test('ato I.4 — renovar existe no chão da árvore (o digest não promete porta falsa)', async ({

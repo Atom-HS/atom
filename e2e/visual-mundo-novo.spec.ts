@@ -147,7 +147,11 @@ test('a casa — o plano da ida (D68)', async ({ authenticatedPage: page }) => {
   await page.waitForTimeout(400);
   await page.getByRole('button', { name: /ver o plano/ }).click();
   await page.waitForTimeout(500);
-  await expect(page).toHaveScreenshot('casa-plano-ida.png', SHOT);
+  // a foto é da FOLHA, não da página: sem relógio fixo, o arco vivo aparece
+  // por trás da folha ancorada embaixo e o sol anda de minuto em minuto —
+  // a cena passava só quando refotografada e rodada no mesmo minuto
+  await expect(page.getByRole('dialog', { name: 'A casa' }))
+    .toHaveScreenshot('casa-plano-ida.png', { maxDiffPixelRatio: 0.01 });
 });
 
 // ─── os gestos (D54 — nada é aba) ────────────────────────
