@@ -42,9 +42,28 @@ export interface Branch {
   ideal: number;  // 0..1 — presença no baseline, mesma régua
   leaves: Leaf[]; // folhas recentes (mais nova primeiro; teto de 8 pro drill)
   total: number;  // quantas folhas a janela tem de verdade (sem teto — o drill não mente)
+  baseTotal: number;  // folhas na janela do baseline — o chão em que o "ideal" se apoia
+  confidence: BranchConfidence; // quanta folha sustenta a leitura deste ramo
   saturated: boolean; // real folgado acima do baseline → anel (cheio)
   thirsty: boolean;   // real bem abaixo do baseline → pedindo água
 }
+
+/**
+ * Confiança por ramo (benchmark 16, table stake): «sem dado, e tudo bem»
+ * tem que ser distinguível de «caiu» — e de leitura apoiada em quase nada.
+ * O degrau é do dado, não do humano: nenhuma confiança julga (D46).
+ */
+export type BranchConfidence = 'firme' | 'rala' | 'sem-dado';
+
+// menos folha que isto no baseline = o "ideal" ainda é chute educado
+export const CONFIDENCE_FLOOR = 3;
+
+/** O que a face diz de cada degrau — null quando não há nada a dizer. */
+export const CONFIDENCE_LABEL: Record<BranchConfidence, string | null> = {
+  firme: null,
+  rala: 'leitura rala — o ideal deste ramo se apoia em pouca folha ainda',
+  'sem-dado': 'sem folha ainda — e tudo bem: o ramo cresce quando a vida tocar nele',
+};
 
 const LIVE = (i: AtomItem) => i.state !== 'archived' && i.status !== 'archived';
 
@@ -89,16 +108,32 @@ export function treeShape(items: AtomItem[], windowKey: TreeWindow['key'], now: 
       .filter((i) => i.module === m && LIVE(i) && touchOf(i) >= since)
       .sort((a, b) => touchOf(b).localeCompare(touchOf(a)));
     const leaves = inWindow.slice(0, 8).map((item) => ({ item, when: touchOf(item) }));
+    const baseTotal = idealRaw[m];
+    const confidence: BranchConfidence =
+      baseTotal === 0 && inWindow.length === 0 ? 'sem-dado'
+      : baseTotal < CONFIDENCE_FLOOR ? 'rala'
+      : 'firme';
     return {
       module: m,
       real,
       ideal,
       leaves,
       total: inWindow.length,
+      baseTotal,
+      confidence,
       saturated: real > ideal + DELTA,
       thirsty: ideal > 0 && real < ideal - DELTA,
     };
   });
+}
+
+/**
+ * A árvore inteira ainda não viveu? Cold start é ESTADO declarado, nunca
+ * silêncio mudo: 8 tocos idênticos sem uma palavra são indistinguíveis de
+ * «caiu» (benchmark 16: Whoop declara o cinza; quem esconde, assusta).
+ */
+export function isColdStart(branches: Branch[]): boolean {
+  return branches.every((b) => b.total === 0 && b.baseTotal === 0);
 }
 
 // nomes de casa pros ramos (a árvore fala pt)

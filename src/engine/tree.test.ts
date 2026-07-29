@@ -1,6 +1,6 @@
 // engine/tree.test.ts — a árvore da vida (face ÁRVORE)
 import { describe, it, expect } from 'vitest';
-import { treeShape, synthesis, presence, TREE_WINDOWS } from './tree';
+import { treeShape, synthesis, presence, isColdStart, CONFIDENCE_FLOOR, TREE_WINDOWS } from './tree';
 import type { AtomItem, AtomModule } from '@/types/item';
 
 const NOW = new Date('2026-07-27T12:00:00Z');
@@ -119,5 +119,44 @@ describe('synthesis — estado, nunca julgamento', () => {
 describe('TREE_WINDOWS', () => {
   it('as 4 janelas φ: 7 · 21 · 55 · 365', () => {
     expect(TREE_WINDOWS.map((w) => w.days)).toEqual([7, 21, 55, 365]);
+  });
+});
+
+describe('cold start e confiança por ramo (benchmark 16)', () => {
+  it('árvore que nunca viveu declara cold start', () => {
+    expect(isColdStart(treeShape([], 'semana', NOW))).toBe(true);
+  });
+
+  it('uma folha só já tira a árvore do cold start', () => {
+    const shape = treeShape([item('work', 2)], 'semana', NOW);
+    expect(isColdStart(shape)).toBe(false);
+  });
+
+  it('ramo sem folha em janela nenhuma → sem-dado', () => {
+    const shape = treeShape([item('work', 2)], 'semana', NOW);
+    expect(shape.find((b) => b.module === 'family')?.confidence).toBe('sem-dado');
+  });
+
+  it('baseline com pouca folha → leitura rala', () => {
+    // 2 toques na estação (< CONFIDENCE_FLOOR): o ideal se apoia em quase nada
+    const shape = treeShape([item('mind', 30), item('mind', 40)], 'semana', NOW);
+    expect(CONFIDENCE_FLOOR).toBeGreaterThan(2);
+    expect(shape.find((b) => b.module === 'mind')?.confidence).toBe('rala');
+  });
+
+  it('baseline no piso ou acima → leitura firme', () => {
+    const shape = treeShape(
+      [item('body', 5), item('body', 20), item('body', 44)],
+      'semana',
+      NOW,
+    );
+    expect(shape.find((b) => b.module === 'body')?.confidence).toBe('firme');
+  });
+
+  it('a confiança é do dado, nunca julga: sem-dado não vira sede nem cheio', () => {
+    const shape = treeShape([item('work', 2)], 'semana', NOW);
+    const family = shape.find((b) => b.module === 'family')!;
+    expect(family.thirsty).toBe(false);
+    expect(family.saturated).toBe(false);
   });
 });

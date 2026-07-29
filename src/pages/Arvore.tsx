@@ -11,7 +11,7 @@ import { useItems } from '@/hooks/useItems';
 import { useNav } from '@/hooks/useNav';
 import { useAppStore } from '@/store/app-store';
 import { eventService } from '@/service/item-service';
-import { treeShape, synthesis, TREE_WINDOWS, BRANCH_LABEL, type Branch, type TreeWindow } from '@/engine/tree';
+import { treeShape, synthesis, isColdStart, CONFIDENCE_LABEL, TREE_WINDOWS, BRANCH_LABEL, type Branch, type TreeWindow } from '@/engine/tree';
 import { mirror } from '@/engine/mirror';
 import { simEvents } from '@/dev/sim-week';
 import type { AtomItem, AtomModule } from '@/types/item';
@@ -134,6 +134,15 @@ export function ArvorePage() {
       {/* a síntese — estado, nunca julgamento; quieta se a árvore está quieta */}
       {line && <p className="text-center text-sm italic text-text-muted -mt-1 mb-3 text-balance">{line}</p>}
 
+      {/* cold start declarado (benchmark 16): «sem dado, e tudo bem» nunca
+          pode parecer «caiu» — a árvore vazia diz por que está vazia */}
+      {isColdStart(branches) && (
+        <p className="text-center text-[13px] italic text-text-muted -mt-1 mb-3 text-balance px-4">
+          a árvore nasce vazia — cada coisa que você tocar vira folha no ramo
+          dela. sem dado, e tudo bem.
+        </p>
+      )}
+
       {/* janelas φ */}
       <div className="flex gap-1.5 justify-center flex-wrap mb-3">
         {TREE_WINDOWS.map((w) => (
@@ -157,6 +166,10 @@ export function ArvorePage() {
           <h4 className="text-[11px] font-semibold tracking-wider text-text-muted mb-1.5">
             {BRANCH_LABEL[drill.module]} · {drill.total > 0 ? `${drill.total} ${drill.total === 1 ? 'folha' : 'folhas'} na janela` : 'sem folha nesta janela'}
           </h4>
+          {/* confiança por ramo: o dado ralo se declara (benchmark 16) */}
+          {CONFIDENCE_LABEL[drill.confidence] && (
+            <p className="text-[11px] italic text-text-faint mb-1.5">{CONFIDENCE_LABEL[drill.confidence]}</p>
+          )}
           {drill.leaves.map(({ item, when }) => (
             <button
               key={item.id}
