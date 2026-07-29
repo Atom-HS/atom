@@ -28,6 +28,10 @@ const DOMAIN_PT: Record<string, string> = {
   finance: "finanças", storage: "arquivos", memories: "memórias",
   time: "tempo", communication: "comunicação", projects: "projetos",
 };
+// espelho de engine/digest.ts (canônico lá — DP-F): o dito só volta quando o
+// ESTADO muda. De 113 pra 112 dias nada aconteceu; de 8 pra 7, sim.
+const EXPIRY_BANDS = { hoje: 0, semana: 7, mes: 30 };
+const ABSENCE_STEP_DAYS = 90;
 const MS_DAY = 86_400_000;
 
 interface Row {
@@ -48,8 +52,8 @@ function readDeadline(body: Record<string, unknown> | null): Date | null {
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
-function expiries(rows: Row[], now: Date): Array<{ title: string; domain: string; daysLeft: number }> {
-  const out: Array<{ title: string; domain: string; daysLeft: number }> = [];
+function expiries(rows: Row[], now: Date): Array<{ id: string; title: string; domain: string; daysLeft: number }> {
+  const out: Array<{ id: string; title: string; domain: string; daysLeft: number }> = [];
   for (const r of rows) {
     if (r.status === "archived" || r.state === "archived" || r.status === "completed") continue;
     const domain = domainOf(r.tags);
@@ -58,7 +62,7 @@ function expiries(rows: Row[], now: Date): Array<{ title: string; domain: string
     if (!deadline) continue;
     const daysLeft = Math.floor((deadline.getTime() - now.getTime()) / MS_DAY);
     const lead = LEAD_DAYS[domain] ?? LEAD_DEFAULT;
-    if (daysLeft <= lead) out.push({ title: r.title, domain, daysLeft });
+    if (daysLeft <= lead) out.push({ id: r.id, title: r.title, domain, daysLeft });
   }
   return out.sort((a, b) => a.daysLeft - b.daysLeft);
 }
@@ -94,9 +98,32 @@ function absences(
     .sort((a, b) => (b.daysSince ?? Infinity) - (a.daysSince ?? Infinity));
 }
 
+// ─── a memória do raro (espelho de engine/digest.ts · DP-F) ──────────
+function expiryBand(daysLeft: number): string {
+  if (daysLeft < 0) return "vencido";
+  if (daysLeft <= EXPIRY_BANDS.hoje) return "hoje";
+  if (daysLeft <= EXPIRY_BANDS.semana) return "semana";
+  if (daysLeft <= EXPIRY_BANDS.mes) return "mes";
+  return "janela";
+}
+
+function absenceStep(daysSince: number | null): string {
+  return daysSince === null ? "nunca" : String(Math.floor(daysSince / ABSENCE_STEP_DAYS));
+}
+
+function fingerprint(
+  exp: Array<{ id: string; daysLeft: number }>,
+  abs: Array<{ domain: string; daysSince: number | null }>,
+): string {
+  return [
+    ...exp.map((e) => `v:${e.id}:${expiryBand(e.daysLeft)}`),
+    ...abs.map((a) => `a:${a.domain}:${absenceStep(a.daysSince)}`),
+  ].sort().join("|");
+}
+
 // ─── a voz do E. (Lei do Tom: você · estado, nunca cobrança · sem !) ──
 function compose(
-  exp: Array<{ title: string; domain: string; daysLeft: number }>,
+  exp: Array<{ id: string; title: string; domain: string; daysLeft: number }>,
   abs: Array<{ domain: string; daysSince: number | null }>,
 ): string {
   const lines: string[] = ["◍ o cofre, uma vez por dia — só porque há algo.", ""];
@@ -249,6 +276,20 @@ Deno.serve(async (req: Request): Promise<Response> => {
       return json({ sent: false, reason: "nada vencendo ou ausente", volta });
     }
 
+    // ...e o raro tem memória (DP-F): matéria idêntica à da última fala não
+    // volta. Cinco ausências «nunca teve registro» todo dia matam a raridade
+    // que justifica a válvula existir. Cruzar um degrau, sim, é notícia.
+    const impressao = fingerprint(exp, abs);
+    const { data: ditos } = await sb
+      .from("atom_events").select("payload, created_at")
+      .eq("user_id", userId).eq("event_type", "digest_sent")
+      .order("created_at", { ascending: false }).limit(1);
+    const ultimo = (ditos?.[0]?.payload as { fingerprint?: string } | undefined)?.fingerprint ?? null;
+    if (impressao === ultimo) {
+      log("quiet-repetido", { volta });
+      return json({ sent: false, reason: "nada mudou desde a última fala", volta });
+    }
+
     const text = compose(exp, abs);
     if (dryRun) return json({ sent: false, dry_run: true, text, expiries: exp.length, absences: abs.length, volta });
 
@@ -260,6 +301,19 @@ Deno.serve(async (req: Request): Promise<Response> => {
       body: JSON.stringify({ chat_id: Number(chatId), text }),
     });
     if (!tr.ok) return json({ error: "Telegram send failed", status: tr.status }, 502);
+
+    // guarda o que foi dito, pra não repetir amanhã. Zero schema novo: o
+    // trilho é o atom_events que já existe. `source_id` é NOT NULL e aponta
+    // pra items — ancoramos no primeiro assunto da fala; a verdade mora no
+    // payload. Se esse item for apagado, a memória cai junto e a casa fala
+    // uma vez a mais: degradar falando é melhor que degradar calando.
+    const ancora = exp[0]?.id ?? (rows ?? [])[0]?.id;
+    if (ancora) {
+      await sb.from("atom_events").insert({
+        user_id: userId, source_id: ancora, event_type: "digest_sent",
+        payload: { fingerprint: impressao, expiries: exp.length, absences: abs.length },
+      });
+    }
 
     log("sent", { expiries: exp.length, absences: abs.length });
     return json({ sent: true, expiries: exp.length, absences: abs.length, volta });

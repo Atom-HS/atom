@@ -19,13 +19,17 @@ export function domainOf(item: AtomItem): string | null {
 // Antecedência por domínio (dias). Regra de domínio, não preferência:
 // passaporte avisa ~9 meses antes porque países exigem 6 meses de validade
 // na entrada; cartão/CNH ~2 meses (padrão 1Password/GetReminded).
-const LEAD_DAYS: Record<string, number> = {
+// Exportados porque a edge `daily-digest` espelha esta lei à mão (Deno não
+// alcança o alias @/): o teste `vault-espelho.test.ts` compara os dois e
+// quebra se divergirem. Comentário não força nada; teste força.
+export const LEAD_DAYS: Record<string, number> = {
   documents: 270,
   identity: 90,
   finance: 60,
   health: 60,
 };
-const LEAD_DEFAULT = 30;
+export const LEAD_DEFAULT = 30;
+export const ABSENCE_THRESHOLD_DAYS = 90;
 
 export function leadDays(item: AtomItem): number {
   const d = domainOf(item);
@@ -124,7 +128,7 @@ export function absences(
 }
 
 /** As ausências que merecem voz — velhas demais (ou nunca), mais antigas primeiro. */
-export function quietAbsences(all: VaultAbsence[], thresholdDays = 90): VaultAbsence[] {
+export function quietAbsences(all: VaultAbsence[], thresholdDays = ABSENCE_THRESHOLD_DAYS): VaultAbsence[] {
   return all
     .filter((a) => a.daysSince === null || a.daysSince > thresholdDays)
     .sort((a, b) => (b.daysSince ?? Infinity) - (a.daysSince ?? Infinity));
