@@ -55,14 +55,11 @@ export function useAuth() {
       // Capture Google OAuth tokens for connectors (non-blocking, once per session)
       if (session?.provider_refresh_token && !tokenStored.current) {
         tokenStored.current = true;
-        console.log('[connector] refresh_token detected, storing...');
         connectorService.storeTokens(
           session.provider_refresh_token,
           'google',
           { email: session.user?.email },
-        ).then(() => {
-          console.log('[connector] tokens stored successfully');
-        }).catch((err) => {
+        ).catch((err) => {
           tokenStored.current = false; // allow retry on failure
           console.warn('[connector] failed to store tokens:', err);
         });
