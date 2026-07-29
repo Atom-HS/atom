@@ -424,6 +424,66 @@ test('builder — a meta financeira nasce task, reload não apaga, e o chip muda
   expect(partos[0].genesis_stage).toBe(1);
 });
 
+// ─── Cirurgia · obra 2 — o projeto vive como camada (DP-E) ─
+
+test('projeto — a pill abre sheet (não a tela condenada), e o próximo leva ao item', async ({
+  authenticatedPage: page,
+}) => {
+  test.setTimeout(60_000);
+  // o mundo com projeto da dissecação 04: 3 abertos, 2 selados
+  const NOW = new Date().toISOString();
+  const mk = (over: Record<string, unknown>) => ({
+    id: 'x', title: 'x', tags: [], status: 'active', state: 'structured',
+    genesis_stage: 3, source: 'mindroot', created_by: 'e2e-test-user-0001',
+    created_at: NOW, updated_at: NOW, body: {}, module: 'work', type: 'task',
+    ...over,
+  });
+  const itens = [
+    mk({ id: 'proj-1', title: 'Atlas Detailer', type: 'project' }),
+    mk({ id: 'c1', title: 'medir a van do Ricardo', created_at: '2026-07-01T08:00:00Z' }),
+    mk({ id: 'c2', title: 'orçar o vinil fosco' }),
+    mk({ id: 'c3', title: 'foto do antes e depois' }),
+    mk({ id: 'c4', title: 'post no insta', status: 'completed', state: 'committed', genesis_stage: 7 }),
+    mk({ id: 'c5', title: 'contrato assinado', status: 'completed', state: 'committed', genesis_stage: 7 }),
+  ];
+  const conexoes = ['c1', 'c2', 'c3', 'c4', 'c5'].map((c, i) => ({
+    id: `conn-${i}`, source_id: c, target_id: 'proj-1', relation: 'belongs_to',
+    user_id: 'e2e-test-user-0001', created_at: NOW,
+  }));
+  await page.route('**/rest/v1/items*', (route) =>
+    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(itens) }),
+  );
+  await page.route('**/rest/v1/item_connections*', (route) =>
+    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(conexoes) }),
+  );
+  await page.goto('/hoje?sim=0');
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(600);
+  await passarAurora(page);
+
+  // a pill comunica presença — e agora abre a sheet, não /projects
+  await page.getByRole('button', { name: /Atlas Detailer/ }).click();
+  await page.waitForTimeout(500);
+  const sheet = page.getByRole('dialog', { name: 'Projeto' });
+  await expect(sheet).toBeVisible();
+  expect(page.url()).not.toContain('/projects');
+
+  // só o que importa (DP-I): presença, o próximo, filhos com ·/○
+  await expect(sheet.getByText('3 de 5 abertos')).toBeVisible();
+  await expect(sheet.getByText('o próximo')).toBeVisible();
+  await expect(sheet.getByText('contrato assinado')).toBeVisible();
+  // chrome de gerenciador não entra: sem criar, sem filtros, sem agrupamento
+  await expect(sheet.getByText(/todos|vivos|selados|MOD-/)).toHaveCount(0);
+  await page.screenshot({ path: 'docs/onda-3/14_dissecacao-01_fotos/73-cirurgia-projeto-sheet.png', fullPage: true });
+
+  // o próximo como convite → ItemDetail (o convite e a linha de filho
+  // mostram o mesmo item — o toque no convite é a porta)
+  await sheet.getByRole('button', { name: /medir a van do Ricardo/ }).first().click();
+  await page.waitForTimeout(600);
+  expect(page.url()).toContain('/item/c1');
+  await expect(sheet).toHaveCount(0);
+});
+
 // ─── Obra 24a — o selo vale com o dia vazio ──────────────
 
 test('wrap — um dia vazio também se sela (nenhum campo trava o rito)', async ({

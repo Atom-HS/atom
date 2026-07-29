@@ -29,12 +29,14 @@ analytics/calendar, e as entradas mortas de rota (§4).
 
 ## 2 — As duas condições que seguram o gatilho
 
-1. **A sheet do projeto (DP-E) ainda não nasceu.** A pill do HOJE hoje
-   navega pra `/projects` ([Hoje.tsx:346](../../src/pages/Hoje.tsx)) — se a
-   tela morrer antes da sheet, a pill vira porta pro nada. Obra pequena
-   (molde: `AssentimentoSheet`), nomeada na fila da dissecação 04 (MANCA 5).
-   **O merge só pode acontecer depois dela** — a mesma lógica que segurou o
-   Pipeline até o Ato II.
+1. **✅ CUMPRIDA (30 Jul, sessão da cirurgia fina).** A sheet do projeto
+   nasceu: a pill do HOJE abre `ProjectSheet`
+   ([components/project/ProjectSheet.tsx](../../src/components/project/ProjectSheet.tsx),
+   molde `AssentimentoSheet`, conteúdo pela DP-I — presença do engine,
+   filhos `·`/`○`, o próximo como convite, quietude; zero chrome de
+   gerenciador) e **não navega mais pra `/projects`**. Prova: cena
+   «projeto — a pill abre sheet» no `atos.spec` + foto 73. A tela
+   condenada pode morrer sem deixar a pill apontando pro nada.
 2. **A escada F4 fica sem boca** (§3) — decisão do Rick, não desta sessão.
 
 Fora isso, o censo de dependências está limpo: nenhum componente do mundo

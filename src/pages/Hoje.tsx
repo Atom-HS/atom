@@ -14,6 +14,7 @@ import { AuroraRitual } from '@/components/home/AuroraRitual';
 import { ProtocolBanner } from '@/components/home/ProtocolBanner';
 import { esperandoLeitura } from '@/components/triage/Assentimento';
 import { AssentimentoSheet } from '@/components/triage/AssentimentoSheet';
+import { ProjectSheet } from '@/components/project/ProjectSheet';
 import { skyNow, sunTimes, fmtMin } from '@/engine/sky';
 import { MODULE_COLORS } from '@/components/atoms/tokens';
 import { suggestNow } from '@/engine/today';
@@ -149,6 +150,8 @@ export function HojePage() {
   const period = getCurrentPeriod();
   const [skip, setSkip] = useState(0);
   const [assentindo, setAssentindo] = useState(false);
+  // DP-E: o projeto vive como camada — a pill abre sheet, não a tela condenada
+  const [projetoAberto, setProjetoAberto] = useState(false);
 
   const all = useMemo(() => (items ?? []) as AtomItem[], [items]);
 
@@ -343,7 +346,7 @@ export function HojePage() {
           ))}
           {pills.projeto && (
             <button
-              onClick={() => navigate('/projects')}
+              onClick={() => setProjetoAberto(true)}
               className="text-xs text-text-muted border border-border bg-card rounded-full px-3 py-1.5"
             >
               ⛓ {pills.projeto.item.title} · <b className="text-text font-medium">{presenceLine(pills.projeto.presence)}</b>
@@ -362,6 +365,9 @@ export function HojePage() {
       </button>
 
       {assentindo && <AssentimentoSheet onClose={() => setAssentindo(false)} />}
+      {projetoAberto && pills.projeto && (
+        <ProjectSheet presence={pills.projeto.presence} onClose={() => setProjetoAberto(false)} />
+      )}
     </div>
   );
 }
