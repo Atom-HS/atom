@@ -17,7 +17,6 @@ import { soulService } from '@/service/soul-service';
 import { StageBadge } from '@/components/atoms/StageBadge';
 import { EMOTIONS } from '@/types/item';
 import type { Emotion, EnergyLevel, AtomItem, AtomRelation } from '@/types/item';
-import { toast } from '@/store/toast-store';
 import { usePipeline } from '@/hooks/usePipeline';
 import { getTypeColor } from '@/components/atoms/tokens';
 
@@ -97,11 +96,12 @@ export function WrapPage() {
   };
 
   const handleCommit = async () => {
+    // O plano de amanhã é o passo de maior efeito medido (Masicampo &
+    // Baumeister: plano específico elimina o pensamento intrusivo) — por
+    // isso mora no passo do selo, em lugar de honra. Mas convite não trava
+    // selo: campo obrigatório em rito diário é culpa fabricada (benchmark
+    // 16), e um dia vazio também merece fechar. Selo vale com tudo vazio.
     const validNext = nextSteps.filter(Boolean);
-    if (validNext.length === 0) {
-      toast.error('falta o que fica pra amanhã — um passo basta');
-      return;
-    }
     if (session) {
       const crepusculo = { emotion: (selectedEmotions[0] ?? 'neutro') as Emotion, energy };
       const auroraEmotion = session.soul.aurora?.emotion ?? null;

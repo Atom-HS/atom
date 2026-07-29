@@ -356,3 +356,30 @@ test('bolso — sem rede, o HOJE lê do snapshot (a promessa da D55 cumprida)', 
   // dentro do prazo de 6s + folga, a sugestão vem do snapshot
   await expect(page.getByRole('button', { name: 'comprar manga no mercado' })).toBeVisible({ timeout: 15_000 });
 });
+
+// ─── Obra 24a — o selo vale com o dia vazio ──────────────
+
+test('wrap — um dia vazio também se sela (nenhum campo trava o rito)', async ({
+  authenticatedPage: page,
+}) => {
+  test.setTimeout(60_000);
+  await page.route('**/rest/v1/items*', (route) =>
+    route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+  );
+  await page.goto('/wrap?sim=0');
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(600);
+
+  // atravessa os 7 passos sem preencher NADA
+  for (let i = 0; i < 6; i++) {
+    await page.getByRole('button', { name: /seguir/ }).click();
+    await page.waitForTimeout(350);
+  }
+  await page.getByRole('button', { name: 'selar ○' }).click();
+  await page.waitForTimeout(300);
+  await page.getByRole('button', { name: 'selar ○' }).click();
+
+  // o selo passa — antes travava com «falta o que fica pra amanhã»
+  await expect(page.getByText('o dia está selado')).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByText(/falta o que fica/)).toHaveCount(0);
+});
