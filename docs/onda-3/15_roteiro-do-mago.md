@@ -442,10 +442,14 @@ ATO V — o chão e a válvula                       ✅ 29 Jul (edd849e)
           espelho — a edge é Deno e entra no vitest como TEXTO, lida
           nunca executada; cobre as constantes, não o runtime)
 
-ATO VI — a dissecação continua
+ATO VI — a dissecação continua        ← a sessão da noite começa aqui
   [ ] 22. 14_dissecacao-02 (features 4, 5, 6)     (obra com mesa)
   [ ] 23. 14_dissecacao-03 (features 7, 8, 9)     (obra com mesa)
   [ ] 24. 14_dissecacao-04 (features 10–13)       (obra com mesa)
+
+OBRAS QUE O BENCHMARK 16 JÁ JUSTIFICOU (não precisam de exame)
+  [ ] 24a. WRAP em um passo por tela              (obra com mesa)
+  [ ] 24b. ÁRVORE: cold start + confiança por ramo (obra pequena)
 
 ATO VII — o gate
   [ ] 25. carregar o gate, não disparar           (obra com mesa)
@@ -453,6 +457,11 @@ ATO VII — o gate
 FECHO
   [ ] 26. wrap no diário + DPs pra mesa + fila que sobrou
 ```
+
+> **Sessão desacompanhada:** o roteiro operacional dela é o
+> `18_handoff-mega-sessao.md`, que traduz este documento em ordem de marcha
+> e fecha as portas que não podem ser abertas sem o Rick (deploy, push,
+> merge, produção).
 
 ---
 
