@@ -153,6 +153,8 @@ function compose(
 interface CalEvent {
   google_id: string; title: string; start: string; end: string;
   calendar: string; recurring: boolean; all_day?: boolean;
+  /** a série (DP-C) — sem ela a instância não herda nem ensina selo */
+  recurring_event_id?: string | null;
   attendees?: Array<{ email: string; name: string | null; response: string | null }>;
 }
 interface GmailMsg {
@@ -188,16 +190,47 @@ async function callEdge(name: string, userId: string): Promise<Record<string, un
   } catch (e) { log(`${name}-error`, { e: String(e) }); return null; }
 }
 
+// ─── espelho de engine/series.ts (canônico lá — DP-C) ────────────────
+// Assentir uma vez vale pra série: a instância nova herda o selo já dado.
+// Sem este espelho o cron re-pergunta o ritual semanal toda semana, pra
+// sempre — e item nascido sem recurring_event_id nem ENSINA selo.
+interface ItemRow {
+  id: string; body: Record<string, unknown> | null; type: string | null;
+  module: string | null; state: string | null; status: string | null;
+  created_at: string; updated_at: string | null;
+}
+
+function seriesIdOf(body: Record<string, unknown> | null): string | null {
+  const raw = body?.recurring_event_id;
+  return typeof raw === "string" && raw !== "" ? raw : null;
+}
+
+function sealedSeries(rows: ItemRow[]): Map<string, { type: string; module: string }> {
+  const out = new Map<string, { type: string; module: string }>();
+  const quando = new Map<string, number>();
+  for (const r of rows) {
+    if (r.status === "archived" || r.state === "archived") continue;
+    const sid = seriesIdOf(r.body);
+    if (!sid || r.state === "inbox" || !r.type) continue;
+    const at = new Date(r.updated_at ?? r.created_at).getTime();
+    if (at >= (quando.get(sid) ?? -Infinity)) {
+      quando.set(sid, at);
+      out.set(sid, { type: r.type, module: r.module ?? "bridge" });
+    }
+  }
+  return out;
+}
+
 // deno-lint-ignore no-explicit-any
 async function ingestVolta(sb: any, userId: string): Promise<{ calendar: number; gmail: number }> {
   const created = { calendar: 0, gmail: 0 };
-  const { data: existing } = await sb.from("items").select("id, body").eq("user_id", userId).not("body", "is", null);
-  const byGoogleId = new Set(
-    (existing ?? []).map((i: { body: Record<string, unknown> | null }) => i.body?.google_id).filter(Boolean),
-  );
-  const byGmailId = new Set(
-    (existing ?? []).map((i: { body: Record<string, unknown> | null }) => i.body?.gmail_id).filter(Boolean),
-  );
+  const { data: existing } = await sb.from("items")
+    .select("id, body, type, module, state, status, created_at, updated_at")
+    .eq("user_id", userId).not("body", "is", null);
+  const rows = (existing ?? []) as ItemRow[];
+  const byGoogleId = new Set(rows.map((i) => i.body?.google_id).filter(Boolean));
+  const byGmailId = new Set(rows.map((i) => i.body?.gmail_id).filter(Boolean));
+  const selos = sealedSeries(rows);
 
   const cal = await callEdge("calendar-sync", userId);
   for (const event of ((cal?.events ?? []) as CalEvent[])) {
@@ -208,12 +241,32 @@ async function ingestVolta(sb: any, userId: string): Promise<{ calendar: number;
       const who = extractWhoTag(a.name ? `${a.name} <${a.email}>` : `<${a.email}>`);
       if (who && !tags.includes(who)) tags.push(who);
     }
-    const { error } = await sb.from("items").insert({
-      title: event.title, user_id: userId, type: event.recurring ? "ritual" : "task",
-      module: "bridge", tags, status: "inbox", state: "inbox", genesis_stage: 1, source: "atom-engine",
-      body: { google_id: event.google_id, start: event.start, end: event.end, calendar: event.calendar, recurring: event.recurring, all_day: event.all_day ?? false, attendees },
-    });
-    if (!error) created.calendar++;
+    const serie = event.recurring_event_id ?? null;
+    const selo = serie ? selos.get(serie) : undefined;
+    // inbox obrigatório (CLAUDE.md §6): TODO item nasce no estágio 1, mesmo
+    // o que herda leitura de série. Herdar poupa a pergunta, nunca o caminho.
+    const { data: criado, error } = await sb.from("items").insert({
+      title: event.title, user_id: userId,
+      type: selo?.type ?? (event.recurring ? "ritual" : "task"),
+      module: selo?.module ?? "bridge",
+      tags, status: "inbox", state: "inbox", genesis_stage: 1, source: "atom-engine",
+      body: {
+        google_id: event.google_id, start: event.start, end: event.end,
+        calendar: event.calendar, recurring: event.recurring,
+        recurring_event_id: serie,
+        all_day: event.all_day ?? false, attendees,
+      },
+    }).select("id").single();
+    if (error) continue;
+    if (selo && criado?.id) {
+      // o selo da série passa pelo portão 1→2, igual ao assentimento manual.
+      // Se falhar, a instância fica no inbox e pergunta — degradar pedindo
+      // é seguro; degradar selando calado não seria.
+      await sb.from("items")
+        .update({ state: "classified", genesis_stage: 2 })
+        .eq("id", criado.id).eq("state", "inbox");
+    }
+    created.calendar++;
   }
 
   const gm = await callEdge("gmail-sync", userId);
