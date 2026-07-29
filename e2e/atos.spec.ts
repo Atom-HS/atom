@@ -529,6 +529,29 @@ test('escada — a ÁRVORE ganha porta pro significado, e cala quando não há',
   await expect(page.getByText(/espera significado/)).toHaveCount(0);
 });
 
+// ─── Cirurgia · obra 4 — as portas invisíveis ganham corpo ─
+
+test('portas — o puxador da casa tem nome, e a busca se ensina UMA vez só', async ({
+  authenticatedPage: page,
+}) => {
+  await chegar(page, '/hoje');
+  await passarAurora(page);
+
+  // o puxador deixou de ser barra muda (dado real de 29 Jul: o Rick não achou)
+  await expect(page.getByRole('button', { name: /a casa/ })).toBeVisible();
+  await expect(page.getByText('a casa', { exact: true })).toBeVisible();
+
+  // a primeira vez ensina o gesto…
+  await expect(page.getByText('↓ puxa pra baixo pra buscar')).toBeVisible();
+  await page.screenshot({ path: 'docs/onda-3/14_dissecacao-01_fotos/75-cirurgia-portas-com-corpo.png', fullPage: true });
+
+  // …e nunca mais (sem tooltip perpétuo)
+  await page.reload();
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(600);
+  await expect(page.getByText('↓ puxa pra baixo pra buscar')).toHaveCount(0);
+});
+
 // ─── Obra 24a — o selo vale com o dia vazio ──────────────
 
 test('wrap — um dia vazio também se sela (nenhum campo trava o rito)', async ({

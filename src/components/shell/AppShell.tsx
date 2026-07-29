@@ -10,9 +10,26 @@ import { SettingsSheet } from './SettingsSheet';
 
 const PULL_THRESHOLD = 70; // px de puxada no topo pra abrir a busca
 
+// affordance de primeira vez (benchmark 16, o problema Spotlight): o gesto
+// invisível se ensina UMA vez e morre pra sempre — nem tutorial, nem
+// tooltip perpétuo
+const HINT_BUSCA_KEY = 'mindroot.hint-busca.v1';
+
 export function AppShell({ children }: { children: ReactNode }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [casaOpen, setCasaOpen] = useState(false);
+  const [hintBusca, setHintBusca] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem(HINT_BUSCA_KEY)) return;
+    localStorage.setItem(HINT_BUSCA_KEY, new Date().toISOString());
+    setHintBusca(true);
+  }, []);
+
+  // achou o gesto → o hint morreu de vez
+  useEffect(() => {
+    if (searchOpen) setHintBusca(false);
+  }, [searchOpen]);
   const mainRef = useRef<HTMLElement>(null);
   const pull = useRef<{ y: number; atTop: boolean } | null>(null);
 
@@ -53,6 +70,13 @@ export function AppShell({ children }: { children: ReactNode }) {
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
+        {/* o hint da primeira vez — no fluxo (nunca por cima de banner);
+            some quando a busca abre, e nunca volta */}
+        {hintBusca && !searchOpen && (
+          <p aria-hidden="true" className="text-center font-mono text-[10px] text-text-faint pt-1.5 -mb-1">
+            ↓ puxa pra baixo pra buscar
+          </p>
+        )}
         {children}
       </main>
 

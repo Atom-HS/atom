@@ -20,14 +20,19 @@ export function BottomNav({ onOpenCasa }: { onOpenCasa?: () => void }) {
       role="navigation"
       aria-label="Navegacao principal"
     >
-      {/* o puxador da casa — pull discreto (D54): settings é sheet, não lugar */}
+      {/* o puxador da casa — pull discreto (D54): settings é sheet, não lugar.
+          A barra sozinha era porta invisível (dado real de 29 Jul: o Rick
+          não a achou) — o rótulo mono quieto dá corpo sem virar aba. */}
       {onOpenCasa && (
         <button
           onClick={onOpenCasa}
-          className="w-full flex justify-center pt-1.5 pb-1"
+          className="w-full flex flex-col items-center gap-[3px] pt-1.5 pb-0.5"
           aria-label="a casa — perfil, conectores, export"
         >
           <span className="w-9 h-1 rounded-full bg-border" />
+          <span className="font-mono text-[10px] leading-none text-text-faint" aria-hidden="true">
+            a casa
+          </span>
         </button>
       )}
       <div className="flex items-stretch pb-[max(0rem,env(safe-area-inset-bottom))]">
