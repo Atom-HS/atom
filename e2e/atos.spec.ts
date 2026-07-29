@@ -40,6 +40,7 @@ test('ato I.1 — selo que falha depois da captura não vira fila (nem duplicata
   await expect(page.getByText(/foi pra fila/)).toHaveCount(0);
   // e o ponto continua alcançável — nada se perdeu de verdade
   await expect(page.getByRole('button', { name: 'abrir' })).toBeVisible();
+  await page.screenshot({ path: 'docs/onda-3/14_dissecacao-01_fotos/31-ato1-at-verdade.png', fullPage: true });
 });
 
 test('ato I.1 — sem rede a fila continua sendo a rede de segurança', async ({
