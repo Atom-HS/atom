@@ -7,6 +7,7 @@ interface EventAttendee {
 interface CalendarEvent {
   google_id: string; title: string; start: string; end: string;
   calendar: string; recurring: boolean; all_day: boolean;
+  recurring_event_id: string | null;
   attendees: EventAttendee[];
 }
 
@@ -75,6 +76,9 @@ async function fetchEvents(at: string): Promise<{ events: CalendarEvent[]; tz: s
       google_id: String(e.id ?? ""), title: String(e.summary ?? ""),
       start: e.start?.dateTime ?? e.start?.date ?? "", end: e.end?.dateTime ?? e.end?.date ?? "",
       calendar: e.organizer?.email ?? "primary", recurring: !!e.recurringEventId, all_day: !e.start?.dateTime,
+      // a série, não só o fato de repetir: é ela que deixa assentir UMA vez
+      // pelo ritual semanal inteiro (DP-C) em vez de toda semana, pra sempre
+      recurring_event_id: e.recurringEventId ? String(e.recurringEventId) : null,
       // People in the event, minus the user (self) and rooms/resources
       attendees: (e.attendees ?? [])
         .filter((a: any) => a.email && !a.self && !a.resource)

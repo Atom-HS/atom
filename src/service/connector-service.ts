@@ -5,6 +5,8 @@
 import { supabase } from './supabase';
 import { itemService } from './item-service';
 import { desiredLabels, ATOM_CALENDAR_SUMMARY } from '@/engine/taxonomy';
+import { birthOf, sealedSeries } from '@/engine/series';
+import type { AtomItem } from '@/types/item';
 
 export interface ConnectorStatus {
   provider: string;
@@ -26,6 +28,8 @@ export interface CalendarEvent {
   end: string;
   calendar: string;
   recurring: boolean;
+  /** a série a que a instância pertence — o que deixa assentir uma vez só (DP-C) */
+  recurring_event_id?: string | null;
   all_day?: boolean;
   attendees?: EventAttendee[];
 }
@@ -141,38 +145,55 @@ export const connectorService = {
 
   async ingestCalendarEvents(events: CalendarEvent[], userId: string): Promise<number> {
     const { data: existingItems } = await supabase
-      .from('items').select('id, body').eq('user_id', userId).not('body', 'is', null);
+      .from('items').select('id, body, type, module, state, status, created_at, updated_at')
+      .eq('user_id', userId).not('body', 'is', null);
+    const existing = (existingItems ?? []) as unknown as AtomItem[];
     const existingByGoogleId = new Map(
-      (existingItems ?? [])
+      existing
         .filter((i) => (i.body as Record<string, unknown>)?.google_id)
         .map((i) => [(i.body as Record<string, unknown>).google_id as string, i]),
     );
+    // DP-C: quem já assentiu a série não é perguntado de novo — a instância
+    // nova herda o selo em vez de encher o inbox toda semana, pra sempre
+    const selos = sealedSeries(existing);
 
     let created = 0;
     for (const event of events) {
       const attendees = event.attendees ?? [];
-      const existing = existingByGoogleId.get(event.google_id);
+      const jaExiste = existingByGoogleId.get(event.google_id);
 
-      if (existing) {
+      if (jaExiste) {
         // Attendees change (people respond, get added) — keep the tronco fresh
-        const body = existing.body as Record<string, unknown>;
+        const body = jaExiste.body as Record<string, unknown>;
         if (attendees.length > 0 && JSON.stringify(body.attendees ?? []) !== JSON.stringify(attendees)) {
-          await itemService.update(existing.id, { body: { ...body, attendees } });
+          await itemService.update(jaExiste.id, { body: { ...body, attendees } });
         }
         continue;
       }
 
-      const type = event.recurring ? 'ritual' : 'task';
+      const serie = event.recurring_event_id ?? null;
+      const nascimento = birthOf(serie ? selos.get(serie) : undefined, {
+        type: event.recurring ? 'ritual' : 'task',
+        module: 'bridge',
+      });
+
       const tags = ['#domain:time', '#source:google-calendar', '#connector'];
       for (const a of attendees) {
         const whoTag = extractWhoTag(a.name ? `${a.name} <${a.email}>` : `<${a.email}>`);
         if (whoTag && !tags.includes(whoTag)) tags.push(whoTag);
       }
       await itemService.create({
-        title: event.title, user_id: userId, type, module: 'bridge',
+        title: event.title, user_id: userId,
+        type: nascimento.type, module: nascimento.module,
         tags,
-        status: 'inbox', state: 'inbox', genesis_stage: 1, source: 'atom-engine',
-        body: { google_id: event.google_id, start: event.start, end: event.end, calendar: event.calendar, recurring: event.recurring, all_day: event.all_day ?? false, attendees },
+        status: 'inbox', state: nascimento.state, genesis_stage: nascimento.genesis_stage,
+        source: 'atom-engine',
+        body: {
+          google_id: event.google_id, start: event.start, end: event.end,
+          calendar: event.calendar, recurring: event.recurring,
+          recurring_event_id: serie,
+          all_day: event.all_day ?? false, attendees,
+        },
       });
       created++;
     }
