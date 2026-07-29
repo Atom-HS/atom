@@ -12,6 +12,7 @@ import { useNav } from '@/hooks/useNav';
 import { useAppStore } from '@/store/app-store';
 import { eventService } from '@/service/item-service';
 import { treeShape, synthesis, isColdStart, CONFIDENCE_LABEL, TREE_WINDOWS, BRANCH_LABEL, type Branch, type TreeWindow } from '@/engine/tree';
+import { nextAvailableReview, type Cadence } from '@/engine/meaning';
 import { mirror } from '@/engine/mirror';
 import { simEvents } from '@/dev/sim-week';
 import type { AtomItem, AtomModule } from '@/types/item';
@@ -21,6 +22,15 @@ function ageLabel(iso: string): string {
   const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000);
   return days <= 0 ? 'hoje' : days === 1 ? 'ontem' : `${days}d`;
 }
+
+// a fala da escada, por degrau — estado, nunca cobrança (D46): sem número
+const ESCADA_ESPERA: Record<Cadence, string> = {
+  week: 'uma semana espera significado',
+  month: 'um mês espera significado',
+  quarter: 'um trimestre espera significado',
+  semester: 'um semestre espera significado',
+  year: 'um ano espera significado',
+};
 
 const MOD_COLOR: Record<AtomModule, string> = {
   work: 'var(--color-mod-work)', body: 'var(--color-mod-body)',
@@ -123,6 +133,11 @@ export function ArvorePage() {
 
   const drill = selected ? branches.find((b) => b.module === selected) : null;
 
+  // a porta da escada F4 (DP-G · gate §3a): as janelas da árvore já falam a
+  // língua da escada — quando há período esperando síntese, um puxador
+  // quieto leva ao rito. Some quando não há.
+  const escada = useMemo(() => nextAvailableReview(all), [all]);
+
   return (
     <div className="px-5 pt-2 pb-24">
       <TreeCrown
@@ -219,6 +234,20 @@ export function ArvorePage() {
             </button>
           ))}
         </section>
+      )}
+
+      {/* a escada de meaning — puxador quieto, no padrão do puxador do HOJE:
+          estado, nunca cobrança (D46); some quando não há período esperando */}
+      {escada && (
+        <button
+          onClick={() => navigate('/review')}
+          className="w-full flex items-baseline gap-2 py-2.5 mb-3 border-b border-border-soft text-left"
+        >
+          <span className="text-[13px] text-text-muted flex-1">
+            {ESCADA_ESPERA[escada.rung.key]}
+          </span>
+          <span className="font-mono text-[11px] text-gold-dim shrink-0">significar</span>
+        </button>
       )}
 
       {/* o chão da árvore — a raiz mora embaixo do tronco (D50) */}

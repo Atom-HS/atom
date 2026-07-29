@@ -484,6 +484,51 @@ test('projeto — a pill abre sheet (não a tela condenada), e o próximo leva a
   await expect(sheet).toHaveCount(0);
 });
 
+// ─── Cirurgia · obra 3 — a porta da escada na ÁRVORE (DP-G) ─
+
+test('escada — a ÁRVORE ganha porta pro significado, e cala quando não há', async ({
+  authenticatedPage: page,
+}) => {
+  test.setTimeout(60_000);
+  const NOW = new Date().toISOString();
+  // 7 wraps não sintetizados acordam o degrau da semana (engine/meaning)
+  const wraps = Array.from({ length: 7 }, (_, i) => ({
+    id: `wrap-${i}`, title: `wrap ${i}`, type: 'wrap', module: null, tags: [],
+    status: 'completed', state: 'committed', genesis_stage: 7, source: 'mindroot',
+    created_by: 'e2e-test-user-0001',
+    created_at: `2026-07-${String(10 + i).padStart(2, '0')}T21:00:00Z`, updated_at: NOW,
+    body: {},
+  }));
+  await page.route('**/rest/v1/items*', (route) =>
+    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(wraps) }),
+  );
+  await page.goto('/arvore?sim=0');
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(600);
+  await passarAurora(page);
+
+  // o puxador quieto: estado, sem número, sem badge (D46)
+  await expect(page.getByText('uma semana espera significado')).toBeVisible();
+  await expect(page.getByText(/7 esperando|atrasad/)).toHaveCount(0);
+  await page.screenshot({ path: 'docs/onda-3/14_dissecacao-01_fotos/74-cirurgia-escada-puxador.png', fullPage: true });
+
+  // e leva ao rito da escada
+  await page.getByRole('button', { name: /espera significado/ }).click();
+  await page.waitForTimeout(600);
+  expect(page.url()).toContain('/review');
+
+  // mundo sem período esperando: o puxador some — silêncio é estado
+  await page.unroute('**/rest/v1/items*');
+  await page.route('**/rest/v1/items*', (route) =>
+    route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+  );
+  await page.goto('/arvore?sim=0');
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(600);
+  await passarAurora(page);
+  await expect(page.getByText(/espera significado/)).toHaveCount(0);
+});
+
 // ─── Obra 24a — o selo vale com o dia vazio ──────────────
 
 test('wrap — um dia vazio também se sela (nenhum campo trava o rito)', async ({

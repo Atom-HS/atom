@@ -19,7 +19,7 @@ fotografadas pelas quatro dissecações.*
 | Analytics | `/analytics` | `antes-analytics.png` | painéis de alma, conexões, métricas | espelho F9 → **ÁRVORE** (D49, com saída concreta) · alma → **wrap (shift visível) + aurora** · métricas de volume → **morrem por lei** (D46/D48: número que julga não tem casa) |
 | Library | `/library` | `antes-library.png` | listar docs/artigos/templates | acesso → **busca** (`tipo:` no vocabulário; motor testado em escala) + ItemDetail · a **despensa D51** (drill contextual) segue semente — o acesso existe, a curadoria espera |
 | Graph | `/graph` | `antes-graph.png` | visualizar conexões | a teia se TECE no wrap (passo 4) e se LÊ no ItemDetail; o desenho de grafo morre por lei (D48) |
-| Review | `/review` | `antes-review.png` | a escada de meaning F4 (ler o período → significar → selar) | **⚠ a única função sem porta nova — ver §3** |
+| Review | `/review` | `antes-review.png` | a escada de meaning F4 (ler o período → significar → selar) | porta nova: **puxador quieto na ÁRVORE** (30 Jul, DP-G — ver §3); a rota `/review` sobrevive ao merge fora da nav, alcançada só pelo puxador; a reforma da tela é de outra onda |
 | Projects | `/projects` | `antes-projects.png` | lista/detalhe de projetos, presença derivada | presença → **pill do HOJE** (viva, fotografada na dissecação 04) · detalhe → **sheet da pill** (DP-E confirmada pela vivência; obra pequena na fila, **condição pra esta morte** — ver §2) |
 
 **Somem junto:** os 62 erros de lint da casca velha (todos moram nas telas
@@ -37,7 +37,14 @@ analytics/calendar, e as entradas mortas de rota (§4).
    gerenciador) e **não navega mais pra `/projects`**. Prova: cena
    «projeto — a pill abre sheet» no `atos.spec` + foto 73. A tela
    condenada pode morrer sem deixar a pill apontando pro nada.
-2. **A escada F4 fica sem boca** (§3) — decisão do Rick, não desta sessão.
+2. **✅ RESOLVIDA POR DEFAULT (30 Jul, sessão da cirurgia fina · DP-G).**
+   A escada F4 ganhou a porta da opção (a): puxador quieto no pé da ÁRVORE
+   (*«uma semana espera significado» · significar*), padrão do puxador do
+   HOJE, que leva ao rito de `/review`; some quando não há período
+   esperando. Prova: cena «escada» no `atos.spec` + foto 74. **DP-G segue
+   na mesa** — é a recomendação registrada aplicada por default, 100%
+   reversível: se o Rick escolher a morte consciente (§3b), apaga-se um
+   puxador. Com isto, `/review` sai das condições e entra no checklist §4.
 
 Fora isso, o censo de dependências está limpo: nenhum componente do mundo
 novo importa página condenada; os SERVIÇOS que as telas velhas usavam
@@ -55,10 +62,11 @@ boca**.
 
 Opções pra mesa do Rick:
 
-- **(a) porta na ÁRVORE** *(recomendação)* — as janelas da árvore já falam
-  a língua da escada (semana · lunar · estação); um puxador quieto no pé da
-  face («uma semana espera significado»), no padrão do puxador do HOJE,
-  é obra pequena e pode nascer ANTES do merge;
+- **(a) porta na ÁRVORE** *(recomendação — APLICADA POR DEFAULT em 30 Jul,
+  DP-G, reversível)* — as janelas da árvore já falam a língua da escada
+  (semana · lunar · estação); um puxador quieto no pé da face («uma semana
+  espera significado»), no padrão do puxador do HOJE, é obra pequena e
+  nasceu ANTES do merge ([Arvore.tsx](../../src/pages/Arvore.tsx));
 - **(b) morte consciente** — a escada hiberna até a onda que a repensar
   (registrar como semente, apagar a rota junto);
 - **(c) adiar só o `/review`** — matar as outras sete e deixar a rota órfã
@@ -68,7 +76,8 @@ Opções pra mesa do Rick:
 
 Quando o Rick puxar o gatilho, o merge remove/ajusta:
 
-- **Rotas** em [App.tsx](../../src/App.tsx): as 8 condenadas somem;
+- **Rotas** em [App.tsx](../../src/App.tsx): as condenadas somem (7 — a
+  `/review` fica, ver nota abaixo);
   `/home` vira `<Navigate to="/hoje">` por uma onda (link antigo não pode
   quebrar); `PATH_TO_PAGE` encolhe pros caminhos vivos (`/inbox` já é
   mapeamento morto sem rota hoje).
@@ -78,8 +87,10 @@ Quando o Rick puxar o gatilho, o merge remove/ajusta:
 - **`components/home/` se divide**: `AuroraRitual`, `ProtocolBanner`,
   `protocol-snooze` mudam pra casa do HOJE; o resto morre.
 - **Páginas**: `Home.tsx`, `Pipeline.tsx`, `Calendar.tsx`, `Analytics.tsx`,
-  `Library.tsx`, `Graph.tsx`, `Review.tsx` (†§3), `Projects.tsx` (†§2) e
-  seus componentes exclusivos.
+  `Library.tsx`, `Graph.tsx`, `Projects.tsx` (†§2) e seus componentes
+  exclusivos. **`Review.tsx` FICA** (nota de 30 Jul): a rota `/review`
+  sobrevive fora da nav — a porta é o puxador da ÁRVORE (DP-G, §3a); a
+  reforma da tela é de outra onda. Só o `ReviewBanner` do `/home` morre.
 - **Nav**: já é `· ⬡ ✳` — nada muda (D41 previu; Ato II cumpriu).
 - **Gate visual**: as 13 fotos são todas do mundo novo — nenhuma baseline
   morre; as cenas de `atos.spec.ts` (12) também não tocam tela condenada
