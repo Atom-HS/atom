@@ -436,9 +436,20 @@ gesto cobrado.
   `taxonomy-sync` — o muro 4 pede a palavra explícita
 
 ### → Next
-1. **A palavra do deploy**: migration + edge — e aí o dry-run real
+1. ~~A palavra do deploy~~ — **dada e executada** (ver adendo abaixo)
 2. Relay pro E. (pacote completo da rodada, agora com a obra nascida)
 3. Digest 07:15 · hostname · DP-G
+
+### Adendo · o fio ligou (mesma manhã)
+«Bora 1 e push» — a mão do Rick, pelo precedente de sempre:
+- ✅ **migration `e_bilhetes` aplicada** no projeto (`avvwjkzkzklloyfugzer`);
+  tabela viva, 0 bilhetes — o silêncio de nascença, como manda a lei
+- ✅ **`taxonomy-sync` v3 deployada** (verify_jwt=false mantido) — o
+  reconcile de amanhã 07:15 já roda com o G1 armado
+- ✅ **push**: `b5af1c4..ccb25e6 v2-faces` na origin
+- Falta só o **dry-run** (gesto a dois: apagar um label `Atom/…` de teste
+  no Gmail → invocar o reconcile → ver o cartão indigo no HOJE → abrir de
+  novo e vê-lo sumir sozinho)
 
 ---
 
