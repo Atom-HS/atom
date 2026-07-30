@@ -140,5 +140,72 @@ inverte. Cinco vetos, todos antes do código, «que é onde ele vale barato».
 
 ---
 
+## Wrap · 30 Jul 2026 (noite, 2ª volta) — a errata, e a conferência do degrau 21
+
+### ⬠ Soul
+O E. tratou a verificação como porta, não como confirmação — voltou com uma
+errata que corrige o próprio § 0 (não são dois mundos de ondas: é um
+contador que reiniciou no 2 em 23 Jul, porque o hub parou de receber) e
+confessa o deslize de método: leu a lei e o registro de UX, não leu a spec
+do MindRoot V1 — que tinha, ratificadas sete dias antes do parecer, as duas
+cláusulas que faltavam aos §§ 1.5 e 2.3 (a entropia em espiral e o lookback
+φ). E devolveu à casa um pedido de conferência que só o repo responde: onde
+o degrau de 21 dias foi parar.
+
+### · Items
+- **`01a_errata-parecer-e.md` selada** — verbatim, do arquivo limpo do
+  Downloads (o relay tinha quebrado o encoding; o original é UTF-8 são).
+- **A conferência do degrau 21, respondida contra o código:**
+  - **Degrau 8 já é código**, e pousou na boca certa: `engine/project.ts`
+    (`QUIET_THRESHOLD = 8`, comentário cita D5 e a espiral) → superfície da
+    **sheet do projeto** via `presenceLine` — «quieto há N dias», estado,
+    solicitada (o Rick abre a pill, D74/D77), D46 limpa.
+  - **Degraus 21 · 55 · 89 não existem em código nenhum.** Nenhuma boca
+    atribuída, nada embarcado — o candidato #8 do Teste 02 NÃO está em
+    produção. A lacuna do § 3.1 da errata é real, mas está no papel: a
+    atribuição de bocas pode nascer já com a regra do § 1.4 do parecer.
+  - A **fase 9 (lookback φ) também não tem código** — o espelho emocional
+    não nasceu; `Review.tsx`/`meaning.ts` são a escada de meaning (fase 4),
+    que existe e usa a espiral só como linguagem.
+  - **Slot `d-057` confere**: reservado no `d-058` do hub, linha 43 —
+    «ADR redigido no Chat, ainda não commitado neste hub».
+
+### △ Decidido
+- Nada. A mesa cresce, não fecha.
+
+### ⬡ Conexões
+- O degrau 8 em código prova o § 1.3 do parecer por precedente vivo: a
+  espiral já fala como **estado quieto em superfície solicitada** — a marca,
+  não a boca. Estender 21/55/89 no mesmo molde é continuação, não invenção.
+- A pergunta da errata pro benchmark (§ 4) fica registrada como pergunta de
+  pesquisa: topo de mercado amostra por intervalo-desde-a-última-visita ou
+  por densidade decrescente? φ é inovação ou é base?
+
+### ✳ Seeds
+- **Bocas por degrau** (§ 3.1 da errata + § 1.4 do parecer): tabela
+  degrau→boca antes de qualquer código da espiral — 8 já tem (sheet);
+  21/55/89 abertas. Candidata a D quando a numeração destravar.
+- **4.8 ↔ lookback φ dizem a mesma coisa sem se citar** (§ 3.2,
+  `[COGITADO]` do E.) — unificação é obra de lei, sem dono.
+
+### □ Audit
+- ✅ errata selada sem edição; encoding verificado na fonte
+- ✅ conferência respondida com evidência de código (grep em src/ +
+  supabase/), não de memória
+- ✅ zero código tocado
+- ⚠ buraco 3 (endereço do soul log no app) segue sem resposta da casa
+
+### → Next — a mesa do Rick (atualizada pela errata)
+1. **Benchmark do retorno** — agora com dois insumos a mais: a lei φ
+   interna (§D5) como base de comparação, e a pergunta
+   intervalo × densidade
+2. **Colisão das séries — três opções, não duas**: sufixo · nota de
+   precedência · **um registro só** (a causa: o hub parou em d-058
+   enquanto D70–D78 nasceram só no app)
+3. Responder o buraco 3 ao E. · ratificar vetos · digest 07:15 · hostname
+   · DP-G
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*
