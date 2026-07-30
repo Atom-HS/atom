@@ -1,4 +1,4 @@
-// home/protocol-snooze.ts — silêncio por aparelho (Fase 7)
+// hoje/protocol-snooze.ts — silêncio por aparelho (Fase 7)
 // Mesmo padrão do PersonSuggestions: localStorage, nunca o tronco.
 // Protocolo rodado ou dispensado não volta a chamar HOJE; amanhã a condição
 // decide de novo.

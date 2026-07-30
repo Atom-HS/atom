@@ -1,4 +1,4 @@
-// components/home/AuroraRitual.tsx — a porta do dia (spec v0.4 · Fase 2)
+// components/hoje/AuroraRitual.tsx — a porta do dia (spec v0.4 · Fase 2)
 // Tela-ritual imersiva, nunca formulário: respiração → check-in → journaling
 // (página, primeira classe) → chegada com o estado do dia. Tudo pulável —
 // a lei: nunca forçar. Sucede o AuroraCheckin (embrião E2).

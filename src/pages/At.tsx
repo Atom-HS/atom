@@ -16,7 +16,7 @@ import { readMouth, resolveListTarget, structureFromTriage, readingChips } from 
 import { listLists, readListBody } from '@/engine/list';
 import { evaluateProtocols, readTodaySoul } from '@/engine/protocol';
 import { getCurrentPeriod } from '@/types/ui';
-import { getSnoozedIds } from '@/components/home/protocol-snooze';
+import { getSnoozedIds } from '@/components/hoje/protocol-snooze';
 import { pipelineService } from '@/service/pipeline-service';
 import { itemService } from '@/service/item-service';
 import { outboxService } from '@/service/outbox-service';

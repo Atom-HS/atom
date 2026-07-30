@@ -6,7 +6,7 @@ import { useMemo, useState } from 'react';
 import type { AtomItem } from '@/types/item';
 import { listProtocols } from '@/engine/protocol';
 import { useItems } from '@/hooks/useItems';
-import { ProtocolRunner } from './ProtocolRunner';
+import { ProtocolRunner } from '@/components/hoje/ProtocolRunner';
 import { ProtocolComposer } from './ProtocolComposer';
 
 export function ProtocolShelf() {

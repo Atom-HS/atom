@@ -1,4 +1,4 @@
-// home/ProtocolRunner.tsx — desdobrar e viver o protocolo (Fase 7 · D2)
+// hoje/ProtocolRunner.tsx — desdobrar e viver o protocolo (Fase 7 · D2)
 // A situação chamou (ou a mão puxou) → os passos se abrem. Tocar passo marca;
 // "executado ○" deixa o rastro (atom_events) e silencia o chamado de hoje.
 // Sair sempre possível — nunca forçar.

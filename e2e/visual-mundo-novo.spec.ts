@@ -117,13 +117,17 @@ test('builder — a entrevista pare cadeia e protocolo', async ({ authenticatedP
 // ─── a lente (obra 7 · D67/D68/D69) ──────────────────────
 
 test('triage — a leitura do conector no chip (D69)', async ({ authenticatedPage: page }) => {
-  // sem relógio: a troca de card do Triage é AnimatePresence mode="wait"
-  await chegarSemRelogio(page, '/pipeline');
-  await page.getByText('Triage', { exact: true }).click();
+  // sem relógio: a troca de card do Triage é AnimatePresence mode="wait".
+  // a porta é a do mundo novo (/pipeline morreu no gate): puxador do HOJE →
+  // folha. A foto é da FOLHA (precedente casa-plano-ida) — sem relógio fixo
+  // o arco vivo andaria de minuto em minuto por trás dela.
+  await chegarSemRelogio(page, '/hoje');
+  await page.getByRole('button', { name: /assentir/ }).click();
   await page.waitForTimeout(500);
-  await page.getByRole('button', { name: 'Pular' }).click(); // passa o ponto do @; chega o conector
+  const folha = page.getByRole('dialog', { name: 'Esperando leitura' });
+  await folha.getByRole('button', { name: 'Pular' }).click(); // passa o ponto do @; chega o conector
   await page.waitForTimeout(600);
-  await expect(page).toHaveScreenshot('triage-leitura-conector.png', SHOT);
+  await expect(folha).toHaveScreenshot('triage-leitura-conector.png', { maxDiffPixelRatio: 0.01 });
 });
 
 test('a casa — o plano da ida (D68)', async ({ authenticatedPage: page }) => {

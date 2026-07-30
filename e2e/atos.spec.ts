@@ -83,16 +83,21 @@ test('ato I.2 — assentir que falha NÃO avança o card', async ({ authenticate
       body: JSON.stringify(Array.from({ length: 50 }, (_, i) => conector(i))),
     }),
   );
-  await page.goto('/pipeline?sim=0');
+  // a porta do mundo novo: /pipeline morreu no gate — a prova é do
+  // componente (Assentimento), alcançado pelo puxador do HOJE
+  await page.goto('/hoje?sim=0');
   await page.waitForLoadState('networkidle');
-  await page.getByText('Triage', { exact: true }).click();
+  await page.waitForTimeout(600);
+  await passarAurora(page);
+  await page.getByRole('button', { name: /assentir/ }).click();
   await page.waitForTimeout(500);
+  const folha = page.getByRole('dialog', { name: 'Esperando leitura' });
 
-  await expect(page.getByText('Fatura #1000')).toBeVisible();
+  await expect(folha.getByText('Fatura #1000')).toBeVisible();
 
   // três tentativas que falham na gravação (mundo mockado)
   for (let i = 0; i < 3; i++) {
-    await page.getByRole('button', { name: /Assentir/ }).click();
+    await folha.getByRole('button', { name: /Assentir/ }).click();
     await page.waitForTimeout(400);
   }
 
@@ -100,8 +105,8 @@ test('ato I.2 — assentir que falha NÃO avança o card', async ({ authenticate
   // é da casa, não o erro cru do FSM que vazava pra tela (obra 12)
   await expect(page.getByText(/não consegui selar/).first()).toBeVisible();
   // e mesmo assim o card não andou: a esteira não finge que selou
-  await expect(page.getByText('Fatura #1000')).toBeVisible();
-  await expect(page.getByText('Fatura #1001')).toHaveCount(0);
+  await expect(folha.getByText('Fatura #1000')).toBeVisible();
+  await expect(folha.getByText('Fatura #1001')).toHaveCount(0);
 });
 
 // ─── Ato II — a porta que faltava ────────────────────────
@@ -187,33 +192,38 @@ test('ato III — o card mostra o que a lente trouxe, e pular manda pro fim', as
       body: JSON.stringify([evento(0), evento(1), evento(2)]),
     }),
   );
-  await page.goto('/pipeline?sim=0');
+  // a porta do mundo novo: a esteira se prova na folha do HOJE (a tela
+  // /pipeline morreu no gate; o componente é o mesmo)
+  await page.goto('/hoje?sim=0');
   await page.waitForLoadState('networkidle');
-  await page.getByText('Triage', { exact: true }).click();
+  await page.waitForTimeout(600);
+  await passarAurora(page);
+  await page.getByRole('button', { name: /assentir/ }).click();
   await page.waitForTimeout(500);
+  const folha = page.getByRole('dialog', { name: 'Esperando leitura' });
 
   // o contexto que estava no body e a tela escondia
-  await expect(page.getByText('Reunião 0')).toBeVisible();
-  await expect(page.getByText('hoje, 16:00–17:00')).toBeVisible();
-  await expect(page.getByText('se repete')).toBeVisible();
-  await expect(page.getByText('com André Tanaka')).toBeVisible();
+  await expect(folha.getByText('Reunião 0')).toBeVisible();
+  await expect(folha.getByText('hoje, 16:00–17:00')).toBeVisible();
+  await expect(folha.getByText('se repete')).toBeVisible();
+  await expect(folha.getByText('com André Tanaka')).toBeVisible();
   // e o módulo passa a ser trocável — não sela tudo em bridge
-  await expect(page.getByText('onde mora')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'family', exact: true })).toBeVisible();
+  await expect(folha.getByText('onde mora')).toBeVisible();
+  await expect(folha.getByRole('button', { name: 'family', exact: true })).toBeVisible();
   await page.screenshot({ path: 'docs/onda-3/14_dissecacao-01_fotos/26-ato3-card-com-contexto.png', fullPage: true });
 
   // pular NÃO gira em círculo: manda pro fim
-  await page.getByRole('button', { name: 'Pular' }).click();
+  await folha.getByRole('button', { name: 'Pular' }).click();
   await page.waitForTimeout(400);
-  await expect(page.getByText('Reunião 1')).toBeVisible();
-  await page.getByRole('button', { name: 'Pular' }).click();
+  await expect(folha.getByText('Reunião 1')).toBeVisible();
+  await folha.getByRole('button', { name: 'Pular' }).click();
   await page.waitForTimeout(400);
-  await expect(page.getByText('Reunião 2')).toBeVisible();
+  await expect(folha.getByText('Reunião 2')).toBeVisible();
   // só depois de todos é que o primeiro volta — e a tela diz isso
-  await page.getByRole('button', { name: 'Pular' }).click();
+  await folha.getByRole('button', { name: 'Pular' }).click();
   await page.waitForTimeout(400);
-  await expect(page.getByText('Reunião 0')).toBeVisible();
-  await expect(page.getByText('todos já passaram uma vez')).toBeVisible();
+  await expect(folha.getByText('Reunião 0')).toBeVisible();
+  await expect(folha.getByText('todos já passaram uma vez')).toBeVisible();
 });
 
 // ─── Ato IV — a lente que não mente ──────────────────────

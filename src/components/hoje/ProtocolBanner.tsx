@@ -1,4 +1,4 @@
-// home/ProtocolBanner.tsx — o chamado do protocolo (Fase 7 · D2)
+// hoje/ProtocolBanner.tsx — o chamado do protocolo (Fase 7 · D2)
 // Discreto por lei: a situação chamou → convida; não chamou → return null.
 // "×" silencia por hoje (por aparelho); amanhã a condição decide de novo.
 import { useMemo, useState } from 'react';
