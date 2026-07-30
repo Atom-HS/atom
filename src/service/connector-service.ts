@@ -289,20 +289,27 @@ export const connectorService = {
 // Extract sender name as #who:slug tag
 // "John Doe <john@x.com>" → "#who:john-doe"
 // "<john@x.com>" → "#who:john" (from email prefix)
+// "André Tanaka <a@x.com>" → "#who:andre-tanaka" — translitera ANTES de
+// slugificar (NFD separa a letra do acento; o acento cai, a letra fica).
+// Vale pro parto novo; item já nascido não se re-taggeia (precedente DP-H).
+function transliterate(s: string): string {
+  return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
 function extractWhoTag(from: string): string | null {
   // Try name part: "Name <email>"
   const nameMatch = from.match(/^([^<]+)</);
   if (nameMatch) {
     const name = nameMatch[1].trim().replace(/["']/g, '');
     if (name) {
-      const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+      const slug = transliterate(name).toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
       if (slug) return `#who:${slug}`;
     }
   }
   // Fallback: email prefix
   const emailMatch = from.match(/<?\s*([^@]+)@/);
   if (emailMatch) {
-    const prefix = emailMatch[1].trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
+    const prefix = transliterate(emailMatch[1]).trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
     if (prefix) return `#who:${prefix}`;
   }
   return null;

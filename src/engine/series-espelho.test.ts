@@ -51,3 +51,19 @@ describe('a volta do cron conhece a série — engine/series × daily-digest', (
     expect(CLIENT).toMatch(/event\.recurring \? 'ritual' : 'task'/);
   });
 });
+
+describe('o tag de pessoa não diverge — extractWhoTag no client e no cron', () => {
+  it('a transliteração existe nos DOIS lados (André → andre, nunca andr)', () => {
+    // pol. 7 da dissecação 03: o acento cai por NFD antes do slug — se um
+    // lado transliterar e o outro não, a mesma pessoa vira duas tags
+    const NFD = /normalize\(.NFD.\)\.replace\(\/\[\\u0300-\\u036f\]\/g/;
+    expect(CLIENT).toMatch(NFD);
+    expect(EDGE).toMatch(NFD);
+  });
+
+  it('o slug se monta igual nos dois lados', () => {
+    const SLUG = /toLowerCase\(\)\.replace\(\/\\s\+\/g, .-.\)\.replace\(\/\[\^a-z0-9-\]\/g/;
+    expect(CLIENT).toMatch(SLUG);
+    expect(EDGE).toMatch(SLUG);
+  });
+});
