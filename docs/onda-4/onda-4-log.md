@@ -289,5 +289,40 @@ selou — e as duas perguntas da errata têm resposta de mercado.
 
 ---
 
+## Wrap · 31 Jul 2026 — a spec dos bilhetes nasce curada
+
+### ⬠ Soul
+«Bora» — e a obra 1 virou spec no molde da irmã (a do digest): leis que
+regem, Guardião, gatilhos, texto canônico shame-testado ANTES do código.
+A decisão de forma que pesa: o texto do bilhete é **determinístico**,
+composto em código como o digest faz — a voz generativa improvisando
+bilhete é o horóscopo que a 4.1 mata. E o bilhete **não é AtomItem**: ele
+é fala do E., não vida do Rick — a escada do Genesis rege itens, a Lei do
+Tom rege falas; duas jurisdições, zero mistura.
+
+### · Items
+- **`03_spec-bilhetes.md` selada** — G2 embarca (braço desligado lá fora;
+  o detector JÁ existe no `reconcile` da taxonomy-sync), G1 dormente até a
+  4.8 nascer, G3 fora da v1 por ordem do próprio E., «cron não rodou» é
+  push e fica pra outra obra. Tabela `e_bilhetes` (migration), cartão
+  indigo no HOJE, um por vez, se lê e se solta, dedup por mudança de
+  estado, coluna `gatilho` como instrumento da revisão dos 20.
+- Texto canônico do G2 aprovado contra as seis condições da 4.1.1, uma a
+  uma, na própria spec.
+
+### △ Decidido
+- Nada novo — a spec declara só decisões pré-existentes. Uma incerteza
+  registrada (soltar = gesto próprio vs abrir-o-dia-seguinte solta;
+  proposta: gesto próprio, pelo teste 5), ajustável pós-vivência.
+
+### → Next
+1. **Assentimento do Rick sobre a spec** — um gesto; com ele, o código
+   nasce (ROOT → ESTRUTURA → INTERFACE → prova no atos.spec)
+2. Relay pro E. segue pendente (buraco 3 + benchmark + D80–D84 + d-059 —
+   agora + esta spec)
+3. Digest 07:15 · hostname · DP-G
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*
