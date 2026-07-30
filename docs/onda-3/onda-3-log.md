@@ -728,6 +728,131 @@ falta — o que vive já fazia o trabalho.**
 
 ---
 
+## Wrap · 30 Jul 2026 — a sessão da faxina e da fila (o rescaldo do gate)
+
+### ○ Soul
+A sessão comum que o handoff pediu: nada de gatilho, nada de morte. Varrer
+o chão depois da obra e fechar a fila MANCA que as dissecações deixaram
+nomeada. As cinco obras fecharam INTEIRAS, cada uma com rito verde e um
+commit — de dentro pra fora, como a ordem mandava. O mundo novo ficou
+inteiro por dentro: a lente que sabe de si, o wrap sem passo oco, a árvore
+polida, o chão sem entulho.
+
+### · Items
+
+**Obra 1 — a faxina pós-gate** (`a7ad79a`)
+- `d3` + `@types/d3` fora do package.json e lockfile (grep confirmou: só o
+  Graph morto usava) — 570 linhas de lockfile a menos
+- `SoulCardSkeleton`, `ChartSkeleton`, `RingSkeleton` morreram (órfãos);
+  `CardSkeleton`/`ListSkeleton` ficam — o `AuditPanel` vivo usa
+- nota de museu em `dissecacao-01`, `tour`, `gate-fotos` (fotografam o
+  mundo de antes do gate; vermelho à mão é a verdade) e nota PARCIAL na
+  `dissecacao-04` (só a cena do `/projects` é história — wrap, busca e
+  offline seguem dirigíveis)
+
+**Obra 2 — a lente sabe de si** (`81177ea` · diss. 03 M4+M5)
+- a sheet diz que o cron existe: «a casa olha sozinha todo dia às 07:15 ·
+  última volta há Nh» lendo `user_connectors.last_sync_at` — estado, nunca
+  promessa (D46); só aparece com Google ligado
+- `taxonomy-sync` ganhou a ação `reconcile`: deletou lá fora → braço
+  desliga, e NUNCA cria (criar exige assentimento, D68); só 404/410
+  explícito desliga o calendário — erro transitório do Google não vira
+  comando; sem ida viva, sai antes de acordar o Google
+- `daily-digest` chama a reconciliação na volta (braço 1.5) — «deletou lá
+  fora → braço desliga» deixou de depender de alguém abrir o preview à mão;
+  falha não cala o cofre
+- **o terceiro espelho nasceu com guarda**: `taxonomy-espelho.test.ts`
+  (8 testes) vigia o contrato da ida (TaxonomyRecord, namespace,
+  CALENDAR_KEY) e o contrato de chamada cron→reconcile
+
+**Obra 3 — o `extractWhoTag` com acento** (`8ce4b42` · diss. 03 pol. 7)
+- André Tanaka → `#who:andre-tanaka` (antes: `andr-tanaka`) — NFD separa a
+  letra do acento antes do slug, NOS DOIS lados (connector-service e
+  espelho da daily-digest)
+- guarda novo no `series-espelho`: transliteração e montagem do slug
+  quebram o teste se divergirem; 2 testes de comportamento (acento,
+  cedilha+til)
+- muro 5 honrado: vale pro parto novo; item já nascido fica (DP-H). O
+  `who:` da busca ensina com os valores do tronco verbatim — os
+  transliterados aparecem certos por construção
+
+**Obra 4 — o passo 5 do wrap vira boca** (`736b05b` · diss. 04 M4)
+- o cartão-promessa («o que dorme será encontrado na Fase 5») morreu: boca
+  de texto que planta de verdade — captura-primeiro (D52), a semente nasce
+  `#seed` no inbox estágio 1, em silêncio (pol. 8), o rito segue
+- `capture` do pipeline aceita tags (compatível, default `[]`)
+- cena 16 no atos.spec: a boca existe, a semente aparece plantada, o POST
+  prova tag + estágio; o selo com dia vazio segue valendo (cena 15 intacta
+  — obra 24a não regrediu)
+
+**Obra 5 — os polimentos da ÁRVORE** (`7c58c07` · diss. 02 pol. 7–11)
+- a janela persiste (`mindroot.arvore-janela.v1`) — a lente escolhida é
+  preferência, não estado de página; cena 17 no atos.spec prova
+- «família» e «propósito» se leem separados (limiar do anchor 0.25→0.15)
+- «+N mais antigas» virou porta: expande o drill até o total honesto
+  (`allLeaves` no engine, com teste — o teto de 8 é do primeiro olhar,
+  nunca do caminho) + recolher
+- pol. 10 rendeu: o tracejado do ideal legível (opacity .5, dash 3-4)
+- legenda quieta de `·`/`○` no PRIMEIRO drill (`mindroot.hint-drill.v1`,
+  molde do hint-busca) — depois nunca mais
+
+### △ Decidido (nada ratificado)
+- Nenhuma DP nova. Tudo aplicação de leis já ratificadas (D46, D52, D68,
+  DP-C/DP-H por precedente) ou polimento sem mesa.
+
+### ⬡ Conexões
+- O terceiro espelho (`taxonomy-espelho`) fecha o padrão da casa: TODO
+  contrato espelhado à mão entre client/engine e edge tem guarda que
+  quebra na divergência — vault, series, taxonomy
+- A legenda do drill e a janela persistida reusam dois moldes que a onda
+  já tinha parido: o hint-de-primeira-vez e o `mindroot.*` — a casa cresce
+  copiando a si mesma
+
+### ✳ Seeds
+- A reconciliação rica (label RENOMEADO vira «sumiu»; o Gmail mantém o id,
+  dava pra seguir o rename) — registrada desde a diss. 03, o `reconcile`
+  novo é o lugar natural quando ela vier
+- A porta do «+N» podia um dia abrir a busca já filtrada pelo ramo (a
+  semente «drill como porta de busca») — hoje expande no lugar, que é o
+  gesto mais barato; a busca semeada precisa de canal que o AppShell ainda
+  não tem
+
+### □ Audit
+- ✅ rito do verde nas 5 obras: tsc limpo · 417 testes (13 novos: 8
+  taxonomy-espelho + 2 who-espelho + 2 who acento + 1 allLeaves) · build ·
+  atos.spec **17 cenas** (2 novas: semente `#seed`, janela persiste) ·
+  gate visual 13/13
+- ✅ 5 commits, um por obra, nenhum com hook vermelho; nenhuma das três
+  condições de parada disparou
+- ✅ baselines refotografadas SÓ na obra 5, com intenção declarada:
+  `face-arvore.png` (anchors + tracejado — diff <1%, refoto pra baseline
+  não mentir, precedente do rótulo do puxador) e `face-arvore-drill.png`
+  (a legenda nova)
+- ⚠ as fotos de prova das dissecações (23–31, 72–76) são regeneradas
+  pelo próprio atos.spec a cada rodada do rito — diffs binários mínimos
+  de re-render foram junto nos commits das obras; são fotos de cena, não
+  baselines
+- ⚠ lint segue 46 erros + 3 avisos herdados (services/edges/shell) — zero
+  erro novo; a reforma é de outra onda
+- ⚠ nada subiu de edge: o `reconcile` e o `extractWhoTag` espelhado SÓ
+  valem em produção depois do deploy — mão do Rick
+
+### → Next — a mesa do Rick
+1. **Deploy das edges — agora com TRÊS razões**: `daily-digest` (a MENTE
+   do cron corrigida em 30 Jul + o braço da reconciliação + o
+   `extractWhoTag` com acento) e `taxonomy-sync` (a ação `reconcile`)
+2. **Redirect URL do Supabase na prod nova** — segue mordendo o login
+   OAuth
+3. **Ratificar**: DP-E (D74?) · DP-G · DP-A…DP-F · DP-J
+4. Fila que sobrou: obra de voz do builder (com o E., D64) · reforma do
+   `Review.tsx` · lint herdado · reconciliação rica (rename)
+5. Viver a ida real no Gmail · dry-run do digest · instalar o PWA
+
+**A última linha: a fila MANCA das dissecações está vazia. O que resta na
+mesa é deploy, ratificação e vida vivida — nada disso é obra de sessão.**
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. O formato é o do wrap do app,
 porque a casa come a própria comida.*

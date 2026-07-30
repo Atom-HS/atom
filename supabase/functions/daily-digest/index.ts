@@ -162,28 +162,34 @@ interface GmailMsg {
   date: string; snippet: string; labels: string[];
 }
 
+// "André Tanaka <a@x.com>" → "#who:andre-tanaka" — translitera ANTES de
+// slugificar, espelho do canônico em connector-service.extractWhoTag.
+function transliterate(s: string): string {
+  return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
 function extractWhoTag(from: string): string | null {
   const nameMatch = from.match(/^([^<]+)</);
   if (nameMatch) {
     const name = nameMatch[1].trim().replace(/["']/g, "");
     if (name) {
-      const slug = name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+      const slug = transliterate(name).toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
       if (slug) return `#who:${slug}`;
     }
   }
   const emailMatch = from.match(/<?\s*([^@]+)@/);
   if (emailMatch) {
-    const prefix = emailMatch[1].trim().toLowerCase().replace(/[^a-z0-9-]/g, "");
+    const prefix = transliterate(emailMatch[1]).trim().toLowerCase().replace(/[^a-z0-9-]/g, "");
     if (prefix) return `#who:${prefix}`;
   }
   return null;
 }
 
-async function callEdge(name: string, userId: string): Promise<Record<string, unknown> | null> {
+async function callEdge(name: string, userId: string, extra?: Record<string, unknown>): Promise<Record<string, unknown> | null> {
   try {
     const r = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/${name}`, {
       method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id: userId }),
+      body: JSON.stringify({ user_id: userId, ...extra }),
     });
     if (!r.ok) { log(`${name}-failed`, { status: r.status }); return null; }
     return await r.json().catch(() => null);
@@ -309,6 +315,13 @@ Deno.serve(async (req: Request): Promise<Response> => {
     // braço 1 — a volta (falha aqui não cala o cofre)
     const volta = await ingestVolta(sb, userId);
     log("volta", volta);
+
+    // braço 1.5 — a reconciliação da ida (D68): «deletou lá fora → braço
+    // desliga» deixa de depender de alguém abrir o preview à mão. O diff é
+    // da taxonomy-sync (contrato canônico: src/engine/taxonomy.ts) — aqui
+    // só se pede. Falha aqui também não cala o cofre.
+    const reconcile = await callEdge("taxonomy-sync", userId, { action: "reconcile" });
+    log("reconcile", { disabled: (reconcile as { disabled?: string[] } | null)?.disabled ?? [] });
 
     // braço 2 — o cofre (espelho de engine/vault.ts)
     const now = new Date();

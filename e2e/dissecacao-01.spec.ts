@@ -1,3 +1,10 @@
+// ═══ NOTA DE MUSEU (30 Jul 2026) ═══════════════════════════════════════
+// Este spec fotografa o mundo de ANTES do gate (D41, disparado em 30 Jul
+// 2026): as cenas do /pipeline dirigem uma tela que morreu na morte por
+// merge. É história — prova dos achados da dissecação 01 — e não roda no
+// rito do verde. Quem rodar à mão vai ver vermelho, e o vermelho é a
+// verdade: a rota não existe mais.
+// ═══════════════════════════════════════════════════════════════════════
 // e2e/dissecacao-01.spec.ts — exame da dissecação (docs/onda-3/13), features 1–3
 // NÃO é gate: roda sob demanda, fotografa as cenas que provam os achados.
 // Rodar: npx playwright test e2e/dissecacao-01.spec.ts --project=mobile

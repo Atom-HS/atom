@@ -590,3 +590,63 @@ test('wrap — um dia vazio também se sela (nenhum campo trava o rito)', async 
   await expect(page.getByText('o dia está selado')).toBeVisible({ timeout: 10_000 });
   await expect(page.getByText(/falta o que fica/)).toHaveCount(0);
 });
+
+// ─── Fila MANCA (diss. 04 M4) — o passo 5 do wrap vira boca ──────────
+
+test('wrap — a semente plantada no passo 5 nasce #seed no inbox', async ({
+  authenticatedPage: page,
+}) => {
+  test.setTimeout(60_000);
+  const capturas: Array<Record<string, unknown>> = [];
+  await page.route('**/rest/v1/items*', (route) => {
+    if (route.request().method() === 'POST') {
+      capturas.push(route.request().postDataJSON() as Record<string, unknown>);
+      return route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify({ id: 'seed-1' }) });
+    }
+    return route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+  });
+  await page.goto('/wrap?sim=0');
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(600);
+
+  // caminha até o passo 5 (sementes) — o rito segue 1 passo por tela
+  for (let i = 0; i < 4; i++) {
+    await page.getByRole('button', { name: /seguir/ }).click();
+    await page.waitForTimeout(350);
+  }
+
+  // o cartão-promessa morreu: nada de «Fase 5» — a boca existe
+  await expect(page.getByText(/Fase 5/)).toHaveCount(0);
+  await page.getByPlaceholder('+ uma semente…').fill('estufa no quintal');
+  await page.keyboard.press('Enter');
+
+  // a semente aparece plantada no passo…
+  await expect(page.getByText('"estufa no quintal"')).toBeVisible();
+
+  // …e nasceu de verdade: inbox estágio 1, com a tag da lei (D52)
+  const semente = capturas
+    .flatMap((c) => (Array.isArray(c) ? c : [c]))
+    .find((c) => c.title === 'estufa no quintal');
+  expect(semente).toBeTruthy();
+  expect(semente!.tags).toContain('#seed');
+  expect(semente!.genesis_stage).toBe(1);
+  expect(semente!.state).toBe('inbox');
+});
+
+// ─── Fila (diss. 02 pol. 7) — a lente escolhida é preferência ────────
+
+test('árvore — a janela escolhida sobrevive à navegação', async ({
+  authenticatedPage: page,
+}) => {
+  await chegar(page, '/arvore');
+  await page.getByRole('button', { name: 'estação 55' }).click();
+  await page.waitForTimeout(300);
+
+  // sai pro HOJE e volta — antes, a lente resetava pra semana 7 (useState)
+  await chegar(page, '/hoje');
+  await passarAurora(page);
+  await chegar(page, '/arvore');
+
+  await expect(page.getByRole('button', { name: 'estação 55' })).toHaveClass(/text-accent/);
+  await expect(page.getByRole('button', { name: 'semana 7' })).not.toHaveClass(/text-accent/);
+});

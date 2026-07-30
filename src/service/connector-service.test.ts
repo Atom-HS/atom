@@ -99,6 +99,32 @@ describe('ingestGmailMessages — a volta do email (só o sinal)', () => {
     expect(arg.tags).toContain('#who:maria-silva');
   });
 
+  it('remetente com acento translitera: André Tanaka → #who:andre-tanaka (pol. 7 diss. 03)', async () => {
+    mockExistingItems([]);
+
+    await connectorService.ingestGmailMessages(
+      [gmailMsg({ from: 'André Tanaka <andre@x.com>' })],
+      USER,
+    );
+
+    const arg = vi.mocked(itemService.create).mock.calls[0][0];
+    // antes o acento era comido: #who:andr-tanaka. NFD translitera antes
+    // de slugificar — vale pro parto novo; item já nascido fica (DP-H)
+    expect(arg.tags).toContain('#who:andre-tanaka');
+  });
+
+  it('cedilha e til também: Conceição Araújo → #who:conceicao-araujo', async () => {
+    mockExistingItems([]);
+
+    await connectorService.ingestGmailMessages(
+      [gmailMsg({ from: 'Conceição Araújo <c@x.com>' })],
+      USER,
+    );
+
+    const arg = vi.mocked(itemService.create).mock.calls[0][0];
+    expect(arg.tags).toContain('#who:conceicao-araujo');
+  });
+
   it('remetente sem nome cai pro prefixo do email', async () => {
     mockExistingItems([]);
 

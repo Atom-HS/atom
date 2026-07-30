@@ -1,3 +1,10 @@
+// ═══ NOTA DE MUSEU (30 Jul 2026) ═══════════════════════════════════════
+// Este tour fotografa o mundo de ANTES do gate (D41, disparado em 30 Jul
+// 2026): o passo da triage entra pelo /pipeline, tela que morreu na morte
+// por merge. É história — o guia visual de uma casa que não existe mais —
+// e não roda no rito do verde. Quem rodar à mão vai ver vermelho, e o
+// vermelho é a verdade: a rota não existe mais.
+// ═══════════════════════════════════════════════════════════════════════
 // e2e/tour.spec.ts — o tour guiado com fotos (não é gate; roda sob demanda)
 // Dirige o app como um usuário faria e fotografa cada gesto, pra montar
 // o guia visual. Mundo simulado (?sim=1) + auth mockada (fixtures/auth).

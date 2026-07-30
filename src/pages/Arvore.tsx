@@ -4,18 +4,24 @@
 // Maturação se vê no galho (· → ○), não em funil (D48). Toque no ramo
 // abre o drill; o chão da árvore leva à raiz (D50). O espelho nasce
 // quieto — "ainda ouvindo teus dias" — e acorda com a semana vivida.
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useItems } from '@/hooks/useItems';
 import { useNav } from '@/hooks/useNav';
 import { useAppStore } from '@/store/app-store';
 import { eventService } from '@/service/item-service';
-import { treeShape, synthesis, isColdStart, CONFIDENCE_LABEL, TREE_WINDOWS, BRANCH_LABEL, type Branch, type TreeWindow } from '@/engine/tree';
+import { treeShape, synthesis, isColdStart, allLeaves, CONFIDENCE_LABEL, TREE_WINDOWS, BRANCH_LABEL, type Branch, type TreeWindow } from '@/engine/tree';
 import { nextAvailableReview, type Cadence } from '@/engine/meaning';
 import { mirror } from '@/engine/mirror';
 import { simEvents } from '@/dev/sim-week';
 import type { AtomItem, AtomModule } from '@/types/item';
+
+// a lente que o olho escolheu é preferência, não estado de página (pol. 7
+// diss. 02) — sobrevive à navegação, no padrão da casa (mindroot.*)
+const JANELA_KEY = 'mindroot.arvore-janela.v1';
+// a legenda de ·/○ se ensina UMA vez, no molde do hint da busca (pol. 11)
+const HINT_DRILL_KEY = 'mindroot.hint-drill.v1';
 
 // idade da folha, quieta: hoje · ontem · Nd (estado, nunca cobrança — D46)
 function ageLabel(iso: string): string {
@@ -63,7 +69,9 @@ function TreeCrown({ branches, selected, onSelect }: {
 
         return (
           <g key={b.module} opacity={dim ? 0.25 : 1} onClick={() => onSelect(b.module)} style={{ cursor: 'pointer' }}>
-            <path d={path(ideal)} fill="none" stroke={color} strokeWidth="1.2" strokeDasharray="4 5" opacity=".35" />
+            {/* o ideal legível (pol. 10): a .35 sobre fundo escuro era quase
+                subliminar — real×ideal tem que comunicar sem explicação */}
+            <path d={path(ideal)} fill="none" stroke={color} strokeWidth="1.4" strokeDasharray="3 4" opacity=".5" />
             <path d={path(real)} fill="none" stroke={color} strokeWidth="3" opacity=".85" strokeLinecap="round" />
             {b.leaves.slice(0, 4).map((_, l) => {
               const n = Math.min(b.leaves.length, 4);
@@ -83,7 +91,9 @@ function TreeCrown({ branches, selected, onSelect }: {
               x={cx + dx * (maxR + 16)} y={cy + dy * (maxR + 16) + 4}
               fontSize="10.5" fontFamily="monospace"
               fill={selected === b.module ? 'var(--color-accent)' : 'var(--color-text-muted)'}
-              textAnchor={dx > 0.25 ? 'start' : dx < -0.25 ? 'end' : 'middle'}
+              // limiar 0.15: os dois ramos do topo (família/propósito) caíam
+              // juntos no anchor middle e se liam colados (pol. 8 diss. 02)
+              textAnchor={dx > 0.15 ? 'start' : dx < -0.15 ? 'end' : 'middle'}
             >
               {BRANCH_LABEL[b.module]}
             </text>
@@ -102,8 +112,27 @@ export function ArvorePage() {
   const { selectItem } = useNav();
   const { items } = useItems();
   const user = useAppStore((s) => s.user);
-  const [winKey, setWinKey] = useState<TreeWindow['key']>('semana');
+  const [winKey, setWinKey] = useState<TreeWindow['key']>(() => {
+    const saved = localStorage.getItem(JANELA_KEY);
+    return TREE_WINDOWS.some((w) => w.key === saved) ? (saved as TreeWindow['key']) : 'semana';
+  });
   const [selected, setSelected] = useState<AtomModule | null>(null);
+  // a porta do «+N mais antigas» (pol. 9): expande o drill além do teto de 8
+  const [expandido, setExpandido] = useState(false);
+  const [hintDrill, setHintDrill] = useState(false);
+
+  const escolherJanela = (k: TreeWindow['key']) => {
+    setWinKey(k);
+    setExpandido(false);
+    try { localStorage.setItem(JANELA_KEY, k); } catch { /* sem storage, a lente só não persiste */ }
+  };
+
+  // legenda quieta de ·/○ no PRIMEIRO drill — depois nunca mais (pol. 11)
+  useEffect(() => {
+    if (!selected || localStorage.getItem(HINT_DRILL_KEY)) return;
+    localStorage.setItem(HINT_DRILL_KEY, new Date().toISOString());
+    setHintDrill(true);
+  }, [selected]);
 
   const all = useMemo(() => (items ?? []) as AtomItem[], [items]);
 
@@ -132,6 +161,11 @@ export function ArvorePage() {
   );
 
   const drill = selected ? branches.find((b) => b.module === selected) : null;
+  // a porta aberta: todas as folhas da janela, sem teto (pol. 9)
+  const folhasDoDrill = useMemo(
+    () => (drill && expandido ? allLeaves(all, drill.module, winKey) : drill?.leaves ?? []),
+    [drill, expandido, all, winKey],
+  );
 
   // a porta da escada F4 (DP-G · gate §3a): as janelas da árvore já falam a
   // língua da escada — quando há período esperando síntese, um puxador
@@ -143,7 +177,7 @@ export function ArvorePage() {
       <TreeCrown
         branches={branches}
         selected={selected}
-        onSelect={(m) => setSelected((cur) => (cur === m ? null : m))}
+        onSelect={(m) => { setSelected((cur) => (cur === m ? null : m)); setExpandido(false); }}
       />
 
       {/* a síntese — estado, nunca julgamento; quieta se a árvore está quieta */}
@@ -163,7 +197,7 @@ export function ArvorePage() {
         {TREE_WINDOWS.map((w) => (
           <button
             key={w.key}
-            onClick={() => setWinKey(w.key)}
+            onClick={() => escolherJanela(w.key)}
             className={`text-[11px] font-mono px-3 py-1 rounded-full border ${
               w.key === winKey
                 ? 'text-accent border-accent/40 bg-accent/10'
@@ -185,7 +219,14 @@ export function ArvorePage() {
           {CONFIDENCE_LABEL[drill.confidence] && (
             <p className="text-[11px] italic text-text-faint mb-1.5">{CONFIDENCE_LABEL[drill.confidence]}</p>
           )}
-          {drill.leaves.map(({ item, when }) => (
+          {/* a legenda quieta do primeiro drill (pol. 11): quem é da casa lê
+              maturação; quem chegou ontem via pontuação */}
+          {hintDrill && drill.leaves.length > 0 && (
+            <p aria-hidden="true" className="font-mono text-[10px] text-text-faint mb-1.5">
+              · caminhando · ○ selado — a maturação se vê no galho
+            </p>
+          )}
+          {folhasDoDrill.map(({ item, when }) => (
             <button
               key={item.id}
               onClick={() => selectItem(item.id)}
@@ -198,10 +239,23 @@ export function ArvorePage() {
               </span>
             </button>
           ))}
-          {drill.total > drill.leaves.length && (
-            <p className="text-[10px] font-mono text-text-muted mt-1.5">
-              +{drill.total - drill.leaves.length} mais antigas na janela
-            </p>
+          {/* «+N mais antigas» era beco (declarava e morria) — agora é porta:
+              expande o drill até o total honesto (pol. 9) */}
+          {!expandido && drill.total > drill.leaves.length && (
+            <button
+              onClick={() => setExpandido(true)}
+              className="text-[10px] font-mono text-gold-dim mt-1.5"
+            >
+              +{drill.total - drill.leaves.length} mais antigas na janela — abrir
+            </button>
+          )}
+          {expandido && drill.total > 8 && (
+            <button
+              onClick={() => setExpandido(false)}
+              className="text-[10px] font-mono text-text-muted mt-1.5"
+            >
+              recolher — as 8 mais novas
+            </button>
           )}
         </section>
       )}
