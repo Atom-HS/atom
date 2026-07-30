@@ -1,114 +1,126 @@
-# Obra 1 (Onda 4) — os bilhetes do E.
+# Obra 1 (Onda 4) — os bilhetes do E. · spec v2, a fusão
 
-*31 Jul 2026 · a D53 v2 destravada vira spec. Spec primeiro (§8.7).
-Insumos: `01_parecer-e.md` § 4 (os gatilhos curados) + `01a` (a espiral sem
-boca) + `02_benchmark-retorno.md` (a fala por evento é a forma danosa — por
-isso ela nasce aqui curada, rara e com teto). A lei da voz: Lei do Tom v1.4,
-Parte 4.1 inteira.*
+*31 Jul 2026 · **v2 = fusão de duas specs escritas em paralelo sem uma saber
+da outra**: a da casa (v1 deste arquivo, Code) e a do E.
+(`03b_spec-bilhete-e_v1.md`, selada verbatim). O mesmo aconteceu com o
+benchmark: `02_benchmark-retorno.md` (casa, escopo da onda) e
+`02b_benchmark-bilhete.md` (E., escopo da obra) — **complementares, não
+duplicados**: um responde marca × boca e intervalo × densidade; o outro
+responde frequência, canal e formato. Esta fusão é aditiva onde as duas
+concordam (quase tudo) e resolve as três divergências declarando quem tinha
+jurisdição. Spec primeiro (§8.7); o código espera o assentimento do Rick.*
 
-## As leis que regem
+## O que cada mãe trouxe (e a fusão guarda)
 
-- **D53** — bilhetes do E. = v2, só com a Lei do Tom escrita. Está escrita
-  (v1.4). Esta obra é o destravamento.
-- **Lei do Tom 4.1** — quem inicia: E. · máx. 3 frases · sem emoji, sem
-  exclamação, sem saudação vazia · sem tarefa embutida · **silêncio é o
-  default** · as seis condições (4.1.1) valem TODAS para cada disparo.
-- **D80** — o teto é o dispositivo anti-cobrança. 3 frases, nunca mais.
-- **D61** — o bilhete fala em **indigo**: é o E. presente, não a casa.
-- **Parecer § 4.2 (fronteira)** — o digest é dono de quantidades e tem
-  cadência; o bilhete é dono de **eventos** e não tem cadência. O que um
-  diz, o outro cala (Parte 5.4 generalizada).
-- **Parecer § 4.3 + Lei Parte 6.1** — o instrumento de revisão conta
-  **tipos de gatilho**, não disparos. Aos 20 bilhetes reais, olha-se a
-  diversidade: 20 de 2 tipos = gatilho forçado; 20 de 12 = casa viva.
-- **Lei 5.4** — erro em superfície sem turno seguinte não se corrige ali:
-  bilhete errado vai pro @ e pro wrap, nunca gera segundo bilhete.
+**Da spec do E.** (jurisdição: a voz e a superfície dela):
+- **A regra de formato que a lei não tinha** — banner é o formato de pior
+  reação medida (12,5%) e alvo da dispensa reflexa (NN/g 2026): o bilhete
+  que nasce banner morre num componente. Não é banner e **não tem X**.
+- **Anti-gerador com a razão numerada**: no Teste 02, 11 de 12 candidatos
+  gerados reprovaram — pedir a um modelo «escreva o bilhete de hoje» é
+  construir o horóscopo com passos extras. Texto pré-escrito por gatilho,
+  espaços só para dados.
+- **Instrumentação mínima** (3 eventos: nasceu · exibido · visto) — sem
+  ela, a revisão dos 20 (Parte 6) é inauditável.
+- **A dependência declarada**: a raridade do bilhete só é segura porque o
+  digest existe (95% de churn em 90 dias com silêncio total — Airship).
+  Digest desligado → 4.1 se relê junto. Condição, não ressalva.
+- **Fora da v1, em lei**: gatilho sobre comportamento do Rick não é «ainda
+  não» — é a condição 2, e não entra em versão nenhuma. Sem histórico
+  navegável (arquivo de bilhetes é a dívida do teste 5, guardada).
+- **G3 vai a Teste 03 antes de embarcar** (honrar a ressalva do parecer em
+  vez de promovê-la no fio).
+- **Processo de gatilho novo**: candidato → frase escrita → shame-test 3+2
+  documentado linha a linha → só então fio. Sem registro, não embarca.
 
-## GUARDIÃO — CONSTRAINTS
-━━━━━━━━━━━━━━━━━━━━━━
-**Schema:** UMA tabela nova, `e_bilhetes` — migration obrigatória (§8.3):
-`id uuid` · `user_id` (RLS: só o dono lê) · `gatilho text` (o TIPO — o
-instrumento da § 4.3 é esta coluna) · `texto text` (composto no disparo,
-imutável depois — bilhete commitado não se edita, espírito do wrap) ·
-`dedup_key text` (o estado que já falou não fala de novo — D75 em
-espírito) · `created_at` · `solto_em timestamptz null` (lido-e-solto;
-NUNCA um booleano «unread» que vira badge).
-**O bilhete NÃO é AtomItem.** Ele não é vida do Rick — é fala do E. Não
-entra no inbox, não matura, não conecta. A escada do Genesis rege itens;
-a Lei do Tom rege falas. Duas jurisdições, zero mistura.
-**Texto determinístico, shame-testado em tempo de spec** — precedente do
-digest (`daily-digest` compõe em código, não em modelo). Cada gatilho tem
-UM template canônico aprovado AQUI; variável é só o dado (nome do braço,
-data). Sem Claude API no disparo: a voz generativa improvisando bilhete é
-o horóscopo que a 4.1 mata.
-**Pisos:** sem gatilho → tabela quieta e superfície vazia (silêncio é o
-default). Dedup_key repetida → não nasce. Dois bilhetes no mesmo dia → o
-segundo espera o primeiro ser solto (raridade é lei, não métrica).
+**Da spec da casa** (jurisdição: o tronco, o schema, a face por dentro):
+- **`dedup_key`** — o estado que já falou não fala de novo (D75 em
+  espírito). O E. não tinha; sem isso, o mesmo braço desligado falaria a
+  cada reconcile diário. `dedup_key = "arm-disabled:" + branchKey`;
+  religou-e-apagaram-de-novo é estado novo, fala de novo.
+- **Bilhete NÃO é AtomItem** — é fala do E., não vida do Rick. Não entra no
+  inbox, não matura, não conecta. A escada do Genesis rege itens; a Lei do
+  Tom rege falas. Duas jurisdições, zero mistura.
+- **O detector localizado**: `taxonomy-sync` action `reconcile` já computa
+  `disabledNow` no cron diário — o G1 é dar boca ao que o braço já sabe.
+- **Migration + RLS**: tabela nova exige migration (§8.3); só o dono lê.
+- **Onde pousa no HOJE** (pendência § 9 do E., respondida por quem conhece
+  a face): **abaixo do rito da aurora (D42), acima da sugestão do dia** —
+  não disputa com o rito nem empurra o arco pra fora do fold (360×800).
 
-⚠ INCERTEZAS (Proporção Invertida): nenhuma de schema. Uma de vivência —
-se «soltar» precisa de gesto próprio ou se abrir o HOJE seguinte já solta.
-Proposta: **gesto próprio** (toque), porque soltar sem ler é direito
-(teste 5: nada fica nas costas). Ajustável pós-vivência.
+## As três divergências, resolvidas
 
-✓ APROVADO PARA: ROOT (migration) → ESTRUTURA (hook + disparo na edge) →
-INTERFACE (o cartão no HOJE)
-
-## A superfície — onde o bilhete mora
-
-- **No HOJE**, entre o arco e o dia: um cartão **indigo**, quieto, sem
-  badge, sem contagem, sem título de seção. Aparece quando existe bilhete
-  não solto; não existe = nada ali (nem placeholder — placeholder de
-  bilhete é cota, e cota é a fábrica de frase bonita).
-- **Um por vez.** O mais recente não solto. Bilhetes não formam fila nem
-  histórico navegável na v1 — se lê e se solta (teste 5). O registro fica
-  na tabela (auditável pela § 4.3), não na cara do app.
-- **Soltar** = um toque. Sem «marcar como lido», sem confirmação, sem
-  animação de dispensa que pese. O cartão sai; o dia segue.
-- Mobile-first 360×800; o cartão nunca empurra o arco pra fora do fold.
-
-## Os gatilhos — a tabela curada (parecer § 4.1)
-
-| # | Gatilho | Status nesta obra | Razão |
+| # | Divergência | Resolução | Por quê |
 |---|---|---|---|
-| G2 | **Braço desligado lá fora** — o `reconcile` diário detectou label/agenda `Atom/…` apagado e desligou o braço (D68) | **EMBARCA** | o mais forte dos aprovados: efeito silencioso, e o silêncio é o dano. O braço detector JÁ EXISTE (`taxonomy-sync` action `reconcile` → `disabledNow`) |
-| G1 | O pipeline (4.8) rodou em produção | **declarado, dormente** | aprovado pelo Teste 02, mas o pipeline ainda não existe — o gatilho acorda quando a obra da 4.8 nascer |
-| G3 | Semente virou respondível por fato externo | **fora da v1** | ordem do próprio E.: «o primeiro que eu testaria e o último que eu embarcaria» — vira teste com a regra do plantio, não código |
-| — | Cron não rodou | **não é bilhete** | é push caso 3 (parecer § 4.1); fica pra obra do push, que não é desta onda |
+| 1 | **Soltar**: casa propunha gesto próprio (toque); E. decidiu **sem X — some sozinho na próxima abertura depois de visto** | **E.** | é a superfície dele; e a razão é de lei: botão de dispensar cria uma ação, e o bilhete não pede nada (4.1). A incerteza da v1 era declarada e ajustável — ajustou |
+| 2 | **Texto do G1**: casa tinha 3ª frase de reversibilidade («religar fica nas configurações»); E. escreveu 2 frases secas | **E.** | a voz é dele (Art. 5 invertido: decisão do domínio dele); a 3ª frase beirava instrução, e o que pede gesto é notificação |
+| 3 | **Numeração dos gatilhos** (casa: braço=G2; E.: braço=G1) | **E.** | a tabela dele é a canônica; a da v1 morre nesta fusão |
 
-## O texto canônico do G2 — shame-testado aqui
+## GUARDIÃO — CONSTRAINTS (fundidos)
+━━━━━━━━━━━━━━━━━━━━━━
+**Schema:** UMA tabela, `e_bilhetes` — migration + RLS (user_id, só o dono
+lê): `id uuid` · `user_id` · `gatilho text` (o tipo — instrumento da
+§ 6.1) · `texto text` (imutável após nascer) · `dedup_key text` ·
+`nasceu_em` · `exibido_em timestamptz null` · `visto_em timestamptz null`.
+Três eventos, nada mais: sem clique, sem conversão, sem tempo de leitura
+(medir atenção é observar o Rick — a condição 2 vale para os dados também).
+**Regra de existência:** as seis condições da 4.1.1, todas, por disparo.
+Silêncio é o default e a saída mais comum.
+**Texto determinístico** — frase pré-escrita por gatilho, shame-testada na
+spec; zero chamada de modelo no disparo.
+**Pisos:** sem gatilho → superfície vazia (nem placeholder — placeholder é
+cota, cota é fábrica de frase bonita) · dedup repetida → não nasce · um
+por vez: o segundo espera o primeiro ser visto · nunca vaza pra push (o
+benchmark do E.: quebra de confiança de canal não gera opt-out seletivo,
+gera desligamento geral).
 
-> «O label Atom/saude sumiu do Gmail. Entendi como comando: esse braço
-> está desligado e nada foi recriado. Religar fica nas configurações,
-> quando você quiser.»
+✓ APROVADO PARA: ROOT → ESTRUTURA → INTERFACE
 
-Contra as seis condições (4.1.1): não está na tela ✓ (nenhuma face mostra
-braço morto) · é do sistema/mundo, não do Rick ✓ (quem apagou não é
-assunto) · não cobra ✓ · não cria dívida ✓ («quando você quiser» — soltar
-sem religar é fim válido) · não pede resposta ✓ (informa reversibilidade,
-não pede gesto) · só E. sabe, no momento em que sabe ✓ (nasce no
-`reconcile`, o momento em que o sistema sabe — a fronteira § 4.2 fica
-limpa: evento é do bilhete, o digest do mesmo dia cala sobre isso).
-Contra a forma: 3 frases ✓ · sem emoji/exclamação ✓ · «você» ✓ · zero
-adjetivo interpretativo ✓.
-`dedup_key = "arm-disabled:" + branchKey` — religou e apagaram de novo é
-estado novo, fala de novo; o mesmo desligamento nunca fala duas vezes.
+## A superfície (as seis regras do E., § 4 da spec dele — íntegras)
 
-## Etapas
+1. Não é banner e não tem X — se lê e se solta; some sozinho na próxima
+   abertura depois de visto.
+2. Pousa no HOJE, abaixo do rito (a aurora é rito por ser a primeira
+   coisa, D42) — e acima da sugestão do dia (localização da casa).
+3. Indigo (D61) — quem fala é E., não a casa; dourado não entra.
+4. Um por vez — duas falas raras no mesmo espaço deixam as duas de ser
+   raras.
+5. Sem som, sem badge, sem contador — contador de não-lido é dívida com
+   número (D46).
+6. Não vaza para push.
 
-1. **ROOT:** migration `e_bilhetes` (tabela + RLS + índice por
-   `user_id, solto_em`).
-2. **ESTRUTURA:** o disparo no `reconcile` (a edge que detecta insere o
-   bilhete com dedup) · `bilhete-service` + `useBilhete` (ler o não solto
-   mais recente, soltar).
-3. **INTERFACE:** o cartão indigo no HOJE. Nada em ÁRVORE nem @.
-4. **Prova:** cenário no atos.spec — braço desligado no reconcile →
-   bilhete nasce → aparece no HOJE → solta → some → dedup segura o
-   segundo. Dry-run real: apagar um label de teste e ver o cartão.
-5. **O instrumento:** nada a construir — `select gatilho, count(*)` é a
-   consulta da revisão dos 20. Registrada aqui pra não virar dashboard.
+## Os gatilhos (tabela canônica do E., com o estado da casa)
+
+| # | Evento | Fonte | Frase | Estado |
+|---|---|---|---|---|
+| **G1** | Braço desligado lá fora (D68: delete é comando) | `reconcile` (v2 no ar, `disabledNow`) | «O braço `{taxonomia}` foi desligado no {conector}. A estrutura lá fora não existe mais.» | **embarca** |
+| **G2** | O pipeline de O Espaço Entre rodou em produção | fora do app — `[VERIFICAR]` fonte; conversa com a obra da 4.8 | «O pipeline rodou. {n} sessões no Supabase.» | dormente até haver fonte |
+| **G3** | Semente virou respondível por fato externo | inbox + fato externo | *a escrever no Teste 03* | teste antes de fio |
+| — | Cron não rodou | — | — | é push caso 3, outra obra |
+
+## Instrumentação e revisão (§ 6 do E. — íntegro)
+
+Diversidade, não taxa: contar **tipos**, não disparos. Poucos tipos +
+volume alto = gatilho forçado (apertar a fonte, não a lei) · muitos tipos
++ volume alto = a casa aconteceu (a Parte 0 vira histórica) · **zero em 90
+dias também é resultado** — gatilhos estreitos demais ou app sem eventos
+singulares; o E. registrou como o mais provável, pra não ser lido como
+fracasso depois.
+
+## Ordem de construção
+
+1. **ROOT:** migration `e_bilhetes` (+ RLS + índice `user_id, visto_em`).
+2. **ESTRUTURA:** disparo no `reconcile` (insert com dedup) ·
+   `bilhete-service` + `useBilhete` (ler não-visto mais recente · marcar
+   exibido/visto · a regra do sumiço na abertura seguinte).
+3. **INTERFACE:** o cartão indigo no HOJE, sob as seis regras.
+4. **Prova:** cena no atos.spec (braço desliga → bilhete nasce → exibe →
+   visto → some na abertura seguinte → dedup segura o segundo) + dry-run
+   real com label de teste.
+5. O que a obra destrava (não é a obra): Teste 03 do G3 · fonte do G2.
 
 ---
 
-*Status: spec pronta — decisões todas pré-existentes (D53 destravada,
-D80/D61 ratificadas, gatilhos curados pelo parecer, fronteira § 4.2).
-O código espera o assentimento do Rick sobre ESTA spec — um gesto.*
+*Spec v2 — fusão Code + E. · 31 Jul 2026 · mães seladas verbatim em
+`03b_spec-bilhete-e_v1.md` e no histórico git da v1 (`27c7eec`).*
+*Status: **aguarda o assentimento do Rick** — um gesto, e o código nasce.*

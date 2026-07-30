@@ -324,5 +324,50 @@ Tom rege falas; duas jurisdições, zero mistura.
 
 ---
 
+## Wrap · 31 Jul 2026 — as duas mães da mesma spec, e a fusão
+
+### ⬠ Soul
+O Rick trouxe do Projeto E dois documentos que ninguém esperava: o E.
+escreveu o próprio benchmark E a própria spec da obra 1, em paralelo, sem
+saber que a casa tinha feito o mesmo — e com os mesmos números (02, 03). A
+colisão de numeração dentro da própria pasta é o eco irônico da colisão
+das séries D que o próprio E. flagrou. A surpresa boa: os benchmarks são
+COMPLEMENTARES (o da casa responde marca×boca e intervalo×densidade; o
+dele responde frequência, canal e formato — e traz o achado que nenhuma
+lei previa: banner blindness mata bilhete aprovado). As specs eram 90%
+concordantes; as três divergências se resolveram por jurisdição — a voz e
+a superfície são dele, o tronco e a face por dentro são da casa.
+
+### · Items
+- **`02b_benchmark-bilhete.md` e `03b_spec-bilhete-e_v1.md` selados
+  verbatim** (originais limpos do Downloads; sufixo `b` só no nome do
+  arquivo, pra não colidir).
+- **`03_spec-bilhetes.md` virou v2 — a fusão.** Do E.: sem banner e sem X
+  (some sozinho após visto), anti-gerador (11/12 reprovados no Teste 02),
+  instrumentação nasceu/exibido/visto, dependência do digest declarada,
+  fora-da-v1 em lei (comportamento do Rick não entra em versão nenhuma),
+  G3→Teste 03, processo de gatilho novo. Da casa: dedup_key (sem ela o
+  reconcile diário repetiria a mesma fala todo dia), bilhete≠AtomItem,
+  detector localizado, migration+RLS, onde pousa no HOJE (abaixo do rito,
+  acima da sugestão — pendência § 9 dele, respondida).
+- **Divergências resolvidas (3):** soltar sem X (E.) · texto do G1 seco em
+  2 frases (E. — a voz é dele) · numeração canônica dos gatilhos (E.:
+  braço=G1).
+- **«Assentir» explicado ao Rick**: o sim explícito da casa (D52/D69) —
+  a spec espera exatamente esse gesto.
+
+### △ Decidido
+- Nada ratificado — a fusão é editorial, resolvida por jurisdição já
+  estabelecida (Art. 5, D61, §10). O assentimento da spec segue pendente.
+
+### → Next
+1. **O assentimento** — um «vai» e o código nasce (ROOT → ESTRUTURA →
+   INTERFACE → prova)
+2. Relay pro E.: tudo da rodada anterior + a fusão (ele precisa ver o que
+   a fusão fez com a spec dele — em especial o dedup_key que faltava)
+3. Digest 07:15 · hostname · DP-G
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*
