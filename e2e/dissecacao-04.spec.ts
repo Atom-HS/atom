@@ -1,3 +1,10 @@
+// ═══ NOTA DE MUSEU PARCIAL (30 Jul 2026) ═══════════════════════════════
+// A cena do projeto («a pill leva pra… /projects») fotografa o mundo de
+// ANTES do gate (D41, disparado em 30 Jul 2026): a pill hoje abre sheet e
+// /projects morreu na morte por merge — quem rodar essa cena à mão vai ver
+// vermelho, e o vermelho é a verdade. As demais cenas (wrap, busca,
+// offline) seguem dirigíveis. Nada aqui roda no rito do verde.
+// ═══════════════════════════════════════════════════════════════════════
 // e2e/dissecacao-04.spec.ts — exame da dissecação (docs/onda-3/13), features 10–13
 // NÃO é gate: roda sob demanda, fotografa as cenas que provam os achados.
 // Rodar: npx playwright test e2e/dissecacao-04.spec.ts --project=mobile

@@ -1,3 +1,10 @@
+// ═══ NOTA DE MUSEU (30 Jul 2026) ═══════════════════════════════════════
+// O gate disparou: as telas condenadas MORRERAM na morte por merge (D41,
+// 30 Jul 2026). Este spec cumpriu o seu papel — as fotos do «antes» vivem
+// em docs/onda-3/19_gate_fotos/ — e agora é história: não roda no rito do
+// verde. Quem rodar à mão vai ver vermelho, e o vermelho é a verdade: as
+// rotas não existem mais.
+// ═══════════════════════════════════════════════════════════════════════
 // e2e/gate-fotos.spec.ts — o «antes» do gate (D41): as telas condenadas,
 // fotografadas uma última vez antes da morte por merge. NÃO é gate de CI:
 // roda sob demanda; as fotos vivem em docs/onda-3/19_gate_fotos/.
