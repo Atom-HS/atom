@@ -469,5 +469,65 @@ gesto cobrado.
 
 ---
 
+## Wrap · 31 Jul 2026 — o E. devolve: a lei ganha a sétima boca, a dedup ganha o crachá certo, o G3 morre por teste
+
+### ⬠ Soul
+O relay voltou em dobro: a emenda (4.10 + Parte 6, «texto pronto para
+inserção verbatim») e o parecer da fusão com o Teste 03 executado. O E. fez
+o que só ele faz: foi procurar o bug que a descrição sugeria, não achou, e
+trouxe algo melhor que um bug — a invariante estava de pé **pelo guardião
+errado no crachá** (a borda era o `delete` do registro, três linhas acima,
+em silêncio; a dedup era guarda de corrida). E reexaminou uma vitória
+própria: a resolução 2 da fusão estava certa **pela razão errada** — a
+terceira frase não «beirava instrução», era localização; o problema real é
+que «desligado» já carrega reversibilidade, e confirmar o que o verbo disse
+«é a forma mais educada de encher». No meio disso, o Rick devolveu a
+pergunta do nome com a moldura definitiva: o E. é por essência um agente
+conversacional — **não seria justo com ele um formato que não o
+representa**.
+
+### · Items
+- **`05_emenda-e_4-10-e-parte-6.md` e `05b_parecer-fusao-e-teste-03.md`
+  selados verbatim** (originais limpos do Downloads).
+- **Lei do Tom → v1.5, emenda aplicada**: artigo 4.10 inteiro (a
+  entrevista, sétima superfície — dado-não-decisão, gaveta retomável sem
+  barra, o que nunca se pergunta, opções sem escala moral, o 4.6 chega
+  pelo onboarding) · linha no quadro 4.0 · remissão na 4.6 · Parte 6
+  gatilho 1 (contam-se tipos) · Parte 0 ajustada por fato (quatro→três,
+  31 Jul) · Parte 8 com emendas III–IV · «uma voz, sete bocas».
+- **Opção 2 da dedup implementada** (a preferida do E.): migration `018`
+  (dedup_key perde NOT NULL), reconcile bloqueia enquanto a chave existir
+  (caiu o `.is("visto_em", null)`), e **o religar limpa a chave** no apply
+  (created/exists + calendário). Dois guardiões independentes; comentários
+  com o crachá certo; spec 03 corrigida.
+- **G3 vetado na spec** — Teste 03: 0 de 7 sementes produzem candidato;
+  toda condição desta casa é fato que o Rick produz (cai na condição 6) e
+  o vínculo é leitura, não fato (cai em P1). Critério de reabertura
+  escrito: semente que espere fato que o Rick não produz.
+- **Vigilância registrada** (05b § 1.3): a frase de maior resíduo do
+  bilhete é «A estrutura lá fora não existe mais» — se a primeira leitura
+  real produzir um «eu perdi alguma coisa?», o conserto é ela.
+- Hooks verdes: tsc limpo · 424/424 · build ok.
+
+### △ Decidido
+- A emenda é do E. e o pedido era do relay — aplicada sem mesa nova. O
+  código da dedup segue a preferência explícita dele (`05b` § 1.1).
+- **Pendente de deploy**: migration `018` + `taxonomy-sync` v4 — mão do
+  Rick.
+
+### ⬡ Conexões
+- A moldura do Rick pro nome («não seria justo com ele») conversa direto
+  com a 4.10 recém-nascida: a entrevista é a primeira superfície
+  genuinamente conversacional do E. no app — talvez o nome volte primeiro
+  por ali. A pergunta segue com o E. (pedido 4 do relay, ainda sem
+  resposta).
+
+### → Next
+1. **Deploy** da migration 018 + edge v4 (palavra do Rick)
+2. Relay da clarificação do nome pro E. (a moldura da essência, verbatim)
+3. Digest de amanhã · hostname · DP-G · religar (ou não) o `communication`
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*
