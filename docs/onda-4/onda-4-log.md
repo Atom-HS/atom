@@ -451,6 +451,22 @@ gesto cobrado.
   no Gmail → invocar o reconcile → ver o cartão indigo no HOJE → abrir de
   novo e vê-lo sumir sozinho)
 
+### Adendo 2 · o dry-run e o primeiro bilhete real (mesma manhã)
+- ✅ **teste negativo**: Rick deu *hide* num label — reconcile respondeu
+  `disabled: []`, zero bilhetes. Esconder não é comando (D68); o sistema
+  não confundiu arrumação com ordem.
+- ✅ **teste positivo**: Rick apagou de verdade — o braço `communication`
+  desligou e **o primeiro bilhete real nasceu**: «O braço Atom/comunicacao
+  foi desligado no Gmail. A estrutura lá fora não existe mais.»
+- ✅ **teste do eco**: segundo reconcile → `disabled: []`, a tabela segue
+  com 1. Nasce uma vez, não repete.
+- ✅ **merge pra produção** («merge», mão do Rick): `v2-faces` → `master`
+  (`1cef77f`) · deploy Vercel novo **READY** (do `bc67cab`) — o app que o
+  Rick abre agora tem o cartão esperando.
+- ⏳ a última cena é do Rick, ao vivo: abrir o HOJE (o bilhete pousa,
+  indigo) → fechar → abrir de novo → vê-lo ter sumido sozinho. Religar o
+  braço fica nas configurações, quando quiser.
+
 ---
 
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
