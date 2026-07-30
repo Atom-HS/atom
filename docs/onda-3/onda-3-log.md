@@ -517,6 +517,118 @@ itens reais, e a casa tinha certeza de que estava consertada.
 
 ---
 
+## Wrap · 30 Jul 2026 (dia) — a cirurgia fina: cinco obras, o gate destravado
+
+### ○ Soul
+A sessão que o handoff `21_` pediu: nada de exame novo — o diagnóstico
+estava feito, faltava bisturi. Cinco obras, de dentro pra fora, cada uma
+fechada com hooks verdes e um commit. As duas condições que seguravam o
+gatilho do gate caíram nesta sessão: a sheet do projeto nasceu e a escada
+ganhou porta na ÁRVORE. Nenhuma das três condições de parada disparou;
+a sessão inteira coube na autorização.
+
+### · Items
+
+**Obra 1 — o parto honesto do builder** (`cfb918a` · MANCA 1–4 da diss. 02)
+- `QUESTION_ROLES` explícito no mapper (coisa/contexto/elo) — o `inferType`
+  de substring morreu com os braços inalcançáveis; a meta financeira nasce
+  **task**, nunca mais «Habito»; `family-2`/`work-1`/`work-6`/`finance-2`
+  são contexto e não viram item
+- `persist` no builder-store (`mindroot.builder.v1`) — reload retoma onde
+  parou; a reescrita em capítulos-gaveta segue obra de voz (D64)
+- o card do mini-wrap ganhou chip de troca de tipo (gramática da triage,
+  D69) — trocar no chip muda o que nasce, provado pelo POST na cena
+- cena nova no atos.spec + fotos 71–72; 5 testes novos módulo a módulo
+
+**Obra 2 — a sheet do projeto** (`f343777` · DP-E/DP-I · condição 1 do gate)
+- `ProjectSheet` (molde AssentimentoSheet): presença pela MESMA linha do
+  engine, filhos `·`/`○`, o próximo como convite, quietude — zero chrome
+- a pill do HOJE abre a sheet; `/projects` intocada (morre no gate)
+- cena pill → sheet → próximo → ItemDetail + foto 73 · **gate §2 atualizado**
+
+**Obra 3 — a porta da escada na ÁRVORE** (`f6d2852` · DP-G · gate §3a)
+- `nextAvailableReview` no pé da face: «uma semana espera significado» ·
+  significar → rota `/review`; sem número, some quando não há (D46)
+- aplicada como default declarado (DP-G segue na mesa, reversível)
+- cena + foto 74 · **gate §3 atualizado: `/review` saiu das condições,
+  a rota sobrevive ao merge fora da nav (checklist §4 anotado)**
+
+**Obra 4 — as portas invisíveis** (`3e688a5` · diss. 03 M2 + diss. 04 M6)
+- o puxador da casa tem nome: «a casa» mono 10px sob a barra (D54 de pé)
+- o pull-down se ensina UMA vez: hint no primeiro open, localStorage mata
+  pra sempre — no fluxo do main, nunca por cima de banner
+- cena + foto 75 · 13 baselines refotografadas com intenção declarada
+
+**Obra 5 — miúdos de lei** (`c82153c` · um commit, cinco leis)
+- `disconnect()` na ordem da D68: ida viva desfaz PRIMEIRO, token morre
+  por último; desfazer que falha recusa o desligar (3 testes de ordem)
+- grid da Raiz lê quietude por `absences` (D63) — `updated_at` banido do
+  badge; `healthPct` morto saiu do hook
+- `who:` prefixo de primeira classe: filtra pelos `#who:*`, ensina com os
+  valores do tronco, aceita `quem:` (4 testes)
+- toasts do conector na Lei do Tom; «Item capturado» silencia no selo
+- varredura de tom Raiz/Builder/Aurora («você» sempre, acentos) — e os
+  nomes da taxonomy projetada CONGELADOS em ASCII num mapa próprio: o tom
+  da UI nunca renomeia label no Gmail (teste guarda)
+
+### △ Decidido (nada ratificado — defaults declarados do handoff)
+- **DP-G aplicada por default**: a escada ganhou a porta recomendada
+  (opção a do gate §3), 100% reversível — a ratificação segue na mesa
+- **DP-H honrada**: nenhum item já nascido foi re-tipado; o conserto do
+  mapper vale pro parto novo
+- **DP-I aplicada**: a sheet mostra só o que a página provou que importa
+- **DP nova pra mesa — DP-J**: os nomes da taxonomy lá fora ficaram
+  congelados sem acento (`Atom/saude`); se o Rick quiser a língua com
+  acento no Gmail (`Atom/saúde`), é decisão de contrato externo (D68),
+  não de tom — um rename lá fora, não um sync novo
+
+### ⬡ Conexões
+- O chip do mini-wrap e o chip da triage são a MESMA gramática (D69) vista
+  em dois ritos — a heurística nunca decide quieta em nenhum dos dois
+- O puxador da escada na ÁRVORE é o irmão do puxador do HOJE («N esperando
+  leitura») — a casa agora tem um padrão de porta quieta, usado 2×
+- O mapa congelado da taxonomy é o mesmo princípio do guarda de espelho:
+  contrato externo não muda por efeito colateral de obra interna
+
+### ✳ Seeds
+- Segundo sinal do OmniFocus («sem próxima ação») na sheet do projeto —
+  registrada desde a dissecação 04, a sheet agora existe pra recebê-lo
+- `extractWhoTag` ainda come acentos (André → `#who:andr-tanaka`) — pol. 7
+  da dissecação 03, fora do escopo desta sessão (mexe no espelho da edge)
+- O hint de primeira vez (localStorage) virou padrão — candidato pra
+  legenda `·`/`○` do drill (pol. 11 da dissecação 02)
+
+### □ Audit
+- ✅ 404 testes verdes (12 novos: 5 mapper + 3 disconnect + 4 who:) ·
+  tsc limpo · build ok
+- ✅ atos.spec **15 cenas** (3 novas: builder, projeto, escada + portas) ·
+  gate visual 13/13
+- ✅ 6 commits (5 obras + fotos), um por obra, nenhum com hook vermelho
+- ✅ baselines refotografadas SEMPRE com intenção declarada no commit
+  (builder-assentimento · face-arvore ×2 · as 13 do rodapé · as 5 do tom)
+- ⚠ o gate visual engole diffs < 1% (maxDiffPixelRatio 0.01): o rótulo do
+  puxador passou por baixo da tolerância — refotografei com
+  `--update-snapshots=all` pra baseline não mentir; fica o registro
+- ⚠ nada subiu: sem deploy, sem push, sem merge — o `disconnect` novo e a
+  edge do cron corrigida ontem só valem em produção depois do Rick
+
+### → Next — a mesa do Rick (em ordem de peso)
+1. **Deploy da `daily-digest`** — a MENTE do cron corrigida espera deploy
+2. **Ratificar**: DP-E (D74?) · DP-G (a porta da escada, aplicada por
+   default) · DP-A…DP-F que rodam com default · DP-J (acento na taxonomy?)
+3. **O gatilho do gate (D41)** — ver a última linha deste wrap
+4. Fila que sobrou das dissecações: reconciliação no cron (diss. 03 M5) ·
+   sheet diz que o cron existe (diss. 03 M4) · passo 5 do wrap vira boca
+   `#seed` (diss. 04 M4) · polimentos da ÁRVORE (janela persiste, rótulos
+   colidindo, «+N» vira porta, legenda `·`/`○`) · `extractWhoTag` com acento
+5. Pendências antigas: redirect URL do Supabase na prod nova · viver a ida
+   real no Gmail · instalar o PWA no celular
+
+**A última linha: as duas condições do gate §2 estão cumpridas — a sheet
+nasceu, a escada tem porta. O gate está com o gatilho livre. Puxar é teu.**
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. O formato é o do wrap do app,
 porque a casa come a própria comida.*
