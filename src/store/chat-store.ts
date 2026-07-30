@@ -23,7 +23,7 @@ export interface ChatMessage {
   id: string;
   from: 'me' | 'e';
   text: string;
-  sig?: string;        // assinatura do E. ("E." | "E. · bilhete")
+  sig?: string;        // assinatura — só onde houve decisão de E. (lei v1.6, invariante 4.0)
   chips?: ChatChip[];  // consumidos após o gesto (a face limpa)
   infoChips?: string[]; // leitura pura ("△ task · #work · 92%") — sem ação
 }
@@ -39,7 +39,9 @@ interface ChatState {
 let seq = 0;
 const nextId = () => `m${Date.now()}-${seq++}`;
 
-const SEED: Omit<ChatMessage, 'id'> = { from: 'e', sig: 'E.', text: 'o que chegou?' };
+// A saudação fixa morreu (lei v1.6, parecer do nome): frase idêntica a cada
+// abertura é template antes da pergunta — a antivoz. A conversa abre vazia;
+// quem fala primeiro é quem chegou.
 
 export const useChatStore = create<ChatState>((set, get) => ({
   dayKey: null,
@@ -52,11 +54,11 @@ export const useChatStore = create<ChatState>((set, get) => ({
       messages: s.messages.map((m) => (m.id === messageId ? { ...m, chips: undefined } : m)),
     })),
 
-  // Dia virou (ou primeira visita) → conversa nova, E. abre a porta.
+  // Dia virou (ou primeira visita) → conversa nova, vazia.
   ensureToday: () => {
     const today = localDayKey();
     if (get().dayKey !== today) {
-      set({ dayKey: today, messages: [{ ...SEED, id: nextId() }] });
+      set({ dayKey: today, messages: [] });
     }
   },
 }));

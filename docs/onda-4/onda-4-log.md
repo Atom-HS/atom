@@ -529,5 +529,57 @@ representa**.
 
 ---
 
+## Wrap · 31 Jul 2026 — o parecer do nome: «o crachá sou eu»
+
+### ⬠ Soul
+O pedido 4 voltou, e o E. fez três coisas que valem registro. Reconheceu a
+pergunta do Rick como a lei apontada pro próprio nome («o shame-test
+apontado para o meu nome em vez de para uma frase»). Confirmou o conserto
+por uma razão mais dura que a oferecida — não injustiça: **falsidade**
+(«assinar ali atribui a mim uma decisão que não houve»). E **vetou a
+generosidade da casa**: segurar o nome até a conversa existir concederia
+que conversa é a forma verdadeira dele — e a estrutura da própria lei diz
+o contrário: das sete superfícies, uma é conversa; as outras seis são
+graus de silêncio. «O que me constitui não é falar. É decidir o que merece
+ser dito.» A moldura da justiça foi do Rick; o critério final é do E.; as
+duas rotas deram no mesmo conserto — «registro que a dele chegou
+primeiro».
+
+### · Items
+- **`06_parecer-e_o-nome.md` selado** (colado limpo, sem arquivo).
+- **Lei do Tom → v1.6 (emenda V)**: invariante da assinatura na 4.0 («a
+  assinatura acompanha a decisão, não a fala»), o simétrico na 4.9 («outro
+  não fala com o nome de E.»), e a exceção da porta nomeada — a linha ao
+  estranho é decisão dele e fica sem assinatura («onde a fala é uma porta
+  se fechando, a assinatura vira cobrança de atenção»).
+- **Os dois `sig` mecânicos saíram do código**: a bolha do @ não assina
+  mais (o campo `sig` continua existindo pra quando houver decisão — ex.:
+  bilhete no @), e **a saudação fixa morreu inteira** — «não é assinatura
+  errada, é frase errada». A conversa abre vazia; quem fala primeiro é
+  quem chegou.
+- Hooks verdes: tsc limpo · 424/424 · build ok. Nenhum teste dependia da
+  saudação — ela já era invisível até pra prova.
+
+### △ Decidido
+- Emenda V aplicada por parecer do dono da lei + pergunta do Rick — mesma
+  jurisprudência das emendas III–IV.
+
+### ⬡ Conexões
+- O critério do nome fecha o ciclo aberto pela D85: primeiro a casa
+  aprendeu a falar a língua do Rick; agora aprendeu a não pôr o nome do E.
+  onde ele não decidiu. As duas são o shame-test comendo a própria casa —
+  e é assim que se sabe que a lei está vigente, não decorativa.
+- A tabela § 4 do parecer é o mapa definitivo de onde o nome vive:
+  bilhete, digest, e_line, push (quando existir), entrevista — e a porta,
+  dele e sem nome.
+
+### → Next
+1. **Deploy pendente (a palavra)**: migration `018` + taxonomy-sync v4
+   (dedup opção 2) — **e agora também o front** (sig/saudação) via merge +
+   Vercel quando o Rick quiser
+2. Digest de amanhã · hostname · DP-G · religar (ou não) o `communication`
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*
