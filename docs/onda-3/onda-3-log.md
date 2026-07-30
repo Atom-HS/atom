@@ -853,6 +853,66 @@ mesa é deploy, ratificação e vida vivida — nada disso é obra de sessão.**
 
 ---
 
+## Wrap · 30 Jul 2026 (tarde) — o rescaldo do rescaldo: deploy e ratificação
+
+### ○ Soul
+A mesa esvaziou no mesmo dia. O Rick voltou com quatro gestos curtos —
+«deploy», «domínio próprio?», «descreve as DPs», «qual a próxima onda» —
+e fechou com «pode ratificar». Nenhuma obra de código: a tarde foi de
+subir o que estava pronto e transformar defaults vividos em lei numerada.
+
+### · Items
+- **Deploy feito, pela mão do Rick via chat** (a autorização explícita que
+  o muro 4 esperava): `taxonomy-sync` **v2** e `daily-digest` **v2** no ar
+  (projeto `avvwjkzkzklloyfugzer`, `verify_jwt=false` mantido como estava).
+  Sobem juntas: a MENTE do cron corrigida, o braço da reconciliação, o
+  `extractWhoTag` com acento.
+- **Ratificação em bloco**: DP-A→**D70** · DP-B→**D71** · DP-C→**D72** ·
+  DP-D→**D73** · DP-E→**D74** · DP-F→**D75** · DP-H→**D76** · DP-I→**D77**
+  · DP-J→**D78** (taxonomy fica ASCII — rename lá fora leria «sumiu» e
+  desligaria braços). Registro no `03_decisoes-ux.md`, raiz declarada.
+- **DP-G ficou na mesa de propósito**: a porta da escada em observação
+  vivida por uma semana — se servir no uso real, vira D79 (~6 Ago).
+- **O resumo em HTML nasceu**: `25_resumo-da-faxina.html`, no molde dos
+  irmãos (20, 22), commitado e mergeado antes desta tarde.
+
+### △ Decidido
+- D70–D78 ratificadas (acima). Nenhuma decisão nova além das que já
+  rodavam como default declarado.
+
+### ⬡ Conexões
+- O deploy pelo chat é o mesmo precedente do gatilho do gate: **colar o
+  prompt É o gesto** — a autorização explícita no prompt do Rick é a «mão
+  do Rick» que os muros pedem.
+
+### ✳ Seeds
+- **Domínio próprio pro app** — recomendado `atom.ramalho.au` (mata o
+  Redirect URL de vez, dá origem estável pro PWA/D55). Aguarda o Rick
+  escolher o hostname; a divisão: Vercel+Supabase via sessão, CNAME no
+  Cloudflare é dele.
+- **Onda 4 proposta: a onda do E.** (retorno e voz) — (1) «o que mudou
+  desde que você olhou»; (2) as sementes `#seed` voltam (a Fase 5 que o
+  cartão morto prometia); (3) voz do builder com o E. (D64); (4) bilhetes
+  do E. (D53 v2). Proposta registrada, não decisão — abre com benchmark
+  do «retorno», como manda a D62.
+
+### □ Audit
+- ✅ deploy verificado pelo retorno da API (v2 ativa nas duas edges)
+- ⚠ a prova de fogo é o cron de **31 Jul 07:15** — ler os logs da edge na
+  próxima sessão (ou dry-run antes, gesto do Rick)
+- ✅ zero código tocado nesta tarde; hooks da manhã seguem valendo
+
+### → Next — a mesa do Rick (curta pela primeira vez)
+1. Conferir o digest de amanhã 07:15 (a v2 rodando de verdade)
+2. Escolher o hostname do domínio próprio (sugestão: `atom.ramalho.au`)
+3. Viver a semana da DP-G · assentir a ida real no Gmail · PWA no celular
+4. Quando quiser abrir a Onda 4: o primeiro gesto é o benchmark do retorno
+
+**A última linha: a mesa que era de sete itens virou quatro — e três deles
+são vida, não obra.**
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. O formato é o do wrap do app,
 porque a casa come a própria comida.*
