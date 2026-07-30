@@ -1,12 +1,13 @@
 // App.tsx — MindRoot v2
 // BrowserRouter + lazy pages + auth gate
 
-import { useState, useEffect, useLayoutEffect, lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useState, useLayoutEffect, lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import { useRealtime } from '@/hooks/useRealtime';
+import { useOutboxSync } from '@/hooks/useOutboxSync';
 import { useAppStore, applyTheme } from '@/store/app-store';
 import type { ThemeMode } from '@/store/app-store';
 import { AppShell } from '@/components/shell/AppShell';
@@ -14,6 +15,8 @@ import { OfflineBanner } from '@/components/shared/OfflineBanner';
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary';
 import { ToastContainer } from '@/components/shared/ToastContainer';
 import { checkSoulMidnightReset } from '@/store/soul-store';
+import { initSimFromUrl } from '@/dev/sim-week';
+import { SimBanner } from '@/dev/SimBanner';
 import type { AppPage } from '@/types/ui';
 
 // Static pages (pre-auth)
@@ -21,19 +24,12 @@ import { LandingPage } from '@/pages/Landing';
 import { AuthPage } from '@/pages/Auth';
 
 // Lazy-loaded pages (post-auth)
-const HomePage = lazy(() => import('@/pages/Home').then((m) => ({ default: m.HomePage })));
-const PipelinePage = lazy(() => import('@/pages/Pipeline').then((m) => ({ default: m.PipelinePage })));
 const WrapPage = lazy(() => import('@/pages/Wrap').then((m) => ({ default: m.WrapPage })));
-const ProjectsPage = lazy(() => import('@/pages/Projects').then((m) => ({ default: m.ProjectsPage })));
-const CalendarPage = lazy(() => import('@/pages/Calendar').then((m) => ({ default: m.CalendarPage })));
-const AnalyticsPage = lazy(() => import('@/pages/Analytics').then((m) => ({ default: m.AnalyticsPage })));
-const LibraryPage = lazy(() => import('@/pages/Library').then((m) => ({ default: m.LibraryPage })));
-const GraphPage = lazy(() => import('@/pages/Graph').then((m) => ({ default: m.GraphPage })));
-const SettingsPage = lazy(() => import('@/pages/Settings').then((m) => ({ default: m.SettingsPage })));
 const RaizPage = lazy(() => import('@/pages/Raiz').then((m) => ({ default: m.RaizPage })));
-const SearchPage = lazy(() => import('@/pages/Search').then((m) => ({ default: m.SearchPage })));
 const ItemDetailPage = lazy(() => import('@/pages/ItemDetail').then((m) => ({ default: m.ItemDetailPage })));
 const HojePage = lazy(() => import('@/pages/Hoje').then((m) => ({ default: m.HojePage })));
+const AtPage = lazy(() => import('@/pages/At').then((m) => ({ default: m.AtPage })));
+const ArvorePage = lazy(() => import('@/pages/Arvore').then((m) => ({ default: m.ArvorePage })));
 const ReviewPage = lazy(() => import('@/pages/Review').then((m) => ({ default: m.ReviewPage })));
 
 const queryClient = new QueryClient({
@@ -57,19 +53,13 @@ function PageSkeleton() {
 // ─── Route → Zustand sync ─────────────────────────────
 
 const PATH_TO_PAGE: Record<string, AppPage> = {
+  // só os caminhos vivos — a casca velha morreu no gate (D41)
   '/': 'home',
-  '/home': 'home',
-  '/inbox': 'inbox',
-  '/pipeline': 'pipeline',
+  '/hoje': 'home',
+  '/arvore': 'raiz',
+  '/at': 'inbox',
   '/wrap': 'wrap',
-  '/projects': 'projects',
-  '/calendar': 'calendar',
   '/raiz': 'raiz',
-  '/analytics': 'analytics',
-  '/library': 'library',
-  '/search': 'search',
-  '/settings': 'settings',
-  '/graph': 'graph',
 };
 
 function RouteSync() {
@@ -105,22 +95,19 @@ function AnimatedRoutes() {
       >
         <Suspense fallback={<PageSkeleton />}>
           <Routes location={location}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/pipeline" element={<PipelinePage />} />
+            {/* o gate (D41): a casca velha morreu por merge — a nav `· ⬡ ✳` é a casa inteira */}
+            <Route path="/" element={<Navigate to="/hoje" replace />} />
+            {/* link antigo não quebra: /home redireciona por uma onda */}
+            <Route path="/home" element={<Navigate to="/hoje" replace />} />
             <Route path="/wrap" element={<WrapPage />} />
-            <Route path="/projects" element={<ProjectsPage />} />
-            <Route path="/calendar" element={<CalendarPage />} />
             <Route path="/raiz" element={<RaizPage />} />
-            <Route path="/analytics" element={<AnalyticsPage />} />
-            <Route path="/library" element={<LibraryPage />} />
-            <Route path="/graph" element={<GraphPage />} />
-            <Route path="/search" element={<SearchPage />} />
+            {/* D54: /search e /settings morreram — busca é gesto, a casa é sheet */}
             <Route path="/hoje" element={<HojePage />} />
+            <Route path="/at" element={<AtPage />} />
+            <Route path="/arvore" element={<ArvorePage />} />
             <Route path="/review" element={<ReviewPage />} />
-            <Route path="/settings" element={<SettingsPage />} />
             <Route path="/item/:id" element={<ItemDetailPage />} />
-            <Route path="/auth/callback" element={<HomePage />} />
+            <Route path="/auth/callback" element={<Navigate to="/hoje" replace />} />
             <Route path="/auth/reset" element={<AuthPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
@@ -132,32 +119,25 @@ function AnimatedRoutes() {
 
 // ─── Authenticated App ────────────────────────────────
 
-// First-time redirect to Raiz (non-blocking)
-function FirstTimeRaizRedirect() {
-  const user = useAppStore((s) => s.user);
-  const routerNavigate = useNavigate();
-  const location = useLocation();
-
-  useEffect(() => {
-    if (user && !user.user_metadata?.raiz_welcomed && location.pathname === '/') {
-      routerNavigate('/raiz', { replace: true });
-    }
-  }, [user, routerNavigate, location.pathname]);
-
-  return null;
-}
+// O redirect de primeira vez pra /raiz morreu aqui: ele esperava pathname
+// '/', e '/' virou <Navigate to="/hoje"> — nunca disparou desde a Onda 3.
+// Quem chega agora pousa no HOJE; a orientação de primeira vez é obra da
+// aurora, não de um desvio de rota.
 
 function AuthenticatedApp() {
   useRealtime();
-  const routerNavigate = useNavigate();
+  useOutboxSync(); // D55: a fila offline sobe quando a rede volta, em qualquer face
 
   return (
     <>
       <ToastContainer />
-      <AppShell onOpenSettings={() => routerNavigate('/settings')}>
-        <OfflineBanner />
+      <AppShell>
+        {/* um teto só: os avisos empilham em vez de disputar o topo */}
+        <div className="sticky top-0 z-30">
+          <SimBanner />
+          <OfflineBanner />
+        </div>
         <RouteSync />
-        <FirstTimeRaizRedirect />
         <AnimatedRoutes />
       </AppShell>
     </>
@@ -172,6 +152,7 @@ function AppContent() {
     const saved = localStorage.getItem('mindroot-theme') as ThemeMode | null;
     applyTheme(saved ?? 'system');
     checkSoulMidnightReset();
+    initSimFromUrl(); // ?sim=1 liga a semana simulada (client-only)
   }, []);
   const { user, loading } = useAuth();
   const [showAuth, setShowAuth] = useState(false);

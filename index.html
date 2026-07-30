@@ -11,16 +11,25 @@
     <title>Atom</title>
     <link rel="apple-touch-icon" href="/icon-192.png" />
     <link rel="manifest" href="/manifest.json" />
-    <meta name="theme-color" content="#534AB7" />
+    <meta name="theme-color" content="#0f0d09" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
+      // SW só em produção — em dev ele servia bundle velho por cima do HMR
+      // (achado 27 Jul: "quando loga cai no antigo"). Em localhost, além de
+      // não registrar, desregistra e limpa caches de visitas antigas.
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+        const isDev = ['localhost', '127.0.0.1'].includes(location.hostname);
+        if (isDev) {
+          navigator.serviceWorker.getRegistrations().then((rs) => rs.forEach((r) => r.unregister()));
+          if (window.caches) caches.keys().then((ks) => ks.forEach((k) => caches.delete(k)));
+        } else {
+          window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+        }
       }
     </script>
   </body>

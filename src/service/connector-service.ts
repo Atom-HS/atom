@@ -4,6 +4,10 @@
 
 import { supabase } from './supabase';
 import { itemService } from './item-service';
+import { desiredLabels, ATOM_CALENDAR_SUMMARY, readTaxonomy, isApplied } from '@/engine/taxonomy';
+import { fsmService } from './fsm-service';
+import { birthOf, sealedSeries } from '@/engine/series';
+import type { AtomItem } from '@/types/item';
 
 export interface ConnectorStatus {
   provider: string;
@@ -25,8 +29,29 @@ export interface CalendarEvent {
   end: string;
   calendar: string;
   recurring: boolean;
+  /** a série a que a instância pertence — o que deixa assentir uma vez só (DP-C) */
+  recurring_event_id?: string | null;
+  all_day?: boolean;
   attendees?: EventAttendee[];
 }
+
+export type TaxonomyAction = 'preview' | 'apply' | 'remove';
+
+export interface TaxonomyBranchReport {
+  key: string;
+  name: string;
+  action: 'create' | 'created' | 'exists' | 'disabled' | 'off';
+}
+
+export interface TaxonomyReport {
+  action: TaxonomyAction;
+  labels?: TaxonomyBranchReport[];
+  calendar?: TaxonomyBranchReport;
+  removed?: string[];
+}
+
+/** Erro-sinal: o token não tem os escopos da ida — pede reconexão Google. */
+export const RECONNECT_SCOPES = 'RECONNECT_SCOPES';
 
 export interface GmailMessage {
   id: string;
@@ -73,6 +98,8 @@ export const connectorService = {
         scopes: [
           'https://www.googleapis.com/auth/calendar.readonly',
           'https://www.googleapis.com/auth/gmail.readonly',
+          'https://www.googleapis.com/auth/gmail.labels',
+          'https://www.googleapis.com/auth/calendar.app.created',
         ],
         metadata: metadata ?? {},
       },
@@ -119,39 +146,66 @@ export const connectorService = {
 
   async ingestCalendarEvents(events: CalendarEvent[], userId: string): Promise<number> {
     const { data: existingItems } = await supabase
-      .from('items').select('id, body').eq('user_id', userId).not('body', 'is', null);
+      .from('items').select('id, body, type, module, state, status, created_at, updated_at')
+      .eq('user_id', userId).not('body', 'is', null);
+    const existing = (existingItems ?? []) as unknown as AtomItem[];
     const existingByGoogleId = new Map(
-      (existingItems ?? [])
+      existing
         .filter((i) => (i.body as Record<string, unknown>)?.google_id)
         .map((i) => [(i.body as Record<string, unknown>).google_id as string, i]),
     );
+    // DP-C: quem já assentiu a série não é perguntado de novo — a instância
+    // nova herda o selo em vez de encher o inbox toda semana, pra sempre
+    const selos = sealedSeries(existing);
 
     let created = 0;
     for (const event of events) {
       const attendees = event.attendees ?? [];
-      const existing = existingByGoogleId.get(event.google_id);
+      const jaExiste = existingByGoogleId.get(event.google_id);
 
-      if (existing) {
+      if (jaExiste) {
         // Attendees change (people respond, get added) — keep the tronco fresh
-        const body = existing.body as Record<string, unknown>;
+        const body = jaExiste.body as Record<string, unknown>;
         if (attendees.length > 0 && JSON.stringify(body.attendees ?? []) !== JSON.stringify(attendees)) {
-          await itemService.update(existing.id, { body: { ...body, attendees } });
+          await itemService.update(jaExiste.id, { body: { ...body, attendees } });
         }
         continue;
       }
 
-      const type = event.recurring ? 'ritual' : 'task';
+      const serie = event.recurring_event_id ?? null;
+      const nascimento = birthOf(serie ? selos.get(serie) : undefined, {
+        type: event.recurring ? 'ritual' : 'task',
+        module: 'bridge',
+      });
+
       const tags = ['#domain:time', '#source:google-calendar', '#connector'];
       for (const a of attendees) {
         const whoTag = extractWhoTag(a.name ? `${a.name} <${a.email}>` : `<${a.email}>`);
         if (whoTag && !tags.includes(whoTag)) tags.push(whoTag);
       }
-      await itemService.create({
-        title: event.title, user_id: userId, type, module: 'bridge',
+      // inbox obrigatório (CLAUDE.md §6): TODO item nasce no estágio 1, mesmo
+      // o que herda leitura de série. Herdar poupa a pergunta, nunca o caminho.
+      const criado = await itemService.create({
+        title: event.title, user_id: userId,
+        type: nascimento.type, module: nascimento.module,
         tags,
-        status: 'inbox', state: 'inbox', genesis_stage: 1, source: 'atom-engine',
-        body: { google_id: event.google_id, start: event.start, end: event.end, calendar: event.calendar, recurring: event.recurring, attendees },
+        status: 'inbox', state: 'inbox', genesis_stage: 1,
+        source: 'atom-engine',
+        body: {
+          google_id: event.google_id, start: event.start, end: event.end,
+          calendar: event.calendar, recurring: event.recurring,
+          recurring_event_id: serie,
+          all_day: event.all_day ?? false, attendees,
+        },
       });
+      if (nascimento.herdou) {
+        // o selo da série passa pelo portão 1→2, igual ao assentimento manual.
+        // Se falhar, a instância fica no inbox e pergunta — degradar pedindo
+        // é seguro; degradar selando calado não seria.
+        await fsmService
+          .classify(criado.id, nascimento.type, nascimento.module)
+          .catch(() => {});
+      }
       created++;
     }
     return created;
@@ -184,12 +238,51 @@ export const connectorService = {
     return created;
   },
 
-  async disconnect(provider: string): Promise<void> {
+  // A ida (D68): projeta a lei da casa lá fora, via edge taxonomy-sync.
+  // preview = só olha · apply = cria o delta · remove = desfaz o que a casa criou
+  async taxonomySync(action: TaxonomyAction): Promise<TaxonomyReport> {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) throw new Error('Not authenticated');
+
+    const resp = await supabase.functions.invoke('taxonomy-sync', {
+      body: {
+        user_id: session.user.id,
+        action,
+        labels: desiredLabels(),
+        calendar_summary: ATOM_CALENDAR_SUMMARY,
+      },
+    });
+
+    if (resp.error) {
+      const ctx = (resp.error as { context?: Response }).context;
+      if (ctx && typeof ctx.json === 'function') {
+        const body = (await ctx.json().catch(() => null)) as { code?: string } | null;
+        if (body?.code === 'TAX_401') throw new Error(RECONNECT_SCOPES);
+        if (body?.code === 'TAX_101') throw new Error(RECONNECT_SCOPES);
+      }
+      throw new Error(resp.error.message);
+    }
+    return resp.data as TaxonomyReport;
+  },
+
+  // D68: «desligar o conector desfaz a estrutura» — e o desfazer PRECISA do
+  // token, então a ordem é lei: ida viva → desfaz primeiro; o token morre
+  // por último. Se o desfazer falhar, recusa inteira (throw): desligar
+  // assim mesmo queimaria a chave do próprio desfazer.
+  // Retorna se havia ida viva desfeita — a fala do toast diz a verdade.
+  async disconnect(provider: string): Promise<{ desfezIda: boolean }> {
+    const connectors = await connectorService.getConnectors();
+    const status = connectors.find((c) => c.provider === provider);
+    const idaViva = !!status && isApplied(readTaxonomy(status.metadata));
+    if (idaViva) {
+      await connectorService.taxonomySync('remove');
+    }
     const { error } = await supabase
       .from('user_connectors')
       .update({ status: 'disconnected', provider_refresh_token: null, updated_at: new Date().toISOString() })
       .eq('provider', provider);
     if (error) throw error;
+    return { desfezIda: idaViva };
   },
 };
 

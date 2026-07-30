@@ -1,10 +1,12 @@
 // hooks/useItems.ts — TanStack Query wrapper + filtros derivados + virtual reset
 import { useQuery } from '@tanstack/react-query';
 import { itemService } from '@/service/item-service';
+import { saveItemsSnapshot, loadItemsSnapshot, comPrazo } from '@/service/items-snapshot';
 import { useAppStore } from '@/store/app-store';
 import { useMemo } from 'react';
 import { isToday, parseISO } from 'date-fns';
 import { applyVirtualReset } from '@/engine/recurrence';
+import { simItems } from '@/dev/sim-week';
 
 export function useItems() {
   const user = useAppStore((s) => s.user);
@@ -12,14 +14,29 @@ export function useItems() {
 
   const query = useQuery({
     queryKey: ['items', user?.id],
-    queryFn: () => itemService.list(user!.id),
+    // D55: fetch bom alimenta o tronco de bolso; sem rede, lê-se dele —
+    // a lista no mercado, o protocolo na rua. O prazo é o que torna o
+    // bolso alcançável: sem rede o fetch pendura sem rejeitar (dissecação
+    // 04), e um catch atrás de promessa eterna é promessa de papel.
+    queryFn: async () => {
+      try {
+        const items = await comPrazo(itemService.list(user!.id), 6_000);
+        saveItemsSnapshot(user!.id, items);
+        return items;
+      } catch (err) {
+        const snap = loadItemsSnapshot(user!.id);
+        if (snap) return snap;
+        throw err;
+      }
+    },
     enabled: !!user,
     staleTime: 30_000,
   });
 
-  // Apply virtual reset to recurring items
+  // Apply virtual reset to recurring items.
+  // Semana simulada (?sim=1) entra aqui — client-only, o banco nunca a vê.
   const items = useMemo(
-    () => applyVirtualReset(query.data ?? []),
+    () => applyVirtualReset([...(query.data ?? []), ...simItems()]),
     [query.data]
   );
 

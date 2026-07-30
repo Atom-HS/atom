@@ -1,6 +1,9 @@
-// pages/Wrap.tsx — 7-step wrap stepper
-// Wireframe: mindroot-wireframe-wrap.html
-// Steps: soul → items → decided → connections → seeds → audit → commit
+// pages/Wrap.tsx — o rito de fechar o dia (obra 4 · 06_paginas-internas_mapa)
+// Wireframe: docs/onda-3/07_paginas-internas_wireframe.html
+// 7 passos = 7 estágios (D44): as geometrias caminham em dourado no topo —
+// estado, não barra. O % de "saúde" morreu (D46: número é estado, nunca
+// julgamento). A e_line entra pelo portão admitELine (Lei do Tom §4.4:
+// 0-ou-1, nunca repetida) — a voz é do E., o portão é da casa.
 
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -8,24 +11,23 @@ import { useWrap } from '@/hooks/useWrap';
 import { useItems } from '@/hooks/useItems';
 import { useFullAudit } from '@/hooks/useAudit';
 import { useNav } from '@/hooks/useNav';
-import { getCreatedToday, getModifiedToday, computeAudit } from '@/engine/wrap';
+import { getCreatedToday, getModifiedToday, computeAudit, admitELine, pastELines } from '@/engine/wrap';
 import { detectShift } from '@/engine/soul';
 import { soulService } from '@/service/soul-service';
 import { StageBadge } from '@/components/atoms/StageBadge';
 import { EMOTIONS } from '@/types/item';
 import type { Emotion, EnergyLevel, AtomItem, AtomRelation } from '@/types/item';
-import { toast } from '@/store/toast-store';
 import { usePipeline } from '@/hooks/usePipeline';
 import { getTypeColor } from '@/components/atoms/tokens';
 
 const STEPS = [
-  { n: '01', name: 'soul', label: '' },
-  { n: '02', name: 'items', label: '' },
-  { n: '03', name: 'decided', label: '' },
-  { n: '04', name: 'connections', label: '' },
-  { n: '05', name: 'seeds', label: 'opcional' },
-  { n: '06', name: 'audit', label: 'auto' },
-  { n: '07', name: 'commit', label: '' },
+  { geo: '·', name: 'alma', label: '' },
+  { geo: '—', name: 'o dia', label: '' },
+  { geo: '△', name: 'decidido', label: '' },
+  { geo: '□', name: 'a teia', label: '' },
+  { geo: '⬠', name: 'sementes', label: 'opcional' },
+  { geo: '⬡', name: 'audit', label: 'auto' },
+  { geo: '○', name: 'selar', label: '' },
 ];
 
 export function WrapPage() {
@@ -94,11 +96,12 @@ export function WrapPage() {
   };
 
   const handleCommit = async () => {
+    // O plano de amanhã é o passo de maior efeito medido (Masicampo &
+    // Baumeister: plano específico elimina o pensamento intrusivo) — por
+    // isso mora no passo do selo, em lugar de honra. Mas convite não trava
+    // selo: campo obrigatório em rito diário é culpa fabricada (benchmark
+    // 16), e um dia vazio também merece fechar. Selo vale com tudo vazio.
     const validNext = nextSteps.filter(Boolean);
-    if (validNext.length === 0) {
-      toast.error('Adicione pelo menos um proximo passo');
-      return;
-    }
     if (session) {
       const crepusculo = { emotion: (selectedEmotions[0] ?? 'neutro') as Emotion, energy };
       const auroraEmotion = session.soul.aurora?.emotion ?? null;
@@ -116,32 +119,41 @@ export function WrapPage() {
     }
     await commitWrap();
 
-    // Create inbox items from next steps
+    // Create inbox items from next steps — em silêncio: toast por cima da
+    // cerimônia do selo quebrava o rito (D60)
     for (const step of validNext) {
       try {
-        await capture(step);
+        await capture(step, { quiet: true });
       } catch { /* non-blocking */ }
     }
 
     setDone(true);
   };
 
+  // a e_line passa pelo portão: 0-ou-1, nunca repetida (Lei do Tom §4.4)
+  const eLine = admitELine(session?.e_line ?? null, pastELines(items));
+
   if (done) {
     return (
       <div className="px-5 text-center py-16">
-        <div className="text-5xl text-accent mb-4">
+        <div className="mb-4">
           <svg width="64" height="64" viewBox="0 0 64 64" className="mx-auto">
-            <circle cx="32" cy="32" r="28" fill="none" stroke="var(--color-accent)" strokeWidth="3" />
-            <path d="M22 32l6 6 14-14" stroke="var(--color-accent)" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+            <circle cx="32" cy="32" r="28" fill="none" stroke="var(--color-gold)" strokeWidth="2" />
           </svg>
         </div>
-        <h2 className="text-xl font-medium mb-1.5">wrap commitado</h2>
+        <h2 className="text-xl text-text mb-1.5">o dia está selado</h2>
         <p className="text-[13px] text-text-muted leading-relaxed">
-          {new Date().toLocaleDateString('pt-BR')} · crepusculo
+          {new Date().toLocaleDateString('pt-BR')} · crepúsculo
         </p>
+        {eLine && (
+          <p className="font-mono text-[11px] text-gold-dim mt-6 max-w-[280px] mx-auto">
+            {eLine}
+            <span className="block mt-1 tracking-[0.12em]">— E.</span>
+          </p>
+        )}
         <button
           onClick={() => navigate('home')}
-          className="mt-8 text-[15px] text-accent font-medium"
+          className="mt-8 text-[15px] text-gold"
         >
           boa noite ○
         </button>
@@ -154,32 +166,38 @@ export function WrapPage() {
   return (
     <div className="flex flex-col h-[calc(100dvh-120px)]">
       {/* Top */}
-      <div className="px-5 pt-4 pb-3 border-b border-border flex justify-between items-end">
+      <div className="px-5 pt-4 pb-3 border-b border-border-soft flex justify-between items-end">
         <div>
-          <h1 className="text-lg font-medium">wrap · {new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}</h1>
-          <p className="text-xs text-text-muted">crepusculo</p>
+          <h1 className="text-lg text-text">○ fechar o dia</h1>
+          <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint mt-0.5">
+            crepúsculo · {new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}
+          </p>
         </div>
-        <span className="text-xs text-text-muted">{step + 1}/7</span>
+        <span className="font-mono text-[11px] text-text-faint">passo {step + 1} de 7</span>
       </div>
 
-      {/* Progress dots */}
-      <div className="flex gap-1.5 px-5 py-3">
-        {STEPS.map((_, i) => (
-          <div
+      {/* as geometrias caminham — estado, não barra (D44/D46) */}
+      <div className="flex justify-center gap-4 px-5 py-3 font-mono text-[14px]">
+        {STEPS.map((st, i) => (
+          <button
             key={i}
-            className={`h-2 rounded-full transition-all cursor-pointer ${
-              i === step ? 'w-6 bg-accent-light' : i < step ? 'w-2 bg-accent-lighter' : 'w-2 bg-border'
-            }`}
             onClick={() => setStep(i)}
-          />
+            className={`transition-all leading-none ${
+              i === step ? 'text-gold scale-125' : i < step ? 'text-gold-dim' : 'text-text-faint opacity-40'
+            }`}
+            aria-label={st.name}
+            aria-current={i === step ? 'step' : undefined}
+          >
+            {st.geo}
+          </button>
         ))}
       </div>
 
       {/* Step header */}
       <div className="px-5 pb-2 flex items-baseline gap-2">
-        <span className="text-[11px] font-medium text-accent-lighter">{s.n}</span>
-        <span className="text-[15px] font-medium">{s.name}</span>
-        {s.label && <span className="text-[11px] text-text-muted ml-auto">{s.label}</span>}
+        <span className="font-mono text-[13px] text-gold">{s.geo}</span>
+        <span className="text-[15px] text-text">{s.name}</span>
+        {s.label && <span className="font-mono text-[10px] text-text-faint ml-auto">{s.label}</span>}
       </div>
 
       {/* Content */}
@@ -198,32 +216,31 @@ export function WrapPage() {
       </div>
 
       {/* Bottom */}
-      <div className="px-5 py-2.5 border-t border-border">
+      <div className="px-5 py-2.5 border-t border-border-soft">
         {step === STEPS.length - 1 && confirmCommit ? (
-          <div className="bg-accent-bg border border-accent/20 rounded-xl p-4 text-center">
-            <p className="text-sm text-accent font-medium mb-2">commitar este wrap?</p>
+          <div className="bg-gold-bg border rounded-xl p-4 text-center" style={{ borderColor: 'color-mix(in srgb, var(--color-gold) 30%, var(--color-border-soft))' }}>
+            <p className="text-sm text-gold mb-2">selar este dia? depois de selado, não se edita</p>
             <div className="flex gap-2">
               <button onClick={() => setConfirmCommit(false)} className="flex-1 py-2.5 rounded-xl border border-border text-sm text-text-muted">
                 voltar
               </button>
-              <button onClick={handleCommit} disabled={loading} className="flex-1 py-2.5 rounded-xl bg-accent text-white text-sm font-medium disabled:opacity-50">
-                {loading ? 'commitando...' : 'confirmar ○'}
+              <button onClick={handleCommit} disabled={loading} className="flex-1 py-2.5 rounded-xl text-gold bg-gold-bg text-sm font-medium disabled:opacity-50" style={{ border: '1px solid color-mix(in srgb, var(--color-gold) 40%, var(--color-border))' }}>
+                {loading ? 'selando…' : 'selar ○'}
               </button>
             </div>
           </div>
         ) : (
           <div className="flex justify-between items-center">
-            <button onClick={goBack} className={`text-sm text-accent ${step === 0 ? 'invisible' : ''}`}>
-              voltar
+            <button onClick={goBack} className={`font-mono text-[11px] text-gold-dim ${step === 0 ? 'invisible' : ''}`}>
+              ← voltar
             </button>
             <button
               onClick={step === STEPS.length - 1 ? () => setConfirmCommit(true) : goNext}
               disabled={loading}
-              className={`rounded-xl px-7 py-3 text-sm font-medium text-white ${
-                step === STEPS.length - 1 ? 'bg-success-text' : 'bg-accent'
-              } disabled:opacity-50`}
+              className="rounded-xl px-7 py-3 text-sm text-gold bg-gold-bg disabled:opacity-50"
+              style={{ border: '1px solid color-mix(in srgb, var(--color-gold) 30%, var(--color-border-soft))' }}
             >
-              {step === STEPS.length - 1 ? 'commitar ○' : 'proximo'}
+              {step === STEPS.length - 1 ? 'selar ○' : `seguir → ${STEPS[step + 1].geo}`}
             </button>
           </div>
         )}
@@ -258,10 +275,10 @@ function SoulStep({ emotions, setEmotions, energy, setEnergy, aurora, intention,
   return (
     <div className="bg-card border border-border rounded-[14px] p-4">
       {aurora && (
-        <div className="mb-3 pb-3 border-b border-surface">
-          <div className="text-[11px] font-medium tracking-wider uppercase text-text-muted mb-1">aurora</div>
+        <div className="mb-3 pb-3 border-b border-border-soft">
+          <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint mb-1">aurora</div>
           <div className="flex items-center gap-2 text-[13px]">
-            <span className="px-2.5 py-0.5 rounded-lg bg-accent-bg text-accent text-xs">{aurora.emotion}</span>
+            <span className="px-2.5 py-0.5 rounded-full bg-gold-bg text-gold text-xs">{aurora.emotion}</span>
             <span className="text-text-muted text-xs">· {aurora.energy}</span>
           </div>
           {intention && (
@@ -269,29 +286,31 @@ function SoulStep({ emotions, setEmotions, energy, setEnergy, aurora, intention,
           )}
         </div>
       )}
-      <div className="text-[11px] font-medium tracking-wider uppercase text-text-muted mb-2">como voce esta saindo hoje?</div>
+      <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint mb-2">como você está saindo hoje?</div>
       <div className="flex flex-wrap gap-1.5 mt-2">
         {EMOTIONS.map((e) => (
           <button
             key={e}
             onClick={() => toggleEmotion(e)}
             className={`px-3 py-1 rounded-2xl border text-xs transition-all ${
-              emotions.includes(e) ? 'border-accent-light bg-accent-bg text-accent' : 'border-border bg-card text-text-muted'
+              emotions.includes(e) ? 'text-gold bg-gold-bg' : 'border-border bg-card text-text-muted'
             }`}
+            style={emotions.includes(e) ? { borderColor: 'color-mix(in srgb, var(--color-gold) 35%, var(--color-border))' } : undefined}
           >
             {e}
           </button>
         ))}
       </div>
       <div className="flex items-center gap-2 mt-3">
-        <span className="text-xs text-text-muted w-12">energy</span>
+        <span className="text-xs text-text-muted w-12">energia</span>
         {(['high', 'medium', 'low'] as EnergyLevel[]).map((e) => (
           <button
             key={e}
             onClick={() => setEnergy(e)}
             className={`px-3 py-1 rounded-xl border text-xs transition-all ${
-              energy === e ? 'border-accent-light bg-accent-bg text-accent' : 'border-border bg-card'
+              energy === e ? 'text-gold bg-gold-bg' : 'border-border bg-card'
             }`}
+            style={energy === e ? { borderColor: 'color-mix(in srgb, var(--color-gold) 35%, var(--color-border))' } : undefined}
           >
             {e}
           </button>
@@ -300,11 +319,11 @@ function SoulStep({ emotions, setEmotions, energy, setEnergy, aurora, intention,
 
       {/* Fase 3 · o shift, visível — nomeia, não julga */}
       {shift && aurora && exit && (
-        <div className="mt-3 pt-3 border-t border-surface text-center">
+        <div className="mt-3 pt-3 border-t border-border-soft text-center">
           <p className="text-sm text-text">
-            <span className="text-accent">{aurora.emotion}</span>
+            <span className="text-gold">{aurora.emotion}</span>
             <span className="text-text-muted mx-2">→</span>
-            <span className="text-accent">{exit}</span>
+            <span className="text-gold">{exit}</span>
           </p>
           {shiftWord && <p className="text-xs text-text-muted italic mt-0.5">{shiftWord}</p>}
         </div>
@@ -312,11 +331,11 @@ function SoulStep({ emotions, setEmotions, energy, setEnergy, aurora, intention,
 
       {/* Fase 3 · o soul log do dia — casa própria no crepúsculo */}
       {todaySoul.length > 0 && (
-        <div className="mt-3 pt-3 border-t border-surface">
-          <div className="text-[11px] font-medium tracking-wider uppercase text-text-muted mb-1.5">o dia escreveu</div>
+        <div className="mt-3 pt-3 border-t border-border-soft">
+          <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint mb-1.5">o dia escreveu</div>
           {todaySoul.map((i) => (
             <div key={i.id} className="flex gap-2 py-0.5 text-xs text-text-muted">
-              <span className="text-accent-light">
+              <span className="font-mono text-gold-dim">
                 {new Date(i.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
               </span>
               <span>{i.title}</span>
@@ -326,8 +345,8 @@ function SoulStep({ emotions, setEmotions, energy, setEnergy, aurora, intention,
       )}
 
       {/* Fase 3 · journaling de fechamento — página, primeira classe */}
-      <div className="mt-3 pt-3 border-t border-surface">
-        <div className="text-[11px] font-medium tracking-wider uppercase text-text-muted mb-1.5">fechar escrevendo · opcional</div>
+      <div className="mt-3 pt-3 border-t border-border-soft">
+        <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint mb-1.5">fechar escrevendo · opcional</div>
         {journalSaved ? (
           <p className="text-xs text-text-muted italic py-1">guardado. o dia está escrito.</p>
         ) : (
@@ -335,14 +354,15 @@ function SoulStep({ emotions, setEmotions, energy, setEnergy, aurora, intention,
             <textarea
               value={journal}
               onChange={(e) => setJournal(e.target.value)}
-              placeholder="o que este dia te deixou..."
+              placeholder="o que este dia deixou em você…"
               rows={4}
-              className="w-full bg-surface border border-border rounded-xl px-3 py-2.5 text-sm text-text outline-none focus:border-accent-light resize-none placeholder:text-text-muted"
+              className="w-full bg-surface border border-border rounded-xl px-3 py-2.5 text-sm text-text outline-none resize-none placeholder:text-text-faint"
             />
             {journal.trim() && (
               <button
                 onClick={onSaveJournal}
-                className="mt-2 px-4 py-2 rounded-xl bg-accent text-white text-xs font-medium"
+                className="mt-2 px-4 py-2 rounded-xl text-gold bg-gold-bg text-xs"
+                style={{ border: '1px solid color-mix(in srgb, var(--color-gold) 30%, var(--color-border-soft))' }}
               >
                 guardar
               </button>
@@ -357,15 +377,15 @@ function SoulStep({ emotions, setEmotions, energy, setEnergy, aurora, intention,
 function ItemsStep({ created, modified }: { created: any[]; modified: any[] }) {
   return (
     <div className="bg-card border border-border rounded-[14px] p-4">
-      <div className="text-xs font-medium text-text-muted pb-1.5 border-b border-border mb-1">criados hoje</div>
+      <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint pb-1.5 border-b border-border-soft mb-1">o que nasceu</div>
       {created.length === 0 ? (
-        <p className="text-xs text-text-muted py-2">nenhum item criado hoje</p>
+        <p className="text-xs text-text-muted py-2">nada nasceu hoje</p>
       ) : (
         created.map((item) => <WrapItemRow key={item.id} item={item} />)
       )}
-      <div className="text-xs font-medium text-text-muted pb-1.5 border-b border-border mb-1 mt-3">modificados</div>
+      <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint pb-1.5 border-b border-border-soft mb-1 mt-3">o que se moveu</div>
       {modified.length === 0 ? (
-        <p className="text-xs text-text-muted py-2">nenhum item modificado hoje</p>
+        <p className="text-xs text-text-muted py-2">nada se moveu hoje</p>
       ) : (
         modified.map((item) => <WrapItemRow key={item.id} item={item} />)
       )}
@@ -398,25 +418,23 @@ function DecidedStep({ decisions, setDecisions, newDecision, setNewDecision }: {
 
   return (
     <div className="bg-card border border-border rounded-[14px] p-4">
-      <div className="text-[11px] font-medium tracking-wider uppercase text-text-muted mb-2">decisoes</div>
+      <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint mb-2">△ o que se decidiu</div>
       {decisions.map((d, i) => (
-        <div key={i} className="py-2 border-b border-surface last:border-0 flex items-center gap-2.5">
-          <div className="w-[18px] h-[18px] rounded-md bg-accent-light text-white flex items-center justify-center shrink-0">
-            <svg width="10" height="10" viewBox="0 0 10 10"><path d="M2 5l2 2 4-4" stroke="currentColor" strokeWidth="1.3" fill="none" strokeLinecap="round" /></svg>
-          </div>
+        <div key={i} className="py-2 border-b border-border-soft last:border-0 flex items-center gap-2.5">
+          <span className="font-mono text-gold text-[13px] w-[18px] text-center shrink-0">△</span>
           <span className="text-[13px]">"{d}"</span>
         </div>
       ))}
       <div className="flex gap-2 mt-2">
         <input
-          className="flex-1 border border-border rounded-lg px-3 py-2 text-[13px] bg-card text-text outline-none focus:border-accent-light"
-          placeholder="+ adicionar decisao..."
+          className="flex-1 border border-border rounded-lg px-3 py-2 text-[13px] bg-card text-text outline-none"
+          placeholder="+ o que se decidiu hoje…"
           value={newDecision}
           onChange={(e) => setNewDecision(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && addDecision()}
         />
         {newDecision.trim() && (
-          <button onClick={addDecision} className="px-3 py-2 bg-accent text-white rounded-lg text-sm shrink-0">
+          <button onClick={addDecision} className="px-3 py-2 text-gold bg-gold-bg rounded-lg text-sm shrink-0" style={{ border: '1px solid color-mix(in srgb, var(--color-gold) 30%, var(--color-border-soft))' }}>
             +
           </button>
         )}
@@ -448,21 +466,21 @@ function ConnectionsStep({ items, createdToday, modifiedToday }: {
   if (todayItems.length === 0) {
     return (
       <div className="bg-card border border-border rounded-[14px] p-4">
-        <div className="text-[11px] font-medium tracking-wider uppercase text-text-muted mb-2">connections</div>
-        <p className="text-xs text-text-muted py-4 text-center">nenhum item criado ou modificado hoje</p>
+        <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint mb-2">a teia</div>
+        <p className="text-xs text-text-muted py-4 text-center">nada nasceu nem se moveu hoje</p>
       </div>
     );
   }
 
   return (
     <div className="bg-card border border-border rounded-[14px] p-4">
-      <div className="text-[11px] font-medium tracking-wider uppercase text-text-muted mb-2">
-        connections
+      <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint mb-2">
+        a teia
         {added.size > 0 && (
-          <span className="ml-1.5 text-[10px] px-1.5 py-px rounded-md bg-success-bg text-success-text font-medium">+{added.size}</span>
+          <span className="ml-1.5 text-[10px] px-1.5 py-px rounded-md bg-success-bg text-success-text">+{added.size}</span>
         )}
       </div>
-      <p className="text-xs text-text-muted mb-3">algum item de hoje se conecta com outro?</p>
+      <p className="text-xs text-text-muted mb-3">algo de hoje se conecta com algo?</p>
       <div className="space-y-1.5">
         {todayItems.map((item) => {
           const isConnecting = connectingItem === item.id;
@@ -478,8 +496,8 @@ function ConnectionsStep({ items, createdToday, modifiedToday }: {
                 {wasConnected ? (
                   <span className="text-[10px] text-success-text">✓</span>
                 ) : (
-                  <button onClick={() => setConnectingItem(isConnecting ? null : item.id)} className="text-[10px] text-accent shrink-0">
-                    {isConnecting ? 'cancelar' : 'conectar'}
+                  <button onClick={() => setConnectingItem(isConnecting ? null : item.id)} className="font-mono text-[10px] text-gold-dim shrink-0">
+                    {isConnecting ? 'deixa' : 'tecer'}
                   </button>
                 )}
               </div>
@@ -525,8 +543,8 @@ function WrapConnectionPicker({ items, sourceId, onSelect, onCancel }: {
     <div className="bg-surface rounded-lg p-2.5 mt-1.5 mb-2">
       {!selectedTarget ? (
         <>
-          <input value={search} onChange={(e) => setSearch(e.target.value)} autoFocus placeholder="buscar item..."
-            className="w-full text-[12px] bg-card border border-border rounded-lg px-2.5 py-1.5 outline-none focus:border-accent-light mb-1.5" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} autoFocus placeholder="buscar…"
+            className="w-full text-[12px] bg-card border border-border rounded-lg px-2.5 py-1.5 outline-none mb-1.5" />
           {filtered.map((item) => (
             <button key={item.id} onClick={() => { setSelectedTarget(item.id); setSearch(''); }}
               className="w-full text-left px-2 py-1.5 text-[11px] hover:bg-card rounded transition-colors truncate">
@@ -540,14 +558,15 @@ function WrapConnectionPicker({ items, sourceId, onSelect, onCancel }: {
           <div className="flex flex-wrap gap-1 mb-2">
             {RELATIONS.map((r) => (
               <button key={r.key} onClick={() => setRelation(r.key)}
-                className={`text-[9px] px-2 py-0.5 rounded-md border ${relation === r.key ? 'border-accent bg-accent-bg text-accent' : 'border-border text-text-muted'}`}>
+                className={`font-mono text-[9px] px-2 py-0.5 rounded-full border ${relation === r.key ? 'text-gold bg-gold-bg' : 'border-border text-text-muted'}`}
+                style={relation === r.key ? { borderColor: 'color-mix(in srgb, var(--color-gold) 35%, var(--color-border))' } : undefined}>
                 {r.label}
               </button>
             ))}
           </div>
           <div className="flex gap-1.5">
-            <button onClick={onCancel} className="flex-1 py-1.5 text-[10px] border border-border rounded-lg text-text-muted">cancelar</button>
-            <button onClick={() => onSelect(selectedTarget!, relation)} className="flex-1 py-1.5 text-[10px] bg-accent text-white rounded-lg">conectar</button>
+            <button onClick={onCancel} className="flex-1 py-1.5 text-[10px] border border-border rounded-lg text-text-muted">deixa</button>
+            <button onClick={() => onSelect(selectedTarget!, relation)} className="flex-1 py-1.5 text-[10px] text-gold bg-gold-bg rounded-lg" style={{ border: '1px solid color-mix(in srgb, var(--color-gold) 30%, var(--color-border-soft))' }}>tecer</button>
           </div>
         </>
       )}
@@ -558,8 +577,8 @@ function WrapConnectionPicker({ items, sourceId, onSelect, onCancel }: {
 function SeedsStep() {
   return (
     <div className="bg-card border border-border rounded-[14px] p-4">
-      <div className="text-[11px] font-medium tracking-wider uppercase text-text-muted mb-2">entropia</div>
-      <p className="text-xs text-text-muted py-4 text-center">items inativos serao detectados na Fase 5</p>
+      <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint mb-2">⬠ sementes</div>
+      <p className="text-xs text-text-muted py-4 text-center">o que dorme será encontrado na Fase 5</p>
     </div>
   );
 }
@@ -577,7 +596,7 @@ function AuditStep({ audit, fullAudit, auditLoading }: {
 
   return (
     <div className="bg-card border border-border rounded-[14px] p-4">
-      <div className="text-[11px] font-medium tracking-wider uppercase text-text-muted mb-2">saude do sistema</div>
+      <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint mb-2">⬡ a casa por dentro</div>
       {auditLoading && (
         <div className="space-y-2 mb-2">
           {[1, 2, 3, 4].map((i) => (
@@ -653,48 +672,46 @@ function CommitStep({ created, modified, decisions, audit, nextSteps, setNextSte
   };
   const addStep = () => setNextSteps([...nextSteps, '']);
 
+  // D46: número é estado — "2 no inbox", nunca "92% de saúde"
+  const quieto = audit.inbox_count === 0 && audit.below_floor === 0;
+
   return (
     <>
-      <div className="bg-accent-bg border border-border rounded-[14px] p-6 text-center">
-        <div className="text-[10px] text-text-muted tracking-wider mb-4">
-          · → — → △ → □ → ⬠ → ⬡ → ○
+      <div className="bg-gold-bg border rounded-[14px] p-6 text-center" style={{ borderColor: 'color-mix(in srgb, var(--color-gold) 25%, var(--color-border-soft))' }}>
+        <div className="font-mono text-[13px] text-gold tracking-[0.3em] mb-4">
+          · — △ □ ⬠ ⬡ ○
         </div>
-        <h2 className="text-xl font-medium mb-1.5">wrap completo</h2>
+        <h2 className="text-xl text-text mb-1.5">o dia, inteiro</h2>
         <p className="text-[13px] text-text-muted leading-relaxed">
-          {created.length} criados · {modified.length} modificados · {decisions.length} decisoes
+          {created.length + modified.length === 0
+            ? 'um dia quieto'
+            : `${created.length} ${created.length === 1 ? 'nasceu' : 'nasceram'} · ${modified.length} se ${modified.length === 1 ? 'moveu' : 'moveram'}`}
+          {decisions.length > 0 && ` · ${decisions.length} ${decisions.length === 1 ? 'decisão' : 'decisões'}`}
         </p>
-        <div className="flex justify-center gap-6 mt-4">
-          <div className="text-center">
-            <div className="text-xl font-medium text-accent">○</div>
-            <div className="text-[10px] text-text-muted mt-0.5">completude</div>
-          </div>
-          <div className="text-center">
-            <div className="text-xl font-medium text-accent">{created.length + modified.length}</div>
-            <div className="text-[10px] text-text-muted mt-0.5">items</div>
-          </div>
-          <div className="text-center">
-            <div className="text-xl font-medium text-accent">
-              {audit.total_active > 0 ? Math.round(((audit.total_active - audit.inbox_count - audit.below_floor) / audit.total_active) * 100) : 100}%
-            </div>
-            <div className="text-[10px] text-text-muted mt-0.5">saude</div>
-          </div>
-        </div>
+        <p className="font-mono text-[11px] text-text-muted mt-3">
+          {quieto
+            ? 'a casa está quieta'
+            : [
+                audit.inbox_count > 0 ? `${audit.inbox_count} no inbox` : null,
+                audit.below_floor > 0 ? `${audit.below_floor} abaixo do piso` : null,
+              ].filter(Boolean).join(' · ')}
+        </p>
       </div>
 
       {/* Soul summary */}
       {(aurora || crepusculo.emotion !== 'neutro') && (
         <div className="bg-card border border-border rounded-[14px] p-4 mt-4">
-          <div className="text-[11px] font-medium tracking-wider uppercase text-text-muted mb-2">soul</div>
+          <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint mb-2">alma</div>
           <div className="flex items-center gap-2 text-xs">
             {aurora && (
               <>
-                <span className="px-2 py-0.5 rounded-lg bg-accent-bg text-accent">{aurora.emotion}</span>
+                <span className="px-2 py-0.5 rounded-full bg-gold-bg text-gold">{aurora.emotion}</span>
                 <span className="text-text-muted">→</span>
               </>
             )}
-            <span className="px-2 py-0.5 rounded-lg bg-accent-bg text-accent">{crepusculo.emotion}</span>
+            <span className="px-2 py-0.5 rounded-full bg-gold-bg text-gold">{crepusculo.emotion}</span>
             {shift !== 'unknown' && (
-              <span className={`ml-auto text-[11px] font-medium px-2 py-0.5 rounded-lg ${
+              <span className={`ml-auto text-[11px] px-2 py-0.5 rounded-full ${
                 shift === 'positive' ? 'bg-success-bg text-success-text' :
                 shift === 'negative' ? 'bg-error-bg text-error-text' :
                 'bg-surface text-text-muted'
@@ -707,17 +724,17 @@ function CommitStep({ created, modified, decisions, audit, nextSteps, setNextSte
       )}
 
       <div className="mt-4">
-        <div className="text-[11px] font-medium tracking-wider uppercase text-text-muted mb-2">proximos passos</div>
+        <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint mb-2">o que fica pra amanhã</div>
         {nextSteps.map((s, i) => (
           <input
             key={i}
-            className="w-full border border-border rounded-lg px-3 py-2.5 text-[13px] bg-card text-text outline-none focus:border-accent-light mb-1.5"
+            className="w-full border border-border rounded-lg px-3 py-2.5 text-[13px] bg-card text-text outline-none mb-1.5"
             value={s}
             onChange={(e) => updateStep(i, e.target.value)}
-            placeholder="+ adicionar..."
+            placeholder="+ um passo…"
           />
         ))}
-        <button onClick={addStep} className="text-xs text-accent mt-1">+ adicionar</button>
+        <button onClick={addStep} className="font-mono text-[11px] text-gold-dim mt-1">+ mais um</button>
       </div>
     </>
   );

@@ -29,6 +29,9 @@ export interface WrapSession {
     stale_count: number;
   };
   next: string[];
+  /** Lei do Tom §4.4: 0-ou-1 por wrap, escrita pelo E. (pós-gate) — o
+      portão admitELine (engine/wrap) decide se ela entra. */
+  e_line?: string | null;
 }
 
 // ─── Service ──────────────────────────────────────────────

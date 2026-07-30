@@ -1,32 +1,41 @@
 // features/raiz/builder-store.ts — Zustand store for Routine Builder
 
 import { create } from 'zustand';
-import type { AtomModule } from '@/types/item';
-import type { BuilderAnswer, BuilderGeneratedItem } from './builder-types';
+import { persist } from 'zustand/middleware';
+import type { AtomModule, AtomType } from '@/types/item';
+import type { BuilderAnswer, BuilderGeneratedItem, BuilderProtocol, BuilderRoutine } from './builder-types';
 import { BUILDER_MODULE_MAP, BUILDER_QUESTION_MAP } from './builder-questions';
-import { generateItems } from './builder-mapper';
+import { generateStructures } from './builder-mapper';
 
 interface BuilderState {
   activeModule: AtomModule | null;
   currentQuestionId: string | null;
   answers: BuilderAnswer[];
   generatedItems: BuilderGeneratedItem[];
+  generatedRoutines: BuilderRoutine[];   // D64: a entrevista pare cadeias
+  generatedProtocols: BuilderProtocol[]; // D64: e protocolos
   completedModules: AtomModule[];
   mindmateMode: boolean;
 
   startModule: (module: AtomModule) => void;
   answerQuestion: (questionId: string, value: string | boolean) => void;
+  setItemType: (tempId: string, type: AtomType) => void;
   goBack: () => void;
   completeModule: () => void;
   checkMindmateTrigger: (text: string) => void;
   reset: () => void;
 }
 
-export const useBuilderStore = create<BuilderState>((set, get) => ({
+// persist (MANCA 3 da dissecação 02): reload não apaga a entrevista — o
+// store retoma onde parou. A reescrita em capítulos-gaveta retomáveis segue
+// sendo obra de voz com o E. (D64); aqui é só não perder o que foi dito.
+export const useBuilderStore = create<BuilderState>()(persist((set, get) => ({
   activeModule: null,
   currentQuestionId: null,
   answers: [],
   generatedItems: [],
+  generatedRoutines: [],
+  generatedProtocols: [],
   completedModules: [],
   mindmateMode: false,
 
@@ -58,9 +67,9 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
     if (nextId && BUILDER_QUESTION_MAP[nextId]) {
       set({ answers: newAnswers, currentQuestionId: nextId });
     } else {
-      // Module complete — generate items
+      // Module complete — a entrevista pare estruturas (D64)
       if (activeModule) {
-        const newItems = generateItems(newAnswers.filter(a => {
+        const { items, routine, protocol } = generateStructures(newAnswers.filter(a => {
           const q = BUILDER_QUESTION_MAP[a.questionId];
           return q?.module === activeModule;
         }), activeModule);
@@ -69,12 +78,21 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
           answers: newAnswers,
           activeModule: null,
           currentQuestionId: null,
-          generatedItems: [...s.generatedItems, ...newItems],
+          generatedItems: [...s.generatedItems, ...items],
+          generatedRoutines: routine ? [...s.generatedRoutines, routine] : s.generatedRoutines,
+          generatedProtocols: protocol ? [...s.generatedProtocols, protocol] : s.generatedProtocols,
           completedModules: [...s.completedModules, activeModule],
         }));
       }
     }
   },
+
+  // D69 — a heurística nunca decide quieta: o chip do mini-wrap troca o
+  // tipo antes do parto, e o que nasce é o que o humano disse
+  setItemType: (tempId, type) =>
+    set((s) => ({
+      generatedItems: s.generatedItems.map((i) => (i.tempId === tempId ? { ...i, type } : i)),
+    })),
 
   goBack: () => {
     const { answers, activeModule } = get();
@@ -113,7 +131,9 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
     currentQuestionId: null,
     answers: [],
     generatedItems: [],
+    generatedRoutines: [],
+    generatedProtocols: [],
     completedModules: [],
     mindmateMode: false,
   }),
-}));
+}), { name: 'mindroot.builder.v1' }));

@@ -45,3 +45,26 @@ export interface BuilderGeneratedItem {
   recurrence?: string;
   notes?: string;
 }
+
+// ─── D64: a entrevista pare estruturas, não itens soltos ──
+
+export interface BuilderRoutine {
+  tempId: string;
+  title: string;
+  module: AtomModule;
+  slot: RitualSlot | null;
+  eloTempIds: string[]; // resolvidos pra ids reais no assentimento
+}
+
+export interface BuilderProtocol {
+  tempId: string;
+  title: string;
+  module: AtomModule;
+  steps: string[];
+}
+
+export interface BuilderStructures {
+  items: BuilderGeneratedItem[];
+  routine: BuilderRoutine | null;
+  protocol: BuilderProtocol | null;
+}

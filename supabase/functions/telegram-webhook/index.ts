@@ -59,7 +59,7 @@ Deno.serve(async (req) => {
         note: soulMatch[1].trim(),
         createdBy: 'e-telegram',
       });
-      await reply(chatId, 'senti contigo. ficou no soul log.');
+      await reply(chatId, 'senti com você. ficou no soul log.');
       return new Response('ok');
     }
 

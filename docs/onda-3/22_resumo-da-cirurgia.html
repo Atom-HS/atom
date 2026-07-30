@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atom · a cirurgia fina — 30 Jul 2026</title>
+<style>
+  /* O mundo é um só, escuro, deliberado (D57) — o resumo veste a pele da
+     casa: tema único é escolha de lei, não omissão. Dourado raro e sagrado;
+     mono marca, sans fala, itálico acolhe. Molde: 20_resumo-da-noite.html. */
+  :root {
+    --bg: #12100c;
+    --card: #1a1712;
+    --surface: #211d16;
+    --border: #2e2820;
+    --border-soft: #262119;
+    --text: #e9e2d3;
+    --muted: #a29781;
+    --faint: #6f675a;
+    --gold: #d4a94e;
+    --gold-dim: #a8843a;
+    --gold-bg: rgba(212, 169, 78, .08);
+    --mente: #c9705c;
+    --viva: #8fae7d;
+    --manca: #c9a45c;
+  }
+  html { background: var(--bg); }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    line-height: 1.6; margin: 0;
+  }
+  .pagina { max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
+  .mono { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; }
+
+  header.topo { margin-bottom: 36px; }
+  .kicker {
+    font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold-dim); margin: 0 0 10px;
+  }
+  h1 {
+    font-size: clamp(26px, 5vw, 34px); font-weight: 500; line-height: 1.2;
+    margin: 0 0 10px; text-wrap: balance;
+  }
+  h1 .geo { color: var(--gold); }
+  .lede { color: var(--muted); font-size: 15px; max-width: 62ch; margin: 0; }
+  .lede em { color: var(--text); }
+
+  h2 {
+    font-size: 19px; font-weight: 500; margin: 56px 0 6px;
+    padding-top: 22px; border-top: 1px solid var(--border-soft);
+    text-wrap: balance;
+  }
+  h2 .geo { color: var(--gold); font-weight: 400; }
+  .sub { color: var(--muted); font-size: 14px; margin: 0 0 18px; max-width: 66ch; }
+  .sub b { color: var(--text); font-weight: 500; }
+
+  p { max-width: 66ch; }
+
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; margin: 18px 0; }
+  th, td { text-align: left; padding: 8px 12px 8px 0; border-bottom: 1px solid var(--border-soft); vertical-align: top; }
+  th {
+    font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--faint); font-weight: 500;
+  }
+  td:first-child { color: var(--text); }
+  td { color: var(--muted); }
+  .num { font-variant-numeric: tabular-nums; }
+
+  .selo { font-family: ui-monospace, Consolas, monospace; font-size: 11px; padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
+  .selo.ok    { color: var(--viva);  background: rgba(143,174,125,.09); }
+  .selo.dp    { color: var(--manca); background: rgba(201,164,92,.09); }
+
+  /* a fita de prints — telas de celular, rolagem própria */
+  .fita {
+    display: flex; gap: 14px; overflow-x: auto; padding: 6px 2px 14px;
+    scroll-snap-type: x proximity;
+  }
+  .fita figure {
+    margin: 0; flex: 0 0 216px; scroll-snap-align: start;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .fita .tela {
+    border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+    background: #000; aspect-ratio: 39/70;
+  }
+  .fita .tela.curta { aspect-ratio: auto; }
+  .fita img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  .fita .tela.curta img { height: auto; }
+  .fita figcaption { font-size: 12px; color: var(--muted); line-height: 1.45; }
+  .fita figcaption b { color: var(--text); font-weight: 500; }
+  .tag-antes, .tag-depois {
+    font-family: ui-monospace, Consolas, monospace; font-size: 10px;
+    letter-spacing: .16em; text-transform: uppercase; display: inline-block; margin-right: 6px;
+  }
+  .tag-antes { color: var(--mente); }
+  .tag-depois { color: var(--viva); }
+
+  .carta {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 18px 20px; margin: 16px 0;
+  }
+  .carta h3 { margin: 0 0 6px; font-size: 15.5px; font-weight: 500; }
+  .carta h3 .geo { color: var(--gold); }
+  .carta p { margin: 6px 0; font-size: 14px; color: var(--muted); }
+  .carta p b { color: var(--text); font-weight: 500; }
+  .carta .lei {
+    font-family: ui-monospace, Consolas, monospace; font-size: 11px;
+    color: var(--gold-dim); margin-top: 10px;
+  }
+
+  .aviso {
+    border-left: 3px solid var(--gold-dim); background: var(--gold-bg);
+    border-radius: 0 12px 12px 0; padding: 12px 16px; margin: 18px 0;
+    font-size: 14px; color: var(--muted); max-width: 66ch;
+  }
+  .aviso b { color: var(--gold); font-weight: 500; }
+
+  ol.mesa { padding-left: 22px; margin: 14px 0; max-width: 66ch; }
+  ol.mesa li { margin: 9px 0; color: var(--muted); font-size: 14.5px; }
+  ol.mesa li b { color: var(--text); font-weight: 500; }
+
+  code, .mono-inline {
+    font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    font-size: .92em; color: var(--gold-dim);
+    background: var(--surface); padding: 1px 5px; border-radius: 5px;
+  }
+
+  footer.pe {
+    margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--border-soft);
+    font-size: 12.5px; color: var(--faint); font-style: italic; max-width: 66ch;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .fita { scroll-behavior: smooth; }
+  }
+</style>
+</head>
+<body>
+
+<div class="pagina">
+  <header class="topo">
+    <p class="kicker">atom · onda 3 · sessão da cirurgia fina</p>
+    <h1><span class="geo">△</span> A cirurgia fina — cinco obras, o gate destravado</h1>
+    <p class="lede">30 Jul 2026, dia. Nada de exame novo — o diagnóstico estava
+    feito, faltava bisturi. <em>As cinco obras da fila fecharam, de dentro pra
+    fora, e as duas condições que seguravam o gatilho do gate caíram.</em>
+    Sete commits em <code>v2-faces</code>, 404 testes verdes, 15 cenas de
+    prova, nada subiu: deploy, push, merge e o gatilho continuam sendo gesto
+    do Rick.</p>
+  </header>
+
+  <h2><span class="geo">·</span> Em uma tela</h2>
+  <table>
+    <thead><tr><th>Obra</th><th>Estado</th></tr></thead>
+    <tbody>
+      <tr><td>1 · o parto honesto do builder (MANCA 1–4)</td><td><span class="selo ok">✓</span> <span class="mono num">cfb918a</span> · mapa explícito + persist + chip D69</td></tr>
+      <tr><td>2 · a sheet do projeto (DP-E/DP-I)</td><td><span class="selo ok">✓</span> <span class="mono num">f343777</span> · <b style="color:var(--gold)">condição 1 do gate cumprida</b></td></tr>
+      <tr><td>3 · a porta da escada na ÁRVORE (DP-G)</td><td><span class="selo ok">✓</span> <span class="mono num">f6d2852</span> · <b style="color:var(--gold)">condição 2 resolvida</b></td></tr>
+      <tr><td>4 · as portas invisíveis ganham corpo</td><td><span class="selo ok">✓</span> <span class="mono num">3e688a5</span> · rótulo «a casa» + hint da busca</td></tr>
+      <tr><td>5 · miúdos de lei (D68 · D63 · who: · D60)</td><td><span class="selo ok">✓</span> <span class="mono num">c82153c</span> · um commit, cinco leis</td></tr>
+      <tr><td>Hooks</td><td><span class="selo ok">✓</span> <span class="num">404</span> testes (12 novos) · tsc · build · atos <span class="num">15</span> cenas · visual 13/13</td></tr>
+      <tr><td>O gate (D41)</td><td><span class="selo dp">gatilho livre</span> as duas condições do §2 cumpridas — puxar é do Rick</td></tr>
+    </tbody>
+  </table>
+
+  <h2><span class="geo">—</span> 1 · O parto honesto do builder</h2>
+  <p class="sub">O <code>inferType</code> testava substrings que nunca batiam —
+  a meta financeira nascia «Habito» e os braços task/ritual eram código morto.
+  Agora o mapper tem <b>mapa explícito questionId → papel</b> (coisa / contexto
+  / elo), o store persiste (reload não apaga a entrevista), e o card do
+  mini-wrap ganhou o chip de troca de tipo — a heurística nunca decide quieta
+  (D69). O que se troca no chip é o que nasce, provado pelo POST na cena.</p>
+  <div class="fita">
+    <figure>
+      <div class="tela"><img src="14_dissecacao-01_fotos/45-builder-miniwrap.png" alt="Antes: a meta financeira rotulada Habito, sem chip pra trocar"></div>
+      <figcaption><span class="tag-antes">antes</span><b>a meta nascia «Habito»</b> — rótulo errado, visível e selado, sem como trocar.</figcaption>
+    </figure>
+    <figure>
+      <div class="tela"><img src="14_dissecacao-01_fotos/71-cirurgia-builder-parto-task.png" alt="Depois: a meta financeira como task, com os chips de tipo"></div>
+      <figcaption><span class="tag-depois">depois</span><b>a meta nasce task</b> — e os quatro chips mostram a leitura, trocável num toque.</figcaption>
+    </figure>
+    <figure>
+      <div class="tela"><img src="14_dissecacao-01_fotos/72-cirurgia-builder-chip-trocado.png" alt="O chip trocado pra ritual antes do parto"></div>
+      <figcaption><span class="tag-depois">depois</span><b>trocar muda o que nasce:</b> chip em ritual → o POST nasce ritual. Contexto (com quem mora, projeto principal) não vira mais item.</figcaption>
+    </figure>
+  </div>
+
+  <h2><span class="geo">△</span> 2 · A sheet do projeto — a condição 1 do gate</h2>
+  <p class="sub">A pill do HOJE desaguava na casca velha. Agora abre a
+  <code>ProjectSheet</code> (molde <code>AssentimentoSheet</code>): a presença
+  pela <b>mesma linha do engine</b>, os filhos com <code>·</code>/<code>○</code>,
+  o próximo como convite, «quieto há Nd» — e nada além (DP-I: criar projeto,
+  filtros e agrupamento eram chrome de gerenciador). <code>/projects</code>
+  ficou intocada: morre no gate, não antes.</p>
+  <div class="fita">
+    <figure>
+      <div class="tela"><img src="14_dissecacao-01_fotos/68-projects-pagina.png" alt="Antes: a página /projects da casca velha"></div>
+      <figcaption><span class="tag-antes">antes</span><b>a pill levava pra cá:</b> inglês, indigo fora da lei D61, chrome de gerenciador.</figcaption>
+    </figure>
+    <figure>
+      <div class="tela"><img src="14_dissecacao-01_fotos/73-cirurgia-projeto-sheet.png" alt="Depois: a sheet do projeto sobre o HOJE" style="object-position: 50% 72%"></div>
+      <figcaption><span class="tag-depois">depois</span><b>a sheet no padrão da casa:</b> presença, o próximo como convite, filhos <code>·</code>/<code>○</code> — e o toque leva ao ItemDetail.</figcaption>
+    </figure>
+  </div>
+
+  <h2><span class="geo">□</span> 3 · A porta da escada — a condição 2 resolvida</h2>
+  <p class="sub">A escada F4 (<code>/review</code>) era a única função do mundo
+  velho sem porta nova. A recomendação do gate §3 foi aplicada como
+  <b>default declarado (DP-G, reversível)</b>: quando um período espera
+  síntese, um puxador quieto no pé da ÁRVORE — <i>«uma semana espera
+  significado» · significar</i> — leva ao rito. Sem número, sem badge (D46);
+  some quando não há. Com isso, <code>/review</code> saiu das condições do
+  gate: a rota sobrevive ao merge fora da nav, e a reforma da tela é de outra
+  onda.</p>
+  <div class="fita">
+    <figure>
+      <div class="tela"><img src="14_dissecacao-01_fotos/74-cirurgia-escada-puxador.png" alt="O puxador da escada no pé da ÁRVORE" style="object-position: 50% 58%"></div>
+      <figcaption><b>o puxador quieto:</b> a mesma gramática do «N esperando leitura» do HOJE — a casa agora tem um padrão de porta, usado duas vezes.</figcaption>
+    </figure>
+  </div>
+
+  <h2><span class="geo">⬠</span> 4 · As portas invisíveis ganham corpo</h2>
+  <p class="sub">A mesma família de pecado, dois consertos: o puxador da casa
+  deixou de ser uma barra muda de 36×4px (dado real de 29 Jul: o Rick não a
+  achou) e o pull-down da busca ganhou affordance de primeira vez — um hint
+  que aparece <b>uma única vez</b> e morre pra sempre (localStorage). Sem
+  tutorial, sem tooltip perpétuo, sem virar aba (D54 de pé).</p>
+  <div class="fita">
+    <figure>
+      <div class="tela curta"><img src="14_dissecacao-01_fotos/47-casa-puxador.png" alt="Antes: a barra fina sem nome acima da nav"></div>
+      <figcaption><span class="tag-antes">antes</span><b>a barra muda</b> — 36×4px, affordance nenhuma.</figcaption>
+    </figure>
+    <figure>
+      <div class="tela curta"><img src="14_dissecacao-01_fotos/76-cirurgia-nav-rotulo.png" alt="Depois: a barra com o rótulo «a casa» embaixo"></div>
+      <figcaption><span class="tag-depois">depois</span><b>a porta com nome:</b> «a casa» em mono 10px sob a barra.</figcaption>
+    </figure>
+    <figure>
+      <div class="tela"><img src="14_dissecacao-01_fotos/75-cirurgia-portas-com-corpo.png" alt="O hint de primeira vez da busca no topo do HOJE"></div>
+      <figcaption><span class="tag-depois">depois</span><b>a busca se ensina uma vez:</b> «↓ puxa pra baixo pra buscar» no primeiro open — e nunca mais.</figcaption>
+    </figure>
+  </div>
+
+  <h2><span class="geo">⬡</span> 5 · Os miúdos de lei — um commit, cinco leis</h2>
+
+  <div class="carta">
+    <h3><span class="geo">D68 ·</span> Desligar desfaz primeiro, o token morre por último</h3>
+    <p><code>disconnect()</code> apagava o refresh token que o «desfazer tudo»
+    precisaria. Agora: ida viva → <b>desfaz a estrutura primeiro</b>; se o
+    desfazer falhar, o desligar inteiro recusa — com a fala certa
+    (<i>«não consegui desligar agora — o conector segue como estava»</i>).</p>
+    <p class="lei">3 testes provam a ordem · a fala do toast diz a verdade (desfez ou não)</p>
+  </div>
+
+  <div class="carta">
+    <h3><span class="geo">D63 ·</span> Uma tela, uma lei de quietude</h3>
+    <p>O grid da Raiz lia <code>updated_at</code> — que mente a cada retag —
+    dez pixels abaixo do card que lia evento significativo. Agora o grid lê a
+    <b>mesma lei do cofre</b> (<code>absences</code>); e o <code>healthPct</code>
+    morto saiu do hook (o % morreu na D50).</p>
+    <p class="lei">um retag em massa não silencia mais o grid</p>
+  </div>
+
+  <div class="carta">
+    <h3><span class="geo">who: ·</span> Pessoas deixam de ser gramática escondida</h3>
+    <p><code>who:</code> virou prefixo de primeira classe: filtra pelos
+    <code>#who:*</code> do tronco (não por texto), aceita <code>quem:</code>,
+    e a tela vazia ensina com os <b>valores que existem</b>.</p>
+    <p class="lei">4 testes novos · benchmark 16 (pol. 7 da dissecação 04)</p>
+  </div>
+
+  <div class="carta">
+    <h3><span class="geo">D60 ·</span> A voz da casa nos toasts, o silêncio no selo</h3>
+    <p>Os toasts do conector saíram da era do erro cru (<i>«Erro ao
+    desconectar»</i>) pra voz da casa; e o «Item capturado» <b>silencia durante
+    a cerimônia do selo</b> do wrap — toast por cima de rito quebrava o rito.</p>
+    <p class="lei">captura quiet no handleCommit · nenhum erro cru vaza pra tela</p>
+  </div>
+
+  <div class="carta">
+    <h3><span class="geo">D60 ·</span> A varredura de tom — e o contrato congelado</h3>
+    <p>Raiz, Builder e Aurora falam «você» com acento («saúde», «finanças»,
+    «Você faz exercício físico?»; o «ninguém lê além de ti» virou <i>«além de
+    você»</i>). E os nomes da taxonomy projetada lá fora ficaram <b>congelados
+    em ASCII</b> num mapa próprio: o tom da UI nunca renomeia label no Gmail —
+    um teste guarda isso.</p>
+    <p class="lei">se o Rick quiser «Atom/saúde» com acento, é a DP-J — decisão de contrato externo (D68), não de tom</p>
+  </div>
+
+  <h2><span class="geo">○</span> 6 · O gate — carregado ontem, destravado hoje</h2>
+  <div class="aviso"><b>As duas condições do §2 estão cumpridas:</b> a sheet do
+  projeto nasceu (a pill não aponta mais pro nada) e a escada tem porta na
+  ÁRVORE (<code>/review</code> saiu das condições, checklist §4 anotado).
+  <b>O gatilho está livre</b> — e continua sendo teu (D41): esta sessão o
+  destravou, nunca o puxa.</div>
+
+  <h2><span class="geo">⬡</span> 7 · A mesa do Rick — em ordem de peso</h2>
+  <ol class="mesa">
+    <li><b>Deploy da <code>daily-digest</code></b> — a MENTE do cron corrigida ontem só vale em produção com o deploy.</li>
+    <li><b>Ratificar</b>: DP-E → D74? · <b>DP-G</b> (a porta da escada, aplicada por default e reversível) · DP-A…DP-F · <b>DP-J</b> (acento na taxonomy lá fora?).</li>
+    <li><b>O gatilho do gate (D41)</b> — as condições caíram; o checklist do §4 é o roteiro do dia do merge.</li>
+    <li><b>A fila que sobrou</b>: reconciliação no cron · a sheet diz que o cron existe · passo 5 do wrap vira boca <code>#seed</code> · polimentos da ÁRVORE · <code>extractWhoTag</code> com acento.</li>
+    <li><b>Pendências antigas</b>: redirect URL na prod nova · viver a ida real no Gmail · instalar o PWA no celular.</li>
+  </ol>
+
+  <footer class="pe">Filho do 21_handoff-sessao-cirurgia.md, no molde do
+  20_resumo-da-noite.html. A trilha do detalhe: o wrap da cirurgia no
+  onda-3-log.md → o gate atualizado (19_gate.md §2–§4) → os cinco commits,
+  um por obra. As três condições de parada nunca dispararam — a sessão
+  inteira coube na autorização. De dentro pra fora, geometria perfeita sempre.</footer>
+</div>
+
+</body>
+</html>

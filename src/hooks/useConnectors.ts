@@ -2,7 +2,13 @@
 // Pattern: hooks → service → supabase
 
 import { useState, useEffect, useCallback } from 'react';
-import { connectorService, type ConnectorStatus } from '@/service/connector-service';
+import {
+  connectorService,
+  RECONNECT_SCOPES,
+  type ConnectorStatus,
+  type TaxonomyAction,
+  type TaxonomyReport,
+} from '@/service/connector-service';
 import { personService } from '@/service/person-service';
 import { useAppStore } from '@/store/app-store';
 import { useQueryClient } from '@tanstack/react-query';
@@ -45,10 +51,11 @@ export function useConnectors() {
       queryClient.invalidateQueries({ queryKey: ['items'] });
       await refresh();
       setSyncState('done');
-      toast.success(created > 0 ? `${created} eventos importados pro inbox` : 'Calendar sincronizado');
-    } catch (err: any) {
+      toast.success(created > 0 ? `${created} eventos importados pro inbox` : 'calendar em dia — nada novo');
+    } catch {
       setSyncState('error');
-      toast.error(err.message ?? 'Erro ao sincronizar calendar');
+      // Lei do Tom (D60): a voz da casa, nunca o erro cru na tela
+      toast.error('não consegui trazer o calendar agora — o que já entrou segue de pé');
     }
   };
 
@@ -61,25 +68,52 @@ export function useConnectors() {
       queryClient.invalidateQueries({ queryKey: ['items'] });
       await refresh();
       setSyncState('done');
-      toast.success(created > 0 ? `${created} emails importados pro inbox` : 'Gmail sincronizado');
-    } catch (err: any) {
+      toast.success(created > 0 ? `${created} emails importados pro inbox` : 'gmail em dia — nada novo');
+    } catch {
       setSyncState('error');
-      toast.error(err.message ?? 'Erro ao sincronizar Gmail');
+      toast.error('não consegui trazer o gmail agora — o que já entrou segue de pé');
     }
   };
 
+  // A ida (D68). Retorna null quando o token não tem os escopos novos —
+  // a face pede reconexão em vez de falhar quieta.
+  const [idaBusy, setIdaBusy] = useState(false);
+  const [needsReconnect, setNeedsReconnect] = useState(false);
+  const taxonomy = async (action: TaxonomyAction): Promise<TaxonomyReport | null> => {
+    if (!user) return null;
+    setIdaBusy(true);
+    try {
+      const report = await connectorService.taxonomySync(action);
+      setNeedsReconnect(false);
+      if (action !== 'preview') await refresh();
+      return report;
+    } catch (err) {
+      if (err instanceof Error && err.message === RECONNECT_SCOPES) {
+        setNeedsReconnect(true);
+      } else {
+        toast.error('não consegui projetar a lei agora — nada mudou lá fora');
+      }
+      return null;
+    } finally {
+      setIdaBusy(false);
+    }
+  };
+
+  // D68: com ida viva, o service desfaz a estrutura ANTES de queimar o
+  // token; se o desfazer falhar, nada muda — e a fala diz exatamente isso
   const disconnect = async (provider: string) => {
     try {
-      await connectorService.disconnect(provider);
+      const { desfezIda } = await connectorService.disconnect(provider);
       await refresh();
-      toast.success('Conector desconectado');
+      toast.success(desfezIda ? 'desligado — a estrutura lá fora saiu junto' : 'conector desligado');
     } catch {
-      toast.error('Erro ao desconectar');
+      toast.error('não consegui desligar agora — o conector segue como estava');
     }
   };
 
   return {
     connectors, loading, syncState,
     getStatus, syncCalendar, syncGmail, disconnect, refresh,
+    taxonomy, idaBusy, needsReconnect,
   };
 }

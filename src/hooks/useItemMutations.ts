@@ -4,7 +4,7 @@
 // alpha.10: toast notifications on success/error, undo on delete/archive
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { itemService } from '@/service/item-service';
+import { eventService, itemService } from '@/service/item-service';
 import type { AtomItem, CreateItemPayload, UpdateItemPayload } from '@/types/item';
 import { toast } from '@/store/toast-store';
 
@@ -66,21 +66,24 @@ export function useItemMutations() {
       // nunca reabre o hábito no período seguinte (achado da Fase 6)
       const current = await itemService.getById(id);
       const rec = current.body?.recurrence;
-      if (rec?.rule) {
-        const now = new Date().toISOString();
-        return itemService.update(id, {
-          status: 'completed',
-          body: {
-            ...current.body,
-            recurrence: {
-              ...rec,
-              last_completed: now,
-              completion_log: [...(rec.completion_log ?? []), now],
+      const now = new Date().toISOString();
+      const updated = rec?.rule
+        ? await itemService.update(id, {
+            status: 'completed',
+            body: {
+              ...current.body,
+              recurrence: {
+                ...rec,
+                last_completed: now,
+                completion_log: [...(rec.completion_log ?? []), now],
+              },
             },
-          },
-        });
-      }
-      return itemService.update(id, { status: 'completed' });
+          })
+        : await itemService.update(id, { status: 'completed' });
+      // concluir é toque de verdade — o cofre lê ausência por este rastro,
+      // nunca por updated_at (D63); falha no rastro não derruba a conclusão
+      eventService.create(updated.user_id, id, 'touch').catch(() => {});
+      return updated;
     },
     onMutate: async (id) => {
       await queryClient.cancelQueries({ queryKey: ['items'] });

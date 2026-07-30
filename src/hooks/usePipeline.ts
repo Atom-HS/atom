@@ -13,15 +13,17 @@ export function usePipeline() {
   const user = useAppStore((s) => s.user);
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ['items'] });
 
-  const capture = async (title: string): Promise<AtomItem | null> => {
+  // quiet: captura dentro de cerimônia não estoura toast — «Item capturado»
+  // por cima do selo do wrap era ruído quebrando o rito (D60, pol. 8)
+  const capture = async (title: string, opts: { quiet?: boolean } = {}): Promise<AtomItem | null> => {
     if (!user) return null;
     try {
       const item = await pipelineService.capture(title, user.id);
       invalidate();
-      toast.success('Item capturado');
+      if (!opts.quiet) toast.success('Item capturado');
       return item;
     } catch {
-      toast.error('Erro ao capturar item');
+      toast.error('não consegui guardar agora — anota e tenta de novo');
       return null;
     }
   };
@@ -38,14 +40,22 @@ export function usePipeline() {
     }
   };
 
-  const classify = async (itemId: string, type: AtomItem['type'], module: AtomModule): Promise<AtomItem | null> => {
+  // quiet: o assentimento em esteira não celebra cada selo (50 toasts é ruído,
+  // e "sucesso" a cada gesto é cobrança com outra cara — Lei do Tom). O erro
+  // continua falando, na voz da casa em vez do erro cru do FSM.
+  const classify = async (
+    itemId: string,
+    type: AtomItem['type'],
+    module: AtomModule,
+    opts: { quiet?: boolean } = {},
+  ): Promise<AtomItem | null> => {
     try {
       const item = await pipelineService.classify(itemId, type, module);
       invalidate();
-      toast.success('Item classificado');
+      if (!opts.quiet) toast.success('Item classificado');
       return item;
     } catch (err: any) {
-      toast.error(err.message ?? 'Erro ao classificar');
+      toast.error(opts.quiet ? 'não consegui selar — o ponto segue esperando' : err.message ?? 'Erro ao classificar');
       return null;
     }
   };

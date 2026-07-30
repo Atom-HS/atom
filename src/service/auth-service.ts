@@ -23,6 +23,9 @@ export const authService = {
         scopes: [
           'https://www.googleapis.com/auth/calendar.readonly',
           'https://www.googleapis.com/auth/gmail.readonly',
+          // a ida (D68): criar labels e o calendário da casa — zero restricted
+          'https://www.googleapis.com/auth/gmail.labels',
+          'https://www.googleapis.com/auth/calendar.app.created',
         ].join(' '),
         queryParams: {
           access_type: 'offline',

@@ -1,7 +1,8 @@
 // Service Worker — MindRoot v2
 // Strategy: cache-first for hashed assets, network-first for HTML
 
-const CACHE_NAME = 'mindroot-v2-v2';
+// v3: shell novo (Onda 3) — bump força clientes antigos a largar o mundo velho
+const CACHE_NAME = 'mindroot-v2-v3';
 const STATIC_ASSETS = [
   '/',
   '/index.html',

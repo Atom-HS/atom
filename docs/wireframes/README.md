@@ -1,5 +1,10 @@
 # MindRoot — UX Wireframes
 
+> **⚠ Casca velha (memória).** Estas 9 telas e o design system abaixo mapeiam
+> o app pré-Onda 3. O baseline vivo é `docs/onda-3/03_mapa-navegacao.html`
+> (template + mapa clicável) + `03_decisoes-ux.md` (D40+, numeração continua
+> a daqui). Replicar tela nova = replicar de lá, não daqui (D41: morte por merge).
+
 Mid-fi wireframes interativos (HTML) para o MindRoot.
 Design system: DM Sans, 375x812 (mobile-first), dark mode support.
 

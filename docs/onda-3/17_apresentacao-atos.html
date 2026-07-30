@@ -1,0 +1,497 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>A casa parou de mentir — Onda 3</title>
+
+<style>
+  /* A página segue a lei do próprio app (D57): mundo único, escuro,
+     deliberado — o app à luz de vela. Um só tema é escolha, não omissão.
+     Paleta e tipografia vêm de src/index.css e da lei do desenho:
+     "mono marca, sans fala, itálico acolhe". */
+  :root {
+    --breu: #0f0d09;
+    --madeira: #1c1712;
+    --madeira-funda: #241e16;
+    --borda: #33291c;
+    --borda-fina: #2a2217;
+    --fala: #ece3cd;
+    --apoia: #91876f;
+    --sussurra: #5f5745;
+    --ouro: #d4b872;
+    --ouro-fosco: #a3884f;
+    --indigo: #7f77dd;
+
+    --marca: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    --voz: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+    --medida: 66ch;
+    --passo: clamp(3.5rem, 9vw, 6.5rem);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(1100px 600px at 50% -8%, rgba(212, 184, 114, 0.055), transparent 62%),
+      var(--breu);
+    color: var(--fala);
+    font-family: var(--voz);
+    font-size: 16px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .folha {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: clamp(2.5rem, 7vw, 5.5rem) clamp(1.25rem, 5vw, 3rem) 6rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--passo);
+  }
+
+  /* ── marca: o mono é sempre rótulo, nunca corpo ── */
+  .marca {
+    font-family: var(--marca);
+    font-size: 0.688rem;
+    letter-spacing: 0.19em;
+    text-transform: uppercase;
+    color: var(--sussurra);
+    margin: 0;
+  }
+
+  h1, h2, h3 { text-wrap: balance; margin: 0; font-weight: 500; }
+
+  h1 {
+    font-size: clamp(2.35rem, 7vw, 4rem);
+    line-height: 1.04;
+    letter-spacing: -0.022em;
+  }
+
+  h2 {
+    font-size: clamp(1.45rem, 3.4vw, 2rem);
+    line-height: 1.18;
+    letter-spacing: -0.016em;
+  }
+
+  h3 { font-size: 1.075rem; line-height: 1.35; letter-spacing: -0.008em; }
+
+  p { margin: 0; max-width: var(--medida); }
+  .apoia { color: var(--apoia); }
+  .sussurra { color: var(--sussurra); }
+  em { font-style: italic; color: var(--apoia); }
+
+  /* ── abertura ── */
+  .abertura { display: flex; flex-direction: column; gap: 1.6rem; }
+  .abertura .linha-fina {
+    width: 100%; height: 1px; border: 0; margin: 0.4rem 0 0;
+    background: linear-gradient(90deg, var(--ouro-fosco), var(--borda) 32%, transparent);
+  }
+  .tese { font-size: clamp(1.05rem, 2.2vw, 1.2rem); color: var(--apoia); max-width: 54ch; }
+  .tese strong { color: var(--fala); font-weight: 500; }
+
+  .placar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+    gap: 1px;
+    background: var(--borda-fina);
+    border: 1px solid var(--borda-fina);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-top: 0.9rem;
+  }
+  .placar div { background: var(--madeira); padding: 1.1rem 1.15rem; }
+  .placar .n {
+    font-family: var(--marca);
+    font-size: 1.55rem;
+    color: var(--ouro);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  .placar .r { font-size: 0.813rem; color: var(--apoia); margin-top: 0.15rem; }
+
+  /* ── atos: a ordem carrega informação (dívida de confiança primeiro) ── */
+  .ato { display: flex; flex-direction: column; gap: 2.1rem; }
+  .ato > header { display: flex; flex-direction: column; gap: 0.55rem; }
+  .ato-num {
+    font-family: var(--marca);
+    font-size: 0.688rem;
+    letter-spacing: 0.19em;
+    color: var(--ouro-fosco);
+  }
+
+  /* ── achado ── */
+  .achado {
+    border-top: 1px solid var(--borda-fina);
+    padding-top: 1.7rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+  }
+  .achado > .corpo { display: flex; flex-direction: column; gap: 0.7rem; }
+
+  .par {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.35rem;
+    margin-top: 0.35rem;
+  }
+  @media (min-width: 720px) { .par.duplo { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 860px) { .par.triplo { grid-template-columns: repeat(3, 1fr); } }
+
+  figure { margin: 0; display: flex; flex-direction: column; gap: 0.6rem; }
+  figure .rotulo {
+    display: flex; align-items: baseline; gap: 0.55rem;
+    font-family: var(--marca); font-size: 0.688rem;
+    letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  figure .rotulo .qual { color: var(--sussurra); }
+  figure .rotulo .diz { font-family: var(--voz); letter-spacing: 0; text-transform: none; font-size: 0.813rem; color: var(--apoia); }
+
+  .tela {
+    border: 1px solid var(--borda-fina);
+    border-radius: 15px;
+    overflow: hidden;
+    background: var(--breu);
+    line-height: 0;
+  }
+  .tela img { width: 100%; height: auto; display: block; max-height: 560px; object-fit: cover; object-position: top; }
+
+  /* o ouro é raro e sagrado: marca só o caminho já andado (o "depois") */
+  .depois .tela { border-color: rgba(212, 184, 114, 0.34); }
+  .depois .rotulo .qual { color: var(--ouro); }
+  .antes .tela img { filter: saturate(0.72) brightness(0.82); }
+
+  /* ── a prova ── */
+  .prova {
+    display: flex; gap: 0.7rem; align-items: baseline;
+    font-size: 0.813rem; color: var(--apoia);
+    background: var(--madeira);
+    border: 1px solid var(--borda-fina);
+    border-left: 2px solid var(--ouro-fosco);
+    border-radius: 0 11px 11px 0;
+    padding: 0.75rem 1rem;
+    max-width: var(--medida);
+  }
+  .prova .marca { color: var(--ouro-fosco); flex-shrink: 0; }
+  .prova code { font-family: var(--marca); font-size: 0.75rem; color: var(--fala); }
+
+  .lei {
+    font-family: var(--marca);
+    font-size: 0.688rem;
+    letter-spacing: 0.1em;
+    color: var(--indigo);
+    opacity: 0.92;
+  }
+
+  /* ── a régua (benchmark) ── */
+  .regua { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--borda-fina); border: 1px solid var(--borda-fina); border-radius: 14px; overflow: hidden; }
+  @media (min-width: 760px) { .regua { grid-template-columns: 1fr 1fr; } }
+  .regua article { background: var(--madeira); padding: 1.35rem 1.4rem; display: flex; flex-direction: column; gap: 0.5rem; }
+  .regua h3 { font-family: var(--marca); font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fala); }
+  .regua p { font-size: 0.875rem; color: var(--apoia); }
+  .selo { font-family: var(--marca); font-size: 0.688rem; letter-spacing: 0.1em; }
+  .selo.passa { color: var(--ouro-fosco); }
+  .selo.reprova { color: #c97c5d; }
+
+  /* ── fecho ── */
+  .fecho { display: flex; flex-direction: column; gap: 1.1rem; border-top: 1px solid var(--borda-fina); padding-top: 2rem; }
+  .fila { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.7rem; max-width: var(--medida); }
+  .fila li { display: flex; gap: 0.85rem; align-items: baseline; font-size: 0.938rem; color: var(--apoia); }
+  .fila .geo { font-family: var(--marca); color: var(--ouro-fosco); flex-shrink: 0; }
+  .fila strong { color: var(--fala); font-weight: 500; }
+
+  .colofao {
+    margin-top: 1.4rem; padding-top: 1.4rem;
+    border-top: 1px solid var(--borda-fina);
+    font-size: 0.75rem; color: var(--sussurra); max-width: var(--medida);
+  }
+
+  /* ── movimento contido ──
+     O conteúdo é visível por padrão. A animação só entra se o script rodar
+     (ele carimba .js na raiz): sem JS, ou com script bloqueado, a página
+     continua inteira em vez de ficar em branco. */
+  .js .surge { opacity: 0; transform: translateY(9px); transition: opacity 620ms ease, transform 620ms ease; }
+  .js .surge.veio { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .js .surge { opacity: 1; transform: none; transition: none; }
+  }
+  a { color: var(--ouro); }
+  :focus-visible { outline: 2px solid var(--ouro); outline-offset: 3px; border-radius: 4px; }
+</style>
+
+<div class="folha">
+
+  <header class="abertura">
+    <p class="marca">Atom · onda 3 · branch v2-faces · 29 jul 2026</p>
+    <h1>A casa parou<br />de mentir.</h1>
+    <hr class="linha-fina" />
+    <p class="tese">
+      Uma dissecação abriu as features uma a uma — <strong>vivendo cada uma antes de
+      ler o código</strong>. O que apareceu não foram bugs: foram telas que diziam
+      uma coisa e faziam outra. Cinco atos depois, cada mentira tem um teste que
+      falha se ela voltar.
+    </p>
+    <div class="placar">
+      <div><div class="n">5</div><div class="r">atos fechados de 7</div></div>
+      <div><div class="n">374</div><div class="r">testes verdes (eram 276)</div></div>
+      <div><div class="n">9</div><div class="r">cenas que provam</div></div>
+      <div><div class="n">4</div><div class="r">réguas de mercado novas</div></div>
+    </div>
+  </header>
+
+  <!-- ─────────── ATO I ─────────── -->
+  <section class="ato surge">
+    <header>
+      <p class="ato-num">Ato I</p>
+      <h2>As mentiras</h2>
+      <p class="apoia">
+        A pior categoria do exame não é «não funciona» — é <em>parece funcionar e
+        engana</em>. Três apareceram vivendo o app; uma quarta apareceu no mapa do
+        código. Nenhuma delas dava erro.
+      </p>
+    </header>
+
+    <div class="achado">
+      <div class="corpo">
+        <p class="lei">D52 · captura-primeiro &nbsp;·&nbsp; D55 · nada se perde</p>
+        <h3>O @ negava o que tinha acabado de guardar</h3>
+        <p class="apoia">
+          Quando a leitura falhava <em>depois</em> da captura, a tela dizia que nada
+          tinha sido guardado e mandava tudo pra fila. Só que o ponto já existia no
+          tronco — então a fila criava um segundo ponto igual. A frase certa já
+          existia dois botões ao lado.
+        </p>
+      </div>
+      <div class="par duplo">
+        <figure class="antes">
+          <figcaption class="rotulo"><span class="qual">antes</span><span class="diz">a fila duplicava</span></figcaption>
+          <div class="tela"><img src="14_dissecacao-01_fotos/07-at-tokens.png" alt="Tela do @ dizendo: não consegui guardar agora — foi pra fila (1). Sobe sozinho quando der." /></div>
+        </figure>
+        <figure class="depois">
+          <figcaption class="rotulo"><span class="qual">agora</span><span class="diz">diz o que aconteceu</span></figcaption>
+          <div class="tela"><img src="14_dissecacao-01_fotos/31-ato1-at-verdade.png" alt="Tela do @ dizendo: guardei como ponto (·) — não consegui selar agora. Nada se perdeu. Com um botão abrir." /></div>
+        </figure>
+      </div>
+      <p class="prova"><span class="marca">prova</span><span>A cena <code>ato I.1</code> falha se a palavra «fila» voltar a essa tela — e uma segunda cena garante que, <em>sem rede</em>, a fila continua sendo a rede de segurança.</span></p>
+    </div>
+
+    <div class="achado">
+      <div class="corpo">
+        <p class="lei">D69 · o assentimento é do humano</p>
+        <h3>A esteira fingia ter selado</h3>
+        <p class="apoia">
+          Cinquenta itens do conector, três toques em «assentir». A gravação falhou
+          nas três, o aviso empilhou três vezes — e o card andou assim mesmo. Quem
+          assentiu achou que tinha selado seis; os itens voltavam na volta seguinte.
+          Consertando isso apareceu a irmã escondida: o card também <strong>pulava
+          um item a cada selo bem-sucedido</strong>, porque a lista encolhia por
+          baixo de um índice que não se mexia.
+        </p>
+      </div>
+      <div class="par">
+        <figure class="antes">
+          <figcaption class="rotulo"><span class="qual">antes</span><span class="diz">três erros, e o card na posição 7</span></figcaption>
+          <div class="tela"><img src="14_dissecacao-01_fotos/20-triage-50-apos-pulos.png" alt="Tela da triage com três avisos empilhados de erro e o contador já em 7 de 50." /></div>
+        </figure>
+      </div>
+      <p class="prova"><span class="marca">prova</span><span>A cena <code>ato I.2</code> confirma que a gravação realmente falhou <em>e</em> que o card não andou — sem a primeira metade, o teste passaria à toa.</span></p>
+    </div>
+
+    <div class="achado">
+      <div class="corpo">
+        <p class="lei">D63 · o cofre &nbsp;·&nbsp; D66 · a válvula</p>
+        <h3>O digest prometia uma porta que não existia</h3>
+        <p class="apoia">
+          Todo dia às 07:15 a mensagem terminava com «renovar é um gesto no chão da
+          árvore». O gesto nunca tinha sido construído: a função estava escrita,
+          testada e órfã. A leitura do cofre era um beco sem saída.
+        </p>
+      </div>
+      <div class="par">
+        <figure class="depois">
+          <figcaption class="rotulo"><span class="qual">agora</span><span class="diz">a validade rola, e deixa rastro</span></figcaption>
+          <div class="tela"><img src="14_dissecacao-01_fotos/23-ato1-renovar.png" alt="Chão da árvore com a seção no vencimento e um campo de data aberto para renovar, com os botões vale até aí e agora não." /></div>
+        </figure>
+      </div>
+      <p class="prova"><span class="marca">prova</span><span>Renovar deixa o mesmo rastro de <em>toque</em> que concluir — então a ausência do domínio zera por vida vivida, nunca por edição de cadastro.</span></p>
+    </div>
+  </section>
+
+  <!-- ─────────── ATO II ─────────── -->
+  <section class="ato surge">
+    <header>
+      <p class="ato-num">Ato II</p>
+      <h2>A porta que faltava</h2>
+      <p class="apoia">
+        O achado que reordenou o plano inteiro. O chip de assentimento — a lei mais
+        nova da casa — morava dentro de uma tela que a navegação não mostra e que
+        outra decisão já tinha sentenciado à morte. <strong>O único caminho até ele
+        era digitar o endereço na mão.</strong> Enquanto isso o cron enchia o inbox
+        e o digest chamava pro app todo dia.
+      </p>
+    </header>
+    <div class="achado">
+      <div class="corpo">
+        <p class="lei">D40 · só três lugares &nbsp;·&nbsp; D46 · estado, nunca cobrança</p>
+        <h3>Assentir deixou de ser lugar e virou camada</h3>
+        <p class="apoia">
+          O HOJE ganhou uma linha quieta — sem selo vermelho, sem número que grita —
+          que some sozinha quando a fila zera. Ela abre a folha onde a leitura da
+          lente espera. A tela velha pode morrer sem levar o gesto junto.
+        </p>
+      </div>
+      <div class="par duplo">
+        <figure class="depois">
+          <figcaption class="rotulo"><span class="qual">o puxador</span><span class="diz">12 esperando leitura</span></figcaption>
+          <div class="tela"><img src="14_dissecacao-01_fotos/24-ato2-puxador.png" alt="Face HOJE com uma linha discreta: 12 esperando leitura, e à direita a palavra assentir." /></div>
+        </figure>
+        <figure class="depois">
+          <figcaption class="rotulo"><span class="qual">a folha</span><span class="diz">o gesto, sem sair do dia</span></figcaption>
+          <div class="tela"><img src="14_dissecacao-01_fotos/25-ato2-folha.png" alt="Folha de assentimento aberta sobre o HOJE, mostrando o item do Gmail com a leitura sugerida e os botões pular e assentir." /></div>
+        </figure>
+      </div>
+      <p class="prova"><span class="marca">prova</span><span>A cena <code>ato II</code> é o teste que falhou na vida real: chegar ao gesto <em>sem digitar URL</em>. E a irmã dela garante o silêncio — dia sem fila não mostra puxador nenhum.</span></p>
+    </div>
+  </section>
+
+  <!-- ─────────── ATO III ─────────── -->
+  <section class="ato surge">
+    <header>
+      <p class="ato-num">Ato III</p>
+      <h2>O que a lente escondia</h2>
+      <p class="apoia">
+        Para assentir a leitura de um compromisso, a tela mostrava só o título.
+        Hora, dia, quem vem junto, remetente, trecho — tudo já chegava no item.
+        A tela é que não abria a mão.
+      </p>
+    </header>
+    <div class="achado">
+      <div class="corpo">
+        <p class="lei">D69 · não se assente o que não se vê</p>
+        <h3>O card informado, e o assentimento que vale pela série</h3>
+        <p class="apoia">
+          Junto veio o maior alívio da esteira: o calendário chega expandido em
+          ocorrências, e a conferência era por ocorrência — o mesmo ritual semanal
+          pedia assentimento <strong>toda semana, para sempre</strong>. Agora
+          assentir uma vez vale pela série, e trocar de ideia continua valendo.
+        </p>
+      </div>
+      <div class="par duplo">
+        <figure class="antes">
+          <figcaption class="rotulo"><span class="qual">antes</span><span class="diz">só o título, e tudo virava «bridge»</span></figcaption>
+          <div class="tela"><img src="14_dissecacao-01_fotos/18-triage-50-inicio.png" alt="Card de assentimento antigo mostrando apenas o título Fatura 1000 e dois chips de tipo." /></div>
+        </figure>
+        <figure class="depois">
+          <figcaption class="rotulo"><span class="qual">agora</span><span class="diz">hora, repetição, quem vem, onde mora</span></figcaption>
+          <div class="tela"><img src="14_dissecacao-01_fotos/26-ato3-card-com-contexto.png" alt="Card novo mostrando hoje 16:00 às 17:00, se repete, com André Tanaka, os chips ritual e task, e a linha onde mora com os oito módulos." /></div>
+        </figure>
+      </div>
+      <p class="prova"><span class="marca">prova</span><span>A cena <code>ato III</code> confere o contexto na tela e vive o «pular»: o item vai pro <em>fim</em> da fila, e quando todos já passaram uma vez, a tela diz isso.</span></p>
+    </div>
+  </section>
+
+  <!-- ─────────── ATO IV / V ─────────── -->
+  <section class="ato surge">
+    <header>
+      <p class="ato-num">Atos IV &amp; V</p>
+      <h2>O que ainda não existia</h2>
+      <p class="apoia">
+        Com as mentiras mortas e o caminho aberto, coube capacidade nova — sempre
+        pela regra de que o app é a lente, nunca o lugar.
+      </p>
+    </header>
+    <div class="achado">
+      <div class="corpo">
+        <p class="lei">a lente, nunca o lugar &nbsp;·&nbsp; D46 · estado, nunca alarme</p>
+        <h3>A pressão dos próximos dias, em uma linha só</h3>
+        <p class="apoia">
+          Um dia visto sozinho sempre parece administrável — é a queixa conhecida da
+          categoria. A resposta do mercado é a vista de semana, que nos faria virar
+          o app que espelha. Aqui é um sussurro embaixo dos fixos, e ele
+          <em>cala</em> quando a semana é leve: a raridade é o que faz o aviso valer.
+        </p>
+      </div>
+      <div class="par duplo">
+        <figure class="depois">
+          <figcaption class="rotulo"><span class="qual">o sussurro</span><span class="diz">adiante · amanhã: 3 horas marcadas</span></figcaption>
+          <div class="tela"><img src="14_dissecacao-01_fotos/27-ato4-pressao.png" alt="Face HOJE com a linha adiante amanhã três horas marcadas, discreta, embaixo dos fixos do dia." /></div>
+        </figure>
+        <figure class="depois">
+          <figcaption class="rotulo"><span class="qual">a busca ensina</span><span class="diz">os valores que existem</span></figcaption>
+          <div class="tela"><img src="14_dissecacao-01_fotos/29-busca-valores.png" alt="Camada de busca mostrando os valores válidos do prefixo mod, como work, body, mind." /></div>
+        </figure>
+      </div>
+      <p class="prova"><span class="marca">também</span><span>A lei do cofre estava escrita <em>duas vezes</em> — no app e, copiada à mão, no serviço que fala contigo de manhã. Agora um teste compara as duas e quebra na divergência. Verifiquei com uma divergência real antes de aceitá-lo: guarda que nunca falhou não é guarda.</span></p>
+    </div>
+  </section>
+
+  <!-- ─────────── A RÉGUA ─────────── -->
+  <section class="ato surge">
+    <header>
+      <p class="ato-num">A régua de fora</p>
+      <h2>Quatro faces contra o topo do mercado</h2>
+      <p class="apoia">
+        A lei da casa manda toda função executiva funcionar no nível do melhor
+        software da categoria — inovação sobre base ruim não serve. Quatro faces
+        nunca tinham sido medidas assim. Três passaram por cima; uma reprovou, e foi
+        consertada na mesma sessão.
+      </p>
+    </header>
+    <div class="regua">
+      <article>
+        <p class="selo passa">✓ passa, com risco nomeado</p>
+        <h3>Panorama de vida</h3>
+        <p>A roda da vida não tem validação empírica nenhuma — o que sustenta a face é a literatura de auto-monitoramento. O dano medido é condicional a quatro coisas, e a casa já está do lado certo das quatro. O risco real é de retenção: a roda entrega tudo na primeira sessão e não cresce com a idade do dado.</p>
+      </article>
+      <article>
+        <p class="selo passa">✓ inédito, mas grande demais</p>
+        <h3>Fechamento do dia</h3>
+        <p>O rito faz cinco coisas que ninguém faz — inclusive terminar sem número. Mas conversão de formulário despenca de 23% com três campos para 11% com sete, e o rito tem sete passos. A saída medida não é cortar para três: é um passo por tela, todos puláveis, e o selo valendo com seis vazios.</p>
+      </article>
+      <article>
+        <p class="selo reprova">✕ abaixo do mínimo — consertado</p>
+        <h3>Busca</h3>
+        <p>Um filtro escrito errado virava texto literal e devolvia zero em silêncio: você concluía que não tinha a coisa, quando o que não existia era o filtro. Pior, chegava a devolver o acervo inteiro como se estivesse filtrado. O motor tinha zero teste; ganhou 26, com escala de três mil itens.</p>
+      </article>
+      <article>
+        <p class="selo passa">✓ à frente pelo eixo do sinal</p>
+        <h3>Projetos</h3>
+        <p>Os dois melhores apps pessoais de projeto não têm painel, gráfico nem funil — o que valida matar a tela. E o sinal de projeto parado aqui é <em>medido</em>, enquanto o mercado inteiro é auto-declarado por quem toca o projeto.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ─────────── FECHO ─────────── -->
+  <footer class="fecho surge">
+    <p class="marca">o que falta</p>
+    <h2>Dois atos, e uma mesa</h2>
+    <ul class="fila">
+      <li><span class="geo">△</span><span><strong>A dissecação continua</strong> — dez features seguem sem exame, em três rodadas do mesmo rito.</span></li>
+      <li><span class="geo">□</span><span><strong>O gate</strong> — a casca velha morre por merge quando o mundo novo tiver porta para tudo. A arma fica carregada na mesa; o gatilho é teu.</span></li>
+      <li><span class="geo">·</span><span><strong>Seis decisões</strong> rodaram com o padrão que eu escolhi e esperam tua palavra. Uma delas eu segurei de propósito: decidir o destino da página de projetos sem ter examinado a feature seria decidir sem evidência.</span></li>
+      <li><span class="geo">○</span><span><strong>Dois avisos honestos</strong> — o serviço que te escreve de manhã ainda não tem teste de comportamento, só das constantes; e a memória nova do digest ainda não rodou contra dado real.</span></li>
+    </ul>
+    <p class="colofao">
+      Fotos tiradas do app rodando, no mundo simulado e num mundo de teste com
+      cinquenta itens — nenhuma é montagem. A página segue a lei visual do próprio
+      app: mundo único e escuro por decisão, dourado raro e reservado ao caminho
+      convidado, indigo para a voz da máquina. Por isso ela não acompanha o tema
+      claro do teu sistema — é escolha, não esquecimento.
+    </p>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    if (!('IntersectionObserver' in window)) return; // fica tudo visível
+    document.documentElement.classList.add('js');
+    var alvos = document.querySelectorAll('.surge');
+    var obs = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('veio'); obs.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+    alvos.forEach(function (el) { obs.observe(el); });
+  })();
+</script>
+</body></html>

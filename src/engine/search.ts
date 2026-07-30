@@ -16,8 +16,18 @@ export interface SearchFilters {
   priority: Priority | null;
   type: AtomType | null;
   tag: string | null;
+  /** pessoas são gramática de primeira classe: casa com os `#who:*` do tronco */
+  who: string | null;
   dateRange: 'hoje' | 'semana' | 'atrasado' | 'futuro' | null;
   completed: boolean | null; // null = don't filter
+  /**
+   * Filtros escritos com prefixo conhecido e valor que não existe
+   * (`mod:xyz`). Antes viravam texto livre em silêncio: a busca procurava
+   * a string «mod:xyz» no título, achava nada, e o usuário concluía que
+   * não tinha o item — quando o que não existia era o filtro. O padrão
+   * documentado (GitHub) é AVISAR qual filtro está errado.
+   */
+  desconhecidos: Array<{ prefix: string; value: string }>;
 }
 
 export interface SearchResult {
@@ -34,9 +44,39 @@ export const EMPTY_FILTERS: SearchFilters = {
   priority: null,
   type: null,
   tag: null,
+  who: null,
   dateRange: null,
   completed: null,
+  desconhecidos: [],
 };
+
+/** Os valores de `who:` que existem no tronco — os slugs dos `#who:*`. */
+export function extractWhoValues(items: AtomItem[]): string[] {
+  const out = new Set<string>();
+  for (const item of items) {
+    for (const tag of item.tags ?? []) {
+      if (tag.startsWith('#who:')) out.add(tag.slice('#who:'.length));
+    }
+  }
+  return Array.from(out).sort();
+}
+
+/** Os prefixos que a busca entende, com os valores válidos de cada um.
+ *  ~10% das pessoas usam operador avançado (Jansen/Spink) — e nenhuma usa
+ *  o que não vê. É daqui que a interface ensina. `who:` ensina com os
+ *  valores que EXISTEM no tronco — pessoas deixam de ser gramática escondida. */
+export function prefixVocabulary(items: AtomItem[] = []): Array<{ prefix: string; values: string[] }> {
+  return [
+    { prefix: 'mod', values: MODULES.map((m) => m.key) },
+    { prefix: 'tipo', values: [...new Set(Object.values(TYPE_MAP))] },
+    { prefix: 'tag', values: [] }, // livre
+    { prefix: 'who', values: extractWhoValues(items) },
+    { prefix: 'data', values: ['hoje', 'semana', 'atrasado', 'futuro'] },
+    { prefix: 'prio', values: ['alta', 'media', 'baixa'] },
+    { prefix: 'emo', values: [...EMOTIONS] },
+    { prefix: 'per', values: RITUAL_PERIODS.map((p) => p.key) },
+  ];
+}
 
 // ━━━ Filter prefix definitions ━━━
 
@@ -118,6 +158,11 @@ function getDueDate(item: AtomItem): string | null {
   return (item.body?.operations as OperationsExtension | undefined)?.due_date ?? null;
 }
 
+/** O último toque de verdade — nascer conta, e editar depois conta mais. */
+function touchedAt(i: AtomItem): string {
+  return i.updated_at && i.updated_at > i.created_at ? i.updated_at : i.created_at;
+}
+
 // ━━━ Core functions ━━━
 
 /** Normalize string for accent-insensitive matching */
@@ -132,8 +177,12 @@ export function normalize(s: string): string {
  * Remaining text becomes the free-text search.
  */
 export function parseSearchQuery(raw: string): SearchFilters {
-  const filters: SearchFilters = { ...EMPTY_FILTERS };
+  const filters: SearchFilters = { ...EMPTY_FILTERS, desconhecidos: [] };
   const parts: string[] = [];
+  const CONHECIDOS = new Set([
+    'mod', 'modulo', 'emo', 'emocao', 'per', 'periodo',
+    'prio', 'prioridade', 'tipo', 'type', 'tag', 'data', 'date',
+  ]);
 
   // Split by whitespace, process prefix tokens
   const tokens = raw.trim().split(/\s+/);
@@ -168,9 +217,20 @@ export function parseSearchQuery(raw: string): SearchFilters {
         filters.tag = value;
         continue;
       }
+      if (prefix === 'who' || prefix === 'quem') {
+        filters.who = value;
+        continue;
+      }
       if (prefix === 'data' || prefix === 'date') {
         const dr = DATE_MAP[value];
         if (dr) { filters.dateRange = dr; continue; }
+      }
+
+      // prefixo que a casa conhece + valor que não existe: NÃO vira texto
+      // livre. Virar texto livre é o que fazia a busca devolver zero calada.
+      if (CONHECIDOS.has(prefix)) {
+        filters.desconhecidos.push({ prefix, value });
+        continue;
       }
     }
     // Not a recognized prefix — treat as free text
@@ -186,6 +246,11 @@ export function parseSearchQuery(raw: string): SearchFilters {
  * Returns SearchResult[] sorted by relevance score (descending).
  */
 export function searchItems(items: AtomItem[], filters: SearchFilters): SearchResult[] {
+  // Filtro que não existe NUNCA alarga o resultado em silêncio. Ignorá-lo e
+  // devolver o tronco inteiro seria apresentar lista não-filtrada como
+  // filtrada — mentira de outro formato. Devolve nada; a tela explica.
+  if (filters.desconhecidos.length > 0) return [];
+
   const results: SearchResult[] = [];
   const q = normalize(filters.text);
 
@@ -219,6 +284,15 @@ export function searchItems(items: AtomItem[], filters: SearchFilters): SearchRe
       const tagNorm = filters.tag;
       const hasTag = item.tags?.some((t) => normalize(t).includes(tagNorm));
       if (!hasTag) continue;
+    }
+
+    // Who filter — casa só com os #who:* (não com qualquer tag)
+    if (filters.who) {
+      const whoNorm = filters.who;
+      const hasWho = item.tags?.some(
+        (t) => t.startsWith('#who:') && normalize(t.slice('#who:'.length)).includes(whoNorm),
+      );
+      if (!hasWho) continue;
     }
 
     // Date range filter
@@ -272,9 +346,14 @@ export function searchItems(items: AtomItem[], filters: SearchFilters): SearchRe
     }
   }
 
-  // Sort by score descending, then by title
+  // Score primeiro; empate desempata pelo mais recentemente tocado, nunca
+  // por ordem alfabética. Recência é table stake da categoria (frecency), e
+  // «Almoço» vindo antes de «Zoom com o contador» só porque começa com A é
+  // ranking por acaso.
   results.sort((a, b) => {
     if (b.score !== a.score) return b.score - a.score;
+    const ta = touchedAt(a.item), tb = touchedAt(b.item);
+    if (ta !== tb) return tb.localeCompare(ta);
     return a.item.title.localeCompare(b.item.title);
   });
 
@@ -292,6 +371,7 @@ export function hasActiveFilters(filters: SearchFilters): boolean {
     filters.priority ||
     filters.type ||
     filters.tag ||
+    filters.who ||
     filters.dateRange
   );
 }
@@ -322,6 +402,9 @@ export function getFilterLabels(filters: SearchFilters): { key: string; label: s
   }
   if (filters.tag) {
     labels.push({ key: 'tag', label: `#${filters.tag}`, color: 'var(--color-mod-mind)' });
+  }
+  if (filters.who) {
+    labels.push({ key: 'who', label: `who:${filters.who}`, color: 'var(--color-mod-social)' });
   }
   if (filters.dateRange) {
     const dl: Record<string, string> = { hoje: 'Hoje', semana: 'Semana', atrasado: 'Atrasado', futuro: 'Futuro' };
