@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atom · a faxina e a fila — 30 Jul 2026</title>
+<style>
+  /* O mundo é um só, escuro, deliberado (D57) — o resumo veste a pele da
+     casa. Molde: 22_resumo-da-cirurgia.html ← 20_resumo-da-noite.html. */
+  :root {
+    --bg: #12100c;
+    --card: #1a1712;
+    --surface: #211d16;
+    --border: #2e2820;
+    --border-soft: #262119;
+    --text: #e9e2d3;
+    --muted: #a29781;
+    --faint: #6f675a;
+    --gold: #d4a94e;
+    --gold-dim: #a8843a;
+    --gold-bg: rgba(212, 169, 78, .08);
+    --mente: #c9705c;
+    --viva: #8fae7d;
+    --manca: #c9a45c;
+  }
+  html { background: var(--bg); }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    line-height: 1.6; margin: 0;
+  }
+  .pagina { max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
+  .mono { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; }
+
+  header.topo { margin-bottom: 36px; }
+  .kicker {
+    font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold-dim); margin: 0 0 10px;
+  }
+  h1 {
+    font-size: clamp(26px, 5vw, 34px); font-weight: 500; line-height: 1.2;
+    margin: 0 0 10px; text-wrap: balance;
+  }
+  h1 .geo { color: var(--gold); }
+  .lede { color: var(--muted); font-size: 15px; max-width: 62ch; margin: 0; }
+  .lede em { color: var(--text); }
+
+  h2 {
+    font-size: 19px; font-weight: 500; margin: 56px 0 6px;
+    padding-top: 22px; border-top: 1px solid var(--border-soft);
+    text-wrap: balance;
+  }
+  h2 .geo { color: var(--gold); font-weight: 400; }
+  .sub { color: var(--muted); font-size: 14px; margin: 0 0 18px; max-width: 66ch; }
+  .sub b { color: var(--text); font-weight: 500; }
+
+  p { max-width: 66ch; }
+
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; margin: 18px 0; }
+  th, td { text-align: left; padding: 8px 12px 8px 0; border-bottom: 1px solid var(--border-soft); vertical-align: top; }
+  th {
+    font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--faint); font-weight: 500;
+  }
+  td:first-child { color: var(--text); }
+  td { color: var(--muted); }
+  .num { font-variant-numeric: tabular-nums; }
+
+  .selo { font-family: ui-monospace, Consolas, monospace; font-size: 11px; padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
+  .selo.ok    { color: var(--viva);  background: rgba(143,174,125,.09); }
+  .selo.dp    { color: var(--manca); background: rgba(201,164,92,.09); }
+
+  .fita {
+    display: flex; gap: 14px; overflow-x: auto; padding: 6px 2px 14px;
+    scroll-snap-type: x proximity;
+  }
+  .fita figure {
+    margin: 0; flex: 0 0 216px; scroll-snap-align: start;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .fita .tela {
+    border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+    background: #000; aspect-ratio: 39/70;
+  }
+  .fita .tela.curta { aspect-ratio: auto; }
+  .fita img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  .fita .tela.curta img { height: auto; }
+  .fita figcaption { font-size: 12px; color: var(--muted); line-height: 1.45; }
+  .fita figcaption b { color: var(--text); font-weight: 500; }
+  .tag-antes, .tag-depois {
+    font-family: ui-monospace, Consolas, monospace; font-size: 10px;
+    letter-spacing: .16em; text-transform: uppercase; display: inline-block; margin-right: 6px;
+  }
+  .tag-antes { color: var(--mente); }
+  .tag-depois { color: var(--viva); }
+
+  .carta {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 18px 20px; margin: 16px 0;
+  }
+  .carta h3 { margin: 0 0 6px; font-size: 15.5px; font-weight: 500; }
+  .carta h3 .geo { color: var(--gold); }
+  .carta p { margin: 6px 0; font-size: 14px; color: var(--muted); }
+  .carta p b { color: var(--text); font-weight: 500; }
+  .carta .lei {
+    font-family: ui-monospace, Consolas, monospace; font-size: 11px;
+    color: var(--gold-dim); margin-top: 10px;
+  }
+
+  .aviso {
+    border-left: 3px solid var(--gold-dim); background: var(--gold-bg);
+    border-radius: 0 12px 12px 0; padding: 12px 16px; margin: 18px 0;
+    font-size: 14px; color: var(--muted); max-width: 66ch;
+  }
+  .aviso b { color: var(--gold); font-weight: 500; }
+
+  ol.mesa { padding-left: 22px; margin: 14px 0; max-width: 66ch; }
+  ol.mesa li { margin: 9px 0; color: var(--muted); font-size: 14.5px; }
+  ol.mesa li b { color: var(--text); font-weight: 500; }
+
+  code, .mono-inline {
+    font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    font-size: .92em; color: var(--gold-dim);
+    background: var(--surface); padding: 1px 5px; border-radius: 5px;
+  }
+
+  footer.pe {
+    margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--border-soft);
+    font-size: 12.5px; color: var(--faint); font-style: italic; max-width: 66ch;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .fita { scroll-behavior: smooth; }
+  }
+</style>
+</head>
+<body>
+
+<div class="pagina">
+  <header class="topo">
+    <p class="kicker">atom · onda 3 · sessão da faxina e da fila</p>
+    <h1><span class="geo">○</span> A faxina e a fila — o rescaldo do gate</h1>
+    <p class="lede">30 Jul 2026, depois do gate. A sessão comum que o handoff
+    pediu: nada de gatilho, nada de morte. <em>As cinco obras fecharam
+    inteiras, a fila MANCA das dissecações esvaziou</em> — a lente que sabe de
+    si, o wrap sem passo oco, a árvore polida, o chão sem entulho. Cinco
+    commits em <code>v2-faces</code>, merge em <code>master</code>
+    (<span class="mono num">64f38c1</span>), ambos pushados. O que resta na
+    mesa é deploy, ratificação e vida vivida.</p>
+  </header>
+
+  <h2><span class="geo">·</span> Em uma tela</h2>
+  <table>
+    <thead><tr><th>Obra</th><th>Estado</th></tr></thead>
+    <tbody>
+      <tr><td>1 · a faxina pós-gate (d3 · skeletons · museu)</td><td><span class="selo ok">✓</span> <span class="mono num">a7ad79a</span> · o chão limpo, a história com placa</td></tr>
+      <tr><td>2 · a lente sabe de si (diss. 03 M4+M5)</td><td><span class="selo ok">✓</span> <span class="mono num">81177ea</span> · sheet diz do cron + <code>reconcile</code> na volta</td></tr>
+      <tr><td>3 · <code>extractWhoTag</code> com acento (pol. 7)</td><td><span class="selo ok">✓</span> <span class="mono num">8ce4b42</span> · André → <code>andre</code>, nos dois lados</td></tr>
+      <tr><td>4 · o passo 5 do wrap vira boca (diss. 04 M4)</td><td><span class="selo ok">✓</span> <span class="mono num">736b05b</span> · a semente nasce <code>#seed</code> no inbox</td></tr>
+      <tr><td>5 · polimentos da ÁRVORE (diss. 02 pol. 7–11)</td><td><span class="selo ok">✓</span> <span class="mono num">7c58c07</span> · os cinco, incluindo o pol. 10</td></tr>
+      <tr><td>Hooks</td><td><span class="selo ok">✓</span> <span class="num">417</span> testes (13 novos) · tsc · build · atos <span class="num">17</span> cenas · visual 13/13</td></tr>
+      <tr><td>Merge + push</td><td><span class="selo ok">✓</span> <code>master</code> <span class="mono num">64f38c1</span> · <code>v2-faces</code> <span class="mono num">3b1c45f</span> — origin confirmado</td></tr>
+      <tr><td>Deploy de edge</td><td><span class="selo dp">pendente</span> mão do Rick — agora com três razões (ver a mesa)</td></tr>
+    </tbody>
+  </table>
+
+  <h2><span class="geo">—</span> 1 · A faxina pós-gate</h2>
+  <p class="sub">O que o gate deixou de entulho saiu: <code>d3</code> +
+  <code>@types/d3</code> fora do lockfile (só o Graph morto usava — 570 linhas
+  a menos), os três skeletons órfãos mortos (<code>CardSkeleton</code>/<code>ListSkeleton</code>
+  ficam: o AuditPanel vivo usa). E os specs históricos ganharam <b>nota de
+  museu</b>: <code>dissecacao-01</code>, <code>tour</code> e
+  <code>gate-fotos</code> fotografam o mundo de antes do gate — quem rodar à
+  mão vê vermelho, e o vermelho é a verdade. A <code>dissecacao-04</code>
+  ganhou nota <b>parcial</b>: só a cena do <code>/projects</code> é história.</p>
+
+  <h2><span class="geo">△</span> 2 · A lente sabe de si</h2>
+  <p class="sub">As duas MANCAs da dissecação 03 caíram juntas.</p>
+
+  <div class="carta">
+    <h3><span class="geo">D46 ·</span> A sheet diz que o cron existe</h3>
+    <p>«a casa olha sozinha todo dia às 07:15 · última volta há Nh» — estado
+    quieto lendo <code>user_connectors.last_sync_at</code>, que toda volta
+    (manual ou cron) carimba. Só aparece com Google ligado. <b>Estado, nunca
+    promessa</b> — o usuário finalmente tem como saber que a casa se move
+    sozinha.</p>
+    <p class="lei">MANCA 4 · benchmark 10 (status da última volta automática)</p>
+  </div>
+
+  <div class="carta">
+    <h3><span class="geo">D68 ·</span> A reconciliação na volta diária</h3>
+    <p>«Deletou lá fora → braço desliga» dependia de alguém abrir o preview à
+    mão. Agora a <code>daily-digest</code> chama a ação nova
+    <code>reconcile</code> da <code>taxonomy-sync</code> na volta (braço 1.5):
+    label registrado que sumiu desliga — e <b>nunca cria</b> (criar exige
+    assentimento). Só 404/410 explícito desliga o calendário; erro transitório
+    do Google não vira comando. Falha não cala o cofre.</p>
+    <p class="lei">MANCA 5 · o terceiro espelho nasceu com guarda: taxonomy-espelho.test.ts (8 testes)</p>
+  </div>
+
+  <h2><span class="geo">□</span> 3 · O <code>extractWhoTag</code> com acento</h2>
+  <p class="sub">André Tanaka virava <code>#who:andr-tanaka</code> — o acento
+  era comido pelo slug. Agora o NFD <b>translitera antes de slugificar</b>
+  (André → <code>andre</code>, Conceição → <code>conceicao</code>), nos DOIS
+  lados: <code>connector-service</code> e o espelho da <code>daily-digest</code>
+  — e o guarda no <code>series-espelho</code> quebra se divergirem. O muro 5
+  valeu: o conserto é do parto novo; item já nascido fica (DP-H). O
+  <code>who:</code> da busca ensina com os valores do tronco verbatim, então
+  os transliterados aparecem certos por construção.</p>
+
+  <h2><span class="geo">⬠</span> 4 · O passo 5 do wrap vira boca</h2>
+  <p class="sub">Um dos 7 passos do rito diário era uma promessa de roadmap
+  (<i>«o que dorme será encontrado na Fase 5»</i>). O cartão morreu: agora é
+  <b>boca de texto que planta de verdade</b> — captura-primeiro (D52), a
+  semente nasce <code>#seed</code> no inbox estágio 1, em silêncio (o rito não
+  leva toast por cima). A cena 16 do atos.spec prova o POST com tag e estágio;
+  a cena 15 (selo com dia vazio) segue intacta — a obra 24a não regrediu.</p>
+
+  <h2><span class="geo">⬡</span> 5 · Os polimentos da ÁRVORE</h2>
+  <p class="sub">Os cinco do wrap da dissecação 02 — incluindo o pol. 10, que
+  era «se o dia render». Rendeu.</p>
+  <div class="fita">
+    <figure>
+      <div class="tela"><img src="../../e2e/screenshots/visual-mundo-novo.spec.ts/face-arvore.png" alt="A copa da árvore: família e propósito legíveis, tracejado do ideal visível"></div>
+      <figcaption><span class="tag-depois">depois</span><b>a copa polida:</b> «família» e «propósito» se leem separados (pol. 8) e o tracejado do ideal deixou de ser subliminar (pol. 10).</figcaption>
+    </figure>
+    <figure>
+      <div class="tela"><img src="../../e2e/screenshots/visual-mundo-novo.spec.ts/face-arvore-drill.png" alt="O drill do ramo trabalho com a legenda de primeira vez" style="object-position: 50% 32%"></div>
+      <figcaption><span class="tag-depois">depois</span><b>o drill que se apresenta:</b> «· caminhando · ○ selado — a maturação se vê no galho», uma vez só, no primeiro drill (pol. 11, molde do hint-busca).</figcaption>
+    </figure>
+  </div>
+  <div class="carta">
+    <h3><span class="geo">pol. 7+9 ·</span> A lente persiste, o beco virou porta</h3>
+    <p>A janela escolhida (semana/lunar/estação/ano) <b>sobrevive à
+    navegação</b> (<code>mindroot.arvore-janela.v1</code> — preferência, não
+    estado de página; cena 17 prova). E o «+N mais antigas na janela», que
+    declarava e morria, agora <b>expande o drill até o total honesto</b> —
+    <code>allLeaves</code> no engine, com teste: o teto de 8 é do primeiro
+    olhar, nunca do caminho.</p>
+    <p class="lei">baselines da ÁRVORE refotografadas com intenção declarada — inclusive a copa, que passou por baixo do 1% (a baseline não mente)</p>
+  </div>
+
+  <h2><span class="geo">○</span> 6 · A mesa do Rick — em ordem de peso</h2>
+  <div class="aviso"><b>Deploy das edges, agora com TRÊS razões:</b> a
+  <code>daily-digest</code> carrega a MENTE do cron corrigida (30 Jul de
+  manhã) + o braço da reconciliação + o <code>extractWhoTag</code> com acento;
+  a <code>taxonomy-sync</code> carrega a ação <code>reconcile</code>. O código
+  está em <code>master</code>; as edges em produção estão velhas.</div>
+  <ol class="mesa">
+    <li><b>Deploy da <code>daily-digest</code> e da <code>taxonomy-sync</code></b> — o aviso acima.</li>
+    <li><b>Redirect URL do Supabase na prod nova</b> — segue mordendo o login OAuth de <code>atom-zeta-snowy.vercel.app</code>.</li>
+    <li><b>Ratificar</b>: DP-E → D74? · DP-G (a porta da escada, default reversível) · DP-A…DP-F · DP-J (acento na taxonomy lá fora?).</li>
+    <li><b>A fila que sobrou</b> (nenhuma é MANCA): obra de voz do builder (com o E., D64) · reforma do <code>Review.tsx</code> · lint herdado (46+3) · reconciliação rica (seguir rename pelo id).</li>
+    <li><b>Vida vivida</b>: assentir a ida real no Gmail · dry-run do digest · instalar o PWA no celular.</li>
+  </ol>
+
+  <footer class="pe">Filho do 24_handoff-sessao-faxina.md, no molde do
+  22_resumo-da-cirurgia.html. A trilha do detalhe: o wrap da faxina no
+  onda-3-log.md → os cinco commits, um por obra → o merge 64f38c1. As três
+  condições de parada nunca dispararam; nenhuma DP foi ratificada. A fila
+  MANCA das dissecações está vazia — o mundo novo ficou inteiro por
+  dentro.</footer>
+</div>
+
+</body>
+</html>
