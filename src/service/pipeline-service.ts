@@ -10,7 +10,7 @@ import type { AtomItem, AtomModule, AtomRelation } from '@/types/item';
 
 export const pipelineService = {
 
-  async capture(title: string, userId: string): Promise<AtomItem> {
+  async capture(title: string, userId: string, tags: string[] = []): Promise<AtomItem> {
     return itemService.create({
       title,
       user_id: userId,
@@ -18,7 +18,7 @@ export const pipelineService = {
       genesis_stage: 1,
       status: 'inbox',
       source: 'mindroot',
-      tags: [],
+      tags,
       body: {},
     });
   },

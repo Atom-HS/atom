@@ -574,11 +574,50 @@ function WrapConnectionPicker({ items, sourceId, onSelect, onCancel }: {
   );
 }
 
+// ⬠ o passo das sementes — boca de verdade, não cartão-promessa (diss. 04
+// M4: rito não tem passo decorativo). Captura-primeiro (D52): a semente
+// nasce #seed no inbox no gesto — em silêncio (pol. 8), o rito segue.
 function SeedsStep() {
+  const { capture } = usePipeline();
+  const [text, setText] = useState('');
+  const [planted, setPlanted] = useState<string[]>([]);
+
+  const plant = async () => {
+    const t = text.trim();
+    if (!t) return;
+    const item = await capture(t, { quiet: true, tags: ['#seed'] });
+    if (item) {
+      setPlanted([...planted, t]);
+      setText('');
+    }
+  };
+
   return (
     <div className="bg-card border border-border rounded-[14px] p-4">
       <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint mb-2">⬠ sementes</div>
-      <p className="text-xs text-text-muted py-4 text-center">o que dorme será encontrado na Fase 5</p>
+      <p className="text-xs text-text-muted mb-2">
+        o que não é de hoje mas não quer se perder — nasce no inbox, dorme como <span className="font-mono">#seed</span>
+      </p>
+      {planted.map((s, i) => (
+        <div key={i} className="py-2 border-b border-border-soft last:border-0 flex items-center gap-2.5">
+          <span className="font-mono text-gold text-[13px] w-[18px] text-center shrink-0">⬠</span>
+          <span className="text-[13px]">"{s}"</span>
+        </div>
+      ))}
+      <div className="flex gap-2 mt-2">
+        <input
+          className="flex-1 border border-border rounded-lg px-3 py-2 text-[13px] bg-card text-text outline-none"
+          placeholder="+ uma semente…"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && plant()}
+        />
+        {text.trim() && (
+          <button onClick={plant} className="px-3 py-2 text-gold bg-gold-bg rounded-lg text-sm shrink-0" style={{ border: '1px solid color-mix(in srgb, var(--color-gold) 30%, var(--color-border-soft))' }}>
+            +
+          </button>
+        )}
+      </div>
     </div>
   );
 }

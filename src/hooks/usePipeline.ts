@@ -15,10 +15,10 @@ export function usePipeline() {
 
   // quiet: captura dentro de cerimônia não estoura toast — «Item capturado»
   // por cima do selo do wrap era ruído quebrando o rito (D60, pol. 8)
-  const capture = async (title: string, opts: { quiet?: boolean } = {}): Promise<AtomItem | null> => {
+  const capture = async (title: string, opts: { quiet?: boolean; tags?: string[] } = {}): Promise<AtomItem | null> => {
     if (!user) return null;
     try {
-      const item = await pipelineService.capture(title, user.id);
+      const item = await pipelineService.capture(title, user.id, opts.tags ?? []);
       invalidate();
       if (!opts.quiet) toast.success('Item capturado');
       return item;
