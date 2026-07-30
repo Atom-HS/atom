@@ -895,6 +895,11 @@ subir o que estava pronto e transformar defaults vividos em lei numerada.
   cartão morto prometia); (3) voz do builder com o E. (D64); (4) bilhetes
   do E. (D53 v2). Proposta registrada, não decisão — abre com benchmark
   do «retorno», como manda a D62.
+- **A visualização padrão de calendário como opção quieta, talvez um
+  dia** — plantada pelo Rick: a lente é o nosso jeito (D67), mas a
+  ausência da grade familiar pode gerar ansiedade em quem precisa dela;
+  «esse é o nosso jeito, mas se você quiser, está aqui». Nota sem ação:
+  `semente_calendario-visualizacao-padrao.md`.
 
 ### □ Audit
 - ✅ deploy verificado pelo retorno da API (v2 ativa nas duas edges)
