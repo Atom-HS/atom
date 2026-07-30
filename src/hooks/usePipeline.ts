@@ -13,15 +13,17 @@ export function usePipeline() {
   const user = useAppStore((s) => s.user);
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ['items'] });
 
-  const capture = async (title: string): Promise<AtomItem | null> => {
+  // quiet: captura dentro de cerimônia não estoura toast — «Item capturado»
+  // por cima do selo do wrap era ruído quebrando o rito (D60, pol. 8)
+  const capture = async (title: string, opts: { quiet?: boolean } = {}): Promise<AtomItem | null> => {
     if (!user) return null;
     try {
       const item = await pipelineService.capture(title, user.id);
       invalidate();
-      toast.success('Item capturado');
+      if (!opts.quiet) toast.success('Item capturado');
       return item;
     } catch {
-      toast.error('Erro ao capturar item');
+      toast.error('não consegui guardar agora — anota e tenta de novo');
       return null;
     }
   };

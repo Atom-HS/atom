@@ -50,16 +50,18 @@ export function SearchLayer({ onClose }: SearchLayerProps) {
   // vez de deixar adivinhar. É o padrão do GitHub, o mais eficaz medido.
   const prefixAberto = useMemo(() => {
     const ultimo = query.trim().split(/\s+/).pop() ?? '';
-    const m = ultimo.match(/^([a-z]+):([a-z]*)$/i);
+    // o valor aceita dígito e hífen — os slugs de who: são «andre-tanaka»
+    const m = ultimo.match(/^([a-z]+):([a-z0-9-]*)$/i);
     return m ? { prefix: m[1].toLowerCase(), parcial: m[2].toLowerCase() } : null;
   }, [query]);
 
   const sugestoes = useMemo(() => {
     if (!prefixAberto) return [];
-    const v = prefixVocabulary().find((p) => p.prefix === prefixAberto.prefix);
+    // who: ensina com os valores que existem no tronco
+    const v = prefixVocabulary(items).find((p) => p.prefix === prefixAberto.prefix);
     if (!v) return [];
     return v.values.filter((x) => x.startsWith(prefixAberto.parcial)).slice(0, 12);
-  }, [prefixAberto]);
+  }, [prefixAberto, items]);
 
   const open = (id: string) => {
     selectItem(id);
@@ -89,7 +91,7 @@ export function SearchLayer({ onClose }: SearchLayerProps) {
           <>
             <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint mb-1.5">recentes</div>
             {recentes.map((item) => <ResultRow key={item.id} item={item} onOpen={open} />)}
-            {/* a tela vazia é o único manual que alguém lê: os 7 prefixos
+            {/* a tela vazia é o único manual que alguém lê: os prefixos
                 aparecem inteiros e entram na boca com um toque */}
             <div className="mt-6">
               <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-text-faint mb-1.5">pra afinar</div>

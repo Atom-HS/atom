@@ -144,6 +144,67 @@ describe('ingestGmailMessages — a volta do email (só o sinal)', () => {
   });
 });
 
+describe('disconnect — desligar desfaz primeiro, token morre por último (D68)', () => {
+  function mockConnectorsTable(metadata: Record<string, unknown>, ordem: string[]) {
+    vi.mocked(supabase.from).mockImplementation(((table: string) => {
+      if (table !== 'user_connectors') throw new Error(`tabela inesperada: ${table}`);
+      return {
+        select: () =>
+          Promise.resolve({
+            data: [{ provider: 'google', status: 'connected', last_sync_at: null, metadata }],
+            error: null,
+          }),
+        update: () => {
+          ordem.push('token-morre');
+          return { eq: () => Promise.resolve({ error: null }) };
+        },
+      };
+    }) as unknown as typeof supabase.from);
+  }
+
+  it('com ida viva: remove roda ANTES de queimar o token', async () => {
+    const ordem: string[] = [];
+    mockConnectorsTable({ taxonomy: { version: 1, gmail: { health: 'L1' }, calendar: null, disabled: [], applied_at: 'x' } }, ordem);
+    const remove = vi
+      .spyOn(connectorService, 'taxonomySync')
+      .mockImplementation(async (action) => {
+        ordem.push(`taxonomy-${action}`);
+        return { action } as never;
+      });
+
+    const { desfezIda } = await connectorService.disconnect('google');
+
+    expect(desfezIda).toBe(true);
+    expect(ordem).toEqual(['taxonomy-remove', 'token-morre']);
+    remove.mockRestore();
+  });
+
+  it('desfazer que falha RECUSA o desligar — o token sobrevive pro desfazer de amanhã', async () => {
+    const ordem: string[] = [];
+    mockConnectorsTable({ taxonomy: { version: 1, gmail: { health: 'L1' }, calendar: null, disabled: [], applied_at: 'x' } }, ordem);
+    const remove = vi
+      .spyOn(connectorService, 'taxonomySync')
+      .mockRejectedValue(new Error('lá fora não respondeu'));
+
+    await expect(connectorService.disconnect('google')).rejects.toThrow();
+    expect(ordem).toEqual([]); // o update do token NUNCA rodou
+    remove.mockRestore();
+  });
+
+  it('sem ida viva: desliga direto, sem chamar o remove', async () => {
+    const ordem: string[] = [];
+    mockConnectorsTable({}, ordem);
+    const remove = vi.spyOn(connectorService, 'taxonomySync');
+
+    const { desfezIda } = await connectorService.disconnect('google');
+
+    expect(desfezIda).toBe(false);
+    expect(remove).not.toHaveBeenCalled();
+    expect(ordem).toEqual(['token-morre']);
+    remove.mockRestore();
+  });
+});
+
 describe('ingestCalendarEvents — a volta do calendar (hora marcada é céu)', () => {
   it('evento único nasce task no inbox estágio 1 com as tags da lei', async () => {
     mockExistingItems([]);

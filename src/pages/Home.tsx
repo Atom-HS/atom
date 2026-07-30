@@ -58,7 +58,7 @@ export function HomePage() {
   const intention = activeItems[0]?.title ?? null;
 
   const isCrepusculo = period.key === 'crepusculo';
-  const { healthPct, staleCount, emptyCount } = useRaiz();
+  const { staleCount, emptyCount } = useRaiz();
   const { emotion: soulEmotion, energy: soulEnergy, intention: soulIntention } = useSoulStore();
 
   if (loading) {
@@ -128,7 +128,8 @@ export function HomePage() {
         <div className="flex items-center gap-3">
           <span className="text-lg">○</span>
           <div>
-            <div className="text-sm font-medium">raiz · {healthPct}%</div>
+            {/* o % morreu na D50 (o número que julga não tem casa) */}
+            <div className="text-sm font-medium">raiz</div>
             <div className="text-xs text-text-muted">
               {staleCount > 0 ? `${staleCount} dominios stale` : emptyCount > 0 ? `${emptyCount} dominios vazios` : '9 dominios ativos'}
             </div>

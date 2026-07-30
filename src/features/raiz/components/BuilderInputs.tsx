@@ -30,7 +30,7 @@ function YesNoInput({ onAnswer }: { onAnswer: (v: string | boolean) => void }) {
       </motion.button>
       <motion.button whileTap={{ scale: 0.96 }} onClick={() => onAnswer(false)}
         className="flex-1 py-3.5 rounded-xl text-sm font-medium bg-surface text-text-muted border border-border">
-        Nao
+        Não
       </motion.button>
     </div>
   );

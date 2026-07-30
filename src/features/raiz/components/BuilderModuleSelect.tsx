@@ -24,7 +24,7 @@ export function BuilderModuleSelect({ onClose }: Props) {
           <span className="text-sm">x</span>
         </button>
       </div>
-      <p className="text-sm text-text-muted mb-6">Escolha um modulo. Uma pergunta de cada vez.</p>
+      <p className="text-sm text-text-muted mb-6">Escolha um módulo. Uma pergunta de cada vez.</p>
 
       {/* Module grid */}
       <div className="grid grid-cols-2 gap-3">

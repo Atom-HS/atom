@@ -211,3 +211,32 @@ describe('vocabulário e rótulos — o que a tela tem pra ensinar', () => {
     expect(extractTags([a, b])).toEqual(['#a', '#b', '#c']);
   });
 });
+
+// pol. 7 da dissecação 04: pessoas eram gramática escondida — who: achava
+// por acaso (texto do tag). Agora é prefixo de verdade, ensinado com os
+// valores que EXISTEM no tronco.
+describe('who: — pessoas como gramática de primeira classe', () => {
+  const reuniao = item({ title: 'Reunião Atlas', tags: ['#who:andre-tanaka', '#connector'] });
+  const fatura = item({ title: 'Fatura julho', tags: ['#who:maria-silva'] });
+  const solto = item({ title: 'andre no título, sem tag' });
+
+  it('who: filtra pelos #who:* do tronco, não por texto', () => {
+    const r = busca([reuniao, fatura, solto], 'who:andre');
+    expect(r.map((x) => x.item.title)).toEqual(['Reunião Atlas']);
+  });
+
+  it('quem: é o mesmo prefixo em português', () => {
+    expect(parseSearchQuery('quem:maria').who).toBe('maria');
+  });
+
+  it('who: conta como filtro ativo e ganha rótulo', () => {
+    expect(hasActiveFilters(parseSearchQuery('who:andre'))).toBe(true);
+  });
+
+  it('o vocabulário ensina who: com os valores que existem', () => {
+    const v = prefixVocabulary([reuniao, fatura]);
+    expect(v.find((x) => x.prefix === 'who')?.values).toEqual(['andre-tanaka', 'maria-silva']);
+    // sem tronco, who: existe mas não inventa valor
+    expect(prefixVocabulary().find((x) => x.prefix === 'who')?.values).toEqual([]);
+  });
+});

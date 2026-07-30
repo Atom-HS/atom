@@ -16,6 +16,8 @@ export interface SearchFilters {
   priority: Priority | null;
   type: AtomType | null;
   tag: string | null;
+  /** pessoas são gramática de primeira classe: casa com os `#who:*` do tronco */
+  who: string | null;
   dateRange: 'hoje' | 'semana' | 'atrasado' | 'futuro' | null;
   completed: boolean | null; // null = don't filter
   /**
@@ -42,19 +44,33 @@ export const EMPTY_FILTERS: SearchFilters = {
   priority: null,
   type: null,
   tag: null,
+  who: null,
   dateRange: null,
   completed: null,
   desconhecidos: [],
 };
 
+/** Os valores de `who:` que existem no tronco — os slugs dos `#who:*`. */
+export function extractWhoValues(items: AtomItem[]): string[] {
+  const out = new Set<string>();
+  for (const item of items) {
+    for (const tag of item.tags ?? []) {
+      if (tag.startsWith('#who:')) out.add(tag.slice('#who:'.length));
+    }
+  }
+  return Array.from(out).sort();
+}
+
 /** Os prefixos que a busca entende, com os valores válidos de cada um.
  *  ~10% das pessoas usam operador avançado (Jansen/Spink) — e nenhuma usa
- *  o que não vê. É daqui que a interface ensina. */
-export function prefixVocabulary(): Array<{ prefix: string; values: string[] }> {
+ *  o que não vê. É daqui que a interface ensina. `who:` ensina com os
+ *  valores que EXISTEM no tronco — pessoas deixam de ser gramática escondida. */
+export function prefixVocabulary(items: AtomItem[] = []): Array<{ prefix: string; values: string[] }> {
   return [
     { prefix: 'mod', values: MODULES.map((m) => m.key) },
     { prefix: 'tipo', values: [...new Set(Object.values(TYPE_MAP))] },
     { prefix: 'tag', values: [] }, // livre
+    { prefix: 'who', values: extractWhoValues(items) },
     { prefix: 'data', values: ['hoje', 'semana', 'atrasado', 'futuro'] },
     { prefix: 'prio', values: ['alta', 'media', 'baixa'] },
     { prefix: 'emo', values: [...EMOTIONS] },
@@ -201,6 +217,10 @@ export function parseSearchQuery(raw: string): SearchFilters {
         filters.tag = value;
         continue;
       }
+      if (prefix === 'who' || prefix === 'quem') {
+        filters.who = value;
+        continue;
+      }
       if (prefix === 'data' || prefix === 'date') {
         const dr = DATE_MAP[value];
         if (dr) { filters.dateRange = dr; continue; }
@@ -264,6 +284,15 @@ export function searchItems(items: AtomItem[], filters: SearchFilters): SearchRe
       const tagNorm = filters.tag;
       const hasTag = item.tags?.some((t) => normalize(t).includes(tagNorm));
       if (!hasTag) continue;
+    }
+
+    // Who filter — casa só com os #who:* (não com qualquer tag)
+    if (filters.who) {
+      const whoNorm = filters.who;
+      const hasWho = item.tags?.some(
+        (t) => t.startsWith('#who:') && normalize(t.slice('#who:'.length)).includes(whoNorm),
+      );
+      if (!hasWho) continue;
     }
 
     // Date range filter
@@ -342,6 +371,7 @@ export function hasActiveFilters(filters: SearchFilters): boolean {
     filters.priority ||
     filters.type ||
     filters.tag ||
+    filters.who ||
     filters.dateRange
   );
 }
@@ -372,6 +402,9 @@ export function getFilterLabels(filters: SearchFilters): { key: string; label: s
   }
   if (filters.tag) {
     labels.push({ key: 'tag', label: `#${filters.tag}`, color: 'var(--color-mod-mind)' });
+  }
+  if (filters.who) {
+    labels.push({ key: 'who', label: `who:${filters.who}`, color: 'var(--color-mod-social)' });
   }
   if (filters.dateRange) {
     const dl: Record<string, string> = { hoje: 'Hoje', semana: 'Semana', atrasado: 'Atrasado', futuro: 'Futuro' };

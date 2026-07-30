@@ -145,7 +145,7 @@ test('builder: módulos, entrevista, retomada e o parto', async ({ authenticated
   await page.screenshot({ path: shot('42-builder-modulos'), fullPage: true });
 
   // a entrevista de finanças (a mais curta) — primeira pergunta
-  await page.getByRole('button', { name: /Financas/ }).click();
+  await page.getByRole('button', { name: /Finan/ }).click();
   await page.waitForTimeout(500);
   await page.screenshot({ path: shot('43-builder-pergunta'), fullPage: true });
 
@@ -161,7 +161,7 @@ test('builder: módulos, entrevista, retomada e o parto', async ({ authenticated
   await page.screenshot({ path: shot('44-builder-retomada'), fullPage: true });
 
   // agora a entrevista inteira, sem interrupção
-  await page.getByRole('button', { name: /Financas/ }).click();
+  await page.getByRole('button', { name: /Finan/ }).click();
   await page.waitForTimeout(400);
   await page.getByRole('button', { name: 'Sim', exact: true }).click();
   await page.waitForTimeout(400);

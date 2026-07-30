@@ -165,7 +165,7 @@ export function AuroraRitual() {
             <motion.div key="checkin" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
               className="w-full" style={{ maxWidth: '384px' }}>
               <h2 className="text-xl font-medium text-text-heading text-center mb-1">
-                como voce ta chegando hoje?
+                como você tá chegando hoje?
               </h2>
               <p className="text-xs text-text-muted text-center mb-6">sem julgamento. uma palavra basta.</p>
               <input value={emotion} onChange={(e) => setEmotion(e.target.value)} autoFocus
@@ -201,7 +201,8 @@ export function AuroraRitual() {
             <motion.div key="journal" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
               className="w-full h-full flex flex-col pt-14 pb-8" style={{ maxWidth: '430px' }}>
               <h2 className="text-lg font-medium text-text-heading mb-1">a pagina esta aberta</h2>
-              <p className="text-xs text-text-muted mb-4">escreve o que quiser. ou nada. ninguem le alem de ti.</p>
+              {/* D60: «você», nunca «tu» — o «além de ti» era forma-tu */}
+              <p className="text-xs text-text-muted mb-4">escreve o que quiser. ou nada. ninguém lê além de você.</p>
               <textarea value={journal} onChange={(e) => setJournal(e.target.value)} autoFocus
                 placeholder="..."
                 className="flex-1 w-full bg-transparent text-[15px] leading-relaxed text-text outline-none resize-none placeholder:text-text-muted" />
@@ -245,7 +246,7 @@ export function AuroraRitual() {
               )}
               <button onClick={closeRitual}
                 className="w-full py-3.5 rounded-xl text-sm font-medium bg-accent text-white">
-                comecar o dia
+                começar o dia
               </button>
             </motion.div>
           )}

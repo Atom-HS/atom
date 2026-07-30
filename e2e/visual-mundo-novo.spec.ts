@@ -93,17 +93,17 @@ test('builder — a entrevista pare cadeia e protocolo', async ({ authenticatedP
 
   // sincronia positiva: cada resposta espera a PRÓXIMA pergunta chegar
   await page.getByRole('button', { name: 'Sim' }).click();                    // body-1
-  await page.getByText('Que tipo de exercicio?').waitFor();
+  await page.getByText('Que tipo de exercício?').waitFor();
   await page.locator('textarea').fill('caminhada');                            // body-2
   await page.getByRole('button', { name: 'Continuar' }).click();
   await page.getByText('Quantas vezes por semana?').waitFor();
   await page.getByRole('button', { name: '3x', exact: true }).click();         // body-3
   await page.getByRole('button', { name: 'Continuar' }).click();
-  await page.getByText('Que horas voce acorda e dorme?').waitFor();
+  await page.getByText('Que horas você acorda e dorme?').waitFor();
   await page.getByRole('button', { name: 'Continuar' }).click();               // body-4: horários default
-  await page.getByText('Toma agua de manha').waitFor();
+  await page.getByText('Toma água de manhã').waitFor();
   await page.getByRole('button', { name: 'Sim' }).click();                     // body-5
-  await page.getByText('Tem algum habito de saude').waitFor();
+  await page.getByText('Tem algum hábito de saúde').waitFor();
   await page.locator('textarea').fill('meditacao 10 min');                     // body-6
   await page.getByRole('button', { name: 'Continuar' }).click();
   await page.getByText('Quando o corpo pesa').waitFor();

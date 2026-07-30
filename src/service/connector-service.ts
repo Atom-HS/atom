@@ -4,7 +4,7 @@
 
 import { supabase } from './supabase';
 import { itemService } from './item-service';
-import { desiredLabels, ATOM_CALENDAR_SUMMARY } from '@/engine/taxonomy';
+import { desiredLabels, ATOM_CALENDAR_SUMMARY, readTaxonomy, isApplied } from '@/engine/taxonomy';
 import { fsmService } from './fsm-service';
 import { birthOf, sealedSeries } from '@/engine/series';
 import type { AtomItem } from '@/types/item';
@@ -265,12 +265,24 @@ export const connectorService = {
     return resp.data as TaxonomyReport;
   },
 
-  async disconnect(provider: string): Promise<void> {
+  // D68: «desligar o conector desfaz a estrutura» — e o desfazer PRECISA do
+  // token, então a ordem é lei: ida viva → desfaz primeiro; o token morre
+  // por último. Se o desfazer falhar, recusa inteira (throw): desligar
+  // assim mesmo queimaria a chave do próprio desfazer.
+  // Retorna se havia ida viva desfeita — a fala do toast diz a verdade.
+  async disconnect(provider: string): Promise<{ desfezIda: boolean }> {
+    const connectors = await connectorService.getConnectors();
+    const status = connectors.find((c) => c.provider === provider);
+    const idaViva = !!status && isApplied(readTaxonomy(status.metadata));
+    if (idaViva) {
+      await connectorService.taxonomySync('remove');
+    }
     const { error } = await supabase
       .from('user_connectors')
       .update({ status: 'disconnected', provider_refresh_token: null, updated_at: new Date().toISOString() })
       .eq('provider', provider);
     if (error) throw error;
+    return { desfezIda: idaViva };
   },
 };
 

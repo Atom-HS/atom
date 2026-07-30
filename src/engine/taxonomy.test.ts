@@ -24,11 +24,13 @@ describe('desiredLabels — a lei da casa no namespace assinado', () => {
     }
   });
 
-  it('os nomes vêm da lei (config/raiz), não inventados', () => {
+  it('os nomes projetados são CONGELADOS em ASCII — o tom da UI não renomeia label no Gmail', () => {
     const names = desiredLabels().map((l) => l.name);
     expect(names).toContain('Atom/saude');
     expect(names).toContain('Atom/financas');
     expect(names).toContain('Atom/identidade');
+    // acento na UI (D60) nunca vaza pro contrato lá fora (D68)
+    for (const n of names) expect(n).toBe(n.normalize('NFD').replace(/[̀-ͯ]/g, ''));
   });
 });
 

@@ -24,11 +24,20 @@ export interface TaxonomyRecord {
   applied_at: string | null;
 }
 
+/** Os nomes projetados lá fora, CONGELADOS em ASCII: o contrato da ida
+ *  (D68) não muda quando o tom da UI ganha acento — label criado no Gmail
+ *  não se renomeia por varredura de voz. */
+const TAXONOMY_NAMES: Record<string, string> = {
+  identity: 'identidade', documents: 'documentos', health: 'saude',
+  finance: 'financas', storage: 'arquivos', memories: 'memorias',
+  time: 'tempo', communication: 'comunicacao', projects: 'projetos',
+};
+
 /** A taxonomia desejada: os 9 domínios da vida, no namespace assinado. */
 export function desiredLabels(): DesiredLabel[] {
   return RAIZ_DOMAINS.map((d) => ({
     key: d.key,
-    name: `${ATOM_NAMESPACE}/${d.label}`,
+    name: `${ATOM_NAMESPACE}/${TAXONOMY_NAMES[d.key] ?? d.label}`,
   }));
 }
 

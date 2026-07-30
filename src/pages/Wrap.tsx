@@ -119,10 +119,11 @@ export function WrapPage() {
     }
     await commitWrap();
 
-    // Create inbox items from next steps
+    // Create inbox items from next steps — em silêncio: toast por cima da
+    // cerimônia do selo quebrava o rito (D60)
     for (const step of validNext) {
       try {
-        await capture(step);
+        await capture(step, { quiet: true });
       } catch { /* non-blocking */ }
     }
 

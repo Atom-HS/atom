@@ -16,7 +16,7 @@ import type { BuilderGeneratedItem, BuilderProtocol, BuilderRoutine } from '../b
 const TYPE_OPTIONS: AtomType[] = ['task', 'habit', 'ritual', 'note'];
 
 const SLOT_LABELS: Record<string, string> = {
-  aurora: 'Aurora', zenite: 'Zenite', crepusculo: 'Crepusculo',
+  aurora: 'Aurora', zenite: 'Zênite', crepusculo: 'Crepúsculo',
 };
 
 interface Props {
@@ -74,7 +74,7 @@ export function BuilderMiniWrap({ onDone, onBack }: Props) {
         </div>
         <p className="text-base font-medium text-text-heading">nasceu — está no inbox</p>
         {mindmateMode && (
-          <p className="text-xs text-text-muted italic">✦ onde tudo comecou.</p>
+          <p className="text-xs text-text-muted italic">✦ onde tudo começou.</p>
         )}
       </motion.div>
     );
@@ -122,7 +122,7 @@ export function BuilderMiniWrap({ onDone, onBack }: Props) {
       </motion.button>
 
       {mindmateMode && (
-        <p className="text-center text-xs text-text-muted mt-4 italic">✦ MindMate spirit — onde tudo comecou.</p>
+        <p className="text-center text-xs text-text-muted mt-4 italic">✦ MindMate spirit — onde tudo começou.</p>
       )}
     </div>
   );

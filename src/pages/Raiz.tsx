@@ -138,8 +138,8 @@ export function RaizPage() {
               vamos organizar<br />sua vida, <span className="font-medium">uma<br />gaveta por vez.</span>
             </h1>
             <p className="text-sm text-text-muted leading-relaxed mb-10 max-w-[280px]">
-              todo mundo tem gavetas. digitais, fisicas, mentais.<br />
-              a gente comeca olhando o que existe — sem mover nada, sem julgar.
+              todo mundo tem gavetas. digitais, físicas, mentais.<br />
+              a gente começa olhando o que existe — sem mover nada, sem julgar.
             </p>
 
             <button
@@ -322,7 +322,7 @@ export function RaizPage() {
             {/* Empty nudge */}
             {healthyCount === 0 && sessionCount === 0 && (
               <p className="text-center text-xs text-text-muted/40 mt-2 leading-relaxed">
-                toca numa gaveta pra comecar.<br />sem pressa. a geometria espera.
+                toca numa gaveta pra começar.<br />sem pressa. a geometria espera.
               </p>
             )}
           </motion.div>
@@ -333,8 +333,8 @@ export function RaizPage() {
           <motion.div key="doors" {...anim} className="px-6 pt-14 pb-6">
             <div className="text-center mb-6">
               <div className="text-text-muted text-xl mb-1">○</div>
-              <h2 className="text-xl font-medium">por onde voce quer comecar?</h2>
-              <p className="text-sm text-text-muted mt-1">nao existe ordem certa.<br />escolha o que faz sentido agora.</p>
+              <h2 className="text-xl font-medium">por onde você quer começar?</h2>
+              <p className="text-sm text-text-muted mt-1">não existe ordem certa.<br />escolha o que faz sentido agora.</p>
             </div>
 
             <div className="space-y-3 mb-6">
@@ -364,7 +364,7 @@ export function RaizPage() {
             </button>
 
             <p className="text-center text-[11px] text-text-muted/40 leading-relaxed px-4 mt-4">
-              "voce nao esta atrasado. o caos nao eh culpa sua.<br />a vida foi acontecendo e ninguem ensinou a organizar."
+              "você não está atrasado. o caos não é culpa sua.<br />a vida foi acontecendo e ninguém ensinou a organizar."
             </p>
           </motion.div>
         )}

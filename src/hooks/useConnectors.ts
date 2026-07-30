@@ -51,10 +51,11 @@ export function useConnectors() {
       queryClient.invalidateQueries({ queryKey: ['items'] });
       await refresh();
       setSyncState('done');
-      toast.success(created > 0 ? `${created} eventos importados pro inbox` : 'Calendar sincronizado');
-    } catch (err: any) {
+      toast.success(created > 0 ? `${created} eventos importados pro inbox` : 'calendar em dia — nada novo');
+    } catch {
       setSyncState('error');
-      toast.error(err.message ?? 'Erro ao sincronizar calendar');
+      // Lei do Tom (D60): a voz da casa, nunca o erro cru na tela
+      toast.error('não consegui trazer o calendar agora — o que já entrou segue de pé');
     }
   };
 
@@ -67,10 +68,10 @@ export function useConnectors() {
       queryClient.invalidateQueries({ queryKey: ['items'] });
       await refresh();
       setSyncState('done');
-      toast.success(created > 0 ? `${created} emails importados pro inbox` : 'Gmail sincronizado');
-    } catch (err: any) {
+      toast.success(created > 0 ? `${created} emails importados pro inbox` : 'gmail em dia — nada novo');
+    } catch {
       setSyncState('error');
-      toast.error(err.message ?? 'Erro ao sincronizar Gmail');
+      toast.error('não consegui trazer o gmail agora — o que já entrou segue de pé');
     }
   };
 
@@ -90,7 +91,7 @@ export function useConnectors() {
       if (err instanceof Error && err.message === RECONNECT_SCOPES) {
         setNeedsReconnect(true);
       } else {
-        toast.error(err instanceof Error ? err.message : 'Erro na projeção da lei');
+        toast.error('não consegui projetar a lei agora — nada mudou lá fora');
       }
       return null;
     } finally {
@@ -98,13 +99,15 @@ export function useConnectors() {
     }
   };
 
+  // D68: com ida viva, o service desfaz a estrutura ANTES de queimar o
+  // token; se o desfazer falhar, nada muda — e a fala diz exatamente isso
   const disconnect = async (provider: string) => {
     try {
-      await connectorService.disconnect(provider);
+      const { desfezIda } = await connectorService.disconnect(provider);
       await refresh();
-      toast.success('Conector desconectado');
+      toast.success(desfezIda ? 'desligado — a estrutura lá fora saiu junto' : 'conector desligado');
     } catch {
-      toast.error('Erro ao desconectar');
+      toast.error('não consegui desligar agora — o conector segue como estava');
     }
   };
 
