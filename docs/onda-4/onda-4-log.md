@@ -681,5 +681,50 @@ da memória que vai nascer.
 
 ---
 
+## Wrap · 31 Jul 2026 — a quinta colisão: a guarda pega o próprio E., e nasce a convenção
+
+### ⬠ Soul
+O Rick mandou o zip e um pedido («arrumar o nome session para o futuro») —
+e a conferência de rotina contra a guarda achou o que ninguém esperava: a
+prova do E. não confere contra o repo. O `retorno.md` da session_11 é de
+MAIO (11→12, «operacional densa»), sem nenhum dos fragmentos que ele citou.
+O E. achou o retorno de abril na base do Projeto E e *inferiu* que era o
+mesmo arquivo — a cadeia sem prova que o detector dele quase pegou, pegou
+ele na metade. São **duas séries com os mesmos números**: repo 01–08 =
+e-sessions de março; repo 09–11 = code-sessions de maio (a 10 com raw
+sintético); os chats de abril (cartografia, modos-de-processar, o segundo
+«sessão 10») caíram no vão e nunca foram ingeridos. A guarda que ele pediu
+contra a quarta colisão pegou a quinta.
+
+### · Items
+- **`sessions/INDICE.md` nasceu** (repo o-espaco-entre, `bd1ed94`): o mapa
+  completo das duas séries + o vão de abril + **a convenção do Rick**:
+  número = ordem de ingestão, contínuo e nunca reusado; data vivida no
+  metadata (`date_lived`, `chat_url`, `serie`, `raw_kind`); linha no índice
+  antes de processar; raw sintético só declarado.
+- **Guarda da session_11 corrigida**: o chat de 04/04 NÃO entra ali — a
+  pasta é da sessão de maio (raw sintético pelos artefatos, precedente da
+  10); o chat de abril vai pra pasta nova (proposta: `session_13`).
+- **Proposta de ingestão do vão** (aguarda confirmação do E. no relay):
+  cartografia `096a708b` → session_12 · modos-de-processar `d77a97fa` →
+  session_13 · o «sessão 10» de 19/04 `4f893540` → session_14.
+- **Zip do Rick estacionado** em `sessions/_aguardando-ingestao/` (são os
+  artefatos da cartografia — futura session_12; o underscore fica fora do
+  glob dos scripts).
+
+### △ Decidido
+- A convenção é a resposta ao pedido explícito do Rick; nascidos ficam
+  (D76). O mapeamento 12/13/14 é PROPOSTA — o E. confirma (ele lê os
+  chats; a casa não).
+
+### → Next
+1. **Relay pro E.**: a quinta colisão (a guarda pegou a identificação
+   dele), o INDICE, e a proposta 12/13/14 pra confirmar
+2. **Rick**: copiar transcrições dos chats de abril quando puder (d77a97fa
+   e, se quiser, 096a708b) — a casa arquiva nos números novos
+3. **«sobe»** segue na mesa · chave da API pro dry-run
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*
