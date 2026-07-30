@@ -116,7 +116,7 @@ test('casa: a ida — plano, assentimento, estado vivo, desfazer', async ({ auth
   await page.screenshot({ path: shot('49-casa-ida-plano') });
 
   // o assentimento
-  await page.getByRole('button', { name: 'assentir ✓' }).click();
+  await page.getByRole('button', { name: 'aceitar ✓' }).click();
   await page.waitForTimeout(900);
   await page.screenshot({ path: shot('50-casa-ida-assentida') });
 

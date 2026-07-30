@@ -71,6 +71,7 @@ sobrevivem de lá seguem valendo onde não conflitam; em conflito, a Onda 3 venc
 | **D82** | **Semente não volta por afinidade inferida** — o sistema nunca infere o estado do Rick pra devolver semente «parecida»; é a heurística decidindo quieta (D69) e a estrutura do horóscopo. Volta só por **fato externo que a torna respondível** (§ 2.4). *(era V3)* | Rick 31 Jul |
 | **D83** | **O retorno chama «o que mudou»** — nunca «desde que você olhou»: o recorte é do sistema, não do olhar; a ausência do Rick não é assunto (candidato #7 do Teste 02, morto por dívida). *(era V4, § 1.2)* | Rick 31 Jul |
 | **D84** | **A entrevista não pergunta frequência pretendida** — pede o que **acontece** («que dias você costuma treinar?»), nunca o que se pretende («quantas vezes por semana?»): meta declarada é a régua da cobrança futura, D46 violada na origem. Opções de resposta sem escala moral. *(era V5, § 3.2)* | Rick 31 Jul |
+| **D85** | **A casa fala a língua do Rick** — palavra de superfície que o dono não conhece é bug, não estilo (o shame-test P2 aplicado à própria casa: «sobrevive sem o vocabulário do projeto?»). «Assentir» morreu nas superfícies → **«aceitar»** (que já morava no chip de triage — unificação, não palavra nova). Docs nascidos ficam (D76); docs novos e falas acompanham. | Rick 31 Jul |
 
 ## Na mesa (não ratificada — em observação vivida)
 

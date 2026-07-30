@@ -89,7 +89,7 @@ test('ato I.2 — assentir que falha NÃO avança o card', async ({ authenticate
   await page.waitForLoadState('networkidle');
   await page.waitForTimeout(600);
   await passarAurora(page);
-  await page.getByRole('button', { name: /assentir/ }).click();
+  await page.getByRole('button', { name: /aceitar/ }).click();
   await page.waitForTimeout(500);
   const folha = page.getByRole('dialog', { name: 'Esperando leitura' });
 
@@ -131,7 +131,7 @@ test('ato II — o assentimento se alcança do HOJE, sem digitar URL', async ({
   await page.screenshot({ path: 'docs/onda-3/14_dissecacao-01_fotos/24-ato2-puxador.png', fullPage: true });
 
   // e leva ao gesto — o caminho que o Rick não achou em 29 Jul
-  await page.getByRole('button', { name: /assentir/ }).click();
+  await page.getByRole('button', { name: /aceitar/ }).click();
   await page.waitForTimeout(500);
   const folha = page.getByRole('dialog', { name: 'Esperando leitura' });
   await expect(folha).toBeVisible();
@@ -198,7 +198,7 @@ test('ato III — o card mostra o que a lente trouxe, e pular manda pro fim', as
   await page.waitForLoadState('networkidle');
   await page.waitForTimeout(600);
   await passarAurora(page);
-  await page.getByRole('button', { name: /assentir/ }).click();
+  await page.getByRole('button', { name: /aceitar/ }).click();
   await page.waitForTimeout(500);
   const folha = page.getByRole('dialog', { name: 'Esperando leitura' });
 

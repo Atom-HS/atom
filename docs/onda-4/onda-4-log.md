@@ -369,5 +369,32 @@ a superfície são dele, o tronco e a face por dentro são da casa.
 
 ---
 
+## Wrap · 31 Jul 2026 — «eu nem conheço essa palavra» vira D85
+
+### ⬠ Soul
+O Rick travou numa palavra: «assentir». E a trava era a lei funcionando —
+o shame-test pergunta «sobrevive sem o vocabulário do projeto?», e a casa
+falhou nele com o próprio dono, três vezes, na cara do app. A correção
+unificou em vez de inventar: «aceitar» já morava no chip vizinho.
+
+### · Items
+- **D85 ratificada** — a casa fala a língua do Rick; palavra de superfície
+  que o dono não conhece é bug, não estilo.
+- **Troca executada**: puxador do HOJE · chip do conector (label +
+  aria) · botão da ida nas configurações — «assentir» → «aceitar».
+  Seletores dos e2e acompanharam (atos, dissecação-03, visual-mundo-novo).
+- **Hooks verdes**: tsc limpo · 417/417 testes · build ok.
+- Identificadores internos (`Assentimento.tsx`, `series.ts`) ficam — código
+  não é superfície; renomear arquivo é churn sem UX.
+
+### → Next
+1. A pergunta da spec continua na mesa — agora dita na língua da casa:
+   **«aceita a spec? constrói?»**
+2. Relay pro E. (a D85 entra no pacote — a Lei do Tom dele tem interesse
+   direto: o shame-test pegou a própria casa)
+3. Digest 07:15 · hostname · DP-G
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*

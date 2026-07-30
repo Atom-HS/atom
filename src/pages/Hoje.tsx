@@ -253,7 +253,7 @@ export function HojePage() {
           <span className="text-[13px] text-text-muted flex-1">
             {esperando === 1 ? '1 esperando leitura' : `${esperando} esperando leitura`}
           </span>
-          <span className="font-mono text-[11px] text-gold-dim shrink-0">assentir</span>
+          <span className="font-mono text-[11px] text-gold-dim shrink-0">aceitar</span>
         </button>
       )}
 
