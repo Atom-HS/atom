@@ -11,6 +11,7 @@ import { useNav } from '@/hooks/useNav';
 import { useSoulStore } from '@/store/soul-store';
 import { getCurrentPeriod } from '@/types/ui';
 import { AuroraRitual } from '@/components/hoje/AuroraRitual';
+import { BilheteCard } from '@/components/hoje/BilheteCard';
 import { ProtocolBanner } from '@/components/hoje/ProtocolBanner';
 import { esperandoLeitura } from '@/components/triage/Assentimento';
 import { AssentimentoSheet } from '@/components/triage/AssentimentoSheet';
@@ -243,6 +244,9 @@ export function HojePage() {
 
       {/* sentinela — o protocolo acordado pela alma (F7, reusado) */}
       <ProtocolBanner />
+
+      {/* a fala rara do E. — indigo, sem X, se lê e se solta (spec 03 v2) */}
+      <BilheteCard />
 
       {/* o que espera leitura — estado quieto, nunca badge que grita (D46) */}
       {esperando > 0 && (

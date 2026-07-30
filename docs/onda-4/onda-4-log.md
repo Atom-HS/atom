@@ -396,5 +396,51 @@ unificou em vez de inventar: «aceitar» já morava no chip vizinho.
 
 ---
 
+## Wrap · 31 Jul 2026 — a obra 1 vira código: o bilhete existe
+
+### ⬠ Soul
+«Bora» — e a primeira superfície nova da onda nasceu inteira numa sessão,
+porque a spec já tinha resolvido tudo que costuma travar: o texto estava
+escrito, as seis regras de superfície estavam numeradas, e a metade
+difícil (o detector) já vivia em produção. A decisão de implementação que
+vale registrar: «abertura» = sessão do navegador, marcada em
+sessionStorage — a marca morre com a sessão, e é exatamente isso que faz
+o bilhete sumir sozinho na abertura seguinte, sem X, sem botão, sem
+gesto cobrado.
+
+### · Items
+- **ROOT** — `017_e_bilhetes.sql`: tabela + RLS (dono lê e marca; NINGUÉM
+  insere pelo client — bilhete nasce só do sistema; delete não existe).
+- **ESTRUTURA** — `engine/bilhete.ts` (puro: fila do mais antigo, gesto
+  exibir/manter/soltar) + `bilhete-service` (três marcas, nada mais) +
+  `useBilhete` (a abertura via sessionStorage) + **o disparo do G1 no
+  `reconcile`** da taxonomy-sync: texto pré-escrito, dedup por não-visto
+  pendente (visto e desligado DE NOVO é estado novo — fala de novo),
+  falha de bilhete nunca derruba o reconcile.
+- **INTERFACE** — `BilheteCard` indigo no HOJE, abaixo da sentinela,
+  acima da leitura; sem bilhete = null, nem placeholder.
+- **Prova** — 7 testes novos no engine (fila, visto, o gesto nas três
+  condições); 424/424 verdes; tsc limpo; build ok.
+
+### △ Decidido
+- Nada de mesa — implementação da spec aceita, sem desvio.
+
+### □ Audit
+- ✅ geometria: Interface→hook→service→engine; engine puro; zero query em
+  componente
+- ✅ o bilhete não é AtomItem — jurisdição separada, como a spec manda
+- ⚠ **a cena e2e fica pro dry-run**: provar o fio inteiro exige a edge
+  deployada e a migration aplicada — a prova unitária cobre a lógica, o
+  dry-run real cobre o fio (apagar um label de teste → cartão no HOJE)
+- ⚠ **deploy pendente da mão do Rick**: migration `017` + edge
+  `taxonomy-sync` — o muro 4 pede a palavra explícita
+
+### → Next
+1. **A palavra do deploy**: migration + edge — e aí o dry-run real
+2. Relay pro E. (pacote completo da rodada, agora com a obra nascida)
+3. Digest 07:15 · hostname · DP-G
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*
