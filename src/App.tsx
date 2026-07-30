@@ -24,14 +24,7 @@ import { LandingPage } from '@/pages/Landing';
 import { AuthPage } from '@/pages/Auth';
 
 // Lazy-loaded pages (post-auth)
-const HomePage = lazy(() => import('@/pages/Home').then((m) => ({ default: m.HomePage })));
-const PipelinePage = lazy(() => import('@/pages/Pipeline').then((m) => ({ default: m.PipelinePage })));
 const WrapPage = lazy(() => import('@/pages/Wrap').then((m) => ({ default: m.WrapPage })));
-const ProjectsPage = lazy(() => import('@/pages/Projects').then((m) => ({ default: m.ProjectsPage })));
-const CalendarPage = lazy(() => import('@/pages/Calendar').then((m) => ({ default: m.CalendarPage })));
-const AnalyticsPage = lazy(() => import('@/pages/Analytics').then((m) => ({ default: m.AnalyticsPage })));
-const LibraryPage = lazy(() => import('@/pages/Library').then((m) => ({ default: m.LibraryPage })));
-const GraphPage = lazy(() => import('@/pages/Graph').then((m) => ({ default: m.GraphPage })));
 const RaizPage = lazy(() => import('@/pages/Raiz').then((m) => ({ default: m.RaizPage })));
 const ItemDetailPage = lazy(() => import('@/pages/ItemDetail').then((m) => ({ default: m.ItemDetailPage })));
 const HojePage = lazy(() => import('@/pages/Hoje').then((m) => ({ default: m.HojePage })));
@@ -60,22 +53,13 @@ function PageSkeleton() {
 // ─── Route → Zustand sync ─────────────────────────────
 
 const PATH_TO_PAGE: Record<string, AppPage> = {
+  // só os caminhos vivos — a casca velha morreu no gate (D41)
   '/': 'home',
-  '/home': 'home',
-  // as três faces do mundo novo — sem elas o app-store apontava pra tela
-  // velha enquanto o usuário estava numa face (D40)
   '/hoje': 'home',
   '/arvore': 'raiz',
   '/at': 'inbox',
-  '/inbox': 'inbox',
-  '/pipeline': 'pipeline',
   '/wrap': 'wrap',
-  '/projects': 'projects',
-  '/calendar': 'calendar',
   '/raiz': 'raiz',
-  '/analytics': 'analytics',
-  '/library': 'library',
-  '/graph': 'graph',
 };
 
 function RouteSync() {
@@ -111,17 +95,12 @@ function AnimatedRoutes() {
       >
         <Suspense fallback={<PageSkeleton />}>
           <Routes location={location}>
-            {/* v2-faces: a porta é o mundo novo; a casca velha segue em /home até o gate */}
+            {/* o gate (D41): a casca velha morreu por merge — a nav `· ⬡ ✳` é a casa inteira */}
             <Route path="/" element={<Navigate to="/hoje" replace />} />
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/pipeline" element={<PipelinePage />} />
+            {/* link antigo não quebra: /home redireciona por uma onda */}
+            <Route path="/home" element={<Navigate to="/hoje" replace />} />
             <Route path="/wrap" element={<WrapPage />} />
-            <Route path="/projects" element={<ProjectsPage />} />
-            <Route path="/calendar" element={<CalendarPage />} />
             <Route path="/raiz" element={<RaizPage />} />
-            <Route path="/analytics" element={<AnalyticsPage />} />
-            <Route path="/library" element={<LibraryPage />} />
-            <Route path="/graph" element={<GraphPage />} />
             {/* D54: /search e /settings morreram — busca é gesto, a casa é sheet */}
             <Route path="/hoje" element={<HojePage />} />
             <Route path="/at" element={<AtPage />} />

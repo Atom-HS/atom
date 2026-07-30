@@ -4,17 +4,9 @@ import type { AtomModule, Priority, AtomType, RitualSlot } from './item';
 export type AppPage =
   | 'home'
   | 'inbox'
-  | 'pipeline'
-  | 'triage'
   | 'wrap'
-  | 'projects'
-  | 'project-detail'
-  | 'calendar'
   | 'raiz'
-  | 'analytics'
-  | 'library'
-  | 'item-detail'
-  | 'graph';
+  | 'item-detail';
 
 export interface AppFilters {
   module: AtomModule | null;

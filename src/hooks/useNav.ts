@@ -4,19 +4,13 @@ import { useAppStore } from '@/store/app-store';
 import type { AppPage } from '@/types/ui';
 
 const PAGE_ROUTES: Record<AppPage, string> = {
-  home: '/',
-  inbox: '/inbox',
-  pipeline: '/pipeline',
-  triage: '/pipeline',
+  // o gate (D41): só as páginas vivas — `home` aponta pro HOJE, os
+  // navigate('home') existentes seguem funcionando
+  home: '/hoje',
+  inbox: '/at',
   wrap: '/wrap',
-  projects: '/projects',
-  'project-detail': '/projects',
-  calendar: '/calendar',
   raiz: '/raiz',
-  analytics: '/analytics',
-  library: '/library',
   'item-detail': '/item',
-  graph: '/graph',
 };
 
 export function useNav() {
