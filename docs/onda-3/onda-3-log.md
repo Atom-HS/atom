@@ -629,6 +629,105 @@ nasceu, a escada tem porta. O gate está com o gatilho livre. Puxar é teu.**
 
 ---
 
+## Wrap · 30 Jul 2026 — a sessão do gate: a morte por merge (D41 disparada)
+
+### ○ Soul
+O Rick colou o prompt — e colar o prompt ERA puxar o gatilho. Esta sessão
+não decidiu nada: executou com precisão o que o `19_gate.md` deixou pronto
+e o `23_handoff` fatiou em quatro obras. Sete telas morreram num commit
+atômico, nada do que vive sentiu falta do que morreu (28 provas e2e
+passaram sem retoque), e a nav `· ⬡ ✳` virou a casa inteira. A morte por
+merge é substituição, não convivência — e hoje ela deixou de ser tese.
+
+### · Items
+
+**Obra 1 — a mudança de casa** (`502c688` · prep, nada morre)
+- `AuroraRitual`, `ProtocolBanner`, `protocol-snooze` saem de
+  `components/home/` pra `components/hoje/` — e o **`ProtocolRunner` foi
+  junto**: dependência dura do banner que vive (o censo é o grep, não a
+  lista do gate)
+- cena I.2 do atos.spec migra do `/pipeline` pra porta do HOJE (puxador →
+  `AssentimentoSheet`) — e **a cena do ato III também**: o gate só
+  registrava a I.2, o grep achou as duas (mesma cirurgia, mesma razão —
+  a prova é do componente, não da tela)
+- a cena visual do chip (D69) migra do mesmo jeito; a foto virou da FOLHA
+  (precedente `casa-plano-ida`) — sem relógio fixo o arco vivo andaria
+  atrás; baseline refotografada com intenção declarada
+
+**Obra 2 — a morte por merge** (`3ab0365` · o commit atômico)
+- **morrem 21 arquivos, −3046 linhas**: `Home`, `Pipeline`, `Calendar`,
+  `Analytics`, `Library`, `Graph`, `Projects` + `components/home/`
+  inteiro + `components/analytics/` + `components/calendar/` (exclusivos
+  confirmados por grep)
+- rotas: `/home` → redirect pro `/hoje` (por uma onda); as outras seis
+  somem; **`/review` fica fora da nav** (porta: puxador da ÁRVORE, DP-G);
+  `PATH_TO_PAGE` encolhe pros 6 caminhos vivos
+- `useNav`/`AppPage` encolhem pra 5 páginas; `home` aponta `/hoje` (os
+  `navigate('home')` de Raiz e Wrap seguem); `inbox` aponta `/at`
+- o bundle principal caiu 442→399 kB; o chunk do d3 (65 kB) sumiu
+- `pipeline-service`, `review-service`, `usePipeline`, `Skeleton.tsx` —
+  usados pelo mundo vivo, não morreram (muro 4 do handoff honrado)
+
+**Obra 3 — a conferência** (sem commit — nada sobrou pra ajustar)
+- rito do verde completo no fecho da obra 2, zero baseline mudada
+- **lint: 49 problemas (46 erros + 3 avisos) — os 62 da casca velha
+  morreram com ela, zero erro novo**; os que restam moram em services/
+  edges/shell e são herdados (App.tsx e AuroraRitual acusam padrão
+  setState-em-effect que já existia, só mudou de linha/casa)
+
+**Obra 4 — o registro e o merge**
+- carimbo no `19_gate.md` §6: disparado em 30 Jul 2026, por decisão do
+  Rick — o prompt é a prova
+- merge `v2-faces` → `master` com commit de merge (precedente da casa:
+  `merge: …`), push de ambos
+
+### △ Decidido (nada ratificado)
+- Nenhuma DP nova. DP-G segue na mesa (a porta da escada é default
+  reversível); DP-E/DP-J idem. O merge não ratificou nada por tabela.
+
+### ⬡ Conexões
+- O `ProtocolRunner` indo junto e a cena do ato III migrando são o mesmo
+  princípio: **o censo é o grep, não a lista** — o gate previu o molde,
+  a sessão obedeceu a evidência
+- A foto da FOLHA (chip D69) reusa o precedente do `casa-plano-ida`: toda
+  cena visual sobre o HOJE sem relógio fixo fotografa a camada, não a página
+
+### ✳ Seeds (achados colaterais — fila, não desvio)
+- `d3` ficou órfão no `package.json` (só o Graph usava) — remover na
+  próxima faxina de deps
+- `Skeleton.tsx` tem exports órfãos (`SoulCardSkeleton`, `ChartSkeleton`,
+  `RingSkeleton`) — shared vivo, mas ninguém mais os importa
+- os specs históricos de e2e (`dissecacao-01`, `tour`, `gate-fotos`)
+  apontam pra rotas mortas — são história (fora do rito do verde), mas
+  quem os rodar à mão vai ver vermelho; decidir se ganham nota de museu
+
+### □ Audit
+- ✅ rito do verde nas obras 1 e 2: tsc limpo · 404 testes · build ·
+  atos.spec 15 cenas · gate visual 13/13
+- ✅ única baseline refotografada: `triage-leitura-conector.png`, com
+  intenção declarada no commit da obra 1
+- ✅ 2 commits de obra + docs; nenhum com hook vermelho; nenhuma das três
+  condições de parada disparou
+- ⚠ o push de `master` provavelmente dispara deploy na Vercel — e **a URL
+  da prod nova segue fora dos Redirect URLs do Supabase** (pendência
+  antiga, não piora com o merge, mas o login OAuth pode falhar lá)
+
+### → Next — a mesa do Rick
+1. **Redirect URL do Supabase na prod nova** — agora que o merge subiu,
+   é a pendência que morde primeiro
+2. **Deploy da `daily-digest`** — a MENTE do cron corrigida segue
+   esperando a mão do Rick
+3. **Ratificar**: DP-E (D74?) · DP-G · DP-A…DP-F · DP-J
+4. Fila MANCA: reconciliação no cron · boca `#seed` no wrap · polimentos
+   da ÁRVORE · `extractWhoTag` com acento · faxina do d3 e dos skeletons
+   órfãos · nota de museu nos specs históricos
+5. Viver a ida real no Gmail · instalar o PWA no celular
+
+**A última linha: a nav `· ⬡ ✳` é a casa inteira. O que morreu não faz
+falta — o que vive já fazia o trabalho.**
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. O formato é o do wrap do app,
 porque a casa come a própria comida.*

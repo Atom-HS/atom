@@ -122,6 +122,15 @@ carregada e na mesa; o gatilho é do dono da casa (D41, diário de 28 Jul).
 Quando quiser: as condições do §2, a decisão do §3, e o checklist do §4
 são o roteiro do dia do merge.
 
+> **CARIMBO — disparado em 30 Jul 2026, por decisão do Rick.** O prompt é
+> a prova: «colar o prompt É puxar o gatilho da D41» (handoff
+> `23_handoff-sessao-gate.md`), com a linha de autorização do merge em
+> `master` e do push. As duas condições do §2 estavam cumpridas; o
+> checklist do §4 foi executado em quatro obras (mudança de casa · morte
+> por merge · conferência · registro) — sete telas mortas, `/review` viva
+> fora da nav, hooks verdes em cada obra. O wrap da execução está no
+> `onda-3-log.md` (30 Jul, a sessão do gate).
+
 ---
 
 *Filho do Ato VII do `15_roteiro-do-mago.md`. «A morte por merge é gesto do
