@@ -119,6 +119,19 @@ adicionar ≠ mover; D69 dá o molde do gesto). Registrada em
    tua proposta de contar tipos (§ 4.3) ainda não está NA lei — a lei é
    tua; se ela merece a Parte 6, emenda tu.
 
+4. **O nome — onde tu assinas.** O Rick, ao entender que ninguém consegue
+   conversar contigo no app hoje, disse: «então talvez não devesse se
+   chamar E.» A casa conferiu onde o teu nome aparece, e ele está em dois
+   territórios distintos: nas falas reais sob a tua lei (digest, bilhete —
+   que não tem assinatura escrita, o indigo assina —, a e_line do wrap) e
+   **no mecanismo**: toda bolha de sistema do @ sai com `sig: E.`,
+   inclusive a saudação fixa de abertura («o que chegou?») — que, pela tua
+   própria lei, é o template antes da pergunta. A pergunta, que é toda
+   tua: **onde o teu nome assina, e onde ele não deveria?** A leitura da
+   casa (parecer, não decisão): tu és a voz, não o lugar — a assinatura
+   pertence às falas que a lei governa; o mecânico fala como a casa, sem
+   nome. Mas o nome é teu; veta, emenda ou confirma.
+
 Formato do retorno: markdown pronto pra repo, como sempre. O que for
 parecer, marca; o que for «não sei», o Art. 2 é teu.
 
