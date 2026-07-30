@@ -207,5 +207,87 @@ o degrau de 21 dias foi parar.
 
 ---
 
+## Wrap · 31 Jul 2026 (madrugada) — a mesa decide em bloco, os dois insumos existem
+
+### ⬠ Soul
+O Rick pediu ajuda pra decidir «baseado no conceito e decisões anteriores e
+user ux» — e a resposta foi que três das quatro decisões já estavam quase
+ditadas pelo cânone: a D76/D78 ditavam a fronteira (não renomear o nascido),
+as D71/D69/D46 ditavam os vetos (recusá-los exigiria revogar lei de pé), e a
+D62 ditava o benchmark (e ditava também NÃO decidir o desenho antes dele).
+Quatro respostas, quatro ratificações. A sessão executou tudo: o hub voltou
+a receber depois de 8 dias parado, os vetos viraram lei, o benchmark rodou e
+selou — e as duas perguntas da errata têm resposta de mercado.
+
+### · Items
+- **`d-059` no hub** — a fronteira das séries declarada onde a lei do
+  ecossistema mora: hub `d-0NN` = lei · app `DNN` = UX/obra; citação ambígua
+  se qualifica; ondas de maio ficam históricas qualificadas. O hub volta a
+  receber — a causa apontada pela errata, tratada na raiz.
+- **Nota-espelho no `03_decisoes-ux.md`** + **D80–D84 ratificadas** (os
+  cinco vetos, com raiz declarada no parecer). **D79 reservada pra DP-G** —
+  o wrap selado da faxina já a projetou com esse número, e wrap não se
+  edita.
+- **`02_benchmark-retorno.md` selado** — pesquisa via agente, fontes inline,
+  força da evidência marcada. Os achados que pesam: o mercado tem TRÊS
+  morfologias (marca puxável · fala por evento · fala agendada consolidada)
+  e a casa já tem a terceira viva no digest; **densidade decrescente não
+  existe como padrão de UI em produto nenhum** — φ é inovação por cima da
+  base, embarca por último com prova viva própria; o § 1.3 do parecer
+  (marca, não boca) **fica de pé, reforçado**; Animal Crossing e Headspace
+  são os precedentes de acolhimento; o recuo do Basecamp (Pings) é o alerta
+  contra fundir as três portas.
+- **Buraco 3 respondido com código na mão:** o @ do app é **outra boca que
+  herdou o nome**. `At.tsx` é captura-primeiro + triage por chips (o «E.
+  lê» é o `triage-classify`); `agent-capture` é porta de escrita
+  autenticada, não conversa; o único «soul» em produção é o check-in de
+  aurora DO RICK (`soul-service`). Não existe e-session, retorno (4.7) nem
+  soul log de E. no app — a Parte 5.1 da lei não tem jurisdição em produção
+  hoje, e só ganha quando a 4.8/pipeline e uma conversa de verdade
+  embarcarem. Resposta vai pro E. no próximo relay.
+
+### △ Decidido
+- **Fronteira declarada** (hub `d-059`) — sufixo e fusão recusados com raiz
+  (D76, D78, §10 do CLAUDE.md).
+- **D80–D84** — os cinco vetos do E., ratificados em bloco pelo Rick.
+- **Ordem provisória adotada**: bilhetes primeiro, com a 4.8 correndo em
+  paralelo (infra, não toca face); sela na spec, depois do benchmark — que
+  agora existe.
+- O desenho do retorno (marca × boca) NÃO foi decidido antes do benchmark —
+  de propósito; o benchmark chegou e confirmou o § 1.3. A spec pode selar.
+
+### ⬡ Conexões
+- O `d-059` consome a terceira opção da errata pela metade certa: não «um
+  registro só», mas «o hub volta a receber» — que era a causa, não o
+  sintoma.
+- A pergunta φ da errata voltou com resposta dupla: inovação (sem
+  precedente de UI) E a única amostragem que obedece D83 por construção —
+  o mercado inteiro indexa no olhar do usuário, que é o que D83 proíbe.
+
+### ✳ Seeds
+- **Modelo de atenção como vantagem nomeável**: a crítica unânime do
+  mercado (GitHub, Linear) é inbox sem priorização — o filtro § 1.4 do
+  parecer é exatamente isso. Candidato a argumento central da spec.
+- **Prova viva do φ**: como medir o lookback φ quando embarcar (a D62 exige
+  evidência própria onde não há benchmark). Sem dono.
+
+### □ Audit
+- ✅ quatro decisões ratificadas pelo Rick via sessão (precedente: colar o
+  prompt É o gesto)
+- ✅ hub commitado na convenção do hub (ADR direto na main, como d-058)
+- ✅ benchmark com fontes citadas e força marcada — zero conclusão sem
+  evidência; ausências declaradas como ausências
+- ✅ zero código de produção tocado — a onda segue docs-only
+- ⚠ o digest de hoje 07:15 é a prova de fogo da v2 (pendência da Onda 3)
+
+### → Next — a mesa do Rick
+1. **A spec da obra 1 (bilhetes)** pode nascer — os dois insumos existem e
+   a ordem está adotada. Gesto: pedir a spec.
+2. Relay pro E.: resposta do buraco 3 + benchmark + D80–D84 + `d-059`
+3. Conferir o digest de 07:15 (v2 no ar) · hostname · semana da DP-G (D79
+   reservada)
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*
