@@ -1,4 +1,9 @@
-# Decisões de UX — Onda 3 (D40–D78)
+# Decisões de UX — Ondas 3–4 (D40–D84)
+
+> **Fronteira das séries (hub `d-059`, 31 Jul):** esta série `DNN` é a de
+> **UX/obra do app**. A série `d-0NN` (minúscula, com hífen) é a **lei do
+> ecossistema**, em `atom/decisions/`. Mesmo número ≠ mesma decisão — citação
+> ambígua se qualifica: «D53 (UX)» × «d-053 (hub)».
 
 **Data:** 2026-07-27 · **Fonte:** `00_parecer-ux.md` (aprovado pelo Rick em
 26 Jul) destilado em decisões numeradas · **Par visual:** `03_mapa-navegacao.html`
@@ -60,6 +65,13 @@ sobrevivem de lá seguem valendo onde não conflitam; em conflito, a Onda 3 venc
 | **D76** | **Item já nascido não se re-processa** — conserto de mapper, tag ou heurística vale pro parto novo; o que nasceu fica como nasceu. História é história; se a busca precisar aceitar as duas formas, isso é obra própria. *(era DP-H, precedente honrado desde a cirurgia)* | Rick 30 Jul |
 | **D77** | **A sheet mostra só o que a página provou que importa** — presença, próximo como convite, filhos, quietude; zero chrome de gerenciador (criar/filtrar/agrupar morreram com a tela). *(era DP-I)* | Rick 30 Jul |
 | **D78** | **A taxonomy projetada fica em ASCII** (`Atom/saude`) — renomear lá fora faria o diff ler «sumiu» e desligar braços (D68: delete lá fora é comando). Acento no Gmail, se um dia, é obra deliberada de contrato (rename pelo id), nunca varredura de tom. *(era DP-J)* | Rick 30 Jul |
+| **D79** | *(reservada para a DP-G — a porta da escada, em observação vivida até ~6 Ago; o wrap da faxina já a projetou com este número)* | — |
+| **D80** | **Superfície não solicitada tem teto de comprimento** — nunca nasce boca que fala sem ser chamada e sem teto; o teto é o dispositivo anti-cobrança (bilhete 3 frases, push 1). Retorno longo só onde o Rick abre (@). *(era V1 do parecer de E., Onda 4 § 1.1)* | Rick 31 Jul |
+| **D81** | **Semente não volta por cadência** — tempo decorrido nunca é gatilho de volta; é snooze com horizonte longo, e snooze é cobrança adiada com outra cara (D71). *(era V2, § 2.3)* | Rick 31 Jul |
+| **D82** | **Semente não volta por afinidade inferida** — o sistema nunca infere o estado do Rick pra devolver semente «parecida»; é a heurística decidindo quieta (D69) e a estrutura do horóscopo. Volta só por **fato externo que a torna respondível** (§ 2.4). *(era V3)* | Rick 31 Jul |
+| **D83** | **O retorno chama «o que mudou»** — nunca «desde que você olhou»: o recorte é do sistema, não do olhar; a ausência do Rick não é assunto (candidato #7 do Teste 02, morto por dívida). *(era V4, § 1.2)* | Rick 31 Jul |
+| **D84** | **A entrevista não pergunta frequência pretendida** — pede o que **acontece** («que dias você costuma treinar?»), nunca o que se pretende («quantas vezes por semana?»): meta declarada é a régua da cobrança futura, D46 violada na origem. Opções de resposta sem escala moral. *(era V5, § 3.2)* | Rick 31 Jul |
+| **D85** | **A casa fala a língua do Rick** — palavra de superfície que o dono não conhece é bug, não estilo (o shame-test P2 aplicado à própria casa: «sobrevive sem o vocabulário do projeto?»). «Assentir» morreu nas superfícies → **«aceitar»** (que já morava no chip de triage — unificação, não palavra nova). Docs nascidos ficam (D76); docs novos e falas acompanham. | Rick 31 Jul |
 
 ## Na mesa (não ratificada — em observação vivida)
 

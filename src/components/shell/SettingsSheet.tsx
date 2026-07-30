@@ -155,7 +155,7 @@ export function SettingsSheet({ onClose }: SettingsSheetProps) {
                       className="font-mono text-[10.5px] px-2.5 py-1 rounded-full text-gold bg-gold-bg disabled:opacity-50"
                       style={{ border: '1px solid color-mix(in srgb, var(--color-gold) 30%, var(--color-border-soft))' }}
                     >
-                      {idaBusy ? 'projetando…' : 'assentir ✓'}
+                      {idaBusy ? 'projetando…' : 'aceitar ✓'}
                     </button>
                     <button onClick={() => setIdaPlan(null)} className="text-[11px] text-text-muted">
                       agora não

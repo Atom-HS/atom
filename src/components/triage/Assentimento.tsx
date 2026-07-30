@@ -292,7 +292,7 @@ export function Assentimento() {
           <button
             onClick={handleAcceptLeitura}
             className="w-14 h-14 rounded-full bg-success text-white flex items-center justify-center text-xl shadow-lg shadow-success/25"
-            aria-label="Assentir leitura do conector"
+            aria-label="Aceitar leitura do conector"
           >
             ✓
           </button>
@@ -317,7 +317,7 @@ export function Assentimento() {
       </div>
       <div className="flex justify-center gap-9 text-[10px] text-text-muted mt-1.5">
         <span>pular</span>
-        <span>{isConnector ? 'assentir' : triageResult ? 'aceitar' : 'classificar'}</span>
+        <span>{isConnector || triageResult ? 'aceitar' : 'classificar'}</span>
       </div>
     </div>
   );

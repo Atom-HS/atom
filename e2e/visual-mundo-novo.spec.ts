@@ -122,7 +122,7 @@ test('triage — a leitura do conector no chip (D69)', async ({ authenticatedPag
   // folha. A foto é da FOLHA (precedente casa-plano-ida) — sem relógio fixo
   // o arco vivo andaria de minuto em minuto por trás dela.
   await chegarSemRelogio(page, '/hoje');
-  await page.getByRole('button', { name: /assentir/ }).click();
+  await page.getByRole('button', { name: /aceitar/ }).click();
   await page.waitForTimeout(500);
   const folha = page.getByRole('dialog', { name: 'Esperando leitura' });
   await folha.getByRole('button', { name: 'Pular' }).click(); // passa o ponto do @; chega o conector

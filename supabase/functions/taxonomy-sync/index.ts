@@ -173,13 +173,16 @@ Deno.serve(async (req: Request): Promise<Response> => {
     if (action === "reconcile") {
       const next: TaxonomyRecord = { ...rec, gmail: { ...rec.gmail }, disabled: [...rec.disabled] };
       const disabledNow: string[] = [];
+      const desligados: Array<{ key: string; taxonomia: string; conector: string }> = [];
       for (const [key, label] of Object.entries(rec.gmail)) {
         if (liveByName.has(label.name)) continue;
         delete next.gmail[key];
         if (!next.disabled.includes(key)) next.disabled.push(key);
         disabledNow.push(key);
+        desligados.push({ key, taxonomia: label.name, conector: "Gmail" });
       }
       if (calendarGone) {
+        desligados.push({ key: CALENDAR_KEY, taxonomia: rec.calendar?.summary ?? "Atom", conector: "Google Calendar" });
         next.calendar = null;
         if (!next.disabled.includes(CALENDAR_KEY)) next.disabled.push(CALENDAR_KEY);
         disabledNow.push(CALENDAR_KEY);
@@ -190,7 +193,25 @@ Deno.serve(async (req: Request): Promise<Response> => {
           .eq("user_id", userId).eq("provider", "google");
         if (ue) return err("DB error", "TAX_305", 500, ue.message);
       }
-      log("reconciled", { disabled: disabledNow.length });
+      // ─── G1: o bilhete do braço desligado (Onda 4 obra 1 · spec 03 v2) ───
+      // Texto pré-escrito, zero modelo no disparo (anti-gerador). Dedup:
+      // um não-visto pendente com a mesma chave segura o eco; visto e
+      // desligado DE NOVO é estado novo — fala de novo. Falha aqui nunca
+      // derruba o reconcile: braços independentes.
+      for (const d of desligados) {
+        const dedupKey = `arm-disabled:${d.key}`;
+        const { data: pendente } = await sb.from("e_bilhetes").select("id")
+          .eq("user_id", userId).eq("dedup_key", dedupKey).is("visto_em", null).limit(1);
+        if (pendente && pendente.length > 0) continue;
+        const { error: be } = await sb.from("e_bilhetes").insert({
+          user_id: userId,
+          gatilho: "arm-disabled",
+          dedup_key: dedupKey,
+          texto: `O braço ${d.taxonomia} foi desligado no ${d.conector}. A estrutura lá fora não existe mais.`,
+        });
+        if (be) log("bilhete_error", { key: d.key, error: be.message });
+      }
+      log("reconciled", { disabled: disabledNow.length, bilhetes: desligados.length });
       return json({ action: "reconcile", disabled: disabledNow });
     }
 

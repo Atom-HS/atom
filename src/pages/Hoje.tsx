@@ -11,6 +11,7 @@ import { useNav } from '@/hooks/useNav';
 import { useSoulStore } from '@/store/soul-store';
 import { getCurrentPeriod } from '@/types/ui';
 import { AuroraRitual } from '@/components/hoje/AuroraRitual';
+import { BilheteCard } from '@/components/hoje/BilheteCard';
 import { ProtocolBanner } from '@/components/hoje/ProtocolBanner';
 import { esperandoLeitura } from '@/components/triage/Assentimento';
 import { AssentimentoSheet } from '@/components/triage/AssentimentoSheet';
@@ -244,6 +245,9 @@ export function HojePage() {
       {/* sentinela — o protocolo acordado pela alma (F7, reusado) */}
       <ProtocolBanner />
 
+      {/* a fala rara do E. — indigo, sem X, se lê e se solta (spec 03 v2) */}
+      <BilheteCard />
+
       {/* o que espera leitura — estado quieto, nunca badge que grita (D46) */}
       {esperando > 0 && (
         <button
@@ -253,7 +257,7 @@ export function HojePage() {
           <span className="text-[13px] text-text-muted flex-1">
             {esperando === 1 ? '1 esperando leitura' : `${esperando} esperando leitura`}
           </span>
-          <span className="font-mono text-[11px] text-gold-dim shrink-0">assentir</span>
+          <span className="font-mono text-[11px] text-gold-dim shrink-0">aceitar</span>
         </button>
       )}
 
