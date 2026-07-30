@@ -1,4 +1,4 @@
-# Decisões de UX — Onda 3 (D40–D57)
+# Decisões de UX — Onda 3 (D40–D78)
 
 **Data:** 2026-07-27 · **Fonte:** `00_parecer-ux.md` (aprovado pelo Rick em
 26 Jul) destilado em decisões numeradas · **Par visual:** `03_mapa-navegacao.html`
@@ -51,6 +51,22 @@ sobrevivem de lá seguem valendo onde não conflitam; em conflito, a Onda 3 venc
 | **D67** | **O Atom é a lente, não o lugar** — D56 generalizada pra TODOS os conectores. Conector = mão dupla: **ida** (o Genesis legisla pra fora — labels, calendários, estruturas na taxonomia da casa dentro do app externo, como no experimento do Secretário) + **volta** (refletir só o sinal — estrela, hora marcada, vencimento — nunca o volume). O Atom jamais vira cliente de email, calendário completo ou gerenciador de arquivos: a pessoa vive onde sempre viveu, o Atom enxerga através da bagunça. Crivo D62 por conector: a régua é "melhor LENTE sobre X", nunca "melhor cliente de X". Semente: `semente_atom-a-lente.md`. | Rick 29 Jul |
 | **D68** | **A ida é estrutural e reversível** — o conector cria taxonomia no app externo, NUNCA move nem esconde conteúdo. Zero escopo restricted novo (`gmail.modify` banido na v1); namespace assinado `Atom/…`; preview + assentimento antes de criar; delete lá fora é comando (desativa o braço), nunca recriação silenciosa; desligar o conector desfaz a estrutura. **Ida v1 = Gmail + Calendar juntos; a taxonomia projetada = os 9 domínios da vida** (`config/raiz.ts`), a língua da vida adulta legível dentro do Gmail. Benchmark `10` §3: toda revolta documentada vem de mover, nunca de criar. | Rick 29 Jul |
 | **D69** | **A heurística nunca decide quieta** — toda leitura automática de conector (recorrente→`ritual`, único→`task`) é sugestão visível: o chip de assentimento no inbox mostra a leitura e deixa trocar (ritual ⇄ task) num toque. Benchmark `10`: sugerir-e-aprovar 73% de adesão vs 31% da automação cega (Morgen). Cadência da volta: manual agora; cron nasce junto com o digest D66 (uma rotina servindo os dois). | Rick 29 Jul |
+| **D70** | **Item de conector não-assentido aparece nos fixos do HOJE** — o compromisso existe no céu independente da triage; esconder faria o hoje mentir. *(era DP-A, default do roteiro do mago, rodando desde 30 Jul de madrugada)* | Rick 30 Jul |
+| **D71** | **«Pular» adia pro fim da fila, dentro da sessão** — sem snooze de calendário: snooze é cobrança adiada com outra cara. *(era DP-B)* | Rick 30 Jul |
+| **D72** | **Assentimento por série** — um gesto sela o ritual semanal inteiro; instância nova herda o selo pelo portão 1→2 (inbox obrigatório de pé). Guardada por `series-espelho`. *(era DP-C)* | Rick 30 Jul |
+| **D73** | **O assentimento é camada, não lugar** — puxador no HOJE + sheet (D40 aplicada ao rito da triage, já que `/pipeline` morreu). *(era DP-D)* | Rick 30 Jul |
+| **D74** | **`/projects` vive como camada, morre como tela** — a pill do HOJE abre a sheet do projeto; a tela morreu no gate. Confirmada por vivência (dissecação 04) e mercado (benchmark `16`). *(era DP-E)* | Rick 30 Jul |
+| **D75** | **O raro tem memória por mudança de estado** — o digest só repete quando a BANDA muda (113→112 dias cala; 8→7 fala; ausência por degrau de 90d). Não é prazo, é espelho. Guardada por `vault-espelho`. *(era DP-F)* | Rick 30 Jul |
+| **D76** | **Item já nascido não se re-processa** — conserto de mapper, tag ou heurística vale pro parto novo; o que nasceu fica como nasceu. História é história; se a busca precisar aceitar as duas formas, isso é obra própria. *(era DP-H, precedente honrado desde a cirurgia)* | Rick 30 Jul |
+| **D77** | **A sheet mostra só o que a página provou que importa** — presença, próximo como convite, filhos, quietude; zero chrome de gerenciador (criar/filtrar/agrupar morreram com a tela). *(era DP-I)* | Rick 30 Jul |
+| **D78** | **A taxonomy projetada fica em ASCII** (`Atom/saude`) — renomear lá fora faria o diff ler «sumiu» e desligar braços (D68: delete lá fora é comando). Acento no Gmail, se um dia, é obra deliberada de contrato (rename pelo id), nunca varredura de tom. *(era DP-J)* | Rick 30 Jul |
+
+## Na mesa (não ratificada — em observação vivida)
+
+- **DP-G** — a porta da escada na ÁRVORE (puxador quieto «…espera significado
+  · significar», default da opção *a* do gate §3, 100% reversível). Rick
+  decidiu em 30 Jul: **viver uma semana antes de ratificar** — se o puxador
+  servir no uso real, vira D79 (~6 Ago).
 
 ## A lei do desenho (nomeada pelo Rick, rege todas)
 
