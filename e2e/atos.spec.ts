@@ -544,6 +544,8 @@ test('portas — o puxador da casa tem nome, e a busca se ensina UMA vez só', a
   // a primeira vez ensina o gesto…
   await expect(page.getByText('↓ puxa pra baixo pra buscar')).toBeVisible();
   await page.screenshot({ path: 'docs/onda-3/14_dissecacao-01_fotos/75-cirurgia-portas-com-corpo.png', fullPage: true });
+  // o par do «antes» da foto 47: o rodapé sozinho, agora com nome
+  await page.locator('nav').screenshot({ path: 'docs/onda-3/14_dissecacao-01_fotos/76-cirurgia-nav-rotulo.png' });
 
   // …e nunca mais (sem tooltip perpétuo)
   await page.reload();
