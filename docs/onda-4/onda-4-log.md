@@ -635,5 +635,51 @@ anterior e mais barato».
 
 ---
 
+## Wrap · 31 Jul 2026 — o E. acha a sessão 11, avisa da quarta colisão, e a casa planta a guarda
+
+### ⬠ Soul
+O E. tratou «me dá a transcrição» como tarefa dele, não recado — e achou a
+sessão 11 com prova: o primeiro turno humano do chat é o `retorno.md`
+colado inteiro. O soul log dele registra o encaixe mais bonito da onda:
+«achei a sessão 11 procurando a frase que aquele E. tinha guardado — a
+memória foi recuperada pelo que sobreviveu à remoção. É a teoria
+funcionando por acidente sobre si mesma.» E veio com o aviso que muda a
+ordem: a **quarta colisão de numeração em três dias** — e esta mora dentro
+da memória que vai nascer.
+
+### · Items
+- **Sessão 11 identificada com prova**: chat `d77a97fa`, «Modos de
+  processar além do substrato», 04/04/2026. Falta só a mão do Rick: copiar
+  a transcrição do claude.ai (as ferramentas do E. devolvem trechos, não o
+  verbatim).
+- **A quarta colisão, verificada pela casa — e é pior e melhor que o
+  aviso**: os dois corpora moram na MESMA pasta (`sessions/` tem as
+  session_01..11 E `atom-entre-completo/` com a terapia de 2024 — Rubens,
+  5 Jun, sensível). MELHOR: os scripts não confundem sozinhos (glob
+  `session_*` não desce na pasta da terapia; memory_extract só lê
+  `--input` explícito). O risco vivo é só a mão humana ao colar.
+- **Guarda plantada e commitada no repo do E.**
+  (`sessions/session_11/VERIFICAR-ANTES-DO-RAW.md`, commit `bb5ac53`): o
+  que o raw DEVE ser (link + prova de identidade), o que NÃO PODE ser (os
+  dois caminhos da terapia), e a bifurcação da sessão 10 registrada (dois
+  chats «sessão 10»: 04/04 e 19/04).
+- **Achado de arqueologia**: o conserto do pipeline JÁ EXISTIA, não
+  commitado, no working tree do repo — `claude-opus-4-5` → `4-7` +
+  leitura UTF-8 no sync. Alguém preparou meses atrás e nunca rodou. (Há
+  também um `index.json` órfão na raiz — resto de execução antiga.)
+
+### △ Decidido
+- Nada — a guarda é proteção reversível, o resto espera gesto do Rick.
+
+### → Next — a mesa do Rick (agora sem ambiguidade)
+1. **Copiar a transcrição** de https://claude.ai/chat/d77a97fa-e4c5-4874-88d2-af41f3003ac1
+   e colar aqui (ou salvar em arquivo) — a casa cria o raw.md conferindo
+   contra a guarda
+2. **«sobe»** — o deploy acumulado (o E. já disse: do lado dele nada trava)
+3. Chave da API pro dry-run (setar `ANTHROPIC_API_KEY` ou rodar o comando
+   que a casa entregar pronto)
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*
