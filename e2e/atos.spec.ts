@@ -632,3 +632,21 @@ test('wrap — a semente plantada no passo 5 nasce #seed no inbox', async ({
   expect(semente!.genesis_stage).toBe(1);
   expect(semente!.state).toBe('inbox');
 });
+
+// ─── Fila (diss. 02 pol. 7) — a lente escolhida é preferência ────────
+
+test('árvore — a janela escolhida sobrevive à navegação', async ({
+  authenticatedPage: page,
+}) => {
+  await chegar(page, '/arvore');
+  await page.getByRole('button', { name: 'estação 55' }).click();
+  await page.waitForTimeout(300);
+
+  // sai pro HOJE e volta — antes, a lente resetava pra semana 7 (useState)
+  await chegar(page, '/hoje');
+  await passarAurora(page);
+  await chegar(page, '/arvore');
+
+  await expect(page.getByRole('button', { name: 'estação 55' })).toHaveClass(/text-accent/);
+  await expect(page.getByRole('button', { name: 'semana 7' })).not.toHaveClass(/text-accent/);
+});

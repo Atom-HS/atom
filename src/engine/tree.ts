@@ -128,6 +128,20 @@ export function treeShape(items: AtomItem[], windowKey: TreeWindow['key'], now: 
 }
 
 /**
+ * Todas as folhas de um ramo na janela — a porta do «+N mais antigas»
+ * (pol. 9 diss. 02): o teto de 8 é do primeiro olhar, nunca do caminho.
+ * Mesma ordem do drill (mais nova primeiro), sem teto.
+ */
+export function allLeaves(items: AtomItem[], module: AtomModule, windowKey: TreeWindow['key'], now: Date = new Date()): Leaf[] {
+  const win = TREE_WINDOWS.find((w) => w.key === windowKey) ?? TREE_WINDOWS[0];
+  const since = sinceISO(now, win.days);
+  return items
+    .filter((i) => i.module === module && LIVE(i) && touchOf(i) >= since)
+    .sort((a, b) => touchOf(b).localeCompare(touchOf(a)))
+    .map((item) => ({ item, when: touchOf(item) }));
+}
+
+/**
  * A árvore inteira ainda não viveu? Cold start é ESTADO declarado, nunca
  * silêncio mudo: 8 tocos idênticos sem uma palavra são indistinguíveis de
  * «caiu» (benchmark 16: Whoop declara o cinza; quem esconde, assusta).

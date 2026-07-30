@@ -1,6 +1,6 @@
 // engine/tree.test.ts — a árvore da vida (face ÁRVORE)
 import { describe, it, expect } from 'vitest';
-import { treeShape, synthesis, presence, isColdStart, CONFIDENCE_FLOOR, TREE_WINDOWS } from './tree';
+import { treeShape, synthesis, presence, isColdStart, allLeaves, CONFIDENCE_FLOOR, TREE_WINDOWS } from './tree';
 import type { AtomItem, AtomModule } from '@/types/item';
 
 const NOW = new Date('2026-07-27T12:00:00Z');
@@ -61,6 +61,19 @@ describe('treeShape — real × ideal (o baseline é o teu passado)', () => {
     expect(work.real).toBe(1);
     expect(work.saturated).toBe(true);
     expect(family.thirsty).toBe(true); // era o maior no baseline, sumiu na semana
+  });
+
+  it('allLeaves — a porta do «+N»: devolve o que o teto esconde, na mesma ordem', () => {
+    const items = Array.from({ length: 10 }, (_, n) => item('body', (n % 6) + 1));
+    const body = treeShape(items, 'semana', NOW).find((b) => b.module === 'body')!;
+    const todas = allLeaves(items, 'body', 'semana', NOW);
+    expect(todas).toHaveLength(body.total);
+    // o começo é idêntico ao drill (o teto é do primeiro olhar, não do caminho)
+    expect(todas.slice(0, 8).map((l) => l.item.id)).toEqual(body.leaves.map((l) => l.item.id));
+    // e a ordem segue: mais nova primeiro
+    for (let i = 1; i < todas.length; i++) {
+      expect(todas[i - 1].when >= todas[i].when).toBe(true);
+    }
   });
 
   it('folhas: mais nova primeiro, teto 8 — e total diz a verdade', () => {
