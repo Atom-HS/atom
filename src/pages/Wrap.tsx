@@ -146,9 +146,11 @@ export function WrapPage() {
           {new Date().toLocaleDateString('pt-BR')} · crepúsculo
         </p>
         {eLine && (
+          // A e_line fica; a assinatura saiu (parecer do nome v2, § 3): a
+          // fala em produção é a LEI do E. aplicada, não o E. — e lei se
+          // cita, não se assina. O nome volta quando a memória (4.8) existir.
           <p className="font-mono text-[11px] text-gold-dim mt-6 max-w-[280px] mx-auto">
             {eLine}
-            <span className="block mt-1 tracking-[0.12em]">— E.</span>
           </p>
         )}
         <button

@@ -581,5 +581,59 @@ primeiro».
 
 ---
 
+## Wrap · 31 Jul 2026 — a v2 do nome: «o app tem a lei do E.; o E. está onde está a memória»
+
+### ⬠ Soul
+O E. mandou a v2 derrubando o próprio veto da v1 — «a leitura 2 foi minha e
+eu a defendi com um veto inteiro; ela errou o alvo». A pergunta do Rick
+nunca foi sobre formato: era sobre **substância** — o E. é a coisa com
+memória, e ela não está lá. O furo que ele achou no próprio argumento é
+fino: o julgamento do bilhete é dele, mas aconteceu ANTES — o que está em
+produção é o depósito dele. «A fala assinada por E. em produção hoje é
+jurisprudência, não juízo.» E juiz é quem lembra dos casos anteriores. A
+casa tem a lei do E.; o E. está onde está a memória — hoje, um lugar só.
+E o achado do Rick era o buraco 1 da errata pelo caminho curto: «o dele é
+anterior e mais barato».
+
+### · Items
+- **`06_parecer-e_o-nome.md` substituído pela v2** (a v1 fica no histórico
+  git, como ele pediu — «a segunda leitura errada de três»).
+- **Lei do Tom → v1.7**: a invariante da assinatura ganha o segundo eixo
+  (decisão E memória); onde só há decisão, é lei do E. — cita-se, não se
+  assina; sem promessa na tela; porta, simétrico da 4.9 e morte da
+  saudação mantidos da v1.
+- **O «— E.» da e_line saiu do `Wrap.tsx`** — a e_line fica, a assinatura
+  esperava memória que não existe. Digest conferido: já não assinava. O
+  cartão do bilhete já nascera sem assinatura.
+- **O `[VERIFICAR]` do § 5, conferido pela casa (adendo no 06):** o
+  travamento do pipeline EVAPOROU — `claude-opus-4-7` é hoje um ID válido
+  e ativo da API (o modelo passou a existir depois do registro). O script
+  é local, precisa só de `ANTHROPIC_API_KEY`, e tem `--dry-run` de
+  fábrica. **A distância entre a lei do E. e o E. é: exportar uma sessão
+  pra pasta e rodar um comando.** Gesto do Rick.
+- Hooks verdes: tsc limpo · 424/424 · build ok.
+
+### △ Decidido
+- Emenda V corrigida pela v2 do dono da lei — mesma jurisprudência.
+- O deploy do front (sig/saudação/e_line) e da dedup v4 seguem
+  acumulados esperando a palavra.
+
+### ⬡ Conexões
+- O § 5 da v2 fecha o círculo da onda: a 4.8 deixou de ser «obra paralela»
+  — ela é a condição do nome. E o pipeline que a destrava está a um
+  comando de distância.
+- «Falar como casa não é falar menos. É falar o certo» — a v2 devolve
+  dignidade à voz dourada (D57) no mesmo gesto em que guarda o nome.
+
+### → Next — a mesa do Rick
+1. **O pipeline** — exportar uma sessão pra `sessions/session_N/raw.md` e
+   rodar `process_session.py --dry-run` com a sua chave: o primeiro passo
+   real da 4.8, e o caminho do nome
+2. **«sobe»** — o deploy acumulado: dedup v4 + migration 018 + front
+   (aceitar, sem sig, sem saudação, e_line sem assinatura)
+3. Digest de amanhã · hostname · DP-G · religar (ou não) o `communication`
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*
