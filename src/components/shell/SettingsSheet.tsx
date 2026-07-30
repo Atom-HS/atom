@@ -25,11 +25,19 @@ export function SettingsSheet({ onClose }: SettingsSheetProps) {
   const { signOut, signInWithGoogle } = useAuth();
   const { getStatus, syncCalendar, syncGmail, disconnect, syncState, taxonomy, idaBusy, needsReconnect } = useConnectors();
   const isGoogleUser = user?.app_metadata?.provider === 'google';
+  const googleConn = getStatus('google');
 
   // a ida (D68): preview → assentimento → estado quieto → desfazer
   const [idaPlan, setIdaPlan] = useState<TaxonomyReport | null>(null);
-  const idaRecord = readTaxonomy(getStatus('google')?.metadata);
+  const idaRecord = readTaxonomy(googleConn?.metadata);
   const idaViva = isApplied(idaRecord);
+
+  // a lente sabe de si (D46): a casa se move sozinha e a sheet diz — estado,
+  // nunca promessa. O horário é o do cron (migration 016: 21:15 UTC = 07:15
+  // Brisbane); a «última volta» é o last_sync_at que toda volta carimba.
+  const ultimaVolta = googleConn?.lastSyncAt
+    ? formatDistanceToNow(parseISO(googleConn.lastSyncAt), { addSuffix: true, locale: ptBR })
+    : null;
 
   const handleIdaPreview = async () => {
     const report = await taxonomy('preview');
@@ -187,6 +195,15 @@ export function SettingsSheet({ onClose }: SettingsSheetProps) {
                 </>
               )}
             </div>
+          )}
+
+          {/* o estado quieto do cron — a casa que olha sozinha se declara */}
+          {isGoogleUser && googleConn?.status === 'connected' && (
+            <p className="px-4 py-3 border-t border-border-soft font-mono text-[10px] text-text-faint">
+              a casa olha sozinha todo dia às 07:15
+              {' · '}
+              {ultimaVolta ? `última volta ${ultimaVolta}` : 'ainda sem volta registrada'}
+            </p>
           )}
         </div>
 

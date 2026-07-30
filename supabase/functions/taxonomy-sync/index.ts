@@ -4,6 +4,9 @@
 // comando (desativa o braço, nunca recria quieto) · desfazer remove SÓ o
 // que a casa criou (ids registrados) · reconciliação por diff, com log.
 // Escopos: gmail.labels (non-sensitive) + calendar.app.created (sensitive).
+// Contrato canônico: src/engine/taxonomy.ts (TaxonomyRecord, namespace,
+// CALENDAR_KEY) — esta edge espelha à mão e o guarda taxonomy-espelho
+// quebra se divergir. Mudança de contrato nasce LÁ; aqui segue.
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
 interface DesiredLabel { key: string; name: string }
@@ -91,8 +94,8 @@ Deno.serve(async (req: Request): Promise<Response> => {
     const labels = body.labels as DesiredLabel[] | undefined;
     const calendarSummary = typeof body.calendar_summary === "string" ? body.calendar_summary : "Atom";
     if (!userId || typeof userId !== "string") return err("Missing user_id", "TAX_022", 400);
-    if (action !== "preview" && action !== "apply" && action !== "remove") return err("Invalid action", "TAX_023", 400);
-    if (action !== "remove" && (!Array.isArray(labels) || labels.some((l) => !l?.key || typeof l.name !== "string" || !l.name.startsWith("Atom/")))) {
+    if (action !== "preview" && action !== "apply" && action !== "remove" && action !== "reconcile") return err("Invalid action", "TAX_023", 400);
+    if ((action === "preview" || action === "apply") && (!Array.isArray(labels) || labels.some((l) => !l?.key || typeof l.name !== "string" || !l.name.startsWith("Atom/")))) {
       return err("Labels must live in the Atom/ namespace", "TAX_024", 400);
     }
 
@@ -103,10 +106,6 @@ Deno.serve(async (req: Request): Promise<Response> => {
     if (ce) return err("DB error", "TAX_301", 500, ce.message);
     if (!conn?.provider_refresh_token) return err("Google not connected", "TAX_302", 400);
 
-    const tr = await refreshToken(conn.provider_refresh_token, ci, cs);
-    if ("error" in tr) return tr.error;
-    const at = tr.token;
-
     const metadata = (conn.metadata ?? {}) as Record<string, unknown>;
     const rawRec = metadata.taxonomy as Partial<TaxonomyRecord> | undefined;
     const rec: TaxonomyRecord = {
@@ -116,6 +115,16 @@ Deno.serve(async (req: Request): Promise<Response> => {
       disabled: Array.isArray(rawRec?.disabled) ? rawRec.disabled : [],
       applied_at: rawRec?.applied_at ?? null,
     };
+
+    // reconciliar sem ida viva: nada a conferir — sai antes de acordar o Google
+    if (action === "reconcile" && Object.keys(rec.gmail).length === 0 && !rec.calendar) {
+      log("reconciled", { disabled: 0, idaViva: false });
+      return json({ action: "reconcile", disabled: [] });
+    }
+
+    const tr = await refreshToken(conn.provider_refresh_token, ci, cs);
+    if ("error" in tr) return tr.error;
+    const at = tr.token;
 
     // ─── desfazer completo: remove SÓ o que a casa criou (ids registrados) ───
     if (action === "remove") {
@@ -147,11 +156,42 @@ Deno.serve(async (req: Request): Promise<Response> => {
     const liveByName = new Map(liveLabels.map((l) => [l.name, l]));
 
     let calendarLive: { id: string; summary: string } | null = null;
+    let calendarGone = false;
     if (rec.calendar) {
       const cr = await gget(`${GCAL}/calendars/${rec.calendar.id}`, at);
       if (cr.status === 403) return scopeError("calendar-get", await cr.text().catch(() => ""));
       if (cr.ok) calendarLive = rec.calendar;
       // 404/410 → o usuário deletou o calendário: comando, não guerra
+      if (cr.status === 404 || cr.status === 410) calendarGone = true;
+    }
+
+    // ─── reconcile: a volta diária confere o que a casa criou (D68) ───
+    // «Deletou lá fora → braço desliga» sem depender de alguém abrir o
+    // preview à mão. Só DESLIGA — nunca cria: criar exige assentimento.
+    // Ninguém olhando → só o 404/410 explícito desliga o calendário; erro
+    // transitório do Google não vira comando.
+    if (action === "reconcile") {
+      const next: TaxonomyRecord = { ...rec, gmail: { ...rec.gmail }, disabled: [...rec.disabled] };
+      const disabledNow: string[] = [];
+      for (const [key, label] of Object.entries(rec.gmail)) {
+        if (liveByName.has(label.name)) continue;
+        delete next.gmail[key];
+        if (!next.disabled.includes(key)) next.disabled.push(key);
+        disabledNow.push(key);
+      }
+      if (calendarGone) {
+        next.calendar = null;
+        if (!next.disabled.includes(CALENDAR_KEY)) next.disabled.push(CALENDAR_KEY);
+        disabledNow.push(CALENDAR_KEY);
+      }
+      if (disabledNow.length > 0) {
+        const { error: ue } = await sb.from("user_connectors")
+          .update({ metadata: { ...metadata, taxonomy: next }, updated_at: new Date().toISOString() })
+          .eq("user_id", userId).eq("provider", "google");
+        if (ue) return err("DB error", "TAX_305", 500, ue.message);
+      }
+      log("reconciled", { disabled: disabledNow.length });
+      return json({ action: "reconcile", disabled: disabledNow });
     }
 
     // ─── o plano por braço ───
