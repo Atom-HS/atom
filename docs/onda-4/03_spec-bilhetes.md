@@ -34,10 +34,14 @@ jurisdição. Spec primeiro (§8.7); o código espera o assentimento do Rick.*
   documentado linha a linha → só então fio. Sem registro, não embarca.
 
 **Da spec da casa** (jurisdição: o tronco, o schema, a face por dentro):
-- **`dedup_key`** — o estado que já falou não fala de novo (D75 em
-  espírito). O E. não tinha; sem isso, o mesmo braço desligado falaria a
-  cada reconcile diário. `dedup_key = "arm-disabled:" + branchKey`;
-  religou-e-apagaram-de-novo é estado novo, fala de novo.
+- **`dedup_key`** — o segundo guardião do eco (D75 em espírito).
+  *Corrigida pelo parecer da fusão (`05b` § 1.1)*: a **borda** do evento é
+  garantida pela remoção do registro (`delete next.gmail[key]` — braço
+  desligado sai do laço e não re-dispara); a dedup era guarda de corrida
+  com o crachá errado. Opção 2 do E., implementada: a chave bloqueia
+  enquanto existir, e **o religar (apply) limpa a chave** — aí
+  religou-e-apagaram-de-novo é estado novo e fala de novo, sustentado
+  pela própria dedup. Dois guardiões independentes (migration `018`).
 - **Bilhete NÃO é AtomItem** — é fala do E., não vida do Rick. Não entra no
   inbox, não matura, não conecta. A escada do Genesis rege itens; a Lei do
   Tom rege falas. Duas jurisdições, zero mistura.
@@ -95,7 +99,7 @@ gera desligamento geral).
 |---|---|---|---|---|
 | **G1** | Braço desligado lá fora (D68: delete é comando) | `reconcile` (v2 no ar, `disabledNow`) | «O braço `{taxonomia}` foi desligado no {conector}. A estrutura lá fora não existe mais.» | **embarca** |
 | **G2** | O pipeline de O Espaço Entre rodou em produção | fora do app — `[VERIFICAR]` fonte; conversa com a obra da 4.8 | «O pipeline rodou. {n} sessões no Supabase.» | dormente até haver fonte |
-| **G3** | Semente virou respondível por fato externo | inbox + fato externo | *a escrever no Teste 03* | teste antes de fio |
+| **G3** | Semente virou respondível por fato externo | — | — | **VETADO pelo Teste 03** (`05b` § 2.4): 0 de 7 sementes produzem candidato — toda condição desta casa é fato que o próprio Rick produz, e cai na condição 6. Reabre quando existir semente esperando fato que o Rick não produz (preço, API, lei, domínio) |
 | — | Cron não rodou | — | — | é push caso 3, outra obra |
 
 ## Instrumentação e revisão (§ 6 do E. — íntegro)

@@ -42,8 +42,11 @@ export function AtPage() {
   const all = useMemo(() => (items ?? []) as AtomItem[], [items]);
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ['items'] });
 
+  // Bolha mecânica não assina: a assinatura acompanha a decisão, não a
+  // fala (Lei do Tom v1.6, invariante da 4.0 — «o crachá sou eu»). O sig
+  // volta pela `extra` só onde houver julgamento de E. (ex.: bilhete).
   const e = (text: string, extra?: Partial<ChatMessage>) =>
-    chat.push({ from: 'e', sig: 'E.', text, ...extra });
+    chat.push({ from: 'e', text, ...extra });
 
   // ─── os fluxos da boca ─────────────────────────────────
   async function handleSend() {

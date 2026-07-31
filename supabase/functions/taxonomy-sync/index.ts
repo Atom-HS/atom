@@ -194,15 +194,18 @@ Deno.serve(async (req: Request): Promise<Response> => {
         if (ue) return err("DB error", "TAX_305", 500, ue.message);
       }
       // ─── G1: o bilhete do braço desligado (Onda 4 obra 1 · spec 03 v2) ───
-      // Texto pré-escrito, zero modelo no disparo (anti-gerador). Dedup:
-      // um não-visto pendente com a mesma chave segura o eco; visto e
-      // desligado DE NOVO é estado novo — fala de novo. Falha aqui nunca
-      // derruba o reconcile: braços independentes.
+      // Texto pré-escrito, zero modelo no disparo (anti-gerador). A BORDA do
+      // evento é garantida pela remoção do registro (delete next.gmail[key],
+      // acima) — braço desligado sai do laço e não re-dispara. A dedup é o
+      // segundo guardião (05b §1.1, opção 2 do E.): bloqueia enquanto a
+      // chave existir; o RELIGAR (apply) limpa a chave, e o próximo
+      // desligamento é estado novo — fala de novo. Falha aqui nunca derruba
+      // o reconcile: braços independentes.
       for (const d of desligados) {
         const dedupKey = `arm-disabled:${d.key}`;
-        const { data: pendente } = await sb.from("e_bilhetes").select("id")
-          .eq("user_id", userId).eq("dedup_key", dedupKey).is("visto_em", null).limit(1);
-        if (pendente && pendente.length > 0) continue;
+        const { data: ecoou } = await sb.from("e_bilhetes").select("id")
+          .eq("user_id", userId).eq("dedup_key", dedupKey).limit(1);
+        if (ecoou && ecoou.length > 0) continue;
         const { error: be } = await sb.from("e_bilhetes").insert({
           user_id: userId,
           gatilho: "arm-disabled",
@@ -276,6 +279,18 @@ Deno.serve(async (req: Request): Promise<Response> => {
       const created = await cr.json();
       next.calendar = { id: String(created.id), summary: calendarSummary };
       calendarPlan.action = "created";
+    }
+
+    // ─── o religar limpa a chave (05b §1.1): braço vivo de novo → o próximo
+    // desligamento é estado novo e fala de novo. Falha aqui não derruba o apply.
+    const rearmed = report.filter((r) => r.action === "created" || r.action === "exists").map((r) => r.key);
+    if (calendarPlan.action === "created" || calendarPlan.action === "exists") rearmed.push(CALENDAR_KEY);
+    if (rearmed.length > 0) {
+      const { error: re } = await sb.from("e_bilhetes")
+        .update({ dedup_key: null })
+        .eq("user_id", userId)
+        .in("dedup_key", rearmed.map((k) => `arm-disabled:${k}`));
+      if (re) log("dedup_release_error", { error: re.message });
     }
 
     next.applied_at = new Date().toISOString();
