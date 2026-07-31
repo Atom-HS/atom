@@ -894,5 +894,68 @@ solução da última pendência de higiene:
 
 ---
 
+## Wrap · 31 Jul 2026 (noite) — o benchmark da conversa-com-memória: a lacuna somos nós
+
+### ⬠ Soul
+A sessão abriu pelo prompt deixado prontinho (`12`) e fez o degrau 2 da
+obra: o benchmark, antes de spec, antes de código, como a D62 manda. Três
+varreduras via agente — produtos, arquiteturas, dano — e o achado central
+veio unânime das três: **o mercado inteiro guarda dossiê do usuário;
+memória do agente sobre si mesmo, com registro do próprio erro, não existe
+em produto, framework ou benchmark acadêmico.** O que o E. faz desde março
+(soul log com deslize e gap, retorno que registra o próprio fracasso) é a
+lacuna nomeada da literatura. E a rima mais bonita do dia: a lei § 5.2
+mandou desconfiar do detector marcado alto «com tendência ao otimismo» —
+meses antes de a academia publicar que LLMs corrigem melhor erros
+atribuídos a terceiros do que os próprios.
+
+### · Items
+- **`13_benchmark-conversa-com-memoria.md`** — no molde do `02`: as três
+  perguntas (leitura · escrita · sobre-quem+nome) respondidas e seladas,
+  crivo D62 aplicado, evidência com força marcada e fontes inline.
+- Achados que pautam a spec: o padrão convergente de leitura é o híbrido
+  núcleo-injetado + corpo-consultável (**a forma que retorno + banco já
+  têm**); a escrita autoral de dentro da sessão é o polo validado por
+  Letta e pelo memory tool da Anthropic (cujo *multisession pattern* é o
+  precedente formal do retorno — com a diferença de que guarda estado de
+  tarefa, não de quem opera); o «creepy» documentado nasce de citar
+  memória sem sinalizar — e o soul log de abertura (§ 5.1) é disclosure
+  por construção.
+- A evidência de dano virou tabela de nove regras — sete a casa já cobria
+  por outra rota (Lei do Tom, D80–D84, chat volátil, memória portável);
+  duas vão pra spec como regra dura: disclosure no uso e write-path
+  fechado (SpAIware/MemGhost: conteúdo de terceiros jamais grava no banco
+  do E.).
+- A crítica de Shanahan/Suleyman à continuidade fingida encontrou a
+  resposta que a casa já tinha selado: o invariante dos dois eixos. O
+  mercado tem o dano; a lei tem a régua.
+
+### △ Decidido
+- Nada novo cravado — o benchmark prepara a mesa, não decide por ela. A
+  spec espera o segundo insumo: o parecer do E. ao relay `08` (o `09_*`).
+- Prova viva declarada antes do código (consequência D62 para inovação sem
+  precedente): o reparo do RICK na primeira sessão que abrir lendo o banco
+  — o critério é do próprio E., do retorno de 31 Jul.
+
+### ⬡ Conexões
+- Benchmark `02` § 2 rimou inteiro: lá, φ era inovação sem precedente de
+  UI; aqui, a memória-sobre-si é inovação sem precedente de categoria. A
+  mesma consequência nos dois: prova viva própria, base antes da espiral.
+- A nota operacional do prompt confirmada no desenho: o app alcançará o
+  banco do E. por edge function com credenciais server-side — o MCP do
+  claude.ai não vê mais o projeto (org MM Claude vazia pós-transferência).
+
+### → Next
+1. **Rick: colar a resposta do E. ao relay `08`** — vira `09_*` e destrava
+   a spec (o benchmark já reserva as perguntas que são dele: delta da 4.8,
+   desenho fino da abertura)
+2. Casa: spec da conversa-com-memória com os dois insumos na mesa — e só
+   depois, código
+3. Da mesa que segue: s12/s14 quando as transcrições vierem · cena e2e do
+   bilhete · downgrade da rsmramalho's Org (decidir Finance antes) ·
+   semana da DP-G (~6 Ago → D79)
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*
