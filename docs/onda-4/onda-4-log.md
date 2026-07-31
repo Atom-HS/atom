@@ -1046,6 +1046,20 @@ chats são esses» — e as três viraram fato:
   secrets no projeto do app (service key do banco do E. + chave da API;
   lembrar: a chave colada no chat de 31 Jul segue pendente de rotação).
 
+### Fecho · 1 Ago — a sessão fecha, e a próxima já sabe o que é
+O Rick fechou pedindo a próxima obra com a franqueza que é dele: «tá
+difícil de navegar sem saber, tudo é muito diferente». O onboarding — do
+PRÓPRIO Rick primeiro, não do visitante — vira a abertura da próxima
+sessão, com a intuição dele («talvez o próprio E.») encontrando a 4.10.6
+que já dizia: a entrevista É o onboarding. Prompt prontinho em
+`15_prompt-proxima-sessao.md`. A fila da casa: degrau 2 da
+conversa-com-memória espera a vez (e a rotação da chave antes dele).
+
+### ✳ Seeds
+- **O E. como guia da casa** — onboarding conversacional do dono; se
+  provar, a mesma boca recebe o estranho amanhã (obra 3 se aproxima por
+  aqui).
+
 ---
 
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
