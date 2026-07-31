@@ -1295,5 +1295,68 @@ superfície.** A auditoria que o dono pediu já existia como componente morto.
 
 ---
 
+## Wrap · 1 Ago 2026 — «bora arrumar»: a primeira onda de consertos da auditoria
+
+### ⬠ Soul
+O «bora» veio e a casa atacou a lista do § 7 pela ordem de dor÷custo,
+começando pelo que não pedia decisão nova. O conserto que dá o tom: o modo
+em bloco da esteira nasceu com a D69 no centro — **só entra no bloco o que
+já tem leitura visível**; a captura crua fica no um-a-um, onde a leitura
+acontece na frente de quem assente. Lote sem atropelo: a linha mostra
+exatamente o que o card mostraria. E o convite que mentia («abrir pro
+mundo» → pulava pro 7) agora diz o destino real — a mentira barata caiu
+primeiro, como manda a lista.
+
+### · Items (3 commits, hooks verdes em cada: tsc limpo · 415/415 · build ok)
+- **`6de9c80` fix(item):** convite do 5 honesto (⬠ → ○ selar, com o
+  comentário do porquê) · **arquivar leva o state junto** (status sozinho
+  deixava o item contando como inbox na esteira — bug latente) · undo do
+  arquivar restaura status E state · **PrazoChip + PrioridadeChip** no
+  ItemDetail (due_date/priority sempre existiram no schema; semana e busca
+  já leem; limpar é gesto de primeira classe) · `archiveBatch` no hook
+  (lote quieto, um toast, falha contada). O fóssil `parsing.ts` foi junto
+  neste commit (deveria ir no seguinte — cosmético).
+- **`1b5faeb` fix(taxonomy):** um vocabulário só — token-parser 23→26
+  (@person/@routine/@protocol parseiam) · busca TYPE_MAP 16→26 com
+  apelidos pt (10 tipos eram inbuscáveis e travavam a busca) · **migration
+  `019`**: enum `session_log`→`session-log` por RENAME VALUE (corrige os 2
+  itens de produção no mesmo gesto; `check_orphan_downgrade` e
+  `v_below_floor` recriadas — literal de enum velho explode em runtime) ·
+  edges tronco/triage no vocabulário novo; agent-capture aceita os dois
+  kinds (quem chama não quebra).
+- **`785020c` feat(esteira):** modo em bloco — toggle «em bloco / um a
+  um», linhas com a leitura visível (`type · module` colorido), «marcar
+  lidos (n)», «✓ aceitar leituras (n)» e «guardar no arquivo (n)»;
+  «sem leitura só vai pro arquivo — pra ler, volta ao um a um»; contador
+  `gravando f/t…` durante; seleção morre na troca de modo; fila de 1
+  volta ao card. `engine/esteira.ts` puro com 4 testes.
+
+### △ Decidido
+- Nada de mesa nova — execução da lista § 7 (itens 1, 2-parcial, 3, 4) já
+  aceita pelo «bora». O destino do estágio 6 (ligar `propagate_effect` vs
+  declarar fora) segue decisão aberta — o conserto de agora só tirou a
+  mentira do rótulo.
+
+### □ Audit
+- ✅ geometria: componente → hook → service; engine puro; zero query em
+  componente; lote no engine testado
+- ✅ D69 honrada no lote (nada decide quieto); D46 (contador é estado);
+  strings na língua da casa (D85)
+- ⚠ **deploy pendente da palavra («sobe»):** migration `019` ANTES das
+  edges (tronco/triage/agent-capture) — a edge velha escrevendo
+  `session_log` falha depois da migration; front via merge + Vercel manual
+- ⚠ itens § 7 que restam: ajustes mínimos (períodos/cofre/lugar) · órfãos
+  (AuditPanel/useRoutine/digest duplicado) · eventos de verdade · gestão
+  de tags — cada um pede sua mesa
+
+### → Next — a mesa do Rick
+1. **«sobe»** — migration 019 + edges + front (a ordem está no commit)
+2. Testar ao vivo: HOJE → puxador → «em bloco» → marcar lidos → ✓ (os 178
+   do inbox são o teste real) · um item → prazo/prioridade
+3. Spec 19 do onboarding: ratificação + [NÃO SEI] + rotação da chave
+4. Da mesa que segue: chats de abril · downgrade rsmramalho's Org · DP-G
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*
