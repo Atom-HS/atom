@@ -1350,11 +1350,29 @@ primeiro, como manda a lista.
   de tags — cada um pede sua mesa
 
 ### → Next — a mesa do Rick
-1. **«sobe»** — migration 019 + edges + front (a ordem está no commit)
+1. ~~«sobe»~~ — **dado e executado** (ver adendo abaixo)
 2. Testar ao vivo: HOJE → puxador → «em bloco» → marcar lidos → ✓ (os 178
    do inbox são o teste real) · um item → prazo/prioridade
 3. Spec 19 do onboarding: ratificação + [NÃO SEI] + rotação da chave
 4. Da mesa que segue: chats de abril · downgrade rsmramalho's Org · DP-G
+
+### Adendo · o deploy (mesma manhã, «deploy»)
+Na ordem que o commit mandava, tudo pela mão da casa:
+- ✅ **Migration `019` aplicada** via Management API (token do cofre; o
+  JavaScriptSerializer engasgou no arquivo — JSON escapado à mão resolveu):
+  enum `session_log`→`session-log`, **os 2 itens de produção renomeados no
+  mesmo gesto**, funções/views recriadas, registro em `schema_migrations`
+  (`20260801120000`). Bônus conferido: a **018 já estava aplicada**
+  (dedup_key nullable — o conector fez o serviço em algum momento; a
+  pendência antiga fecha).
+- ✅ **Edges deployadas** (CLI): `agent-capture` (--no-verify-jwt, auth por
+  segredo) e `triage-classify` — as duas já falam `session-log`.
+- ✅ **Front em produção**: merge `v2-faces`→`master` (`bd562db`), push nas
+  duas branches, `vercel deploy --prod` → **READY**
+  (atom-2dc6bijyt, 09:40 Brisbane). O app que o Rick abre agora tem o modo
+  em bloco, prazo/prioridade e o convite honesto.
+- ⏳ a última cena é do Rick, ao vivo: abrir o puxador do HOJE → «em
+  bloco» → marcar lidos → ✓ — e ver a fila de 178 encolher de verdade.
 
 ---
 
