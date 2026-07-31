@@ -46,11 +46,14 @@ export function useItemMutations() {
     onSuccess: (_data, { updates }, context) => {
       if (updates.status === 'archived' && context?.previous) {
         const previousItems = context.previous;
+        // o undo devolve status E state de antes — restaurar só o status
+        // deixava o item com state 'archived' (fora da esteira pra sempre)
+        const prev = previousItems.find((i) => i.id === _data?.id);
         toast.success('Item arquivado', {
           undoAction: () => {
             queryClient.setQueryData(['items'], previousItems);
             const id = _data?.id;
-            if (id) itemService.update(id, { status: 'active' });
+            if (id) itemService.update(id, { status: prev?.status ?? 'active', state: prev?.state ?? 'classified' });
           },
         });
       } else if (updates.status !== 'archived') {
@@ -157,5 +160,32 @@ export function useItemMutations() {
     onSettled: invalidate,
   });
 
-  return { createItem, updateMutation, completeMutation, uncompleteMutation, deleteMutation };
+  // arquivar em bloco (esteira, auditoria 20 § 7.1) — um toast pro lote
+  // inteiro, nunca N toasts; falha parcial é contada, não escondida.
+  // status E state juntos: sem o state o item seguia contando como inbox.
+  const archiveBatch = useMutation({
+    mutationFn: async (ids: string[]) => {
+      let ok = 0;
+      let falhas = 0;
+      for (const id of ids) {
+        try {
+          await itemService.update(id, { status: 'archived', state: 'archived' });
+          ok += 1;
+        } catch {
+          falhas += 1;
+        }
+      }
+      return { ok, falhas };
+    },
+    onSuccess: ({ ok, falhas }) => {
+      if (ok > 0) toast.success(ok === 1 ? '1 guardado no arquivo' : `${ok} guardados no arquivo`);
+      if (falhas > 0) toast.error(`${falhas} não foram — seguem na fila`);
+    },
+    onError: () => {
+      toast.error('não consegui guardar agora — a fila mostra o que ficou');
+    },
+    onSettled: invalidate,
+  });
+
+  return { createItem, updateMutation, completeMutation, uncompleteMutation, deleteMutation, archiveBatch };
 }
