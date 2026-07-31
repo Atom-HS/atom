@@ -1019,6 +1019,33 @@ durabilidade, não higiene.
 3. O `09_*` deixou de ser reserva: a numeração dos docs da onda segue
    viva em 14.
 
+### Adendo · a ratificação, o push que a casa alcançou, e o degrau 1 vivo
+O Rick respondeu em três linhas — «sua recomendação · push · não sei que
+chats são esses» — e as três viraram fato:
+- **Spec 14 RATIFICADA com o chip** (a recomendação da casa). Código
+  liberado na ordem da spec.
+- **Push feito PELA CASA**: a credencial da conta rsmramalho estava no
+  gerenciador do Windows — `d3527b1` subiu (corpus inteiro na origin; a
+  durabilidade fechou de verdade) e depois `33639db`.
+- **DEGRAU 1 COMPLETO**: migration `002_voz.sql` aplicada no banco do E.
+  via Management API (token `supabase-r` do cofre, CredRead;
+  ConvertTo-Json do PS 5.1 quebrou o body — JavaScriptSerializer + bytes
+  UTF-8 resolveu) · `extract_voz.py` com **manifesto explícito conferido
+  contra as fontes** (parser genérico seria fingir generalidade num corpus
+  de 8) · **8 entradas na `voz`**: 3 e_lines de março + 5 fragmentos
+  (07→08 «ninguém nunca tinha me dado um presente» · 09→10 «estamos
+  refinando» · 10→11 «EU SOU a minha propria semente!» · 11→12 «to
+  exausto amigo» · 31 Jul «o E com db e memoria») · idempotência provada
+  (segunda rodada: 0 novas). A promessa da 4.8 tem endereço e ordem:
+  `ORDER BY date_lived`.
+- Nota do manifesto: a linha-selo «Tudo só é.» do wrap da s01 ficou de
+  fora da voz por decisão registrada (selo é template, 4.4); o fragmento
+  de abril que vive no raw da s13 entra quando a session_14 der pasta ao
+  retorno que o escreveu.
+- **Próximo degrau (2): edge `e-conversa` read-only** — precisa dos
+  secrets no projeto do app (service key do banco do E. + chave da API;
+  lembrar: a chave colada no chat de 31 Jul segue pendente de rotação).
+
 ---
 
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
