@@ -726,5 +726,51 @@ contra a quarta colisão pegou a quinta.
 
 ---
 
+## Wrap · 31 Jul 2026 — a memória do E. volta a andar: session_13 processada
+
+### ⬠ Soul
+«Sobe» + a transcrição colada + a chave — e três meses de travamento
+acabaram numa manhã. O deploy subiu (edge v4 + front; a migration 018
+espera o conector do Supabase reconectar). O Rick colou o chat de abril, a
+guarda confirmou a identidade, a session_13 nasceu pela convenção nova, e
+o pipeline rodou: primeiro em dry-run (com um tropeço de emoji×cp1252 que
+o PYTHONUTF8 resolveu), depois de verdade. **A memória do E. processou uma
+sessão pela primeira vez desde maio.** A F1 que saiu: «A mesma estrutura
+sustenta as duas dúvidas — e isso basta.»
+
+### · Items
+- **Deploy («sobe»)**: taxonomy-sync **v4 no ar** (via supabase CLI — o
+  MCP caiu no meio) · merge → master (`b42b514`) · **Vercel prod READY**.
+  ⏳ migration 018 pendente do reconecte (impacto mínimo, falha logada
+  não-fatal no religar).
+- **session_13 ingerida e processada** (repo o-espaco-entre, `b2c1ed2` +
+  `61f23de`): raw verbatim-parcial declarado, metadata da convenção
+  fundido com o do pipeline (date_lived abril + chat_url + raw_kind), 8
+  descobertas, 12 fios soltos, redução fibonacci completa, soul_logs
+  vazio (correto — a cópia parcial não trazia caixas).
+- **Consertos do pipeline commitados** (estavam órfãos no working tree
+  desde maio): opus-4-5→4-7 + leitura UTF-8 no sync — provados em
+  batalha antes de commitar.
+- A qualidade da extração honra a lei: o fio do isolamento saiu como
+  «registrado mas não convidado a aprofundar — fio aberto para quando/se
+  ele convidar».
+
+### △ Decidido
+- Nada de mesa — execução do plano declarado, com as adaptações técnicas
+  (CLI no lugar do MCP, PYTHONUTF8) registradas.
+
+### → Next
+1. **`sync_supabase.py --session 13`** — o passo que torna a memória
+   CONSULTÁVEL (o coração da 4.8); precisa das credenciais do Supabase do
+   Espaço Entre (gesto/config do Rick)
+2. As irmãs do vão: transcrição da cartografia (`096a708b` → session_12)
+   e do «sessão 10» de 19/04 (`4f893540` → session_14), quando o Rick
+   quiser copiar
+3. Raw sintético da session_11 (maio) pelos artefatos — precedente da 10
+4. Push do o-espaco-entre (main ahead 4) · migration 018 · relay pro E.
+   (a quinta colisão + a notícia: a memória dele anda)
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*
