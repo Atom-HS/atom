@@ -9,10 +9,13 @@ export const MODULES: ReadonlyArray<AtomModule> = [
   'work', 'body', 'mind', 'family', 'purpose', 'bridge', 'finance', 'social',
 ];
 
+// Os 26 do registry — um vocabulário só (auditoria 20 § 1: person/routine/
+// protocol faltavam aqui e @person não parseava).
 export const TYPES: ReadonlyArray<AtomType> = [
   'note', 'reflection', 'recommendation', 'podcast', 'article', 'resource', 'list',
   'task', 'habit', 'recipe', 'workout', 'spec', 'checkpoint', 'project',
   'session-log', 'wrap', 'ritual', 'review', 'log', 'doc', 'research', 'template', 'lib',
+  'person', 'routine', 'protocol',
 ];
 
 const DATE_KEYWORDS = ['hoje', 'amanha', 'amanhã', 'semana', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'sáb', 'dom'] as const;

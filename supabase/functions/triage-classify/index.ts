@@ -18,7 +18,7 @@ Return ONLY valid JSON:
 VALID TYPES (23):
 note, reflection, recommendation, podcast, article, resource, list,
 task, habit, recipe, workout, spec, checkpoint, project,
-session_log, wrap, ritual, review, log, doc, research, template, lib
+session-log, wrap, ritual, review, log, doc, research, template, lib
 
 VALID MODULES (8):
 work (professional, coding, business)

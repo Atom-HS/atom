@@ -93,7 +93,7 @@ export async function createSessionLog(
     .insert({
       title: params.title.slice(0, 200),
       user_id: userId,
-      type: 'session_log', // DB enum usa underscore (TS diz 'session-log' — drift conhecido, bug pro D4)
+      type: 'session-log', // vocabulário unificado (migration 019) — deployar esta edge DEPOIS da 019
       module: 'bridge',
       tags: ['session', 'code', ...(params.tags ?? [])],
       status: 'completed',

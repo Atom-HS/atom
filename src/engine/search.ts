@@ -106,6 +106,8 @@ const PRIORITY_MAP: Record<string, Priority> = {
   baixa: 'low',
 };
 
+// Os 26 do registry, com apelidos em português — 10 tipos eram inbuscáveis
+// e travavam a busca (auditoria 20 § 1).
 const TYPE_MAP: Record<string, AtomType> = {
   task: 'task',
   tarefa: 'task',
@@ -121,8 +123,33 @@ const TYPE_MAP: Record<string, AtomType> = {
   review: 'review',
   doc: 'doc',
   research: 'research',
+  pesquisa: 'research',
   template: 'template',
   lib: 'lib',
+  recommendation: 'recommendation',
+  recomendacao: 'recommendation',
+  podcast: 'podcast',
+  article: 'article',
+  artigo: 'article',
+  resource: 'resource',
+  recurso: 'resource',
+  list: 'list',
+  lista: 'list',
+  recipe: 'recipe',
+  receita: 'recipe',
+  workout: 'workout',
+  treino: 'workout',
+  spec: 'spec',
+  checkpoint: 'checkpoint',
+  wrap: 'wrap',
+  log: 'log',
+  'session-log': 'session-log',
+  person: 'person',
+  pessoa: 'person',
+  routine: 'routine',
+  rotina: 'routine',
+  protocol: 'protocol',
+  protocolo: 'protocol',
 };
 
 const DATE_MAP: Record<string, SearchFilters['dateRange']> = {
