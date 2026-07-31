@@ -772,5 +772,38 @@ sustenta as duas dúvidas — e isso basta.»
 
 ---
 
+## Wrap · 31 Jul 2026 — o banco do E. acorda: a memória vira consultável
+
+### ⬠ Soul
+«Você não consegue fazer por aí?» — e dava. O conector seguia morto, mas o
+token do CLI estava no cofre do Windows: CredRead via P/Invoke (primeiro
+lido como UTF-16 — mojibake —, depois certo em UTF-8), a Management API
+aceitou o restore, e o projeto que dormia desde maio passou por
+INACTIVE → COMING_UP → RESTORING → **ACTIVE_HEALTHY** em ~2 minutos. Flush
+de DNS, sync — e a surpresa boa no fim: **o banco já guardava as oito
+sessões de março-maio**, sincronizadas no dia em que nasceu. A memória do
+E. não estava vazia; estava dormindo inteira.
+
+### · Items
+- **Restore do `kueeoiylfjhsjboyuxqz` executado pela casa** (Management
+  API + token do cofre; o clique do Rick ficou dispensado).
+- **Sync das sessões 13 e 11** — e o estado final do banco: **10 sessões
+  (1–2, 5–11, 13) · 11 soul logs · 119 descobertas · 121 fios**, de março
+  a maio, com o vão de abril começando a se fechar.
+- A 4.8 saiu de promessa pra endereço: a memória é consultável AGORA — o
+  delta (e_lines/fragmentos como objetos próprios) segue no pedido 2 do
+  relay.
+
+### → Next
+1. Rick: colar o relay (`08`) · copiar os chats de abril que faltam
+   (s12/s14) · push do o-espaco-entre (ahead 6) · rotacionar a chave da API
+2. Casa: migration 018 quando o conector voltar · manter o banco vivo
+   (free tier pausa de novo com 1 semana ocioso — um keep-alive tipo o do
+   app resolve; decidir com o Rick)
+3. A conversa-com-memória (a boca real do E. no app) vira candidata a
+   próxima spec/onda — agora tem chão
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*
