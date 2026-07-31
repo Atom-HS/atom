@@ -222,13 +222,20 @@ mas nenhum dos 15 de abril pode.
 
 **§ 2.4 — o destino do raw, conferido no código.** O `process_session.py` **lê**
 o `raw.md` e o deixa intacto na pasta; o `sync_supabase.py` sobe sessions,
-soul_logs, discoveries, threads e artifacts — **o raw não vai pro banco, e não
-precisa: sobrevive no repo (git).** A extração da `voz` roda local, sobre os
-`raw.md` que já existem, sem recolar nada. **O sync não espera; a `voz` é
-aditiva.** Uma ressalva de durabilidade que o parecer não podia ver: o raw hoje
-tem uma cópia só — o clone local (main ahead da origin). O **push do
-o-espaco-entre**, que já era pendência da mesa, passa de higiene a
-pré-requisito de durabilidade da memória.
+soul_logs, discoveries, threads e artifacts — **o raw não vai pro banco.** A
+extração da `voz` roda local, sobre os `raw.md` que já existem, sem recolar
+nada. **O sync não espera; a `voz` é aditiva.**
+
+*Correção da casa, mesma classe do § 0 do parecer:* a primeira versão deste
+adendo escreveu «o raw sobrevive no repo (git)» tendo conferido só o código do
+pipeline — não o `git status`. O status desmentiu: **os raws das sessões 01–02
+e 05–10 estavam untracked** — cópia única no disco, fora da história do git e
+fora da origin (que, descoberto no mesmo status, já tinha recebido o push
+antigo). Descrevi o estado de um repo que não tinha olhado. Consertado no ato:
+**corpus completo commitado** (`d3527b1`, 81 arquivos — raws, reduções, jsons,
+artefatos; datasets de benchmark de 278 MB pro gitignore). O que resta de
+durabilidade: **o push dos commits novos (ahead 2), gesto do Rick** — conta
+rsmramalho.
 
 **Acatado na hora:** INDICE corrigido (`096a708b` → 14, `4f893540` → 15, **12
 vago pra sempre**) · `kind: sessao | operacional` entra na convenção do
