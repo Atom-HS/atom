@@ -1136,5 +1136,87 @@ benchmark.
 
 ---
 
+## Wrap · 1 Ago 2026 — o parecer do onboarding: «não é falta de explicação, é falta de descobribilidade»
+
+### ⬠ Soul
+O relay voltou no mesmo dia, e o E. abriu corrigindo o alvo da obra inteira
+antes de responder as cinco perguntas: a queixa do Rick não se conserta
+falando — se conserta **fazendo a coisa aparecer no momento em que ela
+serve**. Um guia que explica bem um app que não se anuncia devolve a queixa
+em três semanas com outra roupa. E o parecer fez o que os melhores dele
+fazem: desmontou a própria pergunta 4 («meia-voz?») mostrando que o Telegram
+sob a lei vigente não é redução — «uma frase de cinco linhas com o
+julgamento certo dentro não é metade de nada»; o que faria meia-voz seria a
+casca sem o miolo. E vetou a emenda do write-path com a razão de tom que só
+ele tinha: «a memória do bolso seria memória sem soul log» — texto solto no
+meio de material com processo é a coisa que parece igual e não é.
+
+### · Items
+- **`18_parecer-e_onboarding.md` selado verbatim** (um caractere solto ao
+  fim removido no selo), com adendo da casa: os dois pontos checáveis
+  conferidos contra o código — o `[VERIFICAR]` do § 4b confere (captura
+  grava no banco DO APP via tronco.ts; a spec 14 fecha só o banco DO E. —
+  duas jurisdições, zero sobreposição), e o caso exemplar do § 3 é mais
+  fino que o parecer diz: `sinto:` TEM gêmeo na face (mouth.ts, mesma
+  regex); o invisível de verdade é **o próprio bot** — nenhuma superfície
+  anuncia o @Atomhsbot.
+- **O parecer em uma linha por pergunta:** guia não é superfície nova (o
+  4.0 não ganha linha; lei-que-se-cita, voz dourada, sem artigo — «uma
+  obra a menos de lei») · texto composto vale TAMBÉM pros caminhos
+  (ramificação em runtime é improviso com etiqueta) · +3 proibições (não
+  contar o que não se usa hoje · sem progresso · não falar duas vezes) e o
+  critério operacional no lugar do «não-óbvio»: **cobre o que existe e não
+  tem porta visível** (lista finita auditável) · `/e` vale existir como a
+  única porta visível de uma boca que ninguém encontra; read-only mantido,
+  **[VETO]** à emenda com salvaguarda (allowlist é defesa de identidade, o
+  ataque é conteúdo); sem prometer memória («anotei» é o cartão-promessa
+  com voz); resposta nunca morna pra justificar o esquecimento · ordem:
+  **o bolso como primeiro capítulo, degrau 2 depois dos dois** — com a
+  ressalva da prova viva: o critério não é encantar, é **voltar a usar sem
+  ser lembrado**.
+- **`19_spec-onboarding.md` nasceu** com os dois insumos: Guardião com as
+  duas jurisdições explícitas e as sete proibições · ROOT sem migration
+  (dedup do guia em localStorage; dedup do cartão do bolso POR EVENTO REAL
+  — some quando existir item com tag telegram) · `engine/guia.ts` com a
+  lista do invisível auditável por teste · webhook v2 (`/start casa` do
+  deep link + `/e` chamando o miolo `responder` modo bolso — UM miolo, o
+  degrau 2 consome o mesmo) · cartão dourado no vazio do inbox · prova
+  viva com gatilho de revisão em duas semanas.
+
+### △ Decidido
+- Nada ratificado — a spec espera o Rick, com dois vetos abertos: o
+  `[NÃO SEI]` do E. (o guia além do bolso existe antes do degrau 2?) e o
+  armazenamento do dedup. O veto do write-path é do dono da voz e já vale.
+
+### ⬡ Conexões
+- O § 4b do parecer pegou um risco real de leitura: «read-only» mal lido
+  desligaria a captura da Onda 2. A distinção das duas jurisdições agora
+  está em lei de spec — o mesmo movimento do bilhete≠AtomItem.
+- «Se importou, ele traz. Se não trouxe, não sobreviveu» — o E. aplicou ao
+  desabafo do bolso a mesma teoria da memória que rege o retorno dele. A
+  casa inteira usa um filtro só.
+
+### ✳ Seeds
+- **O teto do /e medido na prova viva** (prompt manda, código não trunca)
+  — incerteza declarada na spec, calibra na vivência.
+
+### □ Audit
+- ✅ parecer selado verbatim; dois pontos checáveis conferidos contra
+  código (tronco.ts, mouth.ts) — ambos conferem, um refinado
+- ✅ zero código tocado — sessão segue docs-only
+- ⚠ rotação da chave da API segue pendente — agora trava o passo 2 da
+  ordem de construção (o `/e`), não só o degrau 2 da conversa
+
+### → Next — a mesa do Rick
+1. **Ratificar a spec 19** — e decidir o `[NÃO SEI]`: guia inteiro agora,
+   ou só coreografia + `/e` (o guia espera o degrau 2)?
+2. **A palavra da rotação da chave** — destrava o `/e` e o degrau 2
+3. Com o «vai»: passo 1 da ordem (coreografia do bolso) nasce — engine,
+   cartão, deep link, rota `/start`
+4. Da mesa que segue: chats de abril · downgrade rsmramalho's Org · DP-G
+   (~6 Ago → D79)
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*
