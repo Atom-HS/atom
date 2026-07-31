@@ -1218,5 +1218,82 @@ meio de material com processo é a coisa que parece igual e não é.
 
 ---
 
+## Wrap · 1 Ago 2026 — a auditoria funda: «o motor é maior que o app»
+
+### ⬠ Soul
+O Rick pediu com a precisão de quem «vê simples mas enxerga profundo»: a
+taxometria, os labels («só tem task e ritual»), o ajustar-sem-ver, o
+um-por-um — «vale uma auditoria completa de função, funcionalidade e
+realidade». A casa varreu as três colunas e a produção deu razão às três
+queixas em número: ritual+task = 47% do acervo (mais 20% sem tipo), zero
+ajustes de comportamento no app inteiro, zero operações em lote — e 178
+itens (46%) parados no estágio 1 esperando uma esteira que anda um card por
+vez. O achado que ninguém pediu: **a escada Genesis está quebrada no meio**
+— estágios 3–5 somam 14 itens, o 6 tem zero E é inalcançável por código
+(o convite «abrir pro mundo» pula pro 7). E a ironia da sessão: **o app tem
+um painel de auditoria completo (AuditPanel, 309 linhas) — órfão, sem
+superfície.** A auditoria que o dono pediu já existia como componente morto.
+
+### · Items
+- **`20_auditoria-funcao-funcionalidade-realidade.md` selada** — varredura
+  de código via agente (arquivo:linha em tudo) + banco de produção
+  consultado no dia (Management API, token do cofre; MCP não alcança o
+  projeto do app).
+- **Realidade em números:** 388 itens · 76 sem tipo · 6 tipos jamais
+  nasceram (person/routine/protocol/podcast/article/resource) · módulo
+  bridge engoliu 47% · 22 conexões num sistema cuja escada exige conexão ·
+  **atom_events tem 1 evento** — o `touch` vive numa mutation morta, e o
+  cofre lê ausências de uma tabela vazia (espera `checkin` que ninguém
+  escreve).
+- **Quatro vocabulários de tipos coexistem** (enum TS · token-parser ·
+  triage com `session_log` underscore — 2 itens inválidos em produção ·
+  parsing.ts fóssil com `#mod_mind` ainda em 6 itens). Busca só entende 16
+  dos 26.
+- **Gate do FSM decorativo**: `canAdvance` existe e nenhum caminho real o
+  usa; validar ignora a maturação mínima.
+- **SEM PORTA que morde:** operations inteiro (due_date/priority/progress —
+  um app de organização sem como dar prazo), recurrence sem UI (streak
+  calculado e nunca exibido), rotina não-operável pós-Builder, pessoas
+  invisíveis, nota de conexão, histórico de item, tema, /review e /raiz
+  fora da nav.
+- **Mesa de consertos por alavancagem (§ 7):** lote na esteira · rótulo do
+  convite + destino do estágio 6 · due date/priority editáveis · sanear o
+  drift · porta de ajustes mínima (períodos, cofre, lugar) · órfãos
+  (ressuscitar ou enterrar) · eventos de verdade · gestão de tags.
+
+### △ Decidido
+- Nada — auditoria constata, não decide. Consertos que criam superfície
+  pedem spec (D62); o que tocar voz do E., relay.
+
+### ⬡ Conexões
+- Esta auditoria é a irmã funda da spec 19: lá, o que existe sem porta
+  visível (descobribilidade); aqui, o que existe sem boca nenhuma. O
+  diagnóstico do E. no 18 § 0 se confirma na escala do sistema inteiro.
+- O reinado do ritual (112) é filho do conector do calendar — a lente
+  batiza quase tudo de ritual. A taxometria que o Rick estranhou é, em
+  parte, o batismo automático da obra 7.
+
+### ✳ Seeds
+- **O AuditPanel órfão como painel do Wrap** — a saúde do sistema já tem
+  código; falta decidir a boca.
+- **«Ajusta e vê» tem precedente interno**: o preview→aplicar→desfazer da
+  ida da taxonomia é o molde pra qualquer porta de ajuste futura.
+
+### □ Audit
+- ✅ três colunas com evidência: código (arquivo:linha), UI (bocas
+  enumeradas), produção (SQL do dia)
+- ✅ as duas alegações mais graves conferidas pela casa no código
+  (handleMature pula o 6 · validate sem gate)
+- ✅ zero código tocado — sessão segue docs-only
+- ⚠ spec 19 segue aguardando ratificação; rotação da chave segue pendente
+
+### → Next — a mesa do Rick
+1. **Escolher por onde a auditoria vira obra** — a lista do § 7 está por
+   dor÷custo; o item 1 (lote na esteira) ataca a maior dor declarada
+2. Spec 19 (onboarding): ratificar + o [NÃO SEI] + rotação da chave
+3. Da mesa que segue: chats de abril · downgrade rsmramalho's Org · DP-G
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*
