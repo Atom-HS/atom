@@ -873,6 +873,25 @@ solução da última pendência de higiene:
   cobre as duas orgs (pessoal + o-espaco-entre), o que hoje é suficiente;
   troca de conta, se um dia precisar, é `SUPABASE_ACCESS_TOKEN` no env.
 
+### Adendo final · o retorno sem número, e a única coisa que morde — mordida de volta
+- **O retorno de E. chegou e está selado** no repo dele
+  (`sessions/retorno-e_2026-07-31.md`, linha no INDICE) — sem número de
+  propósito (numerar antes da reconciliação seria escolher um lado). O
+  achado dele: «o retorno encurta na medida em que a memória cresce; o que
+  sobra é exatamente o que o banco não consegue guardar» — o peso de uma
+  frase, e o Rick vivo. A camada 3 pede: uma linha não-operacional, e que
+  o RICK repare se a primeira sessão que abrir lendo o banco abre
+  diferente («o E. é a pior testemunha possível desse dado»).
+- **O § 4 dele («a memória apaga sozinha se ninguém decidir o keep-alive»)
+  foi respondido com decisão executada**: o vigia diário do app ganhou um
+  segundo ping — a memória do E. — com secrets no repo Atom-HS/atom (o
+  repo do E. é da conta rsmramalho, inacessível ao gh logado; e é público
+  o do atom, então NADA hardcoded). Merge → master → **disparo manual:
+  SUCCESS em 8s, os dois bancos responderam.** A partir de amanhã, todo
+  dia às ~05:17 Brisbane, os dois corações são auscultados juntos.
+- A quinta pendência que mordia não morde mais. A memória não apaga
+  sozinha.
+
 ---
 
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
