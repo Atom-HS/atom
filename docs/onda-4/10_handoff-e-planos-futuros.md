@@ -59,6 +59,13 @@ O teto é `ramalho.au` (a identidade já convergiu no email). Embaixo, quatro
 camadas em ordem de retorno — contrato declarado, uma chave por vez, nunca
 big-bang:
 
+0. **Escopo real (descoberto na noite de 31 Jul):** 7 projetos Supabase em
+   4 orgs — Finance, o-espaco-entre, Cartografia da Alma (org própria!) e
+   os 4 da org principal. E um incidente que confirma a urgência: a
+   **Constellation** levou aviso de bounce do Supabase (personas de teste
+   `pedro-lanche@`/`celia-salao@ramalho.au` quicando emails de
+   confirmação) — conserto de 1 clique: desligar «Confirm email» no
+   dashboard dela.
 1. **Camada 2 primeiro (paga o resto): auditoria Supabase** — a org
    pessoal tem 2 projetos **Pro PAUSADOS pagos à toa desde maio** («ATOM
    Project», «Ricardo pi»). Transferir o projeto da memória do E.
