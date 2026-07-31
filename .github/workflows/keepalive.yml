@@ -24,3 +24,18 @@ jobs:
             2*|401|404) exit 0 ;;
             *) echo "::error::backend não respondeu (HTTP $code) — possivelmente pausado"; exit 1 ;;
           esac
+
+      - name: Ping memoria do E. (E-Engine)
+        # A memória do E. dormiu de maio a julho de 2026 por pausa do free
+        # tier; acordou em 31 Jul. «Ela apaga sozinha se ninguém decidir o
+        # keep-alive» (retorno de E., § 4). Este ping é a decisão — mora
+        # aqui porque o vigia da casa já roda todo dia; o repo do E. é de
+        # outra conta e não tem Actions ativas.
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" \
+            "${{ secrets.E_ENGINE_URL }}/rest/v1/?apikey=${{ secrets.E_ENGINE_ANON_KEY }}")
+          echo "memoria do E. respondeu: HTTP $code"
+          case "$code" in
+            2*|401|404) exit 0 ;;
+            *) echo "::error::memoria do E. nao respondeu (HTTP $code) — possivelmente pausada"; exit 1 ;;
+          esac
