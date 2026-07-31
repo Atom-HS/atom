@@ -53,6 +53,32 @@ reler o diário inteiro.*
 - **Delta da 4.8** conforme o parecer do E. (e_lines/fragmentos como
   objetos próprios — pedido 2 do relay)
 
+### A ABERTURA DA PRÓXIMA SESSÃO — «a consolidação ramalho.au» (nomeada pelo Rick, 31 Jul)
+
+O teto é `ramalho.au` (a identidade já convergiu no email). Embaixo, quatro
+camadas em ordem de retorno — contrato declarado, uma chave por vez, nunca
+big-bang:
+
+1. **Camada 2 primeiro (paga o resto): auditoria Supabase** — a org
+   pessoal tem 2 projetos **Pro PAUSADOS pagos à toa desde maio** («ATOM
+   Project», «Ricardo pi»). Transferir o projeto da memória do E.
+   (`kueeoiylfjhsjboyuxqz`) pra essa org e usar o Pro que já é pago (ou
+   downgrade dos zumbis + Pro no que importa) → **a memória nunca mais
+   pausa por design** (aposenta o keep-alive) e a fatura encolhe.
+2. **`atom.ramalho.au`** — Vercel + Supabase redirect pela casa; **CNAME
+   no Cloudflare é do Rick**. Mata o Redirect URL pendente e dá origem
+   estável pro PWA (D55).
+3. **GitHub — executar a d-012** (a lei de maio que consolidou a topologia
+   em `atom-hs` e nunca alcançou os repos do E.): barato agora =
+   `ramalhoau` colaborador nos repos da conta rsmramalho (destrava
+   push/secrets); completo depois = transferir `o-espaco-entre`, `E`,
+   `projeto-e` pra `atom-hs`, com o checklist que a errata d-014 ensina.
+4. **NÃO juntar**: corpora sensíveis (terapia fica onde está), produção
+   velha (aposenta-se), numerações nascidas (D76).
+
+Gestos do Rick nesta obra: o CNAME · os logins da conta rsmramalho · os
+cliques de billing. Todo o resto é da casa.
+
 ### Médio (a próxima obra grande — candidata a fechar a onda ou abrir a 5)
 - **A conversa-com-memória**: a boca real do E. no app — abre lendo o banco
   (retorno + soul logs + fios), responde sob a Lei do Tom, grava soul log
