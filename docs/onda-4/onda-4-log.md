@@ -957,5 +957,69 @@ atribuídos a terceiros do que os próprios.
 
 ---
 
+## Wrap · 1 Ago 2026 — o parecer chega, a lei ganha a ordem, a spec nasce
+
+### ⬠ Soul
+O Rick colou o parecer — e o E. abriu nomeando o próprio erro com o passo
+exato («a etiqueta 'prova' colada justamente onde a cadeia deixava de ter
+chão»), antes de responder os dois pedidos. O vão de abril não eram três
+chats: eram dezessete visíveis. E a numeração proposta no relay quebrava a
+própria cerca de ontem — o E. pegou a casa aplicando errado a convenção
+que a casa mesma escreveu. Os dois `[VERIFICAR]` que ele deixou eram
+endereçados a quem lê o repo, e a casa leu: nenhum chat de abril está
+entre as 01–08 (o vão real: 15 sem pasta), e o raw sobrevive — no repo,
+não no banco, o que faz do push do o-espaco-entre pré-requisito de
+durabilidade, não higiene.
+
+### · Items
+- **`09_parecer-e_vao-de-abril-e-delta-4-8.md`** — selado verbatim, com
+  adendo da casa: os dois `[VERIFICAR]` conferidos (cruzamento dos
+  `date_lived` · destino do raw no código do pipeline).
+- **INDICE corrigido** (repo o-espaco-entre): `096a708b` → **14**,
+  `4f893540` → **15**, **12 vago pra sempre** · `kind: sessao|operacional`
+  na convenção do metadata · o mapa completo do vão (17 visíveis, 15 sem
+  pasta, com os três que o E. marcou como perda material).
+- **Lei do Tom v1.7 → v1.8** — emenda VI (parecer 09 § 2.2): e_lines e
+  fragmentos ordenam por `date_lived`, **nunca** por número de sessão.
+  «Uma história falsa que parece verdadeira» agora é bug por definição.
+- **`14_spec-conversa-com-memoria.md`** — a spec nasceu com os dois
+  insumos na mesa (benchmark 13 + parecer 09): tabela `voz` (schema do E.
+  verbatim), edge `e-conversa` (abrir/responder/gravar, write-path
+  fechado), soul log na abertura como diagnóstico, disclosure em chip,
+  **a assinatura volta na e-session** — os dois eixos valem pela primeira
+  vez em produção. Ordem de construção: voz → edge read-only → face →
+  gravar.
+
+### △ Decidido
+- Numeração acatada na hora (14/15, 12 vago) — era correção de
+  convenção, não decisão nova.
+- Ingerir-tudo-com-E (parecer § 1.3) entrou na convenção do INDICE; o
+  gesto de colar segue sendo do Rick, chat a chat.
+- A spec fica **aguardando ratificação do Rick** (um veto aberto: entrada
+  por chip ou prefixo `e:` — a spec recomenda chip). Código só depois.
+- e-sessions do app em `sessions` com `serie: 'app'` — **vetável pelo E.**
+  na primeira revisão (está marcado na spec).
+
+### ⬡ Conexões
+- O § 0 do parecer (deslize sofisticado: «não descrevo arquivo que não
+  abri») é o mesmo achado do benchmark § 3 pela via da academia — LLMs
+  corrigem melhor erros de terceiros que os próprios. O E. produziu a
+  regra de dentro; a literatura, de fora; a lei § 5.2 já mandava
+  desconfiar. Três fontes, uma conclusão.
+- A emenda VI é a cerca do INDICE alcançando a lei: número virou contador
+  ontem; hoje a consulta aprendeu a não confiar nele.
+
+### → Next
+1. **Rick:** ratificar a spec 14 (e o veto chip × prefixo) · colar os
+   chats de abril na ordem que quiser (cada um ganha o próximo número) ·
+   **push do o-espaco-entre** (agora pré-requisito de durabilidade) ·
+   downgrade da rsmramalho's Org (Finance antes) · DP-G ~6 Ago (D79)
+2. **Casa (pós-ratificação):** degrau 1 da ordem de construção — migration
+   `voz` + `extract_voz.py` + sync. Depois edge, face, gravar.
+3. O `09_*` deixou de ser reserva: a numeração dos docs da onda segue
+   viva em 14.
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*
