@@ -1,8 +1,8 @@
 # LEI DO TOM
 
-**Status:** v1.7 — vigente
+**Status:** v1.8 — vigente
 **Escrita por:** E.
-**Data:** 28/07/2026 · emendas III–V em 31/07/2026
+**Data:** 28/07/2026 · emendas III–V em 31/07/2026 · emenda VI em 01/08/2026
 **Jurisdição:** todas as superfícies em que a voz de E. aparece — bilhete no app, conversa do @, Telegram, e_line do wrap, push, retorno, entrevista
 **Fonte:** destilada do corpus de O Espaço Entre (sessões 1–11, 44+ soul logs, 27 testes, 3 artigos, E-Engine Spec v1.2)
 **Insumo:** `lei-do-tom-inventario-v0.md`
@@ -611,6 +611,13 @@ Quando o pipeline rodar, e_lines e fragmentos são os campos de maior densidade
 por byte da base inteira. Valem indexação própria, consultáveis em sequência —
 quinze e_lines em ordem contam uma história que nenhum outro artefato conta.
 
+**A regra da ordem** *(emenda VI, 1 Ago 2026 — parecer `onda-4/09`, § 2.2)*:
+a sequência das e_lines e fragmentos é **`date_lived`, nunca número de
+sessão**. Com número = ordem de ingestão (convenção do INDICE), ordenar por
+sessão contaria maio antes de abril — uma história falsa que parece
+verdadeira. A ordem é o conteúdo, não um índice sobre ele; a consulta usa o
+campo que a cerca criou.
+
 ### 4.9 Voz emprestada — o Secretário
 
 Categoria nova, trazida pela fusão. Drafts que E. escreve e **Rick assina**. Não
@@ -994,6 +1001,7 @@ calibração é hipótese — e hipótese cai quando encontra território.
 
 | Versão | Data | Mudança |
 |---|---|---|
+| v1.8 | 1 ago 2026 | Emenda VI (parecer `onda-4/09`, § 2.2): a regra da ordem na 4.8 — e_lines e fragmentos ordenam por `date_lived`, nunca por número de sessão. Consequência direta da cerca do INDICE (número = ordem de ingestão). |
 | v1.7 | 31 jul 2026 | Parecer do nome **v2** (`onda-4/06`): a invariante da assinatura ganha o segundo eixo — decisão E memória. Onde só há decisão, é lei do E. (cita-se, não se assina). O «— E.» da e_line saiu do código; o nome tem hoje um lugar só (sessão/soul log/retorno) e chega ao app com a 4.8/pipeline. Porta, simétrico da 4.9 e morte da saudação mantidos da v1. |
 | v1.6 | 31 jul 2026 | Emenda V (parecer do nome, `onda-4/06`): invariante da assinatura na 4.0 (o nome vai onde houve decisão), simétrico na 4.9 (outro não fala com o nome de E.), exceção da porta nomeada. Consequência de código: os dois `sig` mecânicos saem e a saudação fixa morre. |
 | v1.5 | 31 jul 2026 | Emendas III (4.10 — a entrevista, sétima superfície; linha no quadro 4.0; remissão na 4.6) e IV (Parte 6 gatilho 1: contam-se tipos, não disparos). Parte 0 ajustada por fato: o bilhete falou em produção em 31 Jul — «quatro superfícies sem exemplo real» viraram três. Jurisdição e fechos atualizados para sete bocas. |
@@ -1008,6 +1016,6 @@ em 28/07 — duas emendadas, três mantidas. Ata na Parte 8.
 
 ---
 
-*Lei do Tom v1.7 — E.*
+*Lei do Tom v1.8 — E.*
 *O Espaço Entre → repo do Atom — Julho 2026*
 *Uma voz, sete bocas. O núcleo é o que sobrevive à remoção do vocabulário.*

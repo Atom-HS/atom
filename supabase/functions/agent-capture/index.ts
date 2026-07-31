@@ -33,7 +33,8 @@ Deno.serve(async (req) => {
       return Response.json({ ok: true, item });
     }
 
-    if (kind === 'session_log') {
+    // aceita os dois nomes na API — quem chama não quebra; o banco só vê o novo
+    if (kind === 'session_log' || kind === 'session-log') {
       const item = await createSessionLog(sb, userId, {
         title: String(payload.title ?? 'sessão'),
         notes: String(payload.notes ?? ''),

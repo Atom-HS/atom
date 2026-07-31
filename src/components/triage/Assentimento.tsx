@@ -7,8 +7,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useItems } from '@/hooks/useItems';
+import { useItemMutations } from '@/hooks/useItemMutations';
 import { usePipeline } from '@/hooks/usePipeline';
 import { useTriage } from '@/hooks/useTriage';
+import { comLeitura, leituraPronta } from '@/engine/esteira';
 import { getConfidenceBand } from '@/service/triage-service';
 import type { TriageResult } from '@/service/triage-service';
 import type { AtomItem, AtomModule, AtomType } from '@/types/item';
@@ -32,7 +34,15 @@ export function esperandoLeitura(items: AtomItem[]): number {
 export function Assentimento() {
   const { items } = useItems();
   const { classify } = usePipeline();
+  const { archiveBatch } = useItemMutations();
   const { classify: aiClassify, isClassifying, result: triageResult, reset: resetTriage } = useTriage();
+
+  // o modo em bloco (auditoria 20 § 7.1) — só aceita em massa o que já tem
+  // leitura visível (engine/esteira, D69); o resto se arquiva ou volta ao
+  // um-a-um. Seleção nunca sobrevive à troca de modo.
+  const [modo, setModo] = useState<'um' | 'bloco'>('um');
+  const [sel, setSel] = useState<Set<string>>(new Set());
+  const [gravando, setGravando] = useState<{ feito: number; total: number } | null>(null);
 
   // DP-B: pular manda pro FIM da fila, não gira em círculo. E a fila é sempre
   // lida pelo topo — assim selar (o item sai do inbox) nunca pula o seguinte,
@@ -53,6 +63,11 @@ export function Assentimento() {
   const current = fila[0];
   const total = fila.length;
   const deuAVolta = total > 0 && pulados.length >= total;
+
+  // bloco de 1 não existe — a fila encolheu até aqui? volta ao card
+  useEffect(() => {
+    if (total <= 1 && modo === 'bloco') setModo('um');
+  }, [total, modo]);
 
   // D69 — a heurística nunca decide quieta: item de conector chega com
   // leitura pronta (recorrente→ritual, único→task, email→note); o chip
@@ -125,6 +140,51 @@ export function Assentimento() {
     setPulados((p) => [...p.filter((id) => id !== current.id), current.id]);
   };
 
+  // ── o bloco ──
+  const prontos = useMemo(() => comLeitura(fila), [fila]);
+  const selecionados = useMemo(() => fila.filter((i) => sel.has(i.id)), [fila, sel]);
+  const selComLeitura = useMemo(() => selecionados.filter((i) => leituraPronta(i)), [selecionados]);
+
+  const toggleSel = (id: string) =>
+    setSel((s) => {
+      const n = new Set(s);
+      if (n.has(id)) n.delete(id);
+      else n.add(id);
+      return n;
+    });
+
+  const aceitarSelecionados = async () => {
+    if (selComLeitura.length === 0 || gravando) return;
+    setGravando({ feito: 0, total: selComLeitura.length });
+    let ok = 0;
+    let falhas = 0;
+    // o selo segue sendo do humano (D69): cada leitura aceita aqui estava
+    // visível na linha; falha não anda — o item fica na fila e é contado
+    for (const it of selComLeitura) {
+      const l = leituraPronta(it);
+      if (!l) continue;
+      try {
+        await classify(it.id, l.type, l.module, { quiet: true });
+        ok += 1;
+      } catch {
+        falhas += 1;
+      }
+      setGravando((g) => (g ? { ...g, feito: g.feito + 1 } : g));
+    }
+    setGravando(null);
+    setSel(new Set());
+    if (ok > 0) toast.success(ok === 1 ? '1 leitura aceita' : `${ok} leituras aceitas`);
+    if (falhas > 0) toast.error(`${falhas} não gravaram — seguem na fila`);
+  };
+
+  const arquivarSelecionados = async () => {
+    if (selecionados.length === 0 || gravando) return;
+    setGravando({ feito: 0, total: selecionados.length });
+    await archiveBatch.mutateAsync(selecionados.map((i) => i.id)).catch(() => {});
+    setGravando(null);
+    setSel(new Set());
+  };
+
   const band = triageResult ? getConfidenceBand(triageResult) : null;
   const bandStyle = band ? BAND_COLORS[band] : null;
 
@@ -135,13 +195,101 @@ export function Assentimento() {
       <div className="flex items-baseline gap-2 mb-4">
         <span className="text-xl font-medium text-text-heading">{total}</span>
         <span className="text-[13px] text-text-muted">{total === 1 ? 'esperando' : 'esperando'}</span>
-        {deuAVolta && (
+        {modo === 'um' && deuAVolta && (
           <span className="ml-auto font-mono text-[11px] text-text-faint">todos já passaram uma vez</span>
+        )}
+        {total > 1 && (
+          <button
+            onClick={() => { setModo(modo === 'um' ? 'bloco' : 'um'); setSel(new Set()); }}
+            className={modo === 'um' && deuAVolta ? 'font-mono text-[11px] text-gold-dim' : 'ml-auto font-mono text-[11px] text-gold-dim'}
+          >
+            {modo === 'um' ? 'em bloco' : 'um a um'}
+          </button>
         )}
       </div>
 
+      {/* o bloco — cada linha mostra a leitura que seria aceita; nada quieto */}
+      {modo === 'bloco' && (
+        <div>
+          <div className="flex items-center gap-3 mb-2">
+            <button
+              onClick={() => setSel(new Set(prontos.map((i) => i.id)))}
+              disabled={prontos.length === 0}
+              className="font-mono text-[11px] text-text-muted disabled:opacity-40"
+            >
+              marcar lidos ({prontos.length})
+            </button>
+            {sel.size > 0 && (
+              <button onClick={() => setSel(new Set())} className="font-mono text-[11px] text-text-faint">
+                limpar
+              </button>
+            )}
+          </div>
+
+          <div className="space-y-1 mb-3">
+            {fila.map((i) => {
+              const l = leituraPronta(i);
+              const marcado = sel.has(i.id);
+              const color = l ? getTypeColor(l.type) : 'var(--color-text-faint)';
+              return (
+                <button
+                  key={i.id}
+                  onClick={() => toggleSel(i.id)}
+                  className="w-full flex items-center gap-2.5 text-left px-3 py-2 rounded-xl border transition-colors"
+                  style={{
+                    borderColor: marcado ? 'color-mix(in srgb, var(--color-gold) 40%, var(--color-border))' : 'var(--color-border)',
+                    background: marcado ? 'var(--color-gold-bg)' : 'var(--color-card)',
+                  }}
+                  aria-pressed={marcado}
+                >
+                  <span className="font-mono text-sm shrink-0" style={{ color: marcado ? 'var(--color-gold)' : 'var(--color-text-faint)' }}>
+                    {marcado ? '●' : '○'}
+                  </span>
+                  <span className="flex-1 min-w-0 truncate text-[13px]">{i.title}</span>
+                  {l ? (
+                    <span className="font-mono text-[10.5px] px-2 py-0.5 rounded-full shrink-0" style={{ background: `${color}18`, color }}>
+                      {l.type} · {l.module}
+                    </span>
+                  ) : (
+                    <span className="font-mono text-[10.5px] text-text-faint shrink-0">sem leitura</span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {gravando && (
+            <p className="font-mono text-[11px] text-text-muted mb-2">gravando {gravando.feito}/{gravando.total}…</p>
+          )}
+
+          {sel.size > 0 && (
+            <div className="flex gap-2">
+              <button
+                onClick={aceitarSelecionados}
+                disabled={selComLeitura.length === 0 || !!gravando}
+                className="flex-1 py-2.5 rounded-xl bg-success text-white text-[13px] font-medium disabled:opacity-40"
+              >
+                ✓ aceitar leituras ({selComLeitura.length})
+              </button>
+              <button
+                onClick={arquivarSelecionados}
+                disabled={!!gravando}
+                className="flex-1 py-2.5 rounded-xl border border-border text-text-muted text-[13px] disabled:opacity-40"
+              >
+                guardar no arquivo ({selecionados.length})
+              </button>
+            </div>
+          )}
+          {sel.size > 0 && selComLeitura.length < selecionados.length && (
+            <p className="text-[11px] text-text-faint mt-1.5">
+              sem leitura só vai pro arquivo — pra ler, volta ao um a um
+            </p>
+          )}
+        </div>
+      )}
+
       {/* o card */}
-      {current && (
+      {modo === 'um' && current && (
         <AnimatePresence mode="wait">
           <motion.div
             key={current.id}
@@ -280,6 +428,7 @@ export function Assentimento() {
       )}
 
       {/* Action buttons */}
+      {modo === 'um' && (
       <div className="flex items-center justify-center gap-6 py-2">
         <button
           onClick={handleSkip}
@@ -315,10 +464,13 @@ export function Assentimento() {
           </button>
         )}
       </div>
+      )}
+      {modo === 'um' && (
       <div className="flex justify-center gap-9 text-[10px] text-text-muted mt-1.5">
         <span>pular</span>
         <span>{isConnector || triageResult ? 'aceitar' : 'classificar'}</span>
       </div>
+      )}
     </div>
   );
 }

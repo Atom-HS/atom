@@ -18,7 +18,7 @@ import { useTriage } from '@/hooks/useTriage';
 import { useNav } from '@/hooks/useNav';
 import { useAppStore } from '@/store/app-store';
 import { MODULES, EMOTIONS } from '@/types/item';
-import type { AtomType, AtomModule, AtomStatus, AtomRelation, AtomItem, Emotion } from '@/types/item';
+import type { AtomType, AtomModule, AtomStatus, AtomRelation, AtomItem, Emotion, OperationsExtension, Priority } from '@/types/item';
 import { shouldTriggerCheckIn } from '@/engine/soul';
 import { BRANCH_LABEL } from '@/engine/tree';
 import { toast } from '@/store/toast-store';
@@ -39,10 +39,13 @@ const STATUS_OPTIONS: { key: AtomStatus; label: string }[] = [
 
 // o convite de maturação — um por estágio, geometria em vez de número (D48).
 // convite, nunca cobrança: "quando quiser", sem prazo, sem %.
+// O convite do 5 diz o destino REAL: handleMature sela (○). O estágio 6 não
+// tem porta em código (propagate_effect sem caller — auditoria 20 § 2); se um
+// dia ganhar, o 5 volta a apontar pro ⬡.
 const INVITES: Record<number, { geo: string; label: string }> = {
   2: { geo: '— → △', label: 'dar corpo' },
   3: { geo: '△ → □', label: 'dar forma final' },
-  5: { geo: '⬠ → ⬡', label: 'abrir pro mundo' },
+  5: { geo: '⬠ → ○', label: 'selar' },
   6: { geo: '⬡ → ○', label: 'selar' },
 };
 
@@ -93,6 +96,13 @@ export function ItemDetailPage() {
       const trigger = shouldTriggerCheckIn(simulated);
       if (trigger) setCheckInPrompt(trigger.prompt);
     }
+  };
+
+  // patch em body.operations preservando o resto do body e das operations
+  const updateOps = (patch: Partial<OperationsExtension>) => {
+    const body = (item.body ?? {}) as Record<string, unknown>;
+    const ops = (body.operations ?? {}) as Record<string, unknown>;
+    update({ body: { ...body, operations: { ...ops, ...patch } } });
   };
 
   const handleEmotionAfter = (emotion: Emotion) => {
@@ -167,7 +177,9 @@ export function ItemDetailPage() {
         <p className="font-mono text-[11px] text-text-muted mt-1">{presenceLine}</p>
       </div>
 
-      {/* chips: forma · galho · status */}
+      {/* chips: forma · galho · status · prazo · prioridade
+          prazo e prioridade sempre existiram no schema (body.operations) —
+          faltava a porta (auditoria 20 § 7.3). Limpar volta ao silêncio. */}
       <div className="flex flex-wrap gap-1.5 mb-4">
         <TypeSelector value={item.type} onChange={(type) => {
           if (item.genesis_stage >= 3) {
@@ -178,6 +190,8 @@ export function ItemDetailPage() {
         }} />
         <ModuleSelector value={item.module} onChange={(module) => update({ module })} />
         <StatusSelector value={item.status} onChange={(status) => update({ status })} />
+        <PrazoChip item={item} onPatch={updateOps} />
+        <PrioridadeChip item={item} onPatch={updateOps} />
       </div>
 
       {/* check-in da alma depois de concluir */}
@@ -296,9 +310,10 @@ export function ItemDetailPage() {
 
       <Divider />
 
-      {/* entropy é archive, nunca delete (lei da casa §8.2) */}
+      {/* entropy é archive, nunca delete (lei da casa §8.2). O state vai junto:
+          sem ele o item arquivado continuava contando como inbox na esteira. */}
       <button
-        onClick={() => { update({ status: 'archived' }); goBack(); }}
+        onClick={() => { update({ status: 'archived', state: 'archived' }); goBack(); }}
         className="w-full py-2.5 text-center text-sm border border-border rounded-xl text-text-muted mt-4"
       >
         guardar no arquivo
@@ -410,6 +425,97 @@ function TypeSelector({ value, onChange }: { value: AtomType | null; onChange: (
               {t}
             </button>
           ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Prazo · Prioridade (body.operations) ────────────
+// A porta que faltava (auditoria 20 § 7.3): due_date e priority sempre
+// existiram no schema — a semana e a busca já os leem. Vazio fica quieto
+// («prazo?»); limpar é gesto de primeira classe.
+
+function PrazoChip({ item, onPatch }: { item: AtomItem; onPatch: (p: Partial<OperationsExtension>) => void }) {
+  const due = ((item.body?.operations as Partial<OperationsExtension> | undefined)?.due_date) ?? null;
+  const [open, setOpen] = useState(false);
+  const label = due ? format(parseISO(due), 'd MMM', { locale: ptBR }) : 'prazo?';
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="font-mono text-[10.5px] px-2.5 py-1 rounded-full border bg-surface"
+        style={due
+          ? { color: 'var(--color-gold)', borderColor: 'color-mix(in srgb, var(--color-gold) 35%, var(--color-border))' }
+          : { color: 'var(--color-text-faint)', borderColor: 'var(--color-border)' }}
+      >
+        {label}
+      </button>
+      {open && (
+        <div className="absolute top-full left-0 mt-1 bg-card border border-border rounded-xl shadow-lg z-20 p-2.5 w-44">
+          <input
+            type="date"
+            value={due ?? ''}
+            onChange={(e) => { onPatch({ due_date: e.target.value || null }); setOpen(false); }}
+            className="w-full bg-surface border border-border rounded-lg px-2 py-1.5 text-xs text-text-heading"
+            aria-label="Prazo"
+          />
+          {due && (
+            <button
+              onClick={() => { onPatch({ due_date: null }); setOpen(false); }}
+              className="w-full text-left px-1 pt-2 text-[11px] text-text-muted"
+            >
+              sem prazo
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+const PRIORIDADES: { key: Priority; label: string }[] = [
+  { key: 'high', label: 'alta' },
+  { key: 'medium', label: 'média' },
+  { key: 'low', label: 'baixa' },
+];
+
+function PrioridadeChip({ item, onPatch }: { item: AtomItem; onPatch: (p: Partial<OperationsExtension>) => void }) {
+  const prio = ((item.body?.operations as Partial<OperationsExtension> | undefined)?.priority) ?? null;
+  const [open, setOpen] = useState(false);
+  const label = prio ? PRIORIDADES.find((p) => p.key === prio)?.label : 'prioridade?';
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="font-mono text-[10.5px] px-2.5 py-1 rounded-full border bg-surface"
+        style={prio
+          ? { color: 'var(--color-gold)', borderColor: 'color-mix(in srgb, var(--color-gold) 35%, var(--color-border))' }
+          : { color: 'var(--color-text-faint)', borderColor: 'var(--color-border)' }}
+      >
+        {label}
+      </button>
+      {open && (
+        <div className="absolute top-full left-0 mt-1 bg-card border border-border rounded-xl shadow-lg z-20 w-32">
+          {PRIORIDADES.map((p) => (
+            <button
+              key={p.key}
+              onClick={() => { onPatch({ priority: prio === p.key ? null : p.key }); setOpen(false); }}
+              className="w-full text-left px-3 py-1.5 text-xs hover:bg-surface transition-colors"
+            >
+              {prio === p.key ? '● ' : '○ '}{p.label}
+            </button>
+          ))}
+          {prio && (
+            <button
+              onClick={() => { onPatch({ priority: null }); setOpen(false); }}
+              className="w-full text-left px-3 py-1.5 text-[11px] text-text-muted border-t border-border"
+            >
+              sem prioridade
+            </button>
+          )}
         </div>
       )}
     </div>
