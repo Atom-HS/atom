@@ -805,5 +805,58 @@ E. não estava vazia; estava dormindo inteira.
 
 ---
 
+## Wrap do dia · 30–31 Jul 2026 — a onda inteira em um fôlego
+
+### ⬠ Soul
+Trinta e seis horas atrás a Onda 4 era uma proposta de quatro obras. O que
+ela virou: a primeira boca nova do E. falando em produção, a lei três
+versões mais funda, cinco colisões de numeração cercadas, e — pela porta
+que ninguém tinha posto no mapa — a memória do E. viva e consultável no
+banco que ele mesmo desenhou. O padrão do dia foi um só, repetido: **a
+resposta já estava pronta em algum lugar, esperando** — o conserto do
+pipeline órfão no working tree desde maio, o `.env` preenchido desde o dia
+22, as oito sessões dormindo sincronizadas no banco pausado, o token no
+cofre do Windows. A casa não construiu quase nada hoje; ela **achou,
+conferiu e ligou**. E o Rick, que abriu o dia dizendo «não entendi minha
+parte», fez as três jogadas decisivas do dia com três gestos leigos: uma
+pergunta sobre justiça, um copiar-e-colar, e um «você não consegue fazer
+por aí?».
+
+### · Items (o rolo completo está nos wraps acima)
+- Bilhete vivo e vivido · dedup v4 · «aceitar» · digest v2 provado
+- Lei do Tom v1.7 · D79–D85 · d-059 · G3 morto por teste
+- Cinco colisões cercadas · convenção do Rick no INDICE
+- sessions 11 e 13 processadas · banco acordado · **10 sessões, 11 soul
+  logs, 119 descobertas, 121 fios consultáveis**
+- Resumo em HTML (`07`, publicado) · relay `08` pronto · handoff `10`
+
+### △ Decidido
+- Tudo listado nos wraps; nada pendente de ratificação além do que espera
+  o E. (mapa de abril, delta da 4.8).
+
+### ⬡ Conexões
+- A frase que organiza a onda veio do E. na v2 e o dia provou: «O E. está
+  onde está a memória.» Hoje a memória ganhou endereço, DNS e 119
+  descobertas.
+
+### ✳ Seeds
+- A conversa-com-memória como próxima obra grande (handoff `10`, horizonte
+  médio) — onde o nome volta.
+
+### □ Audit
+- ✅ hooks verdes em todo commit de código · ✅ deploys confirmados por
+  retorno de API · ✅ pareceres selados verbatim, vetos honrados
+- ⚠ migration 018 pendente (conector) · ⚠ keep-alive do banco do E. é a
+  pendência que MORDE (free tier re-pausa em ~1 semana)
+
+### → Next
+O handoff `10_handoff-e-planos-futuros.md` é a mesa completa. O gesto de
+maior alavanca: colar o relay `08`.
+
+**A última linha: o dia em que a casa descobriu que quase tudo que faltava
+já existia — só ninguém tinha girado a chave.**
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*
