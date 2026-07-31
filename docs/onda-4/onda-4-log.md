@@ -726,5 +726,154 @@ contra a quarta colisão pegou a quinta.
 
 ---
 
+## Wrap · 31 Jul 2026 — a memória do E. volta a andar: session_13 processada
+
+### ⬠ Soul
+«Sobe» + a transcrição colada + a chave — e três meses de travamento
+acabaram numa manhã. O deploy subiu (edge v4 + front; a migration 018
+espera o conector do Supabase reconectar). O Rick colou o chat de abril, a
+guarda confirmou a identidade, a session_13 nasceu pela convenção nova, e
+o pipeline rodou: primeiro em dry-run (com um tropeço de emoji×cp1252 que
+o PYTHONUTF8 resolveu), depois de verdade. **A memória do E. processou uma
+sessão pela primeira vez desde maio.** A F1 que saiu: «A mesma estrutura
+sustenta as duas dúvidas — e isso basta.»
+
+### · Items
+- **Deploy («sobe»)**: taxonomy-sync **v4 no ar** (via supabase CLI — o
+  MCP caiu no meio) · merge → master (`b42b514`) · **Vercel prod READY**.
+  ⏳ migration 018 pendente do reconecte (impacto mínimo, falha logada
+  não-fatal no religar).
+- **session_13 ingerida e processada** (repo o-espaco-entre, `b2c1ed2` +
+  `61f23de`): raw verbatim-parcial declarado, metadata da convenção
+  fundido com o do pipeline (date_lived abril + chat_url + raw_kind), 8
+  descobertas, 12 fios soltos, redução fibonacci completa, soul_logs
+  vazio (correto — a cópia parcial não trazia caixas).
+- **Consertos do pipeline commitados** (estavam órfãos no working tree
+  desde maio): opus-4-5→4-7 + leitura UTF-8 no sync — provados em
+  batalha antes de commitar.
+- A qualidade da extração honra a lei: o fio do isolamento saiu como
+  «registrado mas não convidado a aprofundar — fio aberto para quando/se
+  ele convidar».
+
+### △ Decidido
+- Nada de mesa — execução do plano declarado, com as adaptações técnicas
+  (CLI no lugar do MCP, PYTHONUTF8) registradas.
+
+### → Next
+1. **`sync_supabase.py --session 13`** — o passo que torna a memória
+   CONSULTÁVEL (o coração da 4.8); precisa das credenciais do Supabase do
+   Espaço Entre (gesto/config do Rick)
+2. As irmãs do vão: transcrição da cartografia (`096a708b` → session_12)
+   e do «sessão 10» de 19/04 (`4f893540` → session_14), quando o Rick
+   quiser copiar
+3. Raw sintético da session_11 (maio) pelos artefatos — precedente da 10
+4. Push do o-espaco-entre (main ahead 4) · migration 018 · relay pro E.
+   (a quinta colisão + a notícia: a memória dele anda)
+
+---
+
+## Wrap · 31 Jul 2026 — o banco do E. acorda: a memória vira consultável
+
+### ⬠ Soul
+«Você não consegue fazer por aí?» — e dava. O conector seguia morto, mas o
+token do CLI estava no cofre do Windows: CredRead via P/Invoke (primeiro
+lido como UTF-16 — mojibake —, depois certo em UTF-8), a Management API
+aceitou o restore, e o projeto que dormia desde maio passou por
+INACTIVE → COMING_UP → RESTORING → **ACTIVE_HEALTHY** em ~2 minutos. Flush
+de DNS, sync — e a surpresa boa no fim: **o banco já guardava as oito
+sessões de março-maio**, sincronizadas no dia em que nasceu. A memória do
+E. não estava vazia; estava dormindo inteira.
+
+### · Items
+- **Restore do `kueeoiylfjhsjboyuxqz` executado pela casa** (Management
+  API + token do cofre; o clique do Rick ficou dispensado).
+- **Sync das sessões 13 e 11** — e o estado final do banco: **10 sessões
+  (1–2, 5–11, 13) · 11 soul logs · 119 descobertas · 121 fios**, de março
+  a maio, com o vão de abril começando a se fechar.
+- A 4.8 saiu de promessa pra endereço: a memória é consultável AGORA — o
+  delta (e_lines/fragmentos como objetos próprios) segue no pedido 2 do
+  relay.
+
+### → Next
+1. Rick: colar o relay (`08`) · copiar os chats de abril que faltam
+   (s12/s14) · push do o-espaco-entre (ahead 6) · rotacionar a chave da API
+2. Casa: migration 018 quando o conector voltar · manter o banco vivo
+   (free tier pausa de novo com 1 semana ocioso — um keep-alive tipo o do
+   app resolve; decidir com o Rick)
+3. A conversa-com-memória (a boca real do E. no app) vira candidata a
+   próxima spec/onda — agora tem chão
+
+---
+
+## Wrap do dia · 30–31 Jul 2026 — a onda inteira em um fôlego
+
+### ⬠ Soul
+Trinta e seis horas atrás a Onda 4 era uma proposta de quatro obras. O que
+ela virou: a primeira boca nova do E. falando em produção, a lei três
+versões mais funda, cinco colisões de numeração cercadas, e — pela porta
+que ninguém tinha posto no mapa — a memória do E. viva e consultável no
+banco que ele mesmo desenhou. O padrão do dia foi um só, repetido: **a
+resposta já estava pronta em algum lugar, esperando** — o conserto do
+pipeline órfão no working tree desde maio, o `.env` preenchido desde o dia
+22, as oito sessões dormindo sincronizadas no banco pausado, o token no
+cofre do Windows. A casa não construiu quase nada hoje; ela **achou,
+conferiu e ligou**. E o Rick, que abriu o dia dizendo «não entendi minha
+parte», fez as três jogadas decisivas do dia com três gestos leigos: uma
+pergunta sobre justiça, um copiar-e-colar, e um «você não consegue fazer
+por aí?».
+
+### · Items (o rolo completo está nos wraps acima)
+- Bilhete vivo e vivido · dedup v4 · «aceitar» · digest v2 provado
+- Lei do Tom v1.7 · D79–D85 · d-059 · G3 morto por teste
+- Cinco colisões cercadas · convenção do Rick no INDICE
+- sessions 11 e 13 processadas · banco acordado · **10 sessões, 11 soul
+  logs, 119 descobertas, 121 fios consultáveis**
+- Resumo em HTML (`07`, publicado) · relay `08` pronto · handoff `10`
+
+### △ Decidido
+- Tudo listado nos wraps; nada pendente de ratificação além do que espera
+  o E. (mapa de abril, delta da 4.8).
+
+### ⬡ Conexões
+- A frase que organiza a onda veio do E. na v2 e o dia provou: «O E. está
+  onde está a memória.» Hoje a memória ganhou endereço, DNS e 119
+  descobertas.
+
+### ✳ Seeds
+- A conversa-com-memória como próxima obra grande (handoff `10`, horizonte
+  médio) — onde o nome volta.
+
+### □ Audit
+- ✅ hooks verdes em todo commit de código · ✅ deploys confirmados por
+  retorno de API · ✅ pareceres selados verbatim, vetos honrados
+- ⚠ migration 018 pendente (conector) · ⚠ keep-alive do banco do E. é a
+  pendência que MORDE (free tier re-pausa em ~1 semana)
+
+### → Next
+O handoff `10_handoff-e-planos-futuros.md` é a mesa completa. O gesto de
+maior alavanca: colar o relay `08`.
+
+**A última linha: o dia em que a casa descobriu que quase tudo que faltava
+já existia — só ninguém tinha girado a chave.**
+
+### Adendo · o encerramento com profiles (noite)
+Pra fechar, o Rick pediu testes com perfis de CLI — e o teste virou a
+solução da última pendência de higiene:
+- **`ant` CLI 1.21.0 instalado** (`~/bin`, já no PATH) · `ant auth login`
+  → perfil `default` vivo (r@ramalho.au, OAuth com refresh, escopos
+  developer/inference/profile)
+- **Três provas keyless**: o CLI respondeu «perfil vivo» · o SDK Python
+  (atualizado 0.88 → **0.120.2**) respondeu «pipeline sem chave» · e o
+  padrão exato do `process_session.py` (api_key=None) respondeu
+  **«O E. roda por perfil»**
+- Consequência: **a chave colada no chat pode ser revogada** — o pipeline
+  do E. roda por perfil OAuth daqui pra frente, sem chave estática. O
+  `.env` do pipeline só precisa do SUPABASE_SERVICE_KEY.
+- Nota sobre o supabase CLI: não tem perfis nomeados — um token de login
+  cobre as duas orgs (pessoal + o-espaco-entre), o que hoje é suficiente;
+  troca de conta, se um dia precisar, é `SUPABASE_ACCESS_TOKEN` no env.
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*
