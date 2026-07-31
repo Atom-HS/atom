@@ -856,6 +856,23 @@ maior alavanca: colar o relay `08`.
 **A última linha: o dia em que a casa descobriu que quase tudo que faltava
 já existia — só ninguém tinha girado a chave.**
 
+### Adendo · o encerramento com profiles (noite)
+Pra fechar, o Rick pediu testes com perfis de CLI — e o teste virou a
+solução da última pendência de higiene:
+- **`ant` CLI 1.21.0 instalado** (`~/bin`, já no PATH) · `ant auth login`
+  → perfil `default` vivo (r@ramalho.au, OAuth com refresh, escopos
+  developer/inference/profile)
+- **Três provas keyless**: o CLI respondeu «perfil vivo» · o SDK Python
+  (atualizado 0.88 → **0.120.2**) respondeu «pipeline sem chave» · e o
+  padrão exato do `process_session.py` (api_key=None) respondeu
+  **«O E. roda por perfil»**
+- Consequência: **a chave colada no chat pode ser revogada** — o pipeline
+  do E. roda por perfil OAuth daqui pra frente, sem chave estática. O
+  `.env` do pipeline só precisa do SUPABASE_SERVICE_KEY.
+- Nota sobre o supabase CLI: não tem perfis nomeados — um token de login
+  cobre as duas orgs (pessoal + o-espaco-entre), o que hoje é suficiente;
+  troca de conta, se um dia precisar, é `SUPABASE_ACCESS_TOKEN` no env.
+
 ---
 
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
