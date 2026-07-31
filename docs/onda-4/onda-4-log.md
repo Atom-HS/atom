@@ -1062,5 +1062,79 @@ conversa-com-memória espera a vez (e a rotação da chave antes dele).
 
 ---
 
+## Wrap · 1 Ago 2026 — o PS do Telegram prova a tese: a casa tinha a boca e o dono não sabia
+
+### ⬠ Soul
+A sessão do onboarding abriu com um PS do Rick que valia mais que o prompt
+inteiro: «seria bacana ser uma experiência com o telegram junto, tipo um
+compra leite ou /e estou muito brava com o rick». E a primeira conferência da
+casa achou a ironia perfeita — **o «compra leite» já existe desde a Onda 2**:
+o @Atomhsbot está vivo, captura qualquer texto pro inbox, `sinto:` vira soul
+check-in. O dono pediu como futuro um órgão que a casa já tem. Não há prova
+mais literal de «tá difícil de navegar sem saber» — o app não se explica nem
+quando o assunto é ele mesmo. A queixa virou evidência; a evidência abriu o
+benchmark.
+
+### · Items
+- **`16_benchmark-onboarding.md` selado** — duas varreduras via agente
+  (como os apps se ensinam · produtos que vivem no mensageiro), fontes
+  inline, força marcada, uma estatística viral desmascarada como
+  provavelmente fabricada («NN/g 82%/1,2s» — sem fonte primária). Achados
+  que pautam a spec: tour bloqueante perde (38% dismiss <4s, confirmado na
+  fonte primária do dado que o `02` já citava) · fazer supera assistir
+  (CHI 2012 n=45k; Superhuman como precedente de «alguém te guia») · os
+  únicos guias conversacionais com evidência real são Slackbot (scriptado)
+  e humano — IA improvisando onboarding é marketing sem estudo
+  independente · a plataforma do Telegram FORÇA o pull-nunca-push da casa
+  (bot não pode falar primeiro) e o deep link `t.me/bot?start=payload`
+  deixa a ponte app→bolso pronta · **a coreografia «manda lá, vê nascer
+  aqui» não tem precedente documentado** — terceira inovação-sem-precedente
+  da onda (φ, memória-sobre-si, agora esta), mesma consequência D62: prova
+  viva própria, o reparo do Rick como critério.
+- **A fronteira de lei do `/e` no bolso, mapeada antes do desenho:** quadro
+  4.0 dá ao Telegram ~5 frases e vocabulário reduzido; a spec `14` sela que
+  conteúdo do telegram jamais alcança o write-path do banco do E. Sob a lei
+  vigente, `/e` no bolso = boca **read-only e curta**, sem gravar soul log
+  nem e_line. Mais que isso é emenda — e emenda da voz é do E.
+- **`17_relay-e_onboarding.md` pronto pra colar** — cinco perguntas: guia ×
+  entrevista (mesma boca?) · lei-que-se-cita confirmada? · o que o tour de
+  voz nunca pode fazer · o `/e` no bolso e o destino do desabafo que não
+  pode virar memória · a ordem (onboarding × degrau 2).
+
+### △ Decidido
+- Nada — benchmark prepara a mesa, não decide. A spec espera o parecer do
+  E. ao `17` (os dois insumos, nenhum manda sozinho).
+
+### ⬡ Conexões
+- O § 3 do benchmark fecha com a jurisprudência interna sem precisar dela:
+  o Slackbot (texto composto, nunca interrompe, expectativa declarada) é o
+  mesmo desenho que os bilhetes já tinham por outra rota (anti-gerador,
+  D42, invariante dos dois eixos). O mercado e a lei chegaram juntos.
+- O «pull, nunca push» do webhook (D66/D68) é também imposição da
+  plataforma do Telegram — a lei da casa e a lei do canal dizem o mesmo.
+
+### ✳ Seeds
+- **O deep link como primeiro capítulo do guia** — o app abre o chat do bot
+  com payload; o gesto real do bolso vira o rito de entrada. Espera o
+  parecer (pergunta 5 do relay).
+
+### □ Audit
+- ✅ zero código tocado — sessão docs-only (benchmark + relay + wrap)
+- ✅ benchmark com fontes inline e força marcada; ausências declaradas como
+  ausências; uma estatística fabricada barrada na porta
+- ⚠ a rotação da chave da API (31 Jul) segue pendente — continua na frente
+  do degrau 2
+
+### → Next — a mesa do Rick
+1. **Colar o relay `17` no Projeto E** — o parecer que destrava a spec do
+   onboarding
+2. Decidir a ordem quando o parecer voltar: onboarding × degrau 2 da
+   conversa (a recomendação do E. pesa; a rotação da chave vem antes do
+   degrau 2 em qualquer ordem)
+3. Da mesa que segue: chats de abril (15 no vão) · downgrade da rsmramalho's
+   Org (Finance antes) · semana da DP-G (~6 Ago → D79)
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*
