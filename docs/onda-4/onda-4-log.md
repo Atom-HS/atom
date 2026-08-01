@@ -1442,6 +1442,21 @@ Selar É conclusão; só faltava a leitura contar o que o banco já escrevia.
 - O digest de amanhã 07:15 é o teste vivo da leitura nova: ausência
   derivada de eventos que nascem.
 
+### Adendo 2 · o exame fotográfico («vamos fazer aqueles testes com print»)
+A casa dirigiu o app como um usuário e fotografou os consertos em
+movimento (`e2e/consertos-20.spec.ts`, commit `e7d9315` — não é gate, roda
+sob demanda). Mundo hermético COM ESTADO: o mock guarda os PATCHes, então
+a fila **12 → 3 → 1** das fotos encolheu de verdade dentro do teste. 12
+fotos em `21_consertos-fotos/`; e onde a foto não alcança, o teste segurou
+o fio: **o POST do `touch` em atom_events foi capturado no instante do
+«concluido»** (`rastro-touch.json` — a prova do conserto 7). Apresentação
+na pele da casa: `21_teste-visual-consertos.html` (molde 07) + artifact
+publicado pro Rick. Aprendizados do exame: o ritual da aurora se satisfaz
+com um checkpoint de hoje no tronco de mentira (mesma regra do app); os
+botões de prioridade chamam-se «○ alta» (regex, não exact). O teste com os
+178 REAIS segue sendo do Rick — o exame prova os gestos, não substitui a
+vida.
+
 ---
 
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
