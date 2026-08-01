@@ -1376,5 +1376,60 @@ Na ordem que o commit mandava, tudo pela mão da casa:
 
 ---
 
+## Wrap · 1 Ago 2026 — «boraew»: eventos de verdade (auditoria 20 § 7.7)
+
+### ⬠ Soul
+Da lista do § 7, o que restava sem mesa nova era o conserto mais quieto e
+mais fundo: a tabela de eventos que a Raiz e o cofre leem estava vazia
+porque **os escritores moravam em mutations mortas** — a leitura de «faz
+tempo» fingia ler. O conserto não cria boca nenhuma: liga fios que já
+existiam. E a descoberta que muda o custo: **não precisava de lei nova.**
+A lei escrita no topo do vault.ts sempre disse «criação, conclusão, toque»
+— e a RPC `commit_item` grava o evento `commit` desde a migration 007.
+Selar É conclusão; só faltava a leitura contar o que o banco já escrevia.
+
+### · Items (1 commit, hooks verdes: tsc limpo · 416/416 · build ok)
+- **`0f0e669` fix(vault):** `SIGNIFICANT_EVENTS` ganha `commit` +
+  comentário honesto de quem escreve cada evento (touch = concluir/renovar
+  · checkin = **sem escritor ainda, reservado** · protocol_run = rodar
+  protocolo · commit = selar via RPC) · edge `daily-digest` espelhada (o
+  teste vault-espelho força engine × edge) · **ItemDetail: concluir pelo
+  seletor de status passa pela `completeMutation`** — grava o rastro
+  `touch` E o `last_completed` da recorrência; o update genérico perdia os
+  dois (bug latente: hábito concluído pelo detalhe nunca reabria no
+  período seguinte) · teste novo: o selo zera o relógio da ausência.
+- A `completeMutation`, órfã desde a auditoria, ganhou seu primeiro caller
+  real — ressuscitada, não duplicada.
+
+### △ Decidido
+- Nada de mesa nova. `commit` contar como significativo é a lei escrita
+  (D63: «criação, conclusão, toque»), não lei nova. O gesto de check-in
+  por gaveta (que escreveria `checkin`) **pede spec**: `source_id` é NOT
+  NULL — toque de gaveta não tem item-âncora sem decisão de superfície.
+
+### ⬡ Conexões
+- Com este conserto, todo caminho vivo de conclusão deixa rastro: concluir
+  (ItemDetail), selar (handleMature/Wrap/Review via RPC), renovar (cofre),
+  rodar protocolo (Runner). A ausência que o digest das 07:15 fala no
+  Telegram passa a ser derivada de vida real, não de tabela vazia.
+
+### □ Audit
+- ✅ geometria: engine puro mudou primeiro, espelho da edge junto, UI só
+  troca de mutation — zero query em componente, zero superfície nova
+- ⚠ **deploy pendente da palavra:** edge `daily-digest` (espelho novo) +
+  front via merge → Vercel. Sem ordem crítica desta vez — a edge nova é
+  compatível com o front velho e vice-versa.
+- ⚠ da lista § 7 restam com mesa: ajustes mínimos (5) · órfãos (6, decisão
+  item a item) · tags (8) · destino do estágio 6
+
+### → Next — a mesa do Rick
+1. «sobe» — edge daily-digest + front
+2. Teste ao vivo dos consertos 1–4 (os 178 do inbox) — segue pendente
+3. Spec 19 do onboarding: ratificação + [NÃO SEI] + rotação da chave
+4. Da mesa que segue: ajustes mínimos · órfãos · tags · estágio 6 · chats
+   de abril · downgrade rsmramalho's Org · DP-G
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*
