@@ -1459,5 +1459,19 @@ vida.
 
 ---
 
+## Fecho · 1 Ago 2026 — a sessão fecha; a próxima já sabe o que é
+
+O dia rendeu o que três costumam render: a obra do onboarding inteira até a
+spec (benchmark `16` → relay `17` → parecer `18` → spec `19`, aguardando
+ratificação), a auditoria `20` que deu número às três queixas do Rick, cinco
+consertos dela **em produção** (1–4 + 7), e o exame fotográfico `21` provando
+os gestos. O prompt da próxima sessão está prontinho em
+`22_prompt-proxima-sessao.md` — a mesa por ordem de alavanca: ratificar a
+spec 19 (+ o [NÃO SEI]), rotacionar a chave, o teste ao vivo dos 178 e do
+digest, e o que resta da auditoria (ajustes · órfãos · tags · estágio 6 ·
+check-in por gaveta).
+
+---
+
 *Regra do diário: cada sessão substantiva da onda ganha um wrap aqui — soul,
 items, decidido, conexões, seeds, audit, next. Herdada da Onda 3.*
