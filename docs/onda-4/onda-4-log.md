@@ -1423,11 +1423,24 @@ Selar É conclusão; só faltava a leitura contar o que o banco já escrevia.
   item a item) · tags (8) · destino do estágio 6
 
 ### → Next — a mesa do Rick
-1. «sobe» — edge daily-digest + front
+1. ~~«sobe»~~ — **dado e executado** (ver adendo abaixo)
 2. Teste ao vivo dos consertos 1–4 (os 178 do inbox) — segue pendente
 3. Spec 19 do onboarding: ratificação + [NÃO SEI] + rotação da chave
 4. Da mesa que segue: ajustes mínimos · órfãos · tags · estágio 6 · chats
    de abril · downgrade rsmramalho's Org · DP-G
+
+### Adendo · o deploy (mesma manhã, «deploy»)
+- ✅ **Edge `daily-digest` v3 no ar** (CLI com `--project-ref`; o link local
+  não persiste). Antes do deploy, a casa provou que a função roda **sem
+  verify_jwt**: o probe sem header devolveu o «não autorizado» da própria
+  guarda (x-digest-secret), não o 401 do gateway — então `--no-verify-jwt`
+  preserva o contrato do cron das 07:15. Probe pós-deploy: v3 ACTIVE,
+  guarda intacta.
+- ✅ **Front em produção**: merge `v2-faces`→`master` (`c8befc2`), push,
+  `vercel deploy --prod` → **READY**, aliased em `atom.ramalho.au`
+  (atom-39otd0j6n). Concluir pelo detalhe agora deixa rastro de verdade.
+- O digest de amanhã 07:15 é o teste vivo da leitura nova: ausência
+  derivada de eventos que nascem.
 
 ---
 
