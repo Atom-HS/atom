@@ -58,7 +58,7 @@ function leafAge(iso: string): string {
 export function ItemDetailPage() {
   const { id: urlId } = useParams<{ id: string }>();
   const { items } = useItems();
-  const { updateMutation } = useItemMutations();
+  const { updateMutation, completeMutation } = useItemMutations();
   const { classify: pipelineClassify, structure, validate, commit: pipelineCommit, morph, connect: pipelineConnect } = usePipeline();
   const { classify: aiClassify, isClassifying, result: triageResult, reset: resetTriage } = useTriage();
   const { connections } = useConnections();
@@ -91,11 +91,19 @@ export function ItemDetailPage() {
 
   const update = (updates: Record<string, unknown>) => {
     updateMutation.mutate({ id: item.id, updates });
-    if (updates.status === 'completed' && item.status !== 'completed') {
-      const simulated = { ...item, status: 'completed' as const };
-      const trigger = shouldTriggerCheckIn(simulated);
+  };
+
+  // concluir tem lei própria: rastro `touch` (o cofre lê ausência por ele,
+  // D63) e `last_completed` da recorrência — o update genérico perde os dois
+  // (auditoria 20 § 7.7). Qualquer outro status segue pelo update.
+  const changeStatus = (status: AtomStatus) => {
+    if (status === 'completed' && item.status !== 'completed') {
+      completeMutation.mutate(item.id);
+      const trigger = shouldTriggerCheckIn({ ...item, status: 'completed' as const });
       if (trigger) setCheckInPrompt(trigger.prompt);
+      return;
     }
+    update({ status });
   };
 
   // patch em body.operations preservando o resto do body e das operations
@@ -189,7 +197,7 @@ export function ItemDetailPage() {
           }
         }} />
         <ModuleSelector value={item.module} onChange={(module) => update({ module })} />
-        <StatusSelector value={item.status} onChange={(status) => update({ status })} />
+        <StatusSelector value={item.status} onChange={changeStatus} />
         <PrazoChip item={item} onPatch={updateOps} />
         <PrioridadeChip item={item} onPatch={updateOps} />
       </div>

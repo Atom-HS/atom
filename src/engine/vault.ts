@@ -79,8 +79,14 @@ export function renewalPatch(item: AtomItem, newDeadlineISO: string): Record<str
 
 // ─── ausência ────────────────────────────────────────────
 
-// Eventos que contam como toque de verdade na vida (não edição de cadastro)
-export const SIGNIFICANT_EVENTS = ['touch', 'checkin', 'protocol_run'] as const;
+// Eventos que contam como toque de verdade na vida (não edição de cadastro).
+// Quem escreve cada um (auditoria 20 § 7.7 — rastro sem escritor é meia-verdade):
+//   touch — concluir (useItemMutations.complete) e renovar validade (useVault)
+//   checkin — ainda sem escritor; reservado pro gesto de check-in por gaveta (pede spec)
+//   protocol_run — rodar protocolo (ProtocolRunner via protocol-service)
+//   commit — selar (RPC commit_item já grava desde a 007; a lei acima diz
+//            «criação, conclusão, toque» — selar É conclusão, só faltava contar)
+export const SIGNIFICANT_EVENTS = ['touch', 'checkin', 'protocol_run', 'commit'] as const;
 
 export interface VaultAbsence {
   domain: string;

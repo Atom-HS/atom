@@ -19,7 +19,7 @@ function json(body: Record<string, unknown>, status = 200): Response {
 // ─── espelho de engine/vault.ts (canônico lá — D63) ──────
 const LEAD_DAYS: Record<string, number> = { documents: 270, identity: 90, finance: 60, health: 60 };
 const LEAD_DEFAULT = 30;
-const SIGNIFICANT_EVENTS = ["touch", "checkin", "protocol_run"];
+const SIGNIFICANT_EVENTS = ["touch", "checkin", "protocol_run", "commit"];
 const ABSENCE_THRESHOLD_DAYS = 90;
 // os 9 domínios da vida (canônico: src/config/raiz.ts)
 const DOMAINS = ["identity", "documents", "health", "finance", "storage", "memories", "time", "communication", "projects"];
