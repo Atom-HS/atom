@@ -1,0 +1,9 @@
+[
+  {
+    "user_id": "e2e-test-user-0001",
+    "source_id": "d-01",
+    "target_id": null,
+    "event_type": "touch",
+    "payload": {}
+  }
+]
