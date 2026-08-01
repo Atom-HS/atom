@@ -118,6 +118,13 @@ describe('ausência — evento significativo, nunca updated_at', () => {
     expect(saude.daysSince).toBe(3);
   });
 
+  it('selar conta como conclusão — o commit da RPC zera o relógio', () => {
+    const velho = item({ id: 'h', tags: ['#domain:health'], created_at: '2024-07-01T00:00:00Z' });
+    const selo = event({ source_id: 'h', event_type: 'commit', created_at: days(-5) });
+    const [saude] = absences(['health'], [velho], [selo], NOW);
+    expect(saude.daysSince).toBe(5);
+  });
+
   it('evento de tipo não-significativo não conta', () => {
     const velho = item({ id: 'h', tags: ['#domain:health'], created_at: '2024-07-01T00:00:00Z' });
     const ruido = event({ source_id: 'h', event_type: 'retag', created_at: days(-1) });
