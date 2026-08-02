@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atom · o teste real virtual — os 187 da vida no palco · 3 Ago 2026</title>
+<style>
+  /* O mundo é um só, escuro, deliberado (D57) — molde: 21 ← 07_resumo-do-dia.
+     Dia de ensaio geral: dourado, sem indigo. */
+  :root {
+    --bg: #12100c;
+    --card: #1a1712;
+    --surface: #211d16;
+    --border: #2e2820;
+    --border-soft: #262119;
+    --text: #e9e2d3;
+    --muted: #a29781;
+    --faint: #6f675a;
+    --gold: #d4a94e;
+    --gold-dim: #a8843a;
+    --gold-bg: rgba(212, 169, 78, .08);
+    --viva: #8fae7d;
+    --espera: #c9a45c;
+    --alerta: #c98a5c;
+  }
+  html { background: var(--bg); }
+  body { background: var(--bg); color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    line-height: 1.6; margin: 0; }
+  .pagina { max-width: 860px; margin: 0 auto; padding: 40px 20px 80px; }
+  .mono { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; }
+  header.topo { margin-bottom: 36px; }
+  .kicker { font-family: ui-monospace, Consolas, monospace; font-size: 11px;
+    letter-spacing: .22em; text-transform: uppercase; color: var(--gold-dim);
+    margin: 0 0 10px; }
+  h1 { font-size: clamp(26px, 5vw, 34px); font-weight: 500; line-height: 1.2;
+    margin: 0 0 10px; text-wrap: balance; }
+  h1 .geo { color: var(--gold); }
+  .lede { color: var(--muted); font-size: 15px; max-width: 62ch; margin: 0; }
+  .lede em { color: var(--text); }
+  h2 { font-size: 19px; font-weight: 500; margin: 56px 0 6px;
+    padding-top: 22px; border-top: 1px solid var(--border-soft); text-wrap: balance; }
+  h2 .geo { color: var(--gold); font-weight: 400; }
+  .sub { color: var(--muted); font-size: 14px; margin: 0 0 18px; max-width: 66ch; }
+  .sub b { color: var(--text); font-weight: 500; }
+  p { max-width: 66ch; }
+  .card { background: var(--card); border: 1px solid var(--border-soft);
+    border-radius: 10px; padding: 16px 18px; margin: 18px 0; }
+  .card p { margin: 0; font-size: 14px; color: var(--muted); }
+  .card b { color: var(--text); font-weight: 500; }
+  .card.achado { border-color: color-mix(in srgb, var(--alerta) 45%, var(--border-soft)); }
+  .card.achado .rotulo { font-family: ui-monospace, Consolas, monospace;
+    font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--alerta); display: block; margin-bottom: 6px; }
+
+  /* os números do retrato */
+  .placar { display: flex; flex-wrap: wrap; gap: 12px; margin: 18px 0; }
+  .n { background: var(--card); border: 1px solid var(--border-soft);
+    border-radius: 10px; padding: 12px 16px; flex: 1 1 120px; min-width: 120px; }
+  .n .v { font-size: 24px; font-weight: 500; color: var(--gold);
+    font-variant-numeric: tabular-nums; line-height: 1.2; }
+  .n .l { font-size: 11.5px; color: var(--faint); font-family: ui-monospace, Consolas, monospace; }
+
+  /* a tira de fotos: rola de lado, a página nunca */
+  .tira { display: flex; gap: 16px; overflow-x: auto; padding: 6px 2px 14px;
+    scroll-snap-type: x proximity; }
+  figure { margin: 0; flex: 0 0 auto; width: 250px; scroll-snap-align: start; }
+  figure img { width: 100%; height: auto; display: block; border-radius: 14px;
+    border: 1px solid var(--border); }
+  figcaption { font-family: ui-monospace, Consolas, monospace; font-size: 11.5px;
+    color: var(--muted); line-height: 1.5; margin-top: 8px; padding: 0 2px; }
+  figcaption b { color: var(--gold); font-weight: 500; }
+
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; margin: 18px 0; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border-soft); vertical-align: top; }
+  th { color: var(--faint); font-weight: 500; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+  td b { color: var(--text); font-weight: 500; }
+  td { color: var(--muted); }
+  .ok { color: var(--viva); }
+  .espera-c { color: var(--espera); }
+  pre { background: var(--surface); border: 1px solid var(--border-soft);
+    border-radius: 10px; padding: 14px 16px; font-size: 12.5px; overflow-x: auto;
+    font-family: ui-monospace, Consolas, monospace; color: var(--muted); line-height: 1.55; }
+  pre .k { color: var(--gold); }
+  .mono-sm { font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: var(--faint); }
+  footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--border-soft);
+    color: var(--faint); font-size: 12.5px; }
+</style>
+</head>
+<body>
+<div class="pagina">
+
+<header class="topo">
+  <p class="kicker">Onda 4 · mesa item 3 · teste real virtual · 3 Ago 2026</p>
+  <h1><span class="geo">⬠</span> O ensaio geral — os 187 da vida entram no palco</h1>
+  <p class="lede">A mesa pedia o teste ao vivo dos 178 reais — <em>a vida é do
+  Rick</em>. Então a casa fez o que dá pra fazer sem tomar o gesto dele: puxou o
+  <em>retrato do banco vivo</em> (leitura apenas, Management API), semeou o mundo
+  hermético com a matéria real, e dirigiu o app no fio. Produção intocada.
+  E a matéria real fez o que matéria de mentira nunca faz: <em>revelou coisas</em>.</p>
+</header>
+
+<div class="card">
+  <p><b>O que este teste é (e não é).</b> Dados reais, mundo virtual. Os 187 do
+  inbox — títulos, tags, datas, tudo como está no banco de 3 Ago — dentro do
+  mesmo mock com estado do exame 21. Cada aceite grava no tronco de teste;
+  produção não recebe um byte. <b>O teste ao vivo continua sendo teu</b> —
+  este ensaio prova que os gestos aguentam o volume e o formato da tua vida,
+  não substitui ela.</p>
+</div>
+
+<h2><span class="geo">·</span> O retrato — a vida como ela estava às 08:45</h2>
+<p class="sub">Da auditoria 20 (30 Jul) pra cá o inbox <b>cresceu de 178 pra
+187</b> — o cron não para. O check-in de hoje já estava lá: «aurora — animado»,
+07:58. E no meio dos crus, uma relíquia: o <b>«Comprar leite»</b> do Telegram
+da Onda 2, ainda esperando leitura.</p>
+<div class="placar">
+  <div class="n"><div class="v">401</div><div class="l">itens no tronco</div></div>
+  <div class="n"><div class="v">187</div><div class="l">esperando leitura</div></div>
+  <div class="n"><div class="v">163</div><div class="l">com leitura pronta</div></div>
+  <div class="n"><div class="v">24</div><div class="l">crus (pedem olho)</div></div>
+  <div class="n"><div class="v">2</div><div class="l">travados (drift)</div></div>
+</div>
+
+<h2><span class="geo">△</span> Ato I — a fila da vida encolhe: 187 → 26</h2>
+<p class="sub">O gesto exato da mesa: HOJE → puxador → «em bloco» → marcar
+lidos → aceitar. Com <b>163 aceites reais em sequência</b>, a esteira drenou
+em segundos — o volume da vida cabe no gesto.</p>
+<div class="tira">
+  <figure>
+    <img src="23_teste-real-fotos/01-hoje-187-reais.png" alt="HOJE real: check-in de hoje e 187 esperando leitura">
+    <figcaption><b>187 esperando leitura</b> — o HOJE real: «cheguei animado», os fixos do dia, e o puxador quieto (D46).</figcaption>
+  </figure>
+  <figure>
+    <img src="23_teste-real-fotos/02-um-a-um-real.png" alt="O primeiro card real da fila">
+    <figcaption><b>o um a um</b> — o primeiro card da fila real, leitura visível e trocável (D69).</figcaption>
+  </figure>
+  <figure>
+    <img src="23_teste-real-fotos/03-em-bloco-real.png" alt="Modo em bloco com as linhas reais">
+    <figcaption><b>«em bloco»</b> — a fila real, linha a linha, cada leitura na cor do tipo; os crus dizem «sem leitura».</figcaption>
+  </figure>
+  <figure>
+    <img src="23_teste-real-fotos/04-marcar-lidos-163.png" alt="Marcar lidos seleciona 163">
+    <figcaption><b>«marcar lidos (163)»</b> — um toque marca os 163; os crus ficam de fora, protegidos do atropelo.</figcaption>
+  </figure>
+  <figure>
+    <img src="23_teste-real-fotos/05-aceitas-fila-26.png" alt="Toast 163 aceitas; sobram crus e 2 travados">
+    <figcaption><b>«163 leituras aceitas»</b> — a fila despenca. Mas repara nos dois últimos da lista…</figcaption>
+  </figure>
+  <figure>
+    <img src="23_teste-real-fotos/06-o-que-sobra-24-crus-2-travados.png" alt="Sobram 24 crus e os 2 Aurora briefings travados">
+    <figcaption><b>o que sobra</b> — 24 crus esperando teu olho (o ensaio não decide por ti) e 2 que <b>não saíram</b>.</figcaption>
+  </figure>
+</div>
+
+<div class="card achado">
+  <p><span class="rotulo">achado 1 · só matéria real expõe</span>
+  <b>Dois itens vivem em estado impossível.</b> Os «Aurora briefing» de junho
+  estão <span class="mono">state='inbox'</span> com
+  <span class="mono">genesis_stage=2</span> e <span class="mono">status='active'</span>
+  — o trio inconsistente. O FSM recusa o classify deles («Item nao esta no
+  inbox») e o aceite em bloco não os drena: ficam na fila pra sempre. O exame
+  de 1 Ago nunca viu isso — os 12 itens de mentira nasceram todos no estágio 1.
+  <b>Pede conserto de dado</b> (update pontual ou migration), decisão da mesa.</p>
+</div>
+
+<div class="card achado">
+  <p><span class="rotulo">achado 2 · a esteira conta o que não gravou</span>
+  <b>O toast diz «163 leituras aceitas» — gravaram 161.</b> O
+  <span class="mono">classify</span> do hook engole o erro e devolve
+  <span class="mono">null</span> em vez de lançar; o contador da esteira
+  (<span class="mono">Assentimento.aceitarSelecionados</span>) só incrementa
+  <span class="mono">falhas</span> no <span class="mono">catch</span> — que
+  nunca dispara. O comentário do código promete «falha não anda e é contada»;
+  a segunda metade não acontece. <b>Conserto de uma linha</b> (contar o
+  <span class="mono">null</span> como falha), pede mesa.</p>
+</div>
+
+<h2><span class="geo">□</span> Ato II — o gesto no item real: a task da Lisa</h2>
+<p class="sub">«Confirmar Lisa leva Bella amanhã» — task real, galho família,
+tags <span class="mono">#hoje #lisa #bella</span>, nascida em 29 abr (veio do
+cockpit arquivado). O ensaio fez com ela o ciclo inteiro que a vida faria:
+<b>prazo amanhã</b> (literalmente o que o título pede), <b>alta</b>, <b>concluída</b>.</p>
+<div class="tira">
+  <figure>
+    <img src="23_teste-real-fotos/07-lisa-chips-virgens.png" alt="Detalhe da task da Lisa com chips virgens">
+    <figcaption><b>«prazo?» · «prioridade?»</b> — o detalhe real, chips virgens, notas e tags da vida.</figcaption>
+  </figure>
+  <figure>
+    <img src="23_teste-real-fotos/08-prazo-amanha.png" alt="Prazo 4 ago dado; prioridade aberta">
+    <figcaption><b>4 ago</b> no chip — amanhã, como o título pede — e a prioridade aberta.</figcaption>
+  </figure>
+  <figure>
+    <img src="23_teste-real-fotos/09-prioridade-alta.png" alt="Prazo e prioridade dados">
+    <figcaption><b>4 ago · alta</b> — dados, dourados, no item de verdade.</figcaption>
+  </figure>
+  <figure>
+    <img src="23_teste-real-fotos/10-concluido-touch-real.png" alt="Task concluída com rastro">
+    <figcaption><b>«concluido»</b> — task · família · 4 ago · alta · «tocada: hoje». E no fio, o rastro abaixo.</figcaption>
+  </figure>
+</div>
+<pre>
+POST /rest/v1/atom_events        <span class="k">← capturado no clique do «concluido»</span>
+{
+  "source_id":  "f696767f-880a-4d55-a0b8-f3d53bda3a2d",   <span class="k">← o UUID real da task</span>
+  "event_type": <span class="k">"touch"</span>,
+  "target_id":  null,
+  "payload":    {}
+}
+</pre>
+<p class="sub">O conserto 7 aguenta matéria real: quando tu concluíres a task
+da Lisa de verdade, é exatamente este evento que nasce — e é ele que o digest
+lê pra saber que a ausência acabou.</p>
+
+<h2><span class="geo">○</span> Ato III — o digest que escolheu o silêncio</h2>
+<p class="sub">A mesa perguntava: «reparar se a fala de 07:15 mudou». A
+resposta veio do banco vivo, e é melhor que um sim: <b>a fala escolheu não se
+repetir</b>. O cron rodou todos os dias; o v3 olhou, viu que nada mudou desde
+31 Jul, e ficou quieto — DP-F, o raro tem memória.</p>
+<pre>
+cron.job          <span class="k">daily-digest · 15 21 * * * · active</span>   (21:15 UTC = 07:15 Brisbane)
+31 Jul → 3 Ago    succeeded · succeeded · succeeded · succeeded
+resposta de hoje  <span class="k">200</span> {"sent": false, "reason": "nada mudou desde a última fala"}
+último digest     31 Jul 07:15 · fingerprint: 5 ausências «nunca»
+</pre>
+<div class="card">
+  <p><b>Por que isso é o desenho funcionando.</b> Cinco ausências «nunca teve
+  registro» faladas todo dia matariam a raridade que justifica a válvula
+  existir. A impressão digital só muda quando um <span class="mono">touch</span>
+  real cruza um degrau — e o Ato II acabou de provar que o touch nasce no
+  gesto. O circuito está fechado; falta só a vida passar por ele.</p>
+</div>
+
+<h2><span class="geo">⬠</span> O placar do ensaio</h2>
+<table>
+  <thead><tr><th>O que a mesa pedia (item 3)</th><th>O que o ensaio provou</th><th>Estado</th></tr></thead>
+  <tbody>
+    <tr><td><b>os 178 reais em bloco</b></td><td>187 reais: puxador → em bloco → marcar lidos (163) → aceitar; fila 187 → 26 em segundos</td><td class="ok">✓ os gestos aguentam a vida</td></tr>
+    <tr><td><b>o rastro no gesto real</b></td><td>touch com UUID real capturado no fio, no clique do «concluido»</td><td class="ok">✓ provado</td></tr>
+    <tr><td><b>a fala do digest</b></td><td>cron vivo, 200 todos os dias; v3 recusa repetir fala idêntica (DP-F)</td><td class="ok">✓ quieto por desenho</td></tr>
+    <tr><td><b>achado 1 · drift state×stage</b></td><td>2 «Aurora briefing» inaceitáveis pelo FSM — presos na fila</td><td class="espera-c">◌ pede conserto de dado</td></tr>
+    <tr><td><b>achado 2 · contador da esteira</b></td><td>toast conta os recusados como aceitos (163 ≠ 161)</td><td class="espera-c">◌ pede conserto de 1 linha</td></tr>
+    <tr><td><b>o teste ao vivo</b></td><td>—</td><td class="espera-c">◌ segue sendo teu</td></tr>
+  </tbody>
+</table>
+
+<footer>
+  <p>Ensaio dirigido por <span class="mono-sm">e2e/teste-real-virtual.spec.ts</span> —
+  não é gate; roda sob demanda: <span class="mono-sm">npx playwright test e2e/teste-real-virtual.spec.ts --project=mobile</span>.
+  Retrato do banco vivo em <span class="mono-sm">e2e/seed/retrato-vivo-2026-08-03.json</span>
+  (Management API, leitura apenas; produção intocada). Fotos em
+  <span class="mono-sm">docs/onda-4/23_teste-real-fotos/</span>; provas em
+  <span class="mono-sm">rastro-touch-real.json</span> e <span class="mono-sm">digest-evidencia.json</span>.
+  Viewport 390×844, 2/2 atos verdes.</p>
+  <p>⬠ a auditoria constata — quem decide é o Rick.</p>
+</footer>
+
+</div>
+</body>
+</html>

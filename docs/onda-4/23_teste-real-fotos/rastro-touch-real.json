@@ -1,0 +1,9 @@
+[
+  {
+    "user_id": "e2e-test-user-0001",
+    "source_id": "f696767f-880a-4d55-a0b8-f3d53bda3a2d",
+    "target_id": null,
+    "event_type": "touch",
+    "payload": {}
+  }
+]

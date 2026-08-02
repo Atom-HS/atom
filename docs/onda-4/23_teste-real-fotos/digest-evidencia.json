@@ -1,0 +1,24 @@
+{
+  "_o_que_e": "Evidência do banco vivo (Management API, leitura apenas) — 3 Ago 2026, ~08:45 AEST. O item 3b da mesa perguntava se a fala do digest mudou; a resposta é melhor: ela escolheu não repetir.",
+  "cron_job": { "jobname": "daily-digest", "schedule": "15 21 * * *", "active": true, "nota": "21:15 UTC = 07:15 Brisbane" },
+  "ultimas_rodadas": [
+    { "start_time": "2026-08-02 21:15:00+00", "status": "succeeded", "local": "3 Ago 07:15" },
+    { "start_time": "2026-08-01 21:15:00+00", "status": "succeeded", "local": "2 Ago 07:15" },
+    { "start_time": "2026-07-31 21:15:00+00", "status": "succeeded", "local": "1 Ago 07:15" },
+    { "start_time": "2026-07-30 21:15:00+00", "status": "succeeded", "local": "31 Jul 07:15" }
+  ],
+  "resposta_de_hoje": {
+    "status_code": 200,
+    "body": { "sent": false, "reason": "nada mudou desde a última fala", "volta": { "calendar": 4, "gmail": 0 } },
+    "created": "2026-08-02 21:15:00+00"
+  },
+  "unico_digest_sent": {
+    "created_at": "2026-07-30 21:15:12+00",
+    "payload": {
+      "absences": 5,
+      "expiries": 0,
+      "fingerprint": "a:documents:nunca|a:finance:nunca|a:identity:nunca|a:memories:nunca|a:storage:nunca"
+    }
+  },
+  "leitura": "DP-F em ação: as cinco ausências ainda dizem «nunca», a impressão digital não mudou, e o v3 recusa repetir a mesma fala todo dia — a raridade que justifica a válvula existir. Quando um touch real cruzar um degrau, a fala volta."
+}
