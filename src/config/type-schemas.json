@@ -1,6 +1,6 @@
 {
   "$schema": "Atom Engine Type Registry — Genesis v5",
-  "$version": "1.1",
+  "$version": "1.2",
   "$created": "2026-04-01",
   "$note": "Loaded by MindRoot at build time. Source of truth for type config. Lives in GitHub repo.",
 
@@ -407,6 +407,28 @@
       "naming": "mod-purpose_reading_[tema]",
       "drive_dest": "mod-purpose/",
       "usage_notes": "27th type of the registry (A Língua v1.0 §3, selo Rick 06 Ago 2026; D86). A delivered reading — origem Alma (Cartografia da Alma), module purpose. Bodyless by decision: the body format pends dialogue with Alma (owner of the type) — D86 registers the pendency; do not invent fields."
+    },
+
+    "goal": {
+      "floor_stage": 3,
+      "default_module": "varies",
+      "has_body_schema": false,
+      "body_schema": null,
+      "extensions": ["operations"],
+      "naming": "mod-[module]_goal_[description]",
+      "drive_dest": "mod-[module]/",
+      "usage_notes": "28th type of the registry (A Língua v1.7 §3/§4.1, curadoria sessão 1, selo Rick 06 Ago 2026; D87). Desired direction/result with a period. ≠ project: project is the effort-container that SUPPORTS a goal via relation (supports/belongs_to); goal never becomes a mandatory hierarchy level — Genesis rules the tree. Bodyless by decision (padrão reading/D86): rich body is born when real use asks for it (d-059). Operations extension covers deadline/progress."
+    },
+
+    "fixed_commitment": {
+      "floor_stage": 3,
+      "default_module": "varies",
+      "has_body_schema": false,
+      "body_schema": null,
+      "extensions": ["recurrence"],
+      "naming": "mod-[module]_fixed-commitment_[description]",
+      "drive_dest": "mod-[module]/",
+      "usage_notes": "29th type of the registry (A Língua v1.7 §3/§4.1, curadoria sessão 1, selo Rick 06 Ago 2026; D87). Recurring NON-negotiable time block anchored in the external world (school run, weekly meeting, therapy). ≠ habit (behavior to build) ≠ task (action with an end) ≠ routine (chain of habits). Doutrina-fonte: doc GPT §3.2, 'compromissos fixos formam a base'. Bodyless by decision (padrão reading/D86): GPT §15.1 fields (travel_before/after_minutes, flexibility, days, participants) are reference input, not imposition — body nasce quando o uso pedir (d-059). Recurrence extension carries the schedule."
     }
   }
 }

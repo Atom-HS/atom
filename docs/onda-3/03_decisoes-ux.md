@@ -1,4 +1,4 @@
-# Decisões de UX — Ondas 3–4 (D40–D86)
+# Decisões de UX — Ondas 3–4 (D40–D87)
 
 > **Fronteira das séries (hub `d-059`, 31 Jul):** esta série `DNN` é a de
 > **UX/obra do app**. A série `d-0NN` (minúscula, com hífen) é a **lei do
@@ -73,6 +73,7 @@ sobrevivem de lá seguem valendo onde não conflitam; em conflito, a Onda 3 venc
 | **D84** | **A entrevista não pergunta frequência pretendida** — pede o que **acontece** («que dias você costuma treinar?»), nunca o que se pretende («quantas vezes por semana?»): meta declarada é a régua da cobrança futura, D46 violada na origem. Opções de resposta sem escala moral. *(era V5, § 3.2)* | Rick 31 Jul |
 | **D85** | **A casa fala a língua do Rick** — palavra de superfície que o dono não conhece é bug, não estilo (o shame-test P2 aplicado à própria casa: «sobrevive sem o vocabulário do projeto?»). «Assentir» morreu nas superfícies → **«aceitar»** (que já morava no chip de triage — unificação, não palavra nova). Docs nascidos ficam (D76); docs novos e falas acompanham. | Rick 31 Jul |
 | **D86** | **Registry alinha ao alvo 27 da Língua** (não-UX — registry/schema) — `type-schemas.json` ganha `reading` (module `purpose`, **sem body** — formato pende de diálogo com a Alma, origem do type), `$version` 1.0 → 1.1; prompt do `triage-classify` 23 → 27 (`person` · `protocol` · `routine` · `reading`). Fonte do número = A Língua v1.0 §3 (lei; ALFA aresta 2) — não recopia a tabela. `parse-input` (ger-1, 8 types com `chore`/`journal` da mesa da curadoria) declarado FORA — destino se resolve na curadoria da Engine. | Rick 06 Ago |
+| **D87** | **Registry alinha ao alvo 29 da Língua v1.7** (não-UX — registry/schema) — `type-schemas.json` ganha `goal` (28º, direção/resultado com período ≠ `project`) e `fixed_commitment` (29º, bloco de tempo recorrente não-negociável ≠ `habit`/`task`/`routine`), ambos **sem body** (padrão `reading`/D86 — schema rico nasce quando o uso pedir, d-059; campos GPT §15.1 = insumo, não imposição), `$version` 1.1 → 1.2; prompt do `triage-classify` 27 → 29 + fronteiras dos 2 types + **os 3 dicionários de tradução da Língua** (sinonímias de type §4.1 · módulos históricos §4.2 · tags underscore §4.5 — triage traduz material antigo pra campos, nunca ecoa namespace morto). Fonte do número = A Língua v1.7 §3 (curadoria sessão 1, S-2026-08-06-017) — não recopia a tabela. | Rick 06 Ago |
 
 ## Na mesa (não ratificada — em observação vivida)
 

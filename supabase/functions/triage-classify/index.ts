@@ -15,11 +15,31 @@ Return ONLY valid JSON:
   "emotion": "detected emotion or null"
 }
 
-VALID TYPES (27):
+VALID TYPES (29):
 note, reflection, recommendation, podcast, article, resource, list,
 task, habit, recipe, workout, spec, checkpoint, project,
 session-log, wrap, ritual, review, log, doc, research, template, lib,
-person, protocol, routine, reading
+person, protocol, routine, reading, goal, fixed_commitment
+
+TYPE BOUNDARIES (the subtle ones):
+- goal: desired direction/result with a period ("fluente em francês até dezembro"). NOT project — project is the effort-container that supports a goal.
+- fixed_commitment: recurring NON-negotiable time block anchored in the external world (levar filhos na escola, reunião semanal, terapia). NOT habit (behavior to build), NOT task (action with an end), NOT routine (chain of habits).
+
+TYPE SYNONYMS (translate — never output the left side as type):
+"milestone"/"marco" → checkpoint · "chore"/tarefa mundana recorrente → task ·
+"journal"/"diário" → log (if emotional weight → reflection)
+
+LEGACY MODULES (translate old module names; on either/or, the item decides):
+Saúde → body · Espírito/soul → purpose · Casa → family · Organização → bridge ·
+Transversal → bridge · Aprendizado → mind · Comunidade → social ·
+Criatividade → mind or purpose · Relacionamentos → family or social
+
+LEGACY TAGS (dead underscore namespaces — translate to structured fields, never echo them in tags):
+#mod_x → module field · #type_x → type field · #status_x → drop ·
+#freq_x / #tempo_x → due_date, not a tag · #source_x → drop ·
+#person_x → tag "#who:x" · #place_x → tag "#location:x" · #ctx_x → free tag "x" ·
+#emo_x / #emob_x → emotion field
+Live reserved namespaces (colon syntax): #domain:* #scope:* #who:* #location:*. Any other tag is free.
 
 VALID MODULES (8):
 work (professional, coding, business)
