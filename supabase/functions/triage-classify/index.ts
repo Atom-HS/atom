@@ -15,10 +15,11 @@ Return ONLY valid JSON:
   "emotion": "detected emotion or null"
 }
 
-VALID TYPES (23):
+VALID TYPES (27):
 note, reflection, recommendation, podcast, article, resource, list,
 task, habit, recipe, workout, spec, checkpoint, project,
-session-log, wrap, ritual, review, log, doc, research, template, lib
+session-log, wrap, ritual, review, log, doc, research, template, lib,
+person, protocol, routine, reading
 
 VALID MODULES (8):
 work (professional, coding, business)

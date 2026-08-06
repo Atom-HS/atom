@@ -1,4 +1,4 @@
-# Decisões de UX — Ondas 3–4 (D40–D84)
+# Decisões de UX — Ondas 3–4 (D40–D86)
 
 > **Fronteira das séries (hub `d-059`, 31 Jul):** esta série `DNN` é a de
 > **UX/obra do app**. A série `d-0NN` (minúscula, com hífen) é a **lei do
@@ -72,6 +72,7 @@ sobrevivem de lá seguem valendo onde não conflitam; em conflito, a Onda 3 venc
 | **D83** | **O retorno chama «o que mudou»** — nunca «desde que você olhou»: o recorte é do sistema, não do olhar; a ausência do Rick não é assunto (candidato #7 do Teste 02, morto por dívida). *(era V4, § 1.2)* | Rick 31 Jul |
 | **D84** | **A entrevista não pergunta frequência pretendida** — pede o que **acontece** («que dias você costuma treinar?»), nunca o que se pretende («quantas vezes por semana?»): meta declarada é a régua da cobrança futura, D46 violada na origem. Opções de resposta sem escala moral. *(era V5, § 3.2)* | Rick 31 Jul |
 | **D85** | **A casa fala a língua do Rick** — palavra de superfície que o dono não conhece é bug, não estilo (o shame-test P2 aplicado à própria casa: «sobrevive sem o vocabulário do projeto?»). «Assentir» morreu nas superfícies → **«aceitar»** (que já morava no chip de triage — unificação, não palavra nova). Docs nascidos ficam (D76); docs novos e falas acompanham. | Rick 31 Jul |
+| **D86** | **Registry alinha ao alvo 27 da Língua** (não-UX — registry/schema) — `type-schemas.json` ganha `reading` (module `purpose`, **sem body** — formato pende de diálogo com a Alma, origem do type), `$version` 1.0 → 1.1; prompt do `triage-classify` 23 → 27 (`person` · `protocol` · `routine` · `reading`). Fonte do número = A Língua v1.0 §3 (lei; ALFA aresta 2) — não recopia a tabela. `parse-input` (ger-1, 8 types com `chore`/`journal` da mesa da curadoria) declarado FORA — destino se resolve na curadoria da Engine. | Rick 06 Ago |
 
 ## Na mesa (não ratificada — em observação vivida)
 

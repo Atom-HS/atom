@@ -1,6 +1,6 @@
 {
   "$schema": "Atom Engine Type Registry — Genesis v5",
-  "$version": "1.0",
+  "$version": "1.1",
   "$created": "2026-04-01",
   "$note": "Loaded by MindRoot at build time. Source of truth for type config. Lives in GitHub repo.",
 
@@ -397,6 +397,16 @@
       "naming": "mod-[module]_protocol_[name]",
       "drive_dest": "mod-[module]/",
       "usage_notes": "Conditional procedure (spec v0.4 D2: ritual ≠ rotina ≠ protocolo): 'quando X, faço Y'. Born structured (stage 3) by the protocol builder — the procedure IS the structure. No recurrence, no calendar: it sleeps until the situation calls (soul check-in match or manual invocation). Each execution is logged as an atom_event (protocol_run) — the item itself never mutates on run."
+    },
+    "reading": {
+      "floor_stage": 2,
+      "default_module": "purpose",
+      "has_body_schema": false,
+      "body_schema": null,
+      "extensions": [],
+      "naming": "mod-purpose_reading_[tema]",
+      "drive_dest": "mod-purpose/",
+      "usage_notes": "27th type of the registry (A Língua v1.0 §3, selo Rick 06 Ago 2026; D86). A delivered reading — origem Alma (Cartografia da Alma), module purpose. Bodyless by decision: the body format pends dialogue with Alma (owner of the type) — D86 registers the pendency; do not invent fields."
     }
   }
 }
